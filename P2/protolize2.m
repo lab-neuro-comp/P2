@@ -22,7 +22,7 @@ function varargout = protolize2(varargin)
 
 % Edit the above text to modify the response to help protolize2
 
-% Last Modified by GUIDE v2.5 07-May-2009 15:30:53
+% Last Modified by GUIDE v2.5 01-Oct-2015 14:30:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -61,14 +61,14 @@ guidata(hObject, handles);
 fs=200;
 fa=4096;
 fb=0.0610426077402027;
-fc=250; 
+fc=250;
 
 % UIWAIT makes protolize2 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = protolize2_OutputFcn(hObject, eventdata, handles) 
+function varargout = protolize2_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -83,28 +83,28 @@ function timedombut_Callback(hObject, eventdata, handles)
 % hObject    handle to timedombut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+timemodule; % imported from P1 % compiles but does not work
 
 % --- Executes on button press in fourierbut.
 function fourierbut_Callback(hObject, eventdata, handles)
 % hObject    handle to fourierbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+fourier2; % apparently works
 
 % --- Executes on button press in stftbut.
 function stftbut_Callback(hObject, eventdata, handles)
 % hObject    handle to stftbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+stft2; % it is not complete yet
 
 % --- Executes on button press in cwtbut.
 function cwtbut_Callback(hObject, eventdata, handles)
 % hObject    handle to cwtbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+cwtmodule; % imported from P1 % does not work
 
 % --- Executes on button press in ecgbut.
 function ecgbut_Callback(hObject, eventdata, handles)
@@ -118,21 +118,21 @@ function timespecbut_Callback(hObject, eventdata, handles)
 % hObject    handle to timespecbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+editionmodule; % imported from P1 % does not work
 
 % --- Executes on button press in dwtbut.
 function dwtbut_Callback(hObject, eventdata, handles)
 % hObject    handle to dwtbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+dwtmodule; % imported from P1 % compiles but does not work
 
 % --- Executes on button press in tsstbut.
 function tsstbut_Callback(hObject, eventdata, handles)
 % hObject    handle to tsstbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-tsstmodule;
+tsstmodule; % apparently missing
 
 % --- Executes on button press in reflexbut.
 function reflexbut_Callback(hObject, eventdata, handles)
@@ -195,3 +195,6 @@ function mainexit_Callback(hObject, eventdata, handles)
 % hObject    handle to mainexit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+close;
+clear;
+clc;
