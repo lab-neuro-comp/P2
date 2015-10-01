@@ -1,0 +1,211 @@
+function varargout = savedatafourier(varargin)
+% SAVEDATAFOURIER M-file for savedatafourier.fig
+%      SAVEDATAFOURIER, by itself, creates a new SAVEDATAFOURIER or raises the existing
+%      singleton*.
+%
+%      H = SAVEDATAFOURIER returns the handle to a new SAVEDATAFOURIER or the handle to
+%      the existing singleton*.
+%
+%      SAVEDATAFOURIER('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in SAVEDATAFOURIER.M with the given input arguments.
+%
+%      SAVEDATAFOURIER('Property','Value',...) creates a new SAVEDATAFOURIER or raises the
+%      existing singleton*.  Starting from the left, property value pairs are
+%      applied to the GUI before savedatafourier_OpeningFcn gets called.  An
+%      unrecognized property name or invalid value makes property application
+%      stop.  All inputs are passed to savedatafourier_OpeningFcn via varargin.
+%
+%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
+%      instance to run (singleton)".
+%
+% See also: GUIDE, GUIDATA, GUIHANDLES
+
+% Edit the above text to modify the response to help savedatafourier
+
+% Last Modified by GUIDE v2.5 26-Jun-2009 16:43:57
+
+% Begin initialization code - DO NOT EDIT
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @savedatafourier_OpeningFcn, ...
+                   'gui_OutputFcn',  @savedatafourier_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code - DO NOT EDIT
+
+
+% --- Executes just before savedatafourier is made visible.
+function savedatafourier_OpeningFcn(hObject, eventdata, handles, varargin)
+% This function has no output args, see OutputFcn.
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% varargin   command line arguments to savedatafourier (see VARARGIN)
+
+% Choose default command line output for savedatafourier
+handles.output = hObject;
+
+% Update handles structure
+guidata(hObject, handles);
+
+% UIWAIT makes savedatafourier wait for user response (see UIRESUME)
+% uiwait(handles.savefourierdata);
+
+% --- Outputs from this function are returned to the command line.
+function varargout = savedatafourier_OutputFcn(hObject, eventdata, handles) 
+% varargout  cell array for returning output args (see VARARGOUT);
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+
+
+% --- Executes on button press in savepowers.
+function savepowers_Callback(hObject, eventdata, handles)
+% hObject    handle to savepowers (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of savepowers
+switch get(hObject,'value')
+    case 0
+        switch get(handles.savespecdata,'value') || get(handles.savetimedata,'value')
+            case 0
+                set(handles.saveokfourier,'enable','off')
+        end
+    case 1
+        set(handles.saveokfourier,'enable','on')
+end
+
+% --- Executes on button press in savespecdata.
+function savespecdata_Callback(hObject, eventdata, handles)
+% hObject    handle to savespecdata (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of savespecdata
+switch get(hObject,'value')
+    case 0
+        switch get(handles.savepowers,'value') || get(handles.savetimedata,'value')
+            case 0
+                set(handles.saveokfourier,'enable','off')
+        end
+    case 1
+        set(handles.saveokfourier,'enable','on')
+end
+
+% --- Executes on button press in savetimedata.
+function savetimedata_Callback(hObject, eventdata, handles)
+% hObject    handle to savetimedata (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of savetimedata
+switch get(hObject,'value')
+    case 0
+        switch get(handles.savepowers,'value') || get(handles.savespecdata,'value')
+            case 0
+                set(handles.saveokfourier,'enable','off')
+        end
+    case 1
+        set(handles.saveokfourier,'enable','on')
+end
+
+% --- Executes on button press in saveallfourier.
+function saveallfourier_Callback(hObject, eventdata, handles)
+% hObject    handle to saveallfourier (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of saveallfourier
+set(hObject,'value',1)
+set(handles.saveselectfourier,'value',0)
+
+% --- Executes on button press in saveselectfourier.
+function saveselectfourier_Callback(hObject, eventdata, handles)
+% hObject    handle to saveselectfourier (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of saveselectfourier
+set(hObject,'value',1)
+set(handles.saveallfourier,'value',0)
+
+% --- Executes on button press in savecancelfourier.
+function savecancelfourier_Callback(hObject, eventdata, handles)
+% hObject    handle to savecancelfourier (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+close(handles.savefourierdata)
+
+% --- Executes on button press in saveokfourier.
+function saveokfourier_Callback(hObject, eventdata, handles)
+% hObject    handle to saveokfourier (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global frtimereg frnumsig frsignalinfo frtimesignal fs hfourier pcalc
+global deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 bethaf1 bethaf2 gammaf1 gammaf2
+
+switch get(handles.saveallfourier,'value')
+    case 0
+        signalid=get(findobj('tag','listfiles'),'value');
+    case 1
+        signalid=1:frnumsig-1;
+end
+
+switch get(handles.savepowers,'value')
+    case 1
+        [numeric,powersheet]=xlsread('fouriersave',1);
+        powersheet{6,2}=deltaf1;
+        powersheet{6,3}=deltaf2;
+        powersheet{7,2}=thetaf1;
+        powersheet{7,3}=thetaf2;
+        powersheet{8,2}=alphaf1;
+        powersheet{8,3}=alphaf2;
+        powersheet{9,2}=bethaf1;
+        powersheet{9,3}=bethaf2;
+        powersheet{10,2}=gammaf1;
+        powersheet{10,3}=gammaf2;
+        for i=1:length(signalid)
+            powersheet{14+i,1}=frsignalinfo{i,1};
+            powersheet{14+i,2}=sprintf('%10.3f',frsignalinfo{i,2}/fs);
+            set(hfourier.listfiles,'value',signalid(i))
+            [deltapower,thetapower,alphapower,bethapower,gammapower,powtotal]=pcalc(hfourier);
+            powersheet{14+i,3}=deltapower;
+            powersheet{14+i,4}=thetapower;
+            powersheet{14+i,5}=alphapower;
+            powersheet{14+i,6}=bethapower;
+            powersheet{14+i,7}=gammapower;
+            powersheet{14+i,8}=powtotal;
+        end
+        powersheet{16+length(signalid),1}='*All power values in uV^2';
+end
+
+switch get(handles.savespecdata,'value')
+    case 1
+        speccell{1,1}='Fs:';
+        speccell{1,2}=fs;
+        speccell{1,3}='[Hz]';
+        speccell{2,1}='Time Interval:';
+        speccell{3,2}='to';
+        speccell{3,4}='[s]';
+        speccell{5,1}='Time Axis';
+        for i=1:length(signalid)
+            
+        end
+end
+[filename, pathname] = uiputfile('*.xls', 'Save Fourier Data as');
+xlswrite(strcat(pathname,filename),powersheet,1);
+

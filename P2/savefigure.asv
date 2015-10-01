@@ -1,0 +1,10 @@
+function savefigure(ydata,xdata,color,xlim,ylim,xname,yname,figtitle)
+global hsaveaxes
+savefigconfirm
+plot(hsaveaxes,ydata,xdata,color)
+% axis([xlim ylim])
+grid on
+xlabel(xname)
+ylabel(yname)
+title(figtitle)
+clear global hsaveaxes
