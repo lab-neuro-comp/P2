@@ -22,7 +22,7 @@ function varargout = protolize2(varargin)
 
 % Edit the above text to modify the response to help protolize2
 
-% Last Modified by GUIDE v2.5 01-Oct-2015 14:30:49
+% Last Modified by GUIDE v2.5 06-Oct-2015 09:21:14
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -140,52 +140,9 @@ function reflexbut_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-
-% --------------------------------------------------------------------
-function mainconfig_Callback(hObject, eventdata, handles)
-% hObject    handle to mainconfig (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --------------------------------------------------------------------
-function fsconfig_Callback(hObject, eventdata, handles)
-% hObject    handle to fsconfig (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
 % --------------------------------------------------------------------
 function mainfnc_Callback(hObject, eventdata, handles)
 % hObject    handle to mainfnc (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --------------------------------------------------------------------
-function fs200_Callback(hObject, eventdata, handles)
-% hObject    handle to fs200 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --------------------------------------------------------------------
-function fs256_Callback(hObject, eventdata, handles)
-% hObject    handle to fs256 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --------------------------------------------------------------------
-function fs512_Callback(hObject, eventdata, handles)
-% hObject    handle to fs512 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --------------------------------------------------------------------
-function fs1000_Callback(hObject, eventdata, handles)
-% hObject    handle to fs1000 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -198,3 +155,18 @@ function mainexit_Callback(hObject, eventdata, handles)
 close;
 clear;
 clc;
+
+
+% --------------------------------------------------------------------
+function mainhelp_Callback(hObject, eventdata, handles)
+% hObject    handle to mainhelp (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function paramconfigmain_Callback(hObject, eventdata, handles)
+% hObject    handle to paramconfigmain (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+paramconfig;
