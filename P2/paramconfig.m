@@ -61,6 +61,11 @@ guidata(hObject, handles);
 % UIWAIT makes paramconfig wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
+% % Atempt to make fb_edit remember their previous value
+% handles.fbprev = 0.061043;
+% handles.fb = handles.fbprev;
+% set(handles.fb, 'String', num2str(handles.fbprev));
+% guidata(hojbect, handles);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = paramconfig_OutputFcn(hObject, eventdata, handles)
@@ -82,7 +87,6 @@ function fa_edit_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of fa_edit as text
 %        str2double(get(hObject,'String')) returns contents of fa_edit as a double
 
-
 % --- Executes during object creation, after setting all properties.
 function fa_edit_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to fa_edit (see GCBO)
@@ -91,11 +95,11 @@ function fa_edit_CreateFcn(hObject, eventdata, handles)
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
+global fa
+set(hObject, 'String', fa);
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
 
 function fb_edit_Callback(hObject, eventdata, handles)
 % hObject    handle to fb_edit (see GCBO)
@@ -105,6 +109,10 @@ function fb_edit_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of fb_edit as text
 %        str2double(get(hObject,'String')) returns contents of fb_edit as a double
 
+% raw = str2num(get(hObject, 'String'));
+% set(handles.fb, 'String', num2str(raw));
+% handles.fbprev = raw;
+% guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function fb_edit_CreateFcn(hObject, eventdata, handles)
@@ -114,11 +122,12 @@ function fb_edit_CreateFcn(hObject, eventdata, handles)
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
+global fb
+
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
+set(hObject, 'String', num2str(fb));
 
 function fc_edit_Callback(hObject, eventdata, handles)
 % hObject    handle to fc_edit (see GCBO)
@@ -128,7 +137,6 @@ function fc_edit_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of fc_edit as text
 %        str2double(get(hObject,'String')) returns contents of fc_edit as a double
 
-
 % --- Executes during object creation, after setting all properties.
 function fc_edit_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to fc_edit (see GCBO)
@@ -137,6 +145,8 @@ function fc_edit_CreateFcn(hObject, eventdata, handles)
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
+global fc
+set(hObject, 'String', num2str(fc));
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -153,7 +163,7 @@ fs = str2num(get(handles.fs_edit, 'String'));
 fa = str2num(get(handles.fa_edit, 'String'));
 fb = str2num(get(handles.fb_edit, 'String'));
 fc = str2num(get(handles.fc_edit, 'String'));
-fprintf('%f %f %f %f\n', fs, fa, fb, fc);
+% fprintf('%f %f %f %f\n', fs, fa, fb, fc);
 close;
 
 function fs_edit_Callback(hObject, eventdata, handles)
@@ -164,7 +174,6 @@ function fs_edit_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of fs_edit as text
 %        str2double(get(hObject,'String')) returns contents of fs_edit as a double
 
-
 % --- Executes during object creation, after setting all properties.
 function fs_edit_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to fs_edit (see GCBO)
@@ -173,6 +182,8 @@ function fs_edit_CreateFcn(hObject, eventdata, handles)
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
+global fs
+set(hObject, 'String', fs);
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end

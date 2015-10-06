@@ -140,6 +140,10 @@ function reflexbut_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+% % show global variables
+% global fs fa fb fc
+% fprintf('%f %f %f %f\n', fs, fa, fb, fc);
+
 % --------------------------------------------------------------------
 function mainfnc_Callback(hObject, eventdata, handles)
 % hObject    handle to mainfnc (see GCBO)
@@ -170,3 +174,9 @@ function paramconfigmain_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 paramconfig;
+
+%---------------------------------------------------------------------
+function mainconfig_Callback(hObject, eventData, handles)
+% hObject    handle to mainconfig (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
