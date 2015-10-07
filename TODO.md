@@ -1,8 +1,8 @@
 - [x] Colocar menu do P1 no P2: "Arquivo | Ajuda"
 - [x] Adicionar menu "Configuração"
 - [x] Manter Sample Frequency no menu "Configuração" em P2, renomeando para "Definir Taxa de Amostragem"
-- [ ] Ativar em P2: "Configurar Ritmo" e "Configurar parâmetros" no menu "Configuração"
-  - [ ] Adicionar "Configurar ritmos"
+- [x] Ativar em P2: "Configurar Ritmo" e "Configurar parâmetros" no menu "Configuração"
+  - [x] Adicionar "Configurar ritmos"
   - [x] Adicionar "Configurar parâmetros"
 - [ ] Ativar funções dos botões do painel
 - [ ] Adicionar menu "Protocolo | Edição | Análise", ativar mesmas funções do painel

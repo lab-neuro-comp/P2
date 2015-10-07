@@ -22,7 +22,7 @@ function varargout = protolize2(varargin)
 
 % Edit the above text to modify the response to help protolize2
 
-% Last Modified by GUIDE v2.5 06-Oct-2015 09:21:14
+% Last Modified by GUIDE v2.5 07-Oct-2015 09:01:29
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -46,7 +46,7 @@ end
 
 % --- Executes just before protolize2 is made visible.
 function protolize2_OpeningFcn(hObject, eventdata, handles, varargin)
-global fs fa fb fc
+global deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 bethaf1 bethaf2 gammaf1 gammaf2 fa fb fc fs frhzoom hfourier pcalc
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -58,6 +58,18 @@ handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
+
+% SETUP GLOBALS
+deltaf1=0.5;
+deltaf2=3.5;
+thetaf1=3.5;
+thetaf2=7;
+alphaf1=8;
+alphaf2=13;
+bethaf1=15;
+bethaf2=24;
+gammaf1=30;
+gammaf2=70;
 fs=200;
 fa=4096;
 fb=0.0610426077402027;
@@ -169,8 +181,8 @@ function mainhelp_Callback(hObject, eventdata, handles)
 
 
 % --------------------------------------------------------------------
-function paramconfigmain_Callback(hObject, eventdata, handles)
-% hObject    handle to paramconfigmain (see GCBO)
+function paramconfig_main_Callback(hObject, eventdata, handles)
+% hObject    handle to paramconfig_main (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 paramconfig;
@@ -180,3 +192,18 @@ function mainconfig_Callback(hObject, eventData, handles)
 % hObject    handle to mainconfig (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function settings_main_Callback(hObject, eventdata, handles)
+% hObject    handle to settings_main (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function rhythmconfig_main_Callback(hObject, eventdata, handles)
+% hObject    handle to rhythmconfig_main (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+rhythmconfig;

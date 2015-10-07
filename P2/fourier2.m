@@ -54,7 +54,6 @@ function fourier2_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for fourier2
 handles.output = hObject;
-
 % Update handles structure
 guidata(hObject, handles);
 
@@ -62,20 +61,7 @@ guidata(hObject, handles);
 % uiwait(handles.fourierpanel);
 global deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 bethaf1 bethaf2 gammaf1 gammaf2 fa fb fc fs frhzoom hfourier pcalc
 clc
-deltaf1=0.5;
-deltaf2=3.5;
-thetaf1=3.5;
-thetaf2=7;
-alphaf1=8;
-alphaf2=13;
-bethaf1=15;
-bethaf2=24;
-gammaf1=30;
-gammaf2=70;
-fa=4096;
-fb=0.0610426077402027;
-fc=250;
-fs=256;
+
 set(handles.fsinfo,'string',strcat('Fs:',num2str(fs),'[Hz]'));
 axes(handles.frqaxes);grid on
 set(handles.axetime,'visible','off')
@@ -118,7 +104,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % --- Outputs from this function are returned to the command line.
-function varargout = fourier2_OutputFcn(hObject, eventdata, handles) 
+function varargout = fourier2_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -405,12 +391,12 @@ end
 % --------------------------------------------------------------------
 
 % function [faxis freqsignal]=specalc(signal)
-% global fs frwindowname 
+% global fs frwindowname
 % faxis=0:fs/(length(signal)-1):fs;
 % window=eval(strcat(frwindowname,'(',num2str(length(signal)),')'));
 % freqsignal=abs(fft(signal.*window)./length(signal));
 function [faxis freqsignal]=specalc(signal)
-global fs 
+global fs
     [freqsignal,faxis]=pwelch(signal,512,256,2^11,fs);
 
 function plotspec(freqsignal,faxis,handles)
@@ -423,7 +409,7 @@ for i=1:7
        frsignalinfo{frnumsig,4}=frcolorname{i,1};
        frsignalinfo{frnumsig,5}=frcolorname{i,3};
        frsignalinfo{frnumsig,6}=i;
-       frsignalinfo{frnumsig,9}=strcat(frsignalinfo{frnumsig,1},'(',frsignalinfo{frnumsig,4},')');  
+       frsignalinfo{frnumsig,9}=strcat(frsignalinfo{frnumsig,1},'(',frsignalinfo{frnumsig,4},')');
        frcolorname{i,2}=1;
        break;
     end;
@@ -569,7 +555,7 @@ frnumsig=frnumsig-1;
 list=get(handles.listfiles,'string');
 list(sigid)=[];
 switch isempty(list)
-    case 1 
+    case 1
         set(handles.listfiles,'string','None','value',1)
         set(handles.frqaxes,'ylim',[0 1],'xlim',[0 1])
         set([handles.refreshfreq handles.fminima handles.fmaxima],'enable','off')
@@ -645,7 +631,7 @@ function restart_Callback(hObject, eventdata, handles)
 % hObject    handle to restart (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global frsignalinfo 
+global frsignalinfo
 restart=questdlg('Are you sure you want to restart?','Restart Fourier Module','Yes','No','No');
 switch strcmp(restart,'Yes')
     case 1
@@ -678,5 +664,3 @@ switch strcmp(restart,'Yes')
         initialize;
         hanningwdw_Callback(handles.hanningwdw, eventdata, handles)
 end
-
-
