@@ -13,3 +13,5 @@
 - [ ] Identicar a funcionalidade da opção Transfer Function em P2
 - [ ] Padronizar interface dos módulos
 - [ ] Otimizar edição (mais de um arquivo por vez quando possível)
+- [ ] Escrever documentação
+- [ ] Comentar código
