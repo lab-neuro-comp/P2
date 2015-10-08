@@ -1,0 +1,62 @@
+<h1><a id="user-content-protolize-2" class="anchor" href="#protolize-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>PROTOLIZE! 2</h1>
+
+<p>O PROTOLIZE! é uma ferramenta escrita em MATLAB para processamento de sinais de caráter biológico. Inicialmente <a href="http://repositorio.unb.br/bitstream/10482/4213/1/2009_SergioAndresCondeOcazionez.pdf">feito</a> pelo professor <a href="http://buscatextual.cnpq.br/buscatextual/visualizacv.do?id=K4245801A8">Sergio Ocazionez</a>, que hoje se encontra no <a href="http://www.neuro.ufrn.br/incerebro/">Instituto do Cérebro da Universidade Federal do Rio Grande do Norte</a>, durante sua tese de mestrado na Universidade de Brasília, ele está sendo trabalhado no Laboratório de Neurociências e Comportamento da Universidade de Brasília.</p>
+
+<h2><a id="user-content-pré-requisitos" class="anchor" href="#pré-requisitos" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pré-requisitos</h2>
+
+<p>--- Checar pré-requisitos ---</p>
+
+<h2><a id="user-content-instalação" class="anchor" href="#instalação" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instalação</h2>
+
+<p>Para fazer o download do PROTOLIZE!2, baixe o arquivo <code>P2.zip</code> e extraia seu conteudo em um pasta específica. Inicie o MATLAB e vá à pasta onde você extraiu a sua versão do PROTOLIZE!2. Dentro desta pasta, entre o comando</p>
+
+<pre><code>protolize2
+</code></pre>
+
+<p>Se não houver nenhum problema, o menu principal do PROTOLIZE!2 aparecerá, indicando que ele está pronto para uso. </p>
+
+<h1><a id="user-content-menu-principal" class="anchor" href="#menu-principal" aria-hidden="true"><span class="octicon octicon-link"></span></a>Menu principal</h1>
+
+<p>O menu principal contém 3 divisões: <a href="#protocols"><code>Protocols</code></a>, <a href="#edition"><code>Edition</code></a> e <a href="#analysis"><code>Analysis</code></a>. A partir delas, podemos acessar as diversas funcionalidades do PROTOLIZE!2 como descritas em suas respectivas sessões. </p>
+
+<p>Além disso, há uma <a href="#toolbar">barra de ferramentas</a> para acesso rápido de diversos ajustes do programa e do arquivo de ajuda.</p>
+
+<p><a name="user-content-toolbar"></a></p>
+
+<h2><a id="user-content-barra-de-ferramentas" class="anchor" href="#barra-de-ferramentas" aria-hidden="true"><span class="octicon octicon-link"></span></a>Barra de ferramentas</h2>
+
+<p>No topo da janela principal, temos uma barra de ferramentas com as opções <code>File</code>, <code>Settings</code> e <code>Help</code>. </p>
+
+<p>Em <code>File</code>, pode-se sair do programa ou do módulo; ou abrir ou salvar arquivos de acordo com o módulo que está sendo usado.</p>
+
+<p>Em <code>Settings</code>, pode-se alterar diversos valores usados na análise de sinais, em especial a taxa de amostragem (chamada de <code>fs</code>); e os ritmos mentais usados no estudo em questão. O software sempre abre com os seguintes valores para os ritmos:</p>
+
+<ul>
+<li>Delta: 0.5 a 3.5Hz</li>
+<li>Theta: 3.5 a 7Hz</li>
+<li>Alpha: 8 a 13Hz</li>
+<li>Beta: 15 a 24Hz</li>
+<li>Gamma: 30 a 70Hz</li>
+</ul>
+
+<p>Estes valores podem ser ajustados de acordo com a necessidade do usuário, e todos os parâmetros disponíveis para ajuste ficam guardados até o fim da sessão do programa.</p>
+
+<p>Em <code>Help</code>, tem-se acesso a este arquivo de ajuda que você está lendo.</p>
+
+<p><a name="user-content-protocols"></a></p>
+
+<h1><a id="user-content-protocolos" class="anchor" href="#protocolos" aria-hidden="true"><span class="octicon octicon-link"></span></a>Protocolos</h1>
+
+<p>Por enquanto, temos 2 protocolos disponíveis: o TSST e o REFLEX.</p>
+
+<p><a name="user-content-edition"></a></p>
+
+<h1><a id="user-content-módulos-de-edição" class="anchor" href="#módulos-de-edição" aria-hidden="true"><span class="octicon octicon-link"></span></a>Módulos de edição</h1>
+
+<p>Para podermos visualizar e editar visualmente o sinal, há as ferramentas <code>Time/Spec</code> e <code>DWT</code>.</p>
+
+<p><a name="user-content-analysis"></a></p>
+
+<h1><a id="user-content-módulos-de-análise" class="anchor" href="#módulos-de-análise" aria-hidden="true"><span class="octicon octicon-link"></span></a>Módulos de análise</h1>
+
+<p>O PROTOLIZE!2 possui 4 ferramentas de análise de dados: análise no domínio do tempo (<code>Time domain</code>); análise por transformada de Fourier (<code>Fourier</code>); por transforma de Fourier de curta duração (<code>STFT</code>); e por transformada contínua de Wavelets (<code>CWT</code>).</p>
