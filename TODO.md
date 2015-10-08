@@ -14,7 +14,9 @@
 - [ ] Padronizar interface dos módulos
 - [ ] Otimizar edição (mais de um arquivo por vez quando possível)
 - [ ] Escrever documentação
-  - [ ] Escrever introdução
+  - [x] Escrever introdução
   - [ ] Checar pré-requisitos
+  - [ ] Escrever sobre protocolos
+  - [ ] Escrever sobre módulos de edição
+  - [ ] Escrever sobre módulos de análise
 - [ ] Comentar código
-- [ ] Escrever texto de ajuda
