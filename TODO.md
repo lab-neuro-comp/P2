@@ -7,8 +7,14 @@
 - [ ] Ativar funções dos botões do painel
 - [ ] Adicionar menu "Protocolo | Edição | Análise", ativar mesmas funções do painel
 - [ ] Verificar mensagens de erros ao abrir TSST
-- [ ] Verificar quais módulos já foram tratados quanto ao uso de strings
-  + Este tópico será desmembrado após a verificação
+- [x] Verificar quais módulos já foram tratados quanto ao uso de strings
+  + Somente os módulos Fourier e (o novo) ECG fora aparentemente tratados com relação ao uso de reflexão, será necessário reescrever todos os outros módulos para que se encaixem no novo padrão.
+- [ ] Reescrever módulos
+  - [ ] Time/Spec
+  - [ ] DWT
+  - [ ] Time domain
+  - [ ] STFT
+  - [ ] CWT
 - [x] Colocar a definição da taxa de amostragem como entrada de dados
 - [ ] Identicar a funcionalidade da opção Transfer Function em P2
 - [ ] Padronizar interface dos módulos
