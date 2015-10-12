@@ -1,4 +1,4 @@
-- [x] Colocar menu do P1 no P2: "Arquivo | Ajuda"
+﻿- [x] Colocar menu do P1 no P2: "Arquivo | Ajuda"
 - [x] Adicionar menu "Configuração"
 - [x] Manter Sample Frequency no menu "Configuração" em P2, renomeando para "Definir Taxa de Amostragem"
 - [x] Ativar em P2: "Configurar Ritmo" e "Configurar parâmetros" no menu "Configuração"
@@ -25,4 +25,5 @@
   - [ ] Escrever sobre protocolos
   - [ ] Escrever sobre módulos de edição
   - [ ] Escrever sobre módulos de análise
+  - [ ] Traduzir documentação para o inglês
 - [ ] Comentar código
