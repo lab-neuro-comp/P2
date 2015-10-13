@@ -22,7 +22,7 @@ function varargout = editionmodule2(varargin)
 
 % Edit the above text to modify the response to help editionmodule2
 
-% Last Modified by GUIDE v2.5 08-Oct-2015 10:12:25
+% Last Modified by GUIDE v2.5 13-Oct-2015 10:30:31
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -63,6 +63,21 @@ if strcmp(get(hObject,'Visible'),'off')
     plot(rand(5));
 end
 
+% % Setup context variables
+% handles.edit_enable=1;
+% handles.v5tipofiltro=1;
+% handles.v5nedit=1;
+% handles.v5tiniok=0;
+% handles.v5fminok=0;
+% handles.v5fmaxok=fs/2;
+% handles.v5numsig=1;
+% handles.v5refselect=0;
+% handles.v5promon=0;
+% handles.v5errorfile=0;
+handles.v5signalname = '.ascii';
+handles.signalnames = {};
+handles.signals = {};
+
 % UIWAIT makes editionmodule2 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
@@ -77,27 +92,30 @@ function varargout = editionmodule2_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
-% --- Executes on button press in pushbutton1.
-function pushbutton1_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton1 (see GCBO)
+% --- Executes on button press in plotbutton.
+function plotbutton_Callback(hObject, eventdata, handles)
+% hObject    handle to plotbutton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 axes(handles.axes1);
 cla;
 
 popup_sel_index = get(handles.popupmenu1, 'Value');
-switch popup_sel_index
-    case 1
-        plot(rand(5));
-    case 2
-        plot(sin(1:0.01:25.99));
-    case 3
-        bar(1:.5:10);
-    case 4
-        plot(membrane);
-    case 5
-        surf(peaks);
-end
+plot(sin(1:0.01:25.99));
+% switch popup_sel_index
+%     case 1
+%         plot(rand(5));
+%     case 2
+%         plot(sin(1:0.01:25.99));
+%     case 3
+%         bar(1:.5:10);
+%     case 4
+%         plot(membrane);
+%     case 5
+%         surf(peaks);
+% end
+
+% plot(handles.signals[popul_sel_index])
 
 
 % --------------------------------------------------------------------
@@ -112,10 +130,20 @@ function OpenMenuItem_Callback(hObject, eventdata, handles)
 % hObject    handle to OpenMenuItem (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-file = uigetfile('*.fig');
-if ~isequal(file, 0)
-    open(file);
+
+% ORIGINAL CALLBACK
+handles.signalnames
+[signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
+if ~isequal(signalname, 0)
+	% loading data into memory
+	handles.signalnames{length(handles.signalnames)+1} = signalname(1:length(signalname)-6);
+    handles.signals{length(handles.signals)+1} = load(strcat(signalpath, signalname));
+
+	% updating registry list
+	% plot(rawdata);
 end
+
+
 
 % --------------------------------------------------------------------
 function PrintMenuItem_Callback(hObject, eventdata, handles)
@@ -148,6 +176,8 @@ function popupmenu1_Callback(hObject, eventdata, handles)
 % Hints: contents = get(hObject,'String') returns popupmenu1 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenu1
 
+% set(hObject, 'String', cell2struct(handles.signalnames));
+
 
 % --- Executes during object creation, after setting all properties.
 function popupmenu1_CreateFcn(hObject, eventdata, handles)
@@ -161,4 +191,5 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
      set(hObject,'BackgroundColor','white');
 end
 
-set(hObject, 'String', {'plot(rand(5))', 'plot(sin(1:0.01:25))', 'bar(1:.5:10)', 'plot(membrane)', 'surf(peaks)'});
+% set(hObject, 'String', {'plot(rand(5))', 'plot(sin(1:0.01:25))', 'bar(1:.5:10)', 'plot(membrane)', 'surf(peaks)'});
+set(hObject, 'String', {'None'});
