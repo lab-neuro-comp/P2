@@ -54,9 +54,6 @@ function editionmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for editionmodule2
 handles.output = hObject;
 
-% Update handles structure
-guidata(hObject, handles);
-
 % This sets up the initial plot - only do when we are invisible
 % so window can get raised using editionmodule2.
 if strcmp(get(hObject,'Visible'),'off')
@@ -81,6 +78,9 @@ handles.signals = {};
 % UIWAIT makes editionmodule2 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
+% Update handles structure
+guidata(hObject, handles);
+clc;
 
 % --- Outputs from this function are returned to the command line.
 function varargout = editionmodule2_OutputFcn(hObject, eventdata, handles)
@@ -100,8 +100,9 @@ function plotbutton_Callback(hObject, eventdata, handles)
 axes(handles.axes1);
 cla;
 
-popup_sel_index = get(handles.popupmenu1, 'Value');
-plot(sin(1:0.01:25.99));
+fprintf('plot button clicked!\n');
+handles
+plot(handles.signals{get(handles.popupmenu1, 'Value')});
 % switch popup_sel_index
 %     case 1
 %         plot(rand(5));
@@ -115,7 +116,6 @@ plot(sin(1:0.01:25.99));
 %         surf(peaks);
 % end
 
-% plot(handles.signals[popul_sel_index])
 
 
 % --------------------------------------------------------------------
@@ -132,18 +132,16 @@ function OpenMenuItem_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % ORIGINAL CALLBACK
-handles.signalnames
+fprintf('opening file!\n');
 [signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
 if ~isequal(signalname, 0)
-	% loading data into memory
 	handles.signalnames{length(handles.signalnames)+1} = signalname(1:length(signalname)-6);
     handles.signals{length(handles.signals)+1} = load(strcat(signalpath, signalname));
-
-	% updating registry list
-	% plot(rawdata);
+	set(handles.popupmenu1, 'String', handles.signalnames);
 end
 
-
+guidata(hObject, handles);
+handles
 
 % --------------------------------------------------------------------
 function PrintMenuItem_Callback(hObject, eventdata, handles)
@@ -157,15 +155,13 @@ function CloseMenuItem_Callback(hObject, eventdata, handles)
 % hObject    handle to CloseMenuItem (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-selection = questdlg(['Close ' get(handles.figure1,'Name') '?'],...
-                     ['Close ' get(handles.figure1,'Name') '...'],...
+selection = questdlg(['Close Time/Spec module?'],...
+                     ['Close Time/Spec module...'],...
                      'Yes','No','Yes');
 if strcmp(selection,'No')
     return;
 end
-
 delete(handles.figure1)
-
 
 % --- Executes on selection change in popupmenu1.
 function popupmenu1_Callback(hObject, eventdata, handles)
@@ -176,7 +172,8 @@ function popupmenu1_Callback(hObject, eventdata, handles)
 % Hints: contents = get(hObject,'String') returns popupmenu1 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenu1
 
-% set(hObject, 'String', cell2struct(handles.signalnames));
+set(hObject, 'String', handles.signalnames);
+guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
