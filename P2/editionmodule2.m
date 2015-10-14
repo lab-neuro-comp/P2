@@ -57,7 +57,7 @@ handles.output = hObject;
 % This sets up the initial plot - only do when we are invisible
 % so window can get raised using editionmodule2.
 if strcmp(get(hObject,'Visible'),'off')
-    plot(rand(5));
+    plot(0);
 end
 
 % % Setup context variables
@@ -100,8 +100,6 @@ function plotbutton_Callback(hObject, eventdata, handles)
 axes(handles.axes1);
 cla;
 
-fprintf('plot button clicked!\n');
-handles
 plot(handles.signals{get(handles.popupmenu1, 'Value')});
 % switch popup_sel_index
 %     case 1
@@ -116,8 +114,6 @@ plot(handles.signals{get(handles.popupmenu1, 'Value')});
 %         surf(peaks);
 % end
 
-
-
 % --------------------------------------------------------------------
 function FileMenu_Callback(hObject, eventdata, handles)
 % hObject    handle to FileMenu (see GCBO)
@@ -131,17 +127,26 @@ function OpenMenuItem_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% ORIGINAL CALLBACK
-fprintf('opening file!\n');
+global fa fb fc fs
 [signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
+
 if ~isequal(signalname, 0)
-	handles.signalnames{length(handles.signalnames)+1} = signalname(1:length(signalname)-6);
-    handles.signals{length(handles.signals)+1} = load(strcat(signalpath, signalname));
+    signal = (load(strcat(signalpath, signalname)) + fa)*fb - fc;
+	signalname = signalname(1:length(signalname)-6);
+
+	v5t = 0:1/fs:(length(signal) - 1)/fs;
+	v5treg = sprintf(' %5.2f', max(v5t));
+
+
+	handles.signalnames{length(handles.signalnames)+1} = signalname;
+	handles.signals{length(handles.signals)+1} = signal;
 	set(handles.popupmenu1, 'String', handles.signalnames);
+	if isequal(length(handles.signals), 1)
+		plot(handles.signals{1})
+	end
 end
 
 guidata(hObject, handles);
-handles
 
 % --------------------------------------------------------------------
 function PrintMenuItem_Callback(hObject, eventdata, handles)
