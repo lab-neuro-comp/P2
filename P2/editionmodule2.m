@@ -22,7 +22,7 @@ function varargout = editionmodule2(varargin)
 
 % Edit the above text to modify the response to help editionmodule2
 
-% Last Modified by GUIDE v2.5 13-Oct-2015 10:30:31
+% Last Modified by GUIDE v2.5 16-Oct-2015 08:46:06
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -98,9 +98,13 @@ function plotbutton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 axes(handles.axes1);
+xlabel('Time [s]');
+ylabel('Amplitude [s]');
 cla;
 
-plot(handles.signals{get(handles.popupmenu1, 'Value')});
+if length(handles.signals) > 0
+	plot(handles.signals{get(handles.popupmenu1, 'Value')});
+end
 % switch popup_sel_index
 %     case 1
 %         plot(rand(5));
@@ -131,12 +135,12 @@ global fa fb fc fs
 [signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
 
 if ~isequal(signalname, 0)
-    signal = (load(strcat(signalpath, signalname)) + fa)*fb - fc;
+	signal = load(strcat(signalpath, signalname));
+    % signal = (signal + fa)*fb - fc;
 	signalname = signalname(1:length(signalname)-6);
 
-	v5t = 0:1/fs:(length(signal) - 1)/fs;
-	v5treg = sprintf(' %5.2f', max(v5t));
-
+	% v5t = 0:1/fs:(length(signal) - 1)/fs;
+	% v5treg = sprintf(' %5.2f', max(v5t));
 
 	handles.signalnames{length(handles.signalnames)+1} = signalname;
 	handles.signals{length(handles.signals)+1} = signal;
@@ -195,3 +199,68 @@ end
 
 % set(hObject, 'String', {'plot(rand(5))', 'plot(sin(1:0.01:25))', 'bar(1:.5:10)', 'plot(membrane)', 'surf(peaks)'});
 set(hObject, 'String', {'None'});
+
+
+
+function tinitial_edit_Callback(hObject, eventdata, handles)
+% hObject    handle to tinitial_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of tinitial_edit as text
+%        str2double(get(hObject,'String')) returns contents of tinitial_edit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function tinitial_edit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to tinitial_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+function tfinal_edit_Callback(hObject, eventdata, handles)
+% hObject    handle to tfinal_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of tfinal_edit as text
+%        str2double(get(hObject,'String')) returns contents of tfinal_edit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function tfinal_edit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to tfinal_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in chopbutton.
+function chopbutton_Callback(hObject, eventdata, handles)
+% hObject    handle to chopbutton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global fs
+
+tinitial = get(handles.tinitial_edit, 'String');
+tfinal = get(handles.tfinal_edit, 'String');
+beginning = str2num(tinitial);
+ending = str2num(tfinal);
+if and(beginning, ending)
+	signal = handles.signals{get(handles.popupmenu1, 'Value')};
+	signal = (signal(beginning:ending));
+	plot(signal);
+	handles.signals{get(handles.popupmenu1, 'Value')} = signal;
+end
+guidata(hObject, handles);
+%-------------------------------------------------------------------------

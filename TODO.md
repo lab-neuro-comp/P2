@@ -11,6 +11,9 @@
   + Somente os módulos Fourier e (o novo) ECG foram aparentemente tratados com relação ao uso de reflexão, será necessário reescrever todos os outros módulos para que se encaixem no novo padrão.
 - [ ] Reescrever módulos
   - [ ] Time/Spec
+    - [ ] Consertar conversão do sinal usando a equação `(s+fa)*fb+fc`
+    - [x] Criar opção de corte
+	- [ ] Criar opções de filtro
   - [ ] DWT
   - [ ] Time domain
   - [ ] STFT
