@@ -5,8 +5,11 @@
   - [x] Adicionar "Configurar ritmos"
   - [x] Adicionar "Configurar parâmetros"
 - [ ] Ativar funções dos botões do painel
+  + Requer que todos os módulos estejam prontos.
 - [ ] Adicionar menu "Protocolo | Edição | Análise", ativar mesmas funções do painel
-- [ ] Verificar mensagens de erros ao abrir TSST
+  + + Requer que todos os módulos estejam prontos.
+- [x] Verificar mensagens de erros ao abrir TSST
+  + Este módulo não existe no P2
 - [x] Verificar quais módulos já foram tratados quanto ao uso de strings
   + Somente os módulos Fourier e (o novo) ECG foram aparentemente tratados com relação ao uso de reflexão, será necessário reescrever todos os outros módulos para que se encaixem no novo padrão.
 - [ ] Reescrever módulos
@@ -19,8 +22,9 @@
   - [ ] STFT
   - [ ] CWT
 - [x] Colocar a definição da taxa de amostragem como entrada de dados
-- [ ] Identicar a funcionalidade da opção Transfer Function em P2
+- [x] Identicar a funcionalidade da opção Transfer Function em P2
 - [ ] Padronizar interface dos módulos
+  + Requer que todos os módulos estejam prontos para que possamos decidir como padronizar esta interface.
 - [ ] Otimizar edição (mais de um arquivo por vez quando possível)
 - [ ] Escrever documentação
   - [x] Escrever introdução
