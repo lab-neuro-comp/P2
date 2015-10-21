@@ -22,7 +22,7 @@ function varargout = editionmodule2(varargin)
 
 % Edit the above text to modify the response to help editionmodule2
 
-% Last Modified by GUIDE v2.5 21-Oct-2015 09:02:00
+% Last Modified by GUIDE v2.5 21-Oct-2015 16:49:09
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -80,7 +80,7 @@ handles.signals = {};
 
 % Update handles structure
 guidata(hObject, handles);
-clc;
+% clc;
 
 % --- Outputs from this function are returned to the command line.
 function varargout = editionmodule2_OutputFcn(hObject, eventdata, handles)
@@ -133,8 +133,6 @@ function OpenMenuItem_Callback(hObject, eventdata, handles)
 
 global fa fb fc fs
 [signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
-
-% fprintf('fa: %.2f\n', fa);
 
 if ~isequal(signalname, 0)
 	signal = load(strcat(signalpath, signalname));
@@ -259,12 +257,19 @@ tfinal = get(handles.tfinal_edit, 'String');
 beginning = str2num(tinitial);
 ending = str2num(tfinal);
 
+if beginning == 0
+	beginning = beginning + 1;
+end
+
 if and(beginning, ending)
-	if beginning == 0; beginning = beginning + 1; end;
-	signal = handles.signals{get(handles.popupmenu1, 'Value')};
-	signal = (signal(beginning:ending));
-	plot(signal);
-	handles.signals{get(handles.popupmenu1, 'Value')} = signal;
+	if beginning >= ending
+		warndlg('Initial time frame is bigger than final time frame');
+	else
+		signal = handles.signals{get(handles.popupmenu1, 'Value')};
+		signal = (signal(beginning:ending));
+		plot(signal);
+		handles.signals{get(handles.popupmenu1, 'Value')} = signal;
+	end
 end
 guidata(hObject, handles);
 %-------------------------------------------------------------------------
@@ -277,10 +282,6 @@ set(handles.bandstopbutton, 'Value', 0);
 
 % --- Executes on button press in lowpassbutton.
 function lowpassbutton_Callback(hObject, eventdata, handles)
-% hObject    handle to lowpassbutton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
 % Hint: get(hObject,'Value') returns toggle state of lowpassbutton
 handles = disable_buttons(handles);
 set(handles.minedit, 'Enable', 'off');
@@ -290,11 +291,6 @@ guidata(hObject, handles);
 
 % --- Executes on button press in highpassbutton.
 function highpassbutton_Callback(hObject, eventdata, handles)
-% hObject    handle to highpassbutton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of highpassbutton
 handles = disable_buttons(handles);
 set(handles.minedit, 'Enable', 'on');
 set(handles.maxedit, 'Enable', 'off');
@@ -303,11 +299,6 @@ guidata(hObject, handles);
 
 % --- Executes on button press in bandpassbutton.
 function bandpassbutton_Callback(hObject, eventdata, handles)
-% hObject    handle to bandpassbutton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of bandpassbutton
 handles = disable_buttons(handles);
 set(handles.minedit, 'Enable', 'on');
 set(handles.maxedit, 'Enable', 'on');
@@ -316,11 +307,6 @@ guidata(hObject, handles);
 
 % --- Executes on button press in bandstopbutton.
 function bandstopbutton_Callback(hObject, eventdata, handles)
-% hObject    handle to bandstopbutton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of bandstopbutton
 handles = disable_buttons(handles);
 set(handles.minedit, 'Enable', 'on');
 set(handles.maxedit, 'Enable', 'on');
@@ -328,52 +314,36 @@ set(hObject, 'Value', 1);
 guidata(hObject, handles);
 
 function minedit_Callback(hObject, eventdata, handles)
-% hObject    handle to minedit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of minedit as text
-%        str2double(get(hObject,'String')) returns contents of minedit as a double
-
+% ...
 
 % --- Executes during object creation, after setting all properties.
 function minedit_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to minedit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
-
-
 function maxedit_Callback(hObject, eventdata, handles)
-% hObject    handle to maxedit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of maxedit as text
-%        str2double(get(hObject,'String')) returns contents of maxedit as a double
-
+% ...
 
 % --- Executes during object creation, after setting all properties.
 function maxedit_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to maxedit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+function [signal] = filter_signal(signal, minimum, maximum)
 
 
 % --- Executes on button press in filterbutton.
 function filterbutton_Callback(hObject, eventdata, handles)
-% hObject    handle to filterbutton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+minimum = str2num(get(handles.minedit, 'String'));
+maximum = str2num(get(handles.maxedit, 'String'));
+
+if and(minimum, maximum)
+	if minimum >= maximum
+		warndlg('Minimum frequency is bigger than maximum frequency');
+	else if length(handles.signals) > 0
+		signal = handles.signals{get(handles.popupmenu1, 'Value')}
+		signal = filter_signal(signal, minimum, maximum);
+	end
+end
