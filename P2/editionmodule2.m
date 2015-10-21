@@ -22,7 +22,7 @@ function varargout = editionmodule2(varargin)
 
 % Edit the above text to modify the response to help editionmodule2
 
-% Last Modified by GUIDE v2.5 16-Oct-2015 08:46:06
+% Last Modified by GUIDE v2.5 21-Oct-2015 09:02:00
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -134,13 +134,15 @@ function OpenMenuItem_Callback(hObject, eventdata, handles)
 global fa fb fc fs
 [signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
 
+% fprintf('fa: %.2f\n', fa);
+
 if ~isequal(signalname, 0)
 	signal = load(strcat(signalpath, signalname));
-    % signal = (signal + fa)*fb - fc;
+    signal = (signal + fa)*fb - fc;
 	signalname = signalname(1:length(signalname)-6);
 
-	% v5t = 0:1/fs:(length(signal) - 1)/fs;
-	% v5treg = sprintf(' %5.2f', max(v5t));
+	v5t = 0:1/fs:(length(signal) - 1)/fs;
+	v5treg = sprintf(' %5.2f', max(v5t));
 
 	handles.signalnames{length(handles.signalnames)+1} = signalname;
 	handles.signals{length(handles.signals)+1} = signal;
@@ -256,7 +258,9 @@ tinitial = get(handles.tinitial_edit, 'String');
 tfinal = get(handles.tfinal_edit, 'String');
 beginning = str2num(tinitial);
 ending = str2num(tfinal);
+
 if and(beginning, ending)
+	if beginning == 0; beginning = beginning + 1; end;
 	signal = handles.signals{get(handles.popupmenu1, 'Value')};
 	signal = (signal(beginning:ending));
 	plot(signal);
@@ -264,3 +268,112 @@ if and(beginning, ending)
 end
 guidata(hObject, handles);
 %-------------------------------------------------------------------------
+
+function [handles] = disable_buttons(handles)
+set(handles.lowpassbutton, 'Value', 0);
+set(handles.highpassbutton, 'Value', 0);
+set(handles.bandpassbutton, 'Value', 0);
+set(handles.bandstopbutton, 'Value', 0);
+
+% --- Executes on button press in lowpassbutton.
+function lowpassbutton_Callback(hObject, eventdata, handles)
+% hObject    handle to lowpassbutton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of lowpassbutton
+handles = disable_buttons(handles);
+set(handles.minedit, 'Enable', 'off');
+set(handles.maxedit, 'Enable', 'on');
+set(hObject, 'Value', 1);
+guidata(hObject, handles);
+
+% --- Executes on button press in highpassbutton.
+function highpassbutton_Callback(hObject, eventdata, handles)
+% hObject    handle to highpassbutton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of highpassbutton
+handles = disable_buttons(handles);
+set(handles.minedit, 'Enable', 'on');
+set(handles.maxedit, 'Enable', 'off');
+set(hObject, 'Value', 1);
+guidata(hObject, handles);
+
+% --- Executes on button press in bandpassbutton.
+function bandpassbutton_Callback(hObject, eventdata, handles)
+% hObject    handle to bandpassbutton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of bandpassbutton
+handles = disable_buttons(handles);
+set(handles.minedit, 'Enable', 'on');
+set(handles.maxedit, 'Enable', 'on');
+set(hObject, 'Value', 1);
+guidata(hObject, handles);
+
+% --- Executes on button press in bandstopbutton.
+function bandstopbutton_Callback(hObject, eventdata, handles)
+% hObject    handle to bandstopbutton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of bandstopbutton
+handles = disable_buttons(handles);
+set(handles.minedit, 'Enable', 'on');
+set(handles.maxedit, 'Enable', 'on');
+set(hObject, 'Value', 1);
+guidata(hObject, handles);
+
+function minedit_Callback(hObject, eventdata, handles)
+% hObject    handle to minedit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of minedit as text
+%        str2double(get(hObject,'String')) returns contents of minedit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function minedit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to minedit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function maxedit_Callback(hObject, eventdata, handles)
+% hObject    handle to maxedit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of maxedit as text
+%        str2double(get(hObject,'String')) returns contents of maxedit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function maxedit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to maxedit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in filterbutton.
+function filterbutton_Callback(hObject, eventdata, handles)
+% hObject    handle to filterbutton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
