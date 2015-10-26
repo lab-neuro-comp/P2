@@ -1,4 +1,5 @@
 % <a href="TRANSLATION OF f5novoreg">
+% <code>
 global fa fb fc fs
 
 if handles.v5numsig>7;
@@ -72,4 +73,34 @@ set([h5remover h5signals h5expbutton h5exportar],'enable','on');
 set(h5tfinaledit,'string',handles.v5treg);
 handles.v5numsig=handles.v5numsig+1;
 delete(h5msnimport);
-% </a>
+
+% </code> </a>
+
+% <a href="filtering"> <code>
+v5tamint=v5editpoints(2)-v5editpoints(1);
+%...
+v5feditmaxvalue=str2num(get(h5fmaxedit,'string'));
+v5feditminvalue=str2num(get(h5fminedit,'string'));
+% ...
+v5fmaxok=v5feditmaxvalue;
+v5fminok=v5feditminvalue;
+v5fmaxpoint=round(v5feditmaxvalue*v5tamint/fs);
+v5fmaxpoint2=length(v5fft)-v5fmaxpoint;
+v5fminpoint=round(v5feditminvalue*v5tamint/fs);
+v5fminpoint2=length(v5fft)-v5fminpoint;
+switch v5tipofiltro;
+case 1;
+    v5fft(v5fmaxpoint:v5fmaxpoint2)=0;
+case 2;
+    v5fft(1:v5fminpoint)=0;
+    v5fft(v5fminpoint2:length(v5fft))=0;
+case 3;
+    v5fft(1:v5fminpoint)=0;
+    v5fft(v5fminpoint2:length(v5fft))=0;
+    v5fft(v5fmaxpoint:v5fmaxpoint2)=0;
+case 4;
+    v5fft(v5fminpoint:v5fmaxpoint)=0;
+    v5fft(v5fmaxpoint2:v5fminpoint2)=0;
+end;
+v5editdata(v5editpoints(1):v5editpoints(2))=real(ifft(v5fft));
+% </code> </a>
