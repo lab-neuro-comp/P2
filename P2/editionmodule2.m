@@ -331,8 +331,33 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-function [signal] = filter_signal(signal, minimum, maximum)
+function [fk] = get_filter_kind(handles)
+k = 1;
 
+switch k
+case get(handles.lowpassbutton, 'Value')
+	fk = 'lowpass';
+case get(handles.highpassbutton, 'Value')
+	fk = 'highpass';
+case get(handles.bandpassbutton, 'Value')
+	fk = 'bandpass';
+case get(handles.bandstopbutton, 'Value')
+	fk = 'bandstop';
+end
+
+function [signal] = filter_signal(signal, minfreq, maxfreq, kind)
+global fs
+signal = fft(signal);
+
+switch kind
+case 'lowpass'
+	
+case 'highpass'
+case 'bandpass'
+case 'bandstop'
+end
+
+signal = real(ifft(signal));
 
 % --- Executes on button press in filterbutton.
 function filterbutton_Callback(hObject, eventdata, handles)
@@ -342,8 +367,8 @@ maximum = str2num(get(handles.maxedit, 'String'));
 if and(minimum, maximum)
 	if minimum >= maximum
 		warndlg('Minimum frequency is bigger than maximum frequency');
-	else if length(handles.signals) > 0
+	elseif length(handles.signals) > 0
 		signal = handles.signals{get(handles.popupmenu1, 'Value')}
-		signal = filter_signal(signal, minimum, maximum);
+		signal = filter_signal(signal, minimum, maximum, get_filter_kind(handles));
 	end
 end
