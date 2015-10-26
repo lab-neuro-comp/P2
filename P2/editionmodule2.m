@@ -74,6 +74,7 @@ end
 handles.v5signalname = '.ascii';
 handles.signalnames = {};
 handles.signals = {};
+handles.intervals = {};
 
 % UIWAIT makes editionmodule2 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -84,19 +85,10 @@ guidata(hObject, handles);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = editionmodule2_OutputFcn(hObject, eventdata, handles)
-% varargout  cell array for returning output args (see VARARGOUT);
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Get default command line output from handles structure
 varargout{1} = handles.output;
 
 % --- Executes on button press in plotbutton.
 function plotbutton_Callback(hObject, eventdata, handles)
-% hObject    handle to plotbutton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 axes(handles.axes1);
 xlabel('Time [s]');
 ylabel('Amplitude [s]');
@@ -127,10 +119,6 @@ function FileMenu_Callback(hObject, eventdata, handles)
 
 % --------------------------------------------------------------------
 function OpenMenuItem_Callback(hObject, eventdata, handles)
-% hObject    handle to OpenMenuItem (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
 global fa fb fc fs
 [signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
 
@@ -140,13 +128,14 @@ if ~isequal(signalname, 0)
 	signalname = signalname(1:length(signalname)-6);
 
 	v5t = 0:1/fs:(length(signal) - 1)/fs;
-	v5treg = sprintf(' %5.2f', max(v5t));
+	% v5treg = sprintf(' %5.2f', max(v5t));
 
 	handles.signalnames{length(handles.signalnames)+1} = signalname;
 	handles.signals{length(handles.signals)+1} = signal;
+	handles.intervals{length(handles.intervals)+1} = v5t;
 	set(handles.popupmenu1, 'String', handles.signalnames);
 	if isequal(length(handles.signals), 1)
-		plot(handles.signals{1})
+		plot(handles.intervals{1}, handles.signals{1});
 	end
 end
 
@@ -161,9 +150,6 @@ printdlg(handles.figure1)
 
 % --------------------------------------------------------------------
 function CloseMenuItem_Callback(hObject, eventdata, handles)
-% hObject    handle to CloseMenuItem (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 selection = questdlg(['Close Time/Spec module?'],...
                      ['Close Time/Spec module...'],...
                      'Yes','No','Yes');
@@ -174,25 +160,12 @@ delete(handles.figure1)
 
 % --- Executes on selection change in popupmenu1.
 function popupmenu1_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = get(hObject,'String') returns popupmenu1 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu1
-
 set(hObject, 'String', handles.signalnames);
 guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
 function popupmenu1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popupmenu1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
      set(hObject,'BackgroundColor','white');
 end
@@ -213,12 +186,6 @@ function tinitial_edit_Callback(hObject, eventdata, handles)
 
 % --- Executes during object creation, after setting all properties.
 function tinitial_edit_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to tinitial_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -247,9 +214,6 @@ end
 
 % --- Executes on button press in chopbutton.
 function chopbutton_Callback(hObject, eventdata, handles)
-% hObject    handle to chopbutton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 global fs
 
 tinitial = get(handles.tinitial_edit, 'String');
@@ -355,9 +319,9 @@ global fs;
 spectre = fft(signal);
 tamint = length(signal)
 maxpoint = round(maxfreq * tamint/fs)
-maxpoint2 = length(spectre) - maxpoint
+maxpoint2 = length(spectre)
 minpoint = round(minfreq * tamint/fs)
-minpoint2 = length(spectre) - minpoint
+minpoint2 = length(spectre)
 
 switch kind
 case 'lowpass'
@@ -378,6 +342,7 @@ signal = real(ifft(spectre));
 
 % --- Executes on button press in filterbutton.
 function filterbutton_Callback(hObject, eventdata, handles)
+global fs;
 minimum = str2num(get(handles.minedit, 'String'));
 maximum = str2num(get(handles.maxedit, 'String'));
 
@@ -387,6 +352,9 @@ if and(minimum, maximum)
 	elseif length(handles.signals) > 0
 		signal = handles.signals{get(handles.popupmenu1, 'Value')};
 		signal = filter_signal(signal, minimum, maximum, get_filter_kind(handles));
-		plot(signal);
+		v5t = 0:1/fs:(length(signal) - 1)/fs;
+		plot(v5t, signal);
 	end
 end
+
+guidata(hObject, handles);
