@@ -78,6 +78,7 @@ delete(h5msnimport);
 
 % <a href="filtering"> <code>
 v5tamint=v5editpoints(2)-v5editpoints(1);
+v5fft=fft(v5editdata(v5editpoints(1):v5editpoints(2)));
 %...
 v5feditmaxvalue=str2num(get(h5fmaxedit,'string'));
 v5feditminvalue=str2num(get(h5fminedit,'string'));
