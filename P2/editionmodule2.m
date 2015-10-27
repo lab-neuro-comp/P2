@@ -105,20 +105,7 @@ cla;
 
 if length(handles.signals) > 0
 	context_plot(handles.signals{get(handles.popupmenu1, 'Value')});
-	% plot(handles.signals{get(handles.popupmenu1, 'Value')});
 end
-% switch popup_sel_index
-%     case 1
-%         plot(rand(5));
-%     case 2
-%         plot(sin(1:0.01:25.99));
-%     case 3
-%         bar(1:.5:10);
-%     case 4
-%         plot(membrane);
-%     case 5
-%         surf(peaks);
-% end
 
 % --------------------------------------------------------------------
 function FileMenu_Callback(hObject, eventdata, handles)
@@ -146,7 +133,6 @@ if ~isequal(signalname, 0)
 	set(handles.popupmenu1, 'String', handles.signalnames);
 	if isequal(length(handles.signals), 1)
 		context_plot(signal);
-		% plot(handles.intervals{1}, handles.signals{1});
 	end
 end
 
@@ -307,6 +293,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
+% --- discovers which filter is currently selected in the available filter lists
 function [fk] = get_filter_kind(handles)
 k = 1;
 
@@ -325,14 +312,15 @@ case get(handles.bandstopbutton, 'Value')
 	fk = 'bandstop';
 end
 
+% --- filters the signal using a filter. is based on the fourier transform
 function [signal] = filter_signal(signal, minfreq, maxfreq, kind)
 global fs;
 
 spectre = fft(signal);
 tamint = length(signal)
-maxpoint = round(maxfreq * tamint/fs)
+maxpoint = round(maxfreq/fs)
 maxpoint2 = length(spectre)
-minpoint = round(minfreq * tamint/fs)
+minpoint = round(minfreq/fs)
 minpoint2 = length(spectre)
 
 switch kind
@@ -364,8 +352,7 @@ if and(minimum, maximum)
 	elseif length(handles.signals) > 0
 		signal = handles.signals{get(handles.popupmenu1, 'Value')};
 		signal = filter_signal(signal, minimum, maximum, get_filter_kind(handles));
-		v5t = 0:1/fs:(length(signal) - 1)/fs;
-		plot(v5t, signal);
+		context_plot(signal);
 	end
 end
 
