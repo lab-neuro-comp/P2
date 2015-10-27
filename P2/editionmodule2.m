@@ -87,6 +87,15 @@ guidata(hObject, handles);
 function varargout = editionmodule2_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
+% --- gets that signal parameter [si it the discrete signal step?]
+function [step] = get_step(signal)
+global fs
+step = 0:1/fs:(length(signal) - 1)/fs;
+
+% --- Plots the current
+function context_plot(signal)
+plot(get_step(signal), signal);
+
 % --- Executes on button press in plotbutton.
 function plotbutton_Callback(hObject, eventdata, handles)
 axes(handles.axes1);
@@ -95,7 +104,8 @@ ylabel('Amplitude [s]');
 cla;
 
 if length(handles.signals) > 0
-	plot(handles.signals{get(handles.popupmenu1, 'Value')});
+	context_plot(handles.signals{get(handles.popupmenu1, 'Value')});
+	% plot(handles.signals{get(handles.popupmenu1, 'Value')});
 end
 % switch popup_sel_index
 %     case 1
@@ -135,7 +145,8 @@ if ~isequal(signalname, 0)
 	handles.intervals{length(handles.intervals)+1} = v5t;
 	set(handles.popupmenu1, 'String', handles.signalnames);
 	if isequal(length(handles.signals), 1)
-		plot(handles.intervals{1}, handles.signals{1});
+		context_plot(signal);
+		% plot(handles.intervals{1}, handles.signals{1});
 	end
 end
 
@@ -170,10 +181,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
      set(hObject,'BackgroundColor','white');
 end
 
-% set(hObject, 'String', {'plot(rand(5))', 'plot(sin(1:0.01:25))', 'bar(1:.5:10)', 'plot(membrane)', 'surf(peaks)'});
 set(hObject, 'String', {'None'});
-
-
 
 function tinitial_edit_Callback(hObject, eventdata, handles)
 % hObject    handle to tinitial_edit (see GCBO)
@@ -229,15 +237,19 @@ if and(beginning, ending)
 	if beginning >= ending
 		warndlg('Initial time frame is bigger than final time frame');
 	else
-		signal = handles.signals{get(handles.popupmenu1, 'Value')};
+		index = get(handles.popupmenu1, 'Value');
+		signal = handles.signals{index};
+		beginning = beginning * fs;
+		ending = ending * fs;
 		signal = (signal(beginning:ending));
-		plot(signal);
-		handles.signals{get(handles.popupmenu1, 'Value')} = signal;
+		context_plot(signal);
+		handles.signals{index} = signal;
+		handles.intervals{index} = get_step(signal);
 	end
 end
 guidata(hObject, handles);
-%-------------------------------------------------------------------------
 
+%-------------------------------------------------------------------------
 function [handles] = disable_buttons(handles)
 set(handles.lowpassbutton, 'Value', 0);
 set(handles.highpassbutton, 'Value', 0);
