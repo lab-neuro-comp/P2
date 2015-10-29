@@ -97,7 +97,7 @@ case 2;
     v5fft(v5fminpoint2:length(v5fft))=0;
 case 3;
     v5fft(1:v5fminpoint)=0;
-    v5fft(v5fminpoint2:length(v5fft))=0;
+    v5fft(v5fminpoint2:length(v5fft))=0; 
     v5fft(v5fmaxpoint:v5fmaxpoint2)=0;
 case 4;
     v5fft(v5fminpoint:v5fmaxpoint)=0;
