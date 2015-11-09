@@ -130,14 +130,14 @@ function timespecbut_Callback(hObject, eventdata, handles)
 % hObject    handle to timespecbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-editionmodule2; % under creation
+editionmodule2;
 
 % --- Executes on button press in dwtbut.
 function dwtbut_Callback(hObject, eventdata, handles)
 % hObject    handle to dwtbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-dwtmodule; % imported from P1 % compiles but does not work
+dwtmodule2; % under construction
 
 % --- Executes on button press in tsstbut.
 function tsstbut_Callback(hObject, eventdata, handles)
