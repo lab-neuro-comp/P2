@@ -317,11 +317,11 @@ function [signal] = filter_signal(signal, minfreq, maxfreq, kind)
 global fs;
 
 spectre = fft(signal);
-tamint = length(signal)
-maxpoint = round(maxfreq/fs)
-maxpoint2 = length(spectre)
-minpoint = round(minfreq/fs)
-minpoint2 = length(spectre)
+tamint = length(signal) / fs;
+maxpoint = round(maxfreq*tamint/fs);
+maxpoint2 = length(spectre) - maxpoint;
+minpoint = round(minfreq*tamint/fs);
+minpoint2 = length(spectre) - minpoint;
 
 switch kind
 case 'lowpass'
@@ -343,15 +343,24 @@ signal = real(ifft(spectre));
 % --- Executes on button press in filterbutton.
 function filterbutton_Callback(hObject, eventdata, handles)
 global fs;
-minimum = str2num(get(handles.minedit, 'String'));
-maximum = str2num(get(handles.maxedit, 'String'));
+
+fk = get_filter_kind(handles); % fk <- filter kind
+minimum = 0;
+maximum = realmax;
+if isequal(fk, 'highpass') || isequal(fk, 'bandpass') || isequal(fk, 'bandstop')
+	minimum = str2num(get(handles.minedit, 'String'));
+end
+if isequal(fk, 'lowpass') || isequal(fk, 'bandpass') || isequal(fk, 'bandstop')
+	maximum = str2num(get(handles.maxedit, 'String'));
+end
 
 if and(minimum, maximum)
 	if minimum >= maximum
 		warndlg('Minimum frequency is bigger than maximum frequency');
 	elseif length(handles.signals) > 0
 		signal = handles.signals{get(handles.popupmenu1, 'Value')};
-		signal = filter_signal(signal, minimum, maximum, get_filter_kind(handles));
+		signal = filter_signal(signal, minimum, maximum, fk);
+		% handles.signals{get(handles.popupmenu1, 'Value')} = signal;
 		context_plot(signal);
 	end
 end

@@ -7,16 +7,17 @@
 - [ ] Ativar funções dos botões do painel
   + Requer que todos os módulos estejam prontos.
 - [ ] Adicionar menu "Protocolo | Edição | Análise", ativar mesmas funções do painel
-  + + Requer que todos os módulos estejam prontos.
+  + Requer que todos os módulos estejam prontos.
 - [x] Verificar mensagens de erros ao abrir TSST
   + Este módulo não existe no P2
 - [x] Verificar quais módulos já foram tratados quanto ao uso de strings
   + Somente os módulos Fourier e (o novo) ECG foram aparentemente tratados com relação ao uso de reflexão, será necessário reescrever todos os outros módulos para que se encaixem no novo padrão.
 - [ ] Reescrever módulos
-  - [ ] Time/Spec
-    - [ ] Consertar conversão do sinal usando a equação `(s+fa)*fb+fc`
+  - [x] Time/Spec
+    - [x] Consertar conversão do sinal usando a equação `(s+fa)*fb+fc`
     - [x] Criar opção de corte
-	- [ ] Criar opções de filtro
+	- [x] Criar opções de filtro
+	- [ ] Testar filtros
   - [ ] DWT
   - [ ] Time domain
   - [ ] STFT
