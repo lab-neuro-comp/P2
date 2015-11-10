@@ -22,7 +22,7 @@ function varargout = dwtmodule2(varargin)
 
 % Edit the above text to modify the response to help dwtmodule2
 
-% Last Modified by GUIDE v2.5 09-Nov-2015 17:24:03
+% Last Modified by GUIDE v2.5 10-Nov-2015 09:25:11
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -54,6 +54,7 @@ function dwtmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for dwtmodule2
 handles.output = hObject;
 handles.signals = {};
+handles.wavelets = [];
 
 % Update handles structure
 guidata(hObject, handles);
@@ -101,8 +102,8 @@ function CloseMenuItem_Callback(hObject, eventdata, handles)
 % hObject    handle to CloseMenuItem (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-selection = questdlg(['Close ' get(handles.figure1,'Name') '?'],...
-                     ['Close ' get(handles.figure1,'Name') '...'],...
+selection = questdlg(['Close DWT module?'],...
+                     ['Close DWT module...'],...
                      'Yes','No','Yes');
 if strcmp(selection,'No')
     return;
@@ -129,6 +130,108 @@ function popupmenu1_CreateFcn(hObject, eventdata, handles)
 
 % Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+	               get(0,'defaultUicontrolBackgroundColor'))
      set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on selection change in PopupWaveletKind.
+function PopupWaveletKind_Callback(hObject, eventdata, handles)
+% hObject    handle to PopupWaveletKind (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns PopupWaveletKind contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from PopupWaveletKind
+contents = cellstr(get(hObject, 'String'));
+wavelet = contents{get(hObject, 'Value')};
+
+switch wavelet
+case 'Haar'
+	set(handles.PopupWaveletVar, 'String', {'Std'});
+case 'Daubechies'
+	set(handles.PopupWaveletVar, 'String', ...
+	   {'db1' 'db2' 'db3' 'db4' 'db5' 'db6' 'db7' 'db8' 'db9' 'db10'});
+case 'Symlets'
+	set(handles.PopupWaveletVar, 'String', ...
+	   {'2' '3' '4' '5' '6' '7' '8'});
+end
+
+guidata(hObject, handles);
+
+% --- Executes during object creation, after setting all properties.
+function PopupWaveletKind_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PopupWaveletKind (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+	               get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in PopupWaveletVar.
+function PopupWaveletVar_Callback(hObject, eventdata, handles)
+% hObject    handle to PopupWaveletVar (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns PopupWaveletVar contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from PopupWaveletVar
+
+
+% --- Executes during object creation, after setting all properties.
+function PopupWaveletVar_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PopupWaveletVar (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+	               get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in PopupWaveletLevel.
+function PopupWaveletLevel_Callback(hObject, eventdata, handles)
+% hObject    handle to PopupWaveletLevel (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns PopupWaveletLevel contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from PopupWaveletLevel
+
+
+% --- Executes during object creation, after setting all properties.
+function PopupWaveletLevel_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PopupWaveletLevel (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+	               get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in ButtonCalculate.
+function ButtonCalculate_Callback(hObject, eventdata, handles)
+% hObject    handle to ButtonCalculate (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+contents = get(handles.PopupWaveletKind, 'string')
+
+
+% --------------------------------------------------------------------
+function VisualizeMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to VisualizeMenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
