@@ -97,11 +97,59 @@ case 2;
     v5fft(v5fminpoint2:length(v5fft))=0;
 case 3;
     v5fft(1:v5fminpoint)=0;
-    v5fft(v5fminpoint2:length(v5fft))=0; 
+    v5fft(v5fminpoint2:length(v5fft))=0;
     v5fft(v5fmaxpoint:v5fmaxpoint2)=0;
 case 4;
     v5fft(v5fminpoint:v5fmaxpoint)=0;
     v5fft(v5fmaxpoint2:v5fminpoint2)=0;
 end;
 v5editdata(v5editpoints(1):v5editpoints(2))=real(ifft(v5fft));
+% </code> </a>
+
+% <a href="dwtmodule -> calcular -> f7calcular_fcn"> <code>
+switch isempty(h7axapdet)
+case 0
+	delete(h7axapdet);
+    clear v7plotapdet;
+    h7axapdet=[];
+    set(h7axesini,'position',[0.056,0.165,0.755,0.76]);
+    set(h7selsignal,'value',1,'string','Nenhum');
+    set([h7pfinalvalue h7pinicialvalue],'string','1');
+    v7editmx=[];
+    h7cdataedit=[];
+    set([h7editsignaltxt h7selsignal h7edittodo h7editintervalo h7pinicialtxt h7pinicialvalue h7pfinaltxt],'enable','off');
+    set([h7pfinalvalue h7v1txt h7v1value h7editar h7desfazer h7limitar h7limitarhist h7substituir],'enable','off');
+    set(h7salvarsignal,'value',1,'string','N/A');
+    set([h7salvar h7salvarfig h7salvartxt h7salvarsignal],'enable','off');
+end
+switch isempty(v7plotrec)
+case 0
+    delete(v7plotrec);
+    v7plotrec=[];
+    set([h7saverecfig h7saverec],'enable','off');
+end
+v7sigselect=[]
+v7level=get(h7level,'value');
+v7apxname={};
+v7detname={};
+for i=1:v7level
+    v7apxname{i,1}=strcat('cA',num2str(i));
+    v7apxname{i,2}=strcat('A',num2str(i));
+    v7apxname{i,3}=1;
+    v7apxname{i,4}=i;
+    v7detname{i,1}=strcat('cD',num2str(i));
+    v7detname{i,2}=strcat('D',num2str(i));
+    v7detname{i,3}=0;
+    v7detname{i,4}=i;
+end
+set(h7veropt,'value',1)
+set(h7listaprox,'string',v7apxname(:,1));
+set(h7listdetalhes,'string',v7detname(:,1));
+set(h7listatotal,'value',1,'string','Nenhum');
+[v7c v7l]=wavedec(v7signal,v7level,v7wname);
+set(h7zoombutton,'enable','off','value',0);
+set(h7zoom,'enable','off');
+set([h7addaprox h7listatotaltxt h7listdetalhes h7addetalhe h7listatotal h7remover h7visualizar],'enable','on');
+set([h7veropt h7veraproxradio h7verdetalradio h7verdefradio h7aproxtxt h7listaprox h7detatxt],'enable','on');
+eval(f7radioverdef_fcn);
 % </code> </a>

@@ -105,10 +105,6 @@ end
 guidata(hObject, handles);
 
 % --------------------------------------------------------------------
-function PrintMenuItem_Callback(hObject, eventdata, handles)
-printdlg(handles.figure1)
-
-% --------------------------------------------------------------------
 function CloseMenuItem_Callback(hObject, eventdata, handles)
 selection = questdlg(['Close DWT module?'],...
                      ['Close DWT module...'],...
@@ -148,8 +144,6 @@ end
 function PopupWaveletKind_Callback(hObject, eventdata, handles)
 % Hints: contents = cellstr(get(hObject,'String')) returns PopupWaveletKind contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from PopupWaveletKind
-contents = cellstr(get(hObject, 'String'));
-wavelet = contents{get(hObject, 'Value')};
 
 % ## Available wavelets ##
 % + Haar
@@ -163,6 +157,9 @@ wavelet = contents{get(hObject, 'Value')};
 %   - 1.1, 1.3, 1.5, 2.2, 2.4, 2.6, 2.8, 3.1, 3.3, 3.5, 3.7, 3.9, 4.4, 5.5, 6.8
 % + R_Biorthigonal
 %   - 1.1, 1.3, 1.5, 2.2, 2.4, 2.6, 2.8, 3.1, 3.3, 3.5, 3.7, 3.9, 4.4, 5.5, 6.8
+
+contents = cellstr(get(hObject, 'String'));
+wavelet = contents{get(hObject, 'Value')};
 
 switch wavelet
 case 'Haar'
@@ -232,9 +229,45 @@ if ispc && isequal(get(hObject,'BackgroundColor'), ...
 end
 
 
-% --- Executes on button press in ButtonCalculate.
+% ---------------------------------------------------------------------
+function [wavecode] = get_choosen_wavelet(family, kind)
+% Wavelet Families | Wavelets
+%
+% Daubechies: 'db1' or 'haar', 'db2', ... ,'db10', ... , 'db45'
+% Coiflets: 'coif1', ... , 'coif5'
+% Symlets: 'sym2', ... , 'sym8', ... ,'sym45'
+% Fejer-Korovkin filters: 'fk4', 'fk6', 'fk8', 'fk14', 'fk22'
+% Discrete Meyer: 'dmey'
+% Biorthogonal: 'bior1.1', 'bior1.3', 'bior1.5'
+% 				'bior2.2', 'bior2.4', 'bior2.6', 'bior2.8'
+% 				'bior3.1', 'bior3.3', 'bior3.5', 'bior3.7'
+% 				'bior3.9', 'bior4.4', 'bior5.5', 'bior6.8'
+% Reverse Biorthogonal: 'rbio1.1', 'rbio1.3', 'rbio1.5'
+% 						'rbio2.2', 'rbio2.4', 'rbio2.6', 'rbio2.8'
+% 						'rbio3.1', 'rbio3.3', 'rbio3.5', 'rbio3.7'
+% 						'rbio3.9', 'rbio4.4', 'rbio5.5', 'rbio6.8'
+
+wavecode = 'haar';
+
+switch family
+case 'Daubechies'
+	wavecode = 'db' + kind;
+case 'Coiflets'
+	wavecode = 'coif' + kind;
+case 'Biorthogonal'
+	wavecode = 'bior' + kind;
+case 'R Biorthogonal'
+	wavecode = 'rbio' + kind;
+end
+
 function ButtonCalculate_Callback(hObject, eventdata, handles)
-contents = get(handles.PopupWaveletKind, 'string')
+contents = get(handles.PopupWaveletKind, 'string');
+signal = handles.signals{1};
+level = get(handles.PopupWaveletLevel, 'Value');
+wavelet_family = get(handles.PopupWaveletKind, 'Value');
+wavelet_kind = get(handles.PopupWaveletVar, 'Value');
+wavelet = get_choosen_wavelet(wavelet_family, wavelet_kind);
+[v7c v7l] = wavedec(signal, level, wavelet)
 
 
 % --------------------------------------------------------------------
