@@ -19,6 +19,10 @@
 	- [x] Criar opções de filtro
 	- [ ] Testar filtros
   - [ ] DWT
+    - [x] Abrir arquivo
+    - [x] Decompor sinal
+    - [ ] Mostrar decomposições do sinal
+    - [ ] Criar ferramentas de edição
   - [ ] Time domain
   - [ ] STFT
   - [ ] CWT
