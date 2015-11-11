@@ -23,7 +23,13 @@
     - [x] Decompor sinal
     - [ ] Mostrar decomposições do sinal
     - [ ] Criar ferramentas de edição
+	- [ ] Mostrar reconstrução do sinal
+	+ Vamos deixar este módulo para depois.
+	+ Ele é muito complexo!
   - [ ] Time domain
+    - [ ] Criar ferramentas para gerar estatísticas do sinal
+	- [ ] Criar ferramentas para cortar o sinal
+	+ Decisão de design: mostrar sinal ao selecioná-lo no eixo?
   - [ ] STFT
   - [ ] CWT
 - [x] Colocar a definição da taxa de amostragem como entrada de dados

@@ -95,7 +95,7 @@ function timedombut_Callback(hObject, eventdata, handles)
 % hObject    handle to timedombut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-timemodule; % imported from P1 % compiles but does not work
+timemodule2; % under construction
 
 % --- Executes on button press in fourierbut.
 function fourierbut_Callback(hObject, eventdata, handles)

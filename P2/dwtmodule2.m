@@ -268,7 +268,7 @@ wavelet_family = get(handles.PopupWaveletKind, 'Value');
 wavelet_kind = get(handles.PopupWaveletVar, 'Value');
 wavelet = get_choosen_wavelet(wavelet_family, wavelet_kind);
 [v7c v7l] = wavedec(signal, level, wavelet)
-
+plot(v7c);
 
 % --------------------------------------------------------------------
 function VisualizeMenu_Callback(hObject, eventdata, handles)
