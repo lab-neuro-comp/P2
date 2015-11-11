@@ -53,9 +53,6 @@ function timemodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for timemodule2
 handles.output = hObject;
-
-% This sets up the initial plot - only do when we are invisible
-% so window can get raised using timemodule2.
 if strcmp(get(hObject,'Visible'),'off')
     plot(0);
 end
@@ -124,48 +121,12 @@ if strcmp(selection,'No')
 end
 delete(handles.figure1)
 
-% --- Executes on button press in chopbutton.
-function chopbutton_Callback(hObject, eventdata, handles)
-global fs
-
-tinitial = get(handles.tinitial_edit, 'String');
-tfinal = get(handles.tfinal_edit, 'String');
-beginning = str2num(tinitial);
-ending = str2num(tfinal);
-
-if beginning == 0
-	beginning = beginning + 1;
-end
-
-if and(beginning, ending)
-	if beginning >= ending
-		warndlg('Initial time frame is bigger than final time frame');
-	else
-		index = get(handles.popupmenu1, 'Value');
-		signal = handles.signals{index};
-		beginning = beginning * fs;
-		ending = ending * fs;
-		signal = (signal(beginning:ending));
-		context_plot(signal);
-		handles.signals{index} = signal;
-		handles.intervals{index} = get_step(signal);
-	end
-end
-guidata(hObject, handles);
-
 % --- Executes on selection change in ListboxSignal.
 function ListboxSignal_Callback(hObject, eventdata, handles)
 context_plot(handles.signals{get(hObject, 'Value')});
 
-
 % --- Executes during object creation, after setting all properties.
 function ListboxSignal_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to ListboxSignal (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: listbox controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'),...
 	               get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
@@ -173,19 +134,35 @@ end
 
 % --- Executes on button press in ButtonStatistics.
 function ButtonStatistics_Callback(hObject, eventdata, handles)
-% hObject    handle to ButtonStatistics (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-set(handles.textStatistics, 'Enabled', 'on');
+global fs
+% # Statistics text
+% Signal:
+% Interval:
+% Mean:
+% Standard Deviation:
+% Median:
+% Minimum:
+% Latency of minimum:
+% Maximum:
+% Latency of maximum:
+% Recording time:
+set(handles.textStatistics, 'Enable', 'on');
 
-text = 'Signal:
-Interval:
-Mean:
-Standard Deviation:
-Median:
-Minimum:
-Latency of minimum:
-Maximum:
-Latency of maximum:
-Recording time:
-';
+signal = handles.signals{get(handles.ListboxSignal, 'Value')};
+signalname = handles.signalnames{get(handles.ListboxSignal, 'Value')};
+signalmean = mean(signal);
+signalmedian = median(signal);
+signalstd = std(signal);
+signalminimum = min(signal);
+signalmaximum = max(signal);
+signalrecordingtime = length(signal) / fs;
+
+set(handles.textStatistics, 'String', {...
+	['Signal: ' signalname];...
+	['Mean: ' num2str(signalmean)];...
+	['Standard deviation: ' num2str(signalstd)];...
+	['Median: ' num2str(signalmedian)];...
+	['Minimum: ' num2str(signalminimum)];...
+	['Maximum: ' num2str(signalmaximum)];...
+	['Recording time: ' num2str(signalrecordingtime)]});
+guidata(hObject, handles);
