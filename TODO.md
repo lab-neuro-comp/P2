@@ -28,8 +28,9 @@
 	+ Ele é muito complexo!
   - [ ] Time domain
     - [x] Criar ferramentas para gerar estatísticas do sinal
-	- [ ] Criar ferramentas para cortar o sinal
-	- [ ] Exportar estatística do sinal
+	- [x] Criar ferramentas para cortar o sinal
+	- [x] Exportar estatística do sinal
+	  + Descobrir porque o nome não é exportado para o arquivo de estatísticas.
 	- [ ] Gerar figura do sinal
 	+ Decisão de design: mostrar sinal ao selecioná-lo no eixo?
   - [ ] STFT

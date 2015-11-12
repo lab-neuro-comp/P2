@@ -22,7 +22,7 @@ function varargout = timemodule2(varargin)
 
 % Edit the above text to modify the response to help timemodule2
 
-% Last Modified by GUIDE v2.5 12-Nov-2015 10:37:24
+% Last Modified by GUIDE v2.5 12-Nov-2015 11:16:25
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -104,6 +104,7 @@ if ~isequal(signalname, 0)
 	handles.signalnames{length(handles.signalnames)+1} = signalname;
 	handles.signals{length(handles.signals)+1} = signal;
 	set(handles.ListboxSignal, 'String', handles.signalnames);
+	set(handles.PopupChooseSignal, 'String', handles.signalnames);
 	if isequal(length(handles.signals), 1)
 		context_plot(signal);
 	end
@@ -133,7 +134,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'),...
 end
 
 % --- Executes on button press in ButtonStatistics.
-function ButtonStatistics_Callback(hObject, eventdata, handles)
+function text = generate_statistics(signal, signalname)
 global fs
 % # Statistics text
 % Signal:
@@ -146,19 +147,14 @@ global fs
 % Maximum:
 % Latency of maximum:
 % Recording time:
-set(handles.textStatistics, 'Enable', 'on');
-
-signal = handles.signals{get(handles.ListboxSignal, 'Value')};
-signalname = handles.signalnames{get(handles.ListboxSignal, 'Value')};
 signalmean = mean(signal);
 signalmedian = median(signal);
 signalstd = std(signal);
 [signalminimum signalminlat] = min(signal);
 [signalmaximum signalmaxlat] = max(signal);
-signalinterval = length(signal) / fs; % fix this when selection of intervals is enabled
+signalinterval = length(signal) / fs;
 signalrecordingtime = length(signal) / fs;
-
-set(handles.textStatistics, 'String', {...
+text = {...
 	['Signal: ' signalname];...
 	['Interval: ' num2str(signalinterval)];...
 	['Mean: ' num2str(signalmean)];...
@@ -168,10 +164,14 @@ set(handles.textStatistics, 'String', {...
 	['Latency of minimum: ' num2str(signalminlat/fs)];...
 	['Maximum: ' num2str(signalmaximum)];...
 	['Latency of maximum: ' num2str(signalmaxlat/fs)];...
-	['Recording time: ' num2str(signalrecordingtime)]});
+	['Recording time: ' num2str(signalrecordingtime)]};
 
+function ButtonStatistics_Callback(hObject, eventdata, handles)
+set(handles.textStatistics, 'Enable', 'on');
+signal = handles.signals{get(handles.ListboxSignal, 'Value')};
+signalname = handles.signalnames{get(handles.ListboxSignal, 'Value')};
+set(handles.textStatistics, 'String', generate_statistics(signal, signalname));
 guidata(hObject, handles);
-
 
 % --- Executes on selection change in popupmenu2.
 function popupmenu2_Callback(hObject, eventdata, handles)
@@ -191,7 +191,8 @@ function popupmenu2_CreateFcn(hObject, eventdata, handles)
 
 % Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc && isequal(get(hObject,'BackgroundColor'),...
+	               get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
@@ -271,3 +272,21 @@ if ispc && isequal(get(hObject,'BackgroundColor'),...
 	               get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on selection change in PopupChooseSignal.
+function PopupChooseSignal_Callback(hObject, eventdata, handles)
+% there is nothing to be executed here right now
+
+% --- Executes on button press in ButtonExport.
+function ButtonExport_Callback(hObject, eventdata, handles)
+signalname = get(handles.PopupChooseSignal, 'Value');
+signal = handles.signals{signalname};
+output = generate_statistics(signal, signalname);
+
+[filename pathname] = uiputfile('*.txt', 'Save statistics');
+outlet = fopen([pathname filename], 'w');
+for line = 1:length(output)
+	fprintf(outlet, '%s\r\n', output{line});
+end
+fclose(outlet);
