@@ -22,7 +22,7 @@ function varargout = timemodule2(varargin)
 
 % Edit the above text to modify the response to help timemodule2
 
-% Last Modified by GUIDE v2.5 11-Nov-2015 16:29:58
+% Last Modified by GUIDE v2.5 12-Nov-2015 10:37:24
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -153,16 +153,121 @@ signalname = handles.signalnames{get(handles.ListboxSignal, 'Value')};
 signalmean = mean(signal);
 signalmedian = median(signal);
 signalstd = std(signal);
-signalminimum = min(signal);
-signalmaximum = max(signal);
+[signalminimum signalminlat] = min(signal);
+[signalmaximum signalmaxlat] = max(signal);
+signalinterval = length(signal) / fs; % fix this when selection of intervals is enabled
 signalrecordingtime = length(signal) / fs;
 
 set(handles.textStatistics, 'String', {...
 	['Signal: ' signalname];...
+	['Interval: ' num2str(signalinterval)];...
 	['Mean: ' num2str(signalmean)];...
 	['Standard deviation: ' num2str(signalstd)];...
 	['Median: ' num2str(signalmedian)];...
 	['Minimum: ' num2str(signalminimum)];...
+	['Latency of minimum: ' num2str(signalminlat/fs)];...
 	['Maximum: ' num2str(signalmaximum)];...
+	['Latency of maximum: ' num2str(signalmaxlat/fs)];...
 	['Recording time: ' num2str(signalrecordingtime)]});
+
 guidata(hObject, handles);
+
+
+% --- Executes on selection change in popupmenu2.
+function popupmenu2_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu2 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu2
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes on button press in pushbutton8.
+function pushbutton8_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in CheckFine.
+function CheckFine_Callback(hObject, eventdata, handles)
+flag = 'off';
+
+if isequal(get(hObject, 'Value'), true)
+	flag = 'on';
+end
+
+set(handles.editMin, 'Enable', flag);
+set(handles.editMax, 'Enable', flag);
+set(handles.ButtonAdjust, 'Enable', flag);
+guidata(hObject, handles);
+
+function editMin_Callback(hObject, eventdata, handles)
+% hObject    handle to editMin (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editMin as text
+%        str2double(get(hObject,'String')) returns contents of editMin as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editMin_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editMin (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'),...
+	               get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in ButtonAdjust.
+function ButtonAdjust_Callback(hObject, eventdata, handles)
+global fs
+beginning = round(str2num(get(handles.editMin, 'String')) * fs);
+ending = round(str2num(get(handles.editMax, 'String')) * fs);
+index = get(handles.ListboxSignal, 'Value');
+signal = handles.signals{index};
+signal = signal(beginning:ending);
+context_plot(signal);
+handles.signals{index} = signal;
+guidata(hObject, handles);
+
+function editMax_Callback(hObject, eventdata, handles)
+% hObject    handle to editMax (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editMax as text
+%        str2double(get(hObject,'String')) returns contents of editMax as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editMax_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editMax (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'),...
+	               get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

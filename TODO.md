@@ -27,8 +27,10 @@
 	+ Vamos deixar este módulo para depois.
 	+ Ele é muito complexo!
   - [ ] Time domain
-    - [ ] Criar ferramentas para gerar estatísticas do sinal
+    - [x] Criar ferramentas para gerar estatísticas do sinal
 	- [ ] Criar ferramentas para cortar o sinal
+	- [ ] Exportar estatística do sinal
+	- [ ] Gerar figura do sinal
 	+ Decisão de design: mostrar sinal ao selecioná-lo no eixo?
   - [ ] STFT
   - [ ] CWT
