@@ -16,23 +16,23 @@
   - [x] Time/Spec
     - [x] Consertar conversão do sinal usando a equação `(s+fa)*fb+fc`
     - [x] Criar opção de corte
-	- [x] Criar opções de filtro
-	- [ ] Testar filtros
+	  - [x] Criar opções de filtro
+	  - [ ] Testar filtros
+    - [ ] Criar opção de desfazer o que foi feito
   - [ ] DWT
     - [x] Abrir arquivo
     - [x] Decompor sinal
     - [ ] Mostrar decomposições do sinal
     - [ ] Criar ferramentas de edição
-	- [ ] Mostrar reconstrução do sinal
-	+ Vamos deixar este módulo para depois.
-	+ Ele é muito complexo!
+	  - [ ] Mostrar reconstrução do sinal
+	  + Vamos deixar este módulo para depois.
+	  + Ele é muito complexo!
   - [ ] Time domain
     - [x] Criar ferramentas para gerar estatísticas do sinal
-	- [x] Criar ferramentas para cortar o sinal
-	- [x] Exportar estatística do sinal
-	  + Descobrir porque o nome não é exportado para o arquivo de estatísticas.
-	- [ ] Gerar figura do sinal
-	+ Decisão de design: mostrar sinal ao selecioná-lo no eixo?
+	  - [x] Criar ferramentas para cortar o sinal
+	  - [x] Exportar estatística do sinal
+	  - [ ] Gerar figura do sinal
+	  + Decisão de design: mostrar sinal ao selecioná-lo no eixo?
   - [ ] STFT
   - [ ] CWT
 - [x] Colocar a definição da taxa de amostragem como entrada de dados
@@ -45,6 +45,14 @@
   - [ ] Checar pré-requisitos
   - [ ] Escrever sobre protocolos
   - [ ] Escrever sobre módulos de edição
+    - [x] Time/Spec
+      - [ ] Gerar imagem do módulo
+    - [ ] DWT
   - [ ] Escrever sobre módulos de análise
+    - [x] Time domain
+      - [ ] Tirar screencap do módulo
+    - [ ] Fourier
+    - [ ] STFT
+    - [ ] CWT
   - [ ] Traduzir documentação para o inglês
 - [ ] Comentar código

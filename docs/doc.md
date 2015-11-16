@@ -90,12 +90,17 @@ A análise em domínio do tempo gera uma análise estatística do sinal em um pe
 
 Para gerar uma análise deste sinal, aperte o botão `Generate Statistics`. A análise produzida poderá ser vista no painel ao lado direito, e poderá ser salva apertando o botão `Export statistics`. 
 
+Fourier analysis
+----------------
+
+<span style="background-color: #BDC3CE">`O módulo ainda está em construção`</span>
+
 Short Time Fourier Transform (STFT)
 -----------------------------------
 
 <span style="background-color: #BDC3CE">`O módulo ainda está em construção`</span>
 
-Continuous Wavelets Transform (CWT)
------------------------------------
+Continuous Wavelet Transform (CWT)
+----------------------------------
 
 <span style="background-color: #BDC3CE">`O módulo ainda está em construção`</span>
