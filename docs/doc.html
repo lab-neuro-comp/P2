@@ -19,6 +19,9 @@
 
 <p>Para fazer o download do PROTOLIZE!2, baixe o arquivo <code>P2.zip</code> e extraia seu conteudo em um pasta específica. Inicie o MATLAB e vá à pasta onde você extraiu a sua versão do PROTOLIZE!2. Dentro desta pasta, entre o comando <span style="background-color: #BDC3CE"><code>protolize2</code></span>. Se não houver nenhum problema, o menu principal do PROTOLIZE!2 aparecerá, indicando que ele está pronto para uso. </p>
 
+<h2>Outras informações relevantes</h2>
+
+<p>Os sinais a serem processados deverão estar no formato <code>*.ASCII</code>.</p>
 
 <h1>Menu principal</h1>
 
@@ -55,15 +58,43 @@
 
 <p>Por enquanto, temos 2 protocolos disponíveis: o TSST e o REFLEX.</p>
 
-<p><a name="edition"></a></p>
+<p><a name="edition"/></p>
 
 <h1>Módulos de edição</h1>
 
 <p>Para podermos visualizar e editar visualmente o sinal, há as ferramentas <code>Time/Spec</code> e <code>DWT</code>.</p>
+
+<h2>Time / Spectre</h2>
+
+<p>Este módulo fornece algumas ferramentas para edição de sinais no domínio do tempo. Em sua interface, pode-se notar que há ferramentas para cortar e para filtrar o sinal.</p>
+
+<p><img src="timespec.jpg" alt="time/spec module" title="'Time/Spec' Module"/></p>
+
+<p>Inicialmente, carrega-se um sinal usando a opção <code>Open</code> no menu <code>File</code> da barra de ferramentas. Este sinal aparecerá na lista de sinais <code>???</code> no canto superior direito. Para mostrar este sinal na tela, aperte o botão <code>Plot</code>. Para cortar o sinal, digite os valores mínimo e máximo nas caixas <code>Min</code> e <code>Max</code>, respectivamente, e aperte o botão <code>Crop</code>. Para filtrar o sinal, existem 4 opções de filtros: passa-baixa, passa-alta, passa-banda ou rejeita-banda. Escolha o filtro e os intervalos de frequência desejados. Lembre-se que, para cada filtro, há uma forma correspondente de preencher os parâmetros de filtro.</p>
+
+<h2>Discrete Wavelets Transform (DWT)</h2>
+
+<p><span style="background-color: #BDC3CE"><code>O módulo ainda está em construção</code></span></p>
 
 <p><a name="analysis"></a></p>
 
 <h1>Módulos de análise</h1>
 
 <p>O PROTOLIZE!2 possui 4 ferramentas de análise de dados: análise no domínio do tempo (<code>Time domain</code>); análise por transformada de Fourier (<code>Fourier</code>); por transforma de Fourier de curta duração (<code>STFT</code>); e por transformada contínua de Wavelets (<code>CWT</code>).</p>
+
+<h2>Time Domain</h2>
+
+<p>A análise em domínio do tempo gera uma análise estatística do sinal em um período de tempo determinado. Selecione um sinal usando a opção <code>Open</code> no menu <code>File</code>. Este sinal pode ser cortado em um intervalo menor usando a opção <code>Crop</code>. </p>
+
+<p><img src="timedomain.jpg" alt="time domain module" title="'Time domain' Module"/></p>
+
+<p>Para gerar uma análise deste sinal, aperte o botão <code>Generate Statistics</code>. A análise produzida poderá ser vista no painel ao lado direito, e poderá ser salva apertando o botão <code>Export statistics</code>. </p>
+
+<h2>Short Time Fourier Transform (STFT)</h2>
+
+<p><span style="background-color: #BDC3CE"><code>O módulo ainda está em construção</code></span></p>
+
+<h2>Continuous Wavelets Transform (CWT)</h2>
+
+<p><span style="background-color: #BDC3CE"><code>O módulo ainda está em construção</code></span></p>
 </body></html>

@@ -12,6 +12,10 @@ Instalação
 
 Para fazer o download do PROTOLIZE!2, baixe o arquivo `P2.zip` e extraia seu conteudo em um pasta específica. Inicie o MATLAB e vá à pasta onde você extraiu a sua versão do PROTOLIZE!2. Dentro desta pasta, entre o comando <span style="background-color: #BDC3CE">`protolize2`</span>. Se não houver nenhum problema, o menu principal do PROTOLIZE!2 aparecerá, indicando que ele está pronto para uso. 
 
+Outras informações relevantes
+-----------------------------
+
+Os sinais a serem processados deverão estar no formato `*.ASCII`.
 
 Menu principal
 ==============
@@ -49,12 +53,26 @@ Protocolos
 
 Por enquanto, temos 2 protocolos disponíveis: o TSST e o REFLEX.
 
-<a name="edition"></a>
+<a name="edition"/>
 
 Módulos de edição
 =================
 
 Para podermos visualizar e editar visualmente o sinal, há as ferramentas `Time/Spec` e `DWT`.
+
+Time / Spectre
+--------------
+
+Este módulo fornece algumas ferramentas para edição de sinais no domínio do tempo. Em sua interface, pode-se notar que há ferramentas para cortar e para filtrar o sinal.
+
+![time/spec module](timespec.jpg "'Time/Spec' Module")
+
+Inicialmente, carrega-se um sinal usando a opção `Open` no menu `File` da barra de ferramentas. Este sinal aparecerá na lista de sinais `???` no canto superior direito. Para mostrar este sinal na tela, aperte o botão `Plot`. Para cortar o sinal, digite os valores mínimo e máximo nas caixas `Min` e `Max`, respectivamente, e aperte o botão `Crop`. Para filtrar o sinal, existem 4 opções de filtros: passa-baixa, passa-alta, passa-banda ou rejeita-banda. Escolha o filtro e os intervalos de frequência desejados. Lembre-se que, para cada filtro, há uma forma correspondente de preencher os parâmetros de filtro.
+
+Discrete Wavelets Transform (DWT)
+---------------------------------
+
+<span style="background-color: #BDC3CE">`O módulo ainda está em construção`</span>
 
 <a name="analysis"></a>
 
@@ -62,3 +80,22 @@ Módulos de análise
 ==================
 
 O PROTOLIZE!2 possui 4 ferramentas de análise de dados: análise no domínio do tempo (`Time domain`); análise por transformada de Fourier (`Fourier`); por transforma de Fourier de curta duração (`STFT`); e por transformada contínua de Wavelets (`CWT`).
+
+Time Domain
+-----------
+
+A análise em domínio do tempo gera uma análise estatística do sinal em um período de tempo determinado. Selecione um sinal usando a opção `Open` no menu `File`. Este sinal pode ser cortado em um intervalo menor usando a opção `Crop`. 
+
+![time domain module](timedomain.jpg "'Time domain' Module")
+
+Para gerar uma análise deste sinal, aperte o botão `Generate Statistics`. A análise produzida poderá ser vista no painel ao lado direito, e poderá ser salva apertando o botão `Export statistics`. 
+
+Short Time Fourier Transform (STFT)
+-----------------------------------
+
+<span style="background-color: #BDC3CE">`O módulo ainda está em construção`</span>
+
+Continuous Wavelets Transform (CWT)
+-----------------------------------
+
+<span style="background-color: #BDC3CE">`O módulo ainda está em construção`</span>
