@@ -30,8 +30,7 @@
   - [ ] Time domain
     - [x] Criar ferramentas para gerar estatísticas do sinal
 	  - [x] Criar ferramentas para cortar o sinal
-	  - [x] Exportar estatística do sinal
-	  - [ ] Gerar figura do sinal
+	  - [x] Exportar estatística do sinal	  - [ ] Gerar figura do sinal
 	  + Decisão de design: mostrar sinal ao selecioná-lo no eixo?
   - [ ] STFT
   - [ ] CWT
