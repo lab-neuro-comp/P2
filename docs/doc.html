@@ -11,13 +11,15 @@
 
 <p>O PROTOLIZE! é uma ferramenta escrita em MATLAB para processamento de sinais de caráter biológico. Inicialmente <a href="http://repositorio.unb.br/bitstream/10482/4213/1/2009_SergioAndresCondeOcazionez.pdf">feito</a> pelo professor <a href="http://buscatextual.cnpq.br/buscatextual/visualizacv.do?id=K4245801A8">Sergio Ocazionez</a>, que hoje se encontra no <a href="http://www.neuro.ufrn.br/incerebro/">Instituto do Cérebro da Universidade Federal do Rio Grande do Norte</a>, durante sua tese de mestrado na Universidade de Brasília, ele está sendo trabalhado no Laboratório de Neurociências e Comportamento da Universidade de Brasília.</p>
 
+<p><img src="assets/p2mainpage.jpg" alt="Protolize 2"/></p>
+
 <h2>Pré-requisitos</h2>
 
 <p>--- Checar pré-requisitos ---</p>
 
 <h2>Instalação</h2>
 
-<p>Para fazer o download do PROTOLIZE!2, baixe o arquivo <code>P2.zip</code> e extraia seu conteudo em um pasta específica. Inicie o MATLAB e vá à pasta onde você extraiu a sua versão do PROTOLIZE!2. Dentro desta pasta, entre o comando <span style="background-color: #BDC3CE"><code>protolize2</code></span>. Se não houver nenhum problema, o menu principal do PROTOLIZE!2 aparecerá, indicando que ele está pronto para uso. </p>
+<p>Para fazer o download do PROTOLIZE!2, baixe o arquivo <code>P2.zip</code> e extraia seu conteudo em um pasta específica. Inicie o MATLAB e vá à pasta onde você extraiu a sua versão do PROTOLIZE!2. Dentro desta pasta, entre o comando <span style="background-color: #BDC3CE"><code>protolize2</code></span>. Se não houver nenhum problema, o menu principal do PROTOLIZE!2 aparecerá, indicando que ele está pronto para uso.</p>
 
 <h2>Outras informações relevantes</h2>
 
@@ -25,7 +27,7 @@
 
 <h1>Menu principal</h1>
 
-<p>O menu principal contém 3 divisões: <a href="#protocols"><code>Protocols</code></a>, <a href="#edition"><code>Edition</code></a> e <a href="#analysis"><code>Analysis</code></a>. A partir delas, podemos acessar as diversas funcionalidades do PROTOLIZE!2 como descritas em suas respectivas sessões. </p>
+<p>O menu principal contém 3 divisões: <a href="#protocols"><code>Protocols</code></a>, <a href="#edition"><code>Edition</code></a> e <a href="#analysis"><code>Analysis</code></a>. A partir delas, podemos acessar as diversas funcionalidades do PROTOLIZE!2 como descritas em suas respectivas sessões.</p>
 
 <p>Além disso, há uma <a href="#toolbar">barra de ferramentas</a> para acesso rápido de diversos ajustes do programa e do arquivo de ajuda.</p>
 
@@ -33,7 +35,7 @@
 
 <h2>Barra de ferramentas</h2>
 
-<p>No topo da janela principal, temos uma barra de ferramentas com as opções <code>File</code>, <code>Settings</code> e <code>Help</code>. </p>
+<p>No topo da janela principal, temos uma barra de ferramentas com as opções <code>File</code>, <code>Settings</code> e <code>Help</code>.</p>
 
 <p>Em <code>File</code>, pode-se sair do programa ou do módulo; ou abrir ou salvar arquivos de acordo com o módulo que está sendo usado.</p>
 
@@ -68,9 +70,9 @@
 
 <p>Este módulo fornece algumas ferramentas para edição de sinais no domínio do tempo. Em sua interface, pode-se notar que há ferramentas para cortar e para filtrar o sinal.</p>
 
-<p><img src="timespec.jpg" alt="time/spec module" title="'Time/Spec' Module"/></p>
+<p><img src="assets/timespec.jpg" alt="time/spec module" title="'Time/Spec' Module"/></p>
 
-<p>Inicialmente, carrega-se um sinal usando a opção <code>Open</code> no menu <code>File</code> da barra de ferramentas. Este sinal aparecerá na lista de sinais <code>???</code> no canto superior direito. Para mostrar este sinal na tela, aperte o botão <code>Plot</code>. Para cortar o sinal, digite os valores mínimo e máximo nas caixas <code>Min</code> e <code>Max</code>, respectivamente, e aperte o botão <code>Crop</code>. Para filtrar o sinal, existem 4 opções de filtros: passa-baixa, passa-alta, passa-banda ou rejeita-banda. Escolha o filtro e os intervalos de frequência desejados. Lembre-se que, para cada filtro, há uma forma correspondente de preencher os parâmetros de filtro.</p>
+<p>Inicialmente, carrega-se um sinal usando a opção <code>Open</code> no menu <code>File</code> da barra de ferramentas. Este sinal aparecerá na lista de <code>Data registry</code> no canto superior direito. Para mostrar este sinal na tela, aperte o botão <code>Plot</code>. Para cortar o sinal, digite os valores mínimo e máximo nas caixas <code>Min</code> e <code>Max</code>, respectivamente, e aperte o botão <code>Crop</code>. Para filtrar o sinal, existem 4 opções de filtros: passa-baixa, passa-alta, passa-banda ou rejeita-banda. Escolha o filtro e os intervalos de frequência desejados. Lembre-se que, para cada filtro, há uma forma correspondente de preencher os parâmetros de filtro.</p>
 
 <h2>Discrete Wavelets Transform (DWT)</h2>
 
@@ -84,11 +86,11 @@
 
 <h2>Time Domain</h2>
 
-<p>A análise em domínio do tempo gera uma análise estatística do sinal em um período de tempo determinado. Selecione um sinal usando a opção <code>Open</code> no menu <code>File</code>. Este sinal pode ser cortado em um intervalo menor usando a opção <code>Crop</code>. </p>
+<p>A análise em domínio do tempo gera uma análise estatística do sinal em um período de tempo determinado. Selecione um sinal usando a opção <code>Open</code> no menu <code>File</code>. Este sinal pode ser cortado em um intervalo menor usando a opção <code>Crop</code>.</p>
 
-<p><img src="timedomain.jpg" alt="time domain module" title="'Time domain' Module"/></p>
+<p><img src="assets/timedomain.jpg" alt="time domain module" title="'Time domain' Module"/></p>
 
-<p>Para gerar uma análise deste sinal, aperte o botão <code>Generate Statistics</code>. A análise produzida poderá ser vista no painel ao lado direito, e poderá ser salva apertando o botão <code>Export statistics</code>. </p>
+<p>Para gerar uma análise deste sinal, aperte o botão <code>Generate Statistics</code>. A análise produzida poderá ser vista no painel ao lado direito, e poderá ser salva apertando o botão <code>Export statistics</code>.</p>
 
 <h2>Fourier analysis</h2>
 
@@ -101,4 +103,5 @@
 <h2>Continuous Wavelet Transform (CWT)</h2>
 
 <p><span style="background-color: #BDC3CE"><code>O módulo ainda está em construção</code></span></p>
+
 </body></html>

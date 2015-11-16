@@ -45,11 +45,11 @@
   - [ ] Escrever sobre protocolos
   - [ ] Escrever sobre módulos de edição
     - [x] Time/Spec
-      - [ ] Gerar imagem do módulo
+      - [x] Gerar imagem do módulo
     - [ ] DWT
   - [ ] Escrever sobre módulos de análise
     - [x] Time domain
-      - [ ] Tirar screencap do módulo
+      - [x] Tirar screencap do módulo
     - [ ] Fourier
     - [ ] STFT
     - [ ] CWT
