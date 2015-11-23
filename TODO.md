@@ -32,8 +32,12 @@
 	  - [x] Criar ferramentas para cortar o sinal
 	  - [x] Exportar estatística do sinal	  - [ ] Gerar figura do sinal
 	  + Decisão de design: mostrar sinal ao selecioná-lo no eixo?
-  - [ ] STFT
+  - [x] Fourier
+    + Aparentemente já está implementado. Testar depois.
+  - [x] STFT
+    + Aparentemente já está implementado. Testar depois.
   - [ ] CWT
+    - [ ] Checar funcionalidades
 - [x] Colocar a definição da taxa de amostragem como entrada de dados
 - [x] Identicar a funcionalidade da opção Transfer Function em P2
 - [ ] Padronizar interface dos módulos
