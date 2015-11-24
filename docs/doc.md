@@ -1,8 +1,10 @@
-# PROTOLIZE! 2
+﻿# PROTOLIZE! 2
 
 O PROTOLIZE! é uma ferramenta escrita em MATLAB para processamento de sinais de caráter biológico. Inicialmente [feito](http://repositorio.unb.br/bitstream/10482/4213/1/2009_SergioAndresCondeOcazionez.pdf) pelo professor [Sergio Ocazionez](http://buscatextual.cnpq.br/buscatextual/visualizacv.do?id=K4245801A8), que hoje se encontra no [Instituto do Cérebro da Universidade Federal do Rio Grande do Norte](http://www.neuro.ufrn.br/incerebro/), durante sua tese de mestrado na Universidade de Brasília, ele está sendo trabalhado no Laboratório de Neurociências e Comportamento da Universidade de Brasília.
 
 ![Protolize 2](assets/p2mainpage.jpg)
+
+Ele está sendo escrito no MATLAB 2010, com o editor de textos [Atom](https://atom.io/). Este documento está sendo escrito em markdown e sendo traduzido em HTML usando o script [markdown.lua](https://github.com/mpeterv/markdown) feito por [@mpeterv](https://github.com/mpeterv).
 
 Pré-requisitos
 --------------
