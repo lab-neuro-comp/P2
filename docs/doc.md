@@ -4,7 +4,7 @@ O PROTOLIZE! é uma ferramenta escrita em MATLAB para processamento de sinais de
 
 ![Protolize 2](assets/p2mainpage.jpg)
 
-Ele está sendo escrito no MATLAB 2010, com o editor de textos [Atom](https://atom.io/). Este documento está sendo escrito em markdown e sendo traduzido em HTML usando o script [markdown.lua](https://github.com/mpeterv/markdown) feito por [@mpeterv](https://github.com/mpeterv).
+O PROTOLIZE!2 está sendo escrito em MATLAB 2010 com auxílio do editor de textos [Atom](https://atom.io/). Esta documentação está sendo escrita em [Markdown](https://daringfireball.net/projects/markdown/) e sendo traduzido em HTML usando o script [markdown.lua](https://github.com/mpeterv/markdown) feito por [@mpeterv](https://github.com/mpeterv).
 
 Pré-requisitos
 --------------

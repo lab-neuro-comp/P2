@@ -22,7 +22,7 @@ function varargout = fourier2(varargin)
 
 % Edit the above text to modify the response to help fourier2
 
-% Last Modified by GUIDE v2.5 24-Nov-2015 11:07:13
+% Last Modified by GUIDE v2.5 24-Nov-2015 11:27:30
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -162,3 +162,66 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 set(hObject, 'String', {'plot(rand(5))', 'plot(sin(1:0.01:25))', 'bar(1:.5:10)', 'plot(membrane)', 'surf(peaks)'});
+
+
+% --------------------------------------------------------------------
+function SettingsMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to SettingsMenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function ChooseWindowMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to ChooseWindowMenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function EEGMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to EEGMenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function HammingWindowMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to HammingWindowMenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function GaussianWindowMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to GaussianWindowMenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function BlackWindowMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to BlackWindowMenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function HanningWindowMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to HanningWindowMenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function KaiserWindowMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to KaiserWindowMenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function HannWindowMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to HannWindowMenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
