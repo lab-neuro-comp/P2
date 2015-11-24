@@ -71,6 +71,8 @@ Este módulo fornece algumas ferramentas para edição de sinais no domínio do 
 
 Inicialmente, carrega-se um sinal usando a opção `Open` no menu `File` da barra de ferramentas. Este sinal aparecerá na lista de `Data registry` no canto superior direito. Para mostrar este sinal na tela, aperte o botão `Plot`. Para cortar o sinal, digite os valores mínimo e máximo nas caixas `Min` e `Max`, respectivamente, e aperte o botão `Crop`. Para filtrar o sinal, existem 4 opções de filtros: passa-baixa, passa-alta, passa-banda ou rejeita-banda. Escolha o filtro e os intervalos de frequência desejados. Lembre-se que, para cada filtro, há uma forma correspondente de preencher os parâmetros de filtro.
 
+Para executar este módulo em separado, execute a função `editionmodule2`.
+
 Discrete Wavelets Transform (DWT)
 ---------------------------------
 
@@ -91,6 +93,8 @@ A análise em domínio do tempo gera uma análise estatística do sinal em um pe
 ![time domain module](assets/timedomain.jpg "'Time domain' Module")
 
 Para gerar uma análise deste sinal, aperte o botão `Generate Statistics`. A análise produzida poderá ser vista no painel ao lado direito, e poderá ser salva apertando o botão `Export statistics`.
+
+Este módulo pode ser executado em separado usando o script `timemodule2`.
 
 Fourier analysis
 ----------------
