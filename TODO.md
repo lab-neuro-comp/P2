@@ -24,9 +24,9 @@
     - [x] Decompor sinal
     - [ ] Mostrar decomposições do sinal
     - [ ] Criar ferramentas de edição
-	  - [ ] Mostrar reconstrução do sinal
-	  + Vamos deixar este módulo para depois.
-	  + Ele é muito complexo!
+	- [ ] Mostrar reconstrução do sinal
+	+ Vamos deixar este módulo para depois.
+	+ Ele é muito complexo!
   - [ ] Time domain
     - [x] Criar ferramentas para gerar estatísticas do sinal
 	  - [x] Criar ferramentas para cortar o sinal
