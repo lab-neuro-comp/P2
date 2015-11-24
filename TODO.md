@@ -32,10 +32,13 @@
 	  - [x] Criar ferramentas para cortar o sinal
 	  - [x] Exportar estatística do sinal	  - [ ] Gerar figura do sinal
 	  + Decisão de design: mostrar sinal ao selecioná-lo no eixo?
-  - [x] Fourier
-    + Aparentemente já está implementado. Testar depois.
-  - [x] STFT
-    + Aparentemente já está implementado. Testar depois.
+  - [ ] Fourier
+    + O módulo original não funciona.
+	- [ ] Identicar funcionalidades.
+	- [ ] Fazer design da UI
+	- [ ] Estudar como o MATLAB lida com a transformada de Fourier.
+  - [ ] STFT
+    + O módulo original não funciona.
   - [ ] CWT
     - [ ] Checar funcionalidades
 - [x] Colocar a definição da taxa de amostragem como entrada de dados
