@@ -29,13 +29,16 @@
   - [ ] Time domain
     - [x] Criar ferramentas para gerar estatísticas do sinal
 	  - [x] Criar ferramentas para cortar o sinal
-	  - [x] Exportar estatística do sinal	  - [ ] Gerar figura do sinal
+	  - [x] Exportar estatística do sinal	  
+      - [ ] Gerar figura do sinal
 	  + Decisão de design: mostrar sinal ao selecioná-lo no eixo?
   - [ ] Fourier
     + O módulo original não funciona.
-	- [ ] Identicar funcionalidades.
-	- [ ] Fazer design da UI
-    - [ ] Estudar como plotar várias funções em um mesmo gráfico usando cores diferentes
+	- [x] Identicar funcionalidades.
+	- [ ] Fazer design da UI.
+      - [ ] Descobrir como fazer o módulo escolher somente uma janela para a transformada.
+      - [ ] Decidir onde calcular a transformada de Fourier do sinal.
+    - [ ] Estudar como plotar várias funções em um mesmo gráfico usando cores diferentes.
 	- [ ] Estudar como o MATLAB lida com a transformada de Fourier.
   - [ ] STFT
     + O módulo original não funciona.

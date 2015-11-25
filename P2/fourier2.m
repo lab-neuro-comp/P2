@@ -22,7 +22,7 @@ function varargout = fourier2(varargin)
 
 % Edit the above text to modify the response to help fourier2
 
-% Last Modified by GUIDE v2.5 25-Nov-2015 16:44:50
+% Last Modified by GUIDE v2.5 25-Nov-2015 17:43:26
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -175,7 +175,6 @@ function SettingsMenu_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-
 % --------------------------------------------------------------------
 function ChooseWindowMenu_Callback(hObject, eventdata, handles)
 % hObject    handle to ChooseWindowMenu (see GCBO)
@@ -190,19 +189,31 @@ function EEGMenu_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
+function deactivate_windows(hObject, handles)
+set(HammingWindowMenu, 'Checked', 'off');
+set(GaussianWindowMenu, 'Checked', 'off');
+% set(handles.BlackmanWindowMenu, 'Checked', 'off');
+% set(handles.HanningWindowMenu, 'Checked', 'off');
+% set(handles.KaiserWindowMenu, 'Checked', 'off');
+% set(handles.HannWindowMenu, 'Checked', 'off');
+
 % --------------------------------------------------------------------
 function HammingWindowMenu_Callback(hObject, eventdata, handles)
 % hObject    handle to HammingWindowMenu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+deactivate_windows(hObject, handles);
+set(hObject, 'Checked', 'on');
+guidata(hObject, handles);
 
 % --------------------------------------------------------------------
 function GaussianWindowMenu_Callback(hObject, eventdata, handles)
 % hObject    handle to GaussianWindowMenu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+deactivate_windows(hObject, handles);
+set(hObject, 'Checked', 'on');
+guidata(hObject, handles);
 
 % --------------------------------------------------------------------
 function BlackWindowMenu_Callback(hObject, eventdata, handles)
@@ -231,13 +242,30 @@ function HannWindowMenu_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+function [text] = generate_statistics(signal, signalname)
+global fs
+% Signal:
+% Interval:
+% Delta:
+% Theta:
+% Alpha:
+% Beta:
+% Gamma:
+% Total:
+signalinterval = length(signal) / fs;
+signalrecordingtime = signalinterval;
+text = {...
+	['Signal: ' signalname];...
+	['Interval: ' num2str(signalinterval)];...
+	['Recording time: ' num2str(signalrecordingtime)]};
 
 % --- Executes on button press in buttonCalculatePower.
 function buttonCalculatePower_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonCalculatePower (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
+set(handles.labelPower, 'Enable', 'on');
+signal = handles.signals{get(handles.listRecordings, 'Value')};
+signalname = handles.signalnames{get(handles.listRecordings, 'Value')};
+set(handles.labelPower, 'String', generate_statistics(signal, signalname));
+guidata(hObject, handles);
 
 % --- Executes on selection change in listRecordings.
 function listRecordings_Callback(hObject, eventdata, handles)
