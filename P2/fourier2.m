@@ -22,7 +22,7 @@ function varargout = fourier2(varargin)
 
 % Edit the above text to modify the response to help fourier2
 
-% Last Modified by GUIDE v2.5 24-Nov-2015 11:27:30
+% Last Modified by GUIDE v2.5 25-Nov-2015 16:44:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -52,16 +52,17 @@ function fourier2_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to fourier2 (see VARARGIN)
 
 % Choose default command line output for fourier2
+handles.signals = {};
+handles.signalnames = {};
+handles.intervals = {};
 handles.output = hObject;
+
+if strcmp(get(hObject,'Visible'),'off')
+    plot(0);
+end
 
 % Update handles structure
 guidata(hObject, handles);
-
-% This sets up the initial plot - only do when we are invisible
-% so window can get raised using fourier2.
-if strcmp(get(hObject,'Visible'),'off')
-    plot(rand(5));
-end
 
 % UIWAIT makes fourier2 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -77,28 +78,13 @@ function varargout = fourier2_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
-% --- Executes on button press in pushbutton1.
-function pushbutton1_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton1 (see GCBO)
+% --- Executes on button press in buttonToggleSignal.
+function buttonToggleSignal_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonToggleSignal (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 axes(handles.axes1);
 cla;
-
-popup_sel_index = get(handles.popupmenu1, 'Value');
-switch popup_sel_index
-    case 1
-        plot(rand(5));
-    case 2
-        plot(sin(1:0.01:25.99));
-    case 3
-        bar(1:.5:10);
-    case 4
-        plot(membrane);
-    case 5
-        surf(peaks);
-end
-
 
 % --------------------------------------------------------------------
 function FileMenu_Callback(hObject, eventdata, handles)
@@ -107,15 +93,36 @@ function FileMenu_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
+% --- gets that signal parameter [si it the discrete signal step?]
+function [step] = get_step(signal)
+global fs
+step = 0:1/fs:(length(signal) - 1)/fs;
+
+% --- Plots the current
+function context_plot(signal)
+plot(get_step(signal), signal);
+
 % --------------------------------------------------------------------
 function OpenMenuItem_Callback(hObject, eventdata, handles)
-% hObject    handle to OpenMenuItem (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-file = uigetfile('*.fig');
-if ~isequal(file, 0)
-    open(file);
+global fa fb fc fs
+[signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
+
+if ~isequal(signalname, 0)
+	signal = load(strcat(signalpath, signalname));
+    signal = (signal + fa)*fb - fc;
+	signalname = signalname(1:length(signalname)-6);
+	interval = 0:1/fs:(length(signal) - 1)/fs;
+
+	handles.signalnames{length(handles.signalnames)+1} = signalname;
+	handles.signals{length(handles.signals)+1} = signal;
+	handles.intervals{length(handles.intervals)+1} = interval;
+	set(handles.listRecordings, 'String', handles.signalnames);
+	if isequal(length(handles.signals), 1)
+		context_plot(signal);
+	end
 end
+
+guidata(hObject, handles);
 
 % --------------------------------------------------------------------
 function PrintMenuItem_Callback(hObject, eventdata, handles)
@@ -157,12 +164,10 @@ function popupmenu1_CreateFcn(hObject, eventdata, handles)
 
 % Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc && isequal(get(hObject,'BackgroundColor'),...
+                   get(0,'defaultUicontrolBackgroundColor'))
      set(hObject,'BackgroundColor','white');
 end
-
-set(hObject, 'String', {'plot(rand(5))', 'plot(sin(1:0.01:25))', 'bar(1:.5:10)', 'plot(membrane)', 'surf(peaks)'});
-
 
 % --------------------------------------------------------------------
 function SettingsMenu_Callback(hObject, eventdata, handles)
@@ -225,3 +230,34 @@ function HannWindowMenu_Callback(hObject, eventdata, handles)
 % hObject    handle to HannWindowMenu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in buttonCalculatePower.
+function buttonCalculatePower_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonCalculatePower (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on selection change in listRecordings.
+function listRecordings_Callback(hObject, eventdata, handles)
+% hObject    handle to listRecordings (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns listRecordings contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from listRecordings
+
+
+% --- Executes during object creation, after setting all properties.
+function listRecordings_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to listRecordings (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0, 'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

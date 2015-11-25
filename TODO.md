@@ -26,7 +26,6 @@
     - [ ] Criar ferramentas de edição
 	- [ ] Mostrar reconstrução do sinal
 	+ Vamos deixar este módulo para depois.
-	+ Ele é muito complexo!
   - [ ] Time domain
     - [x] Criar ferramentas para gerar estatísticas do sinal
 	  - [x] Criar ferramentas para cortar o sinal
@@ -36,6 +35,7 @@
     + O módulo original não funciona.
 	- [ ] Identicar funcionalidades.
 	- [ ] Fazer design da UI
+    - [ ] Estudar como plotar várias funções em um mesmo gráfico usando cores diferentes
 	- [ ] Estudar como o MATLAB lida com a transformada de Fourier.
   - [ ] STFT
     + O módulo original não funciona.
