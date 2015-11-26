@@ -26,7 +26,7 @@
     - [ ] Criar ferramentas de edição
 	- [ ] Mostrar reconstrução do sinal
 	+ Vamos deixar este módulo para depois.
-  - [ ] Time domain
+  - [x] Time domain
     - [x] Criar ferramentas para gerar estatísticas do sinal
 	  - [x] Criar ferramentas para cortar o sinal
 	  - [x] Exportar estatística do sinal	  
