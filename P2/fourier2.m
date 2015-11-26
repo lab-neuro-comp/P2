@@ -55,12 +55,15 @@ function fourier2_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.signals = {};
 handles.signalnames = {};
 handles.intervals = {};
+handles.plots = {};
 handles.output = hObject;
 
 if strcmp(get(hObject,'Visible'),'off')
     plot(0);
 end
 
+axes(handles.axes1);
+cla;
 % Update handles structure
 guidata(hObject, handles);
 
@@ -78,13 +81,40 @@ function varargout = fourier2_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
+% --------------------------------------------------------------------------
+function [index] = find_this_string(needle, haystack)
+index = 1;
+for hay = haystack
+    hay
+    if isequal(needle, hay)
+        break;
+    else
+        index = index + 1;
+    end
+end
+
 % --- Executes on button press in buttonToggleSignal.
 function buttonToggleSignal_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonToggleSignal (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-axes(handles.axes1);
-cla;
+% handles    structure with handles and user data (see GUIDATA
+
+% Hints: contents = cellstr(get(hObject,'String')) returns listRecordings contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from listRecordings
+
+item = get(handles.listRecordings, 'Value');
+handles.plots{item} = ~handles.plots{item};
+
+plot(0);
+hold on;
+for index = 1:length(handles.plots)
+    if handles.plots{index}
+        context_plot(handles.signals{index});
+    end
+end
+hold off;
+
+guidata(hObject, handles);
 
 % --------------------------------------------------------------------
 function FileMenu_Callback(hObject, eventdata, handles)
@@ -116,9 +146,13 @@ if ~isequal(signalname, 0)
 	handles.signalnames{length(handles.signalnames)+1} = signalname;
 	handles.signals{length(handles.signals)+1} = signal;
 	handles.intervals{length(handles.intervals)+1} = interval;
+    handles.plots{length(handles.plots)+1} = true;
 	set(handles.listRecordings, 'String', handles.signalnames);
 	if isequal(length(handles.signals), 1)
 		context_plot(signal);
+        set(handles.buttonToggleSignal, 'Enable', 'on');
+        set(handles.buttonCalculatePower, 'Enable', 'on');
+        set(handles.labelPower, 'Enable', 'on');
 	end
 end
 
@@ -136,8 +170,8 @@ function CloseMenuItem_Callback(hObject, eventdata, handles)
 % hObject    handle to CloseMenuItem (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-selection = questdlg(['Close ' get(handles.figure1,'Name') '?'],...
-                     ['Close ' get(handles.figure1,'Name') '...'],...
+selection = questdlg(['Close Fourier module?'],...
+                     ['Closing Fourier''s module...'],...
                      'Yes','No','Yes');
 if strcmp(selection,'No')
     return;
@@ -184,34 +218,31 @@ function ChooseWindowMenu_Callback(hObject, eventdata, handles)
 
 % --------------------------------------------------------------------
 function EEGMenu_Callback(hObject, eventdata, handles)
-% hObject    handle to EEGMenu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+rhythmconfig;
 
-
-function deactivate_windows(hObject, handles)
-set(HammingWindowMenu, 'Checked', 'off');
-set(GaussianWindowMenu, 'Checked', 'off');
+% --------------------------------------------------------------------
+function [handles] = deactivate_windows(hObject, handles)
+for submenu = get(handles.SettingsMenu, 'Children')
+    set(submenu, 'Checked', 'off');
+end
 % set(handles.BlackmanWindowMenu, 'Checked', 'off');
 % set(handles.HanningWindowMenu, 'Checked', 'off');
 % set(handles.KaiserWindowMenu, 'Checked', 'off');
 % set(handles.HannWindowMenu, 'Checked', 'off');
 
-% --------------------------------------------------------------------
 function HammingWindowMenu_Callback(hObject, eventdata, handles)
 % hObject    handle to HammingWindowMenu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-deactivate_windows(hObject, handles);
+handles = deactivate_windows(hObject, handles);
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
-% --------------------------------------------------------------------
 function GaussianWindowMenu_Callback(hObject, eventdata, handles)
 % hObject    handle to GaussianWindowMenu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-deactivate_windows(hObject, handles);
+handles = deactivate_windows(hObject, handles);
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 

@@ -22,7 +22,7 @@ function varargout = rhythmconfig(varargin)
 
 % Edit the above text to modify the response to help rhythmconfig
 
-% Last Modified by GUIDE v2.5 26-Jun-2009 12:21:06
+% Last Modified by GUIDE v2.5 26-Nov-2015 09:53:58
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -414,5 +414,3 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 global thetaf1
 set(hObject,'string',num2str(thetaf1))
-
-
