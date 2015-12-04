@@ -161,13 +161,6 @@ end
 guidata(hObject, handles);
 
 % --------------------------------------------------------------------
-function PrintMenuItem_Callback(hObject, eventdata, handles)
-% hObject    handle to PrintMenuItem (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-printdlg(handles.figure1)
-
-% --------------------------------------------------------------------
 function CloseMenuItem_Callback(hObject, eventdata, handles)
 % hObject    handle to CloseMenuItem (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -224,11 +217,6 @@ rhythmconfig;
 
 % --------------------------------------------------------------------
 function [handles] = deactivate_windows(hObject, handles)
-% handles
-% for submenu = get(handles.SettingsMenu, 'Children')
-%     set(submenu, 'Checked', 'off');
-% end
-
 set(handles.HammingWindowMenu, 'Checked', 'off');
 set(handles.GaussianWindowMenu, 'Checked', 'off');
 set(handles.BlackmanWindowMenu, 'Checked', 'off');
@@ -237,57 +225,36 @@ set(handles.KaiserWindowMenu, 'Checked', 'off');
 set(handles.HannWindowMenu, 'Checked', 'off');
 
 function HammingWindowMenu_Callback(hObject, eventdata, handles)
-% hObject    handle to HammingWindowMenu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 handles = deactivate_windows(hObject, handles);
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
 function GaussianWindowMenu_Callback(hObject, eventdata, handles)
-% hObject    handle to GaussianWindowMenu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 handles = deactivate_windows(hObject, handles);
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
-% --------------------------------------------------------------------
 function BlackmanWindowMenu_Callback(hObject, eventdata, handles)
-% hObject    handle to BlackmanWindowMenu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 handles = deactivate_windows(hObject, handles);
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
-% --------------------------------------------------------------------
 function HanningWindowMenu_Callback(hObject, eventdata, handles)
-% hObject    handle to HanningWindowMenu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 handles = deactivate_windows(hObject, handles);
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
-% --------------------------------------------------------------------
 function KaiserWindowMenu_Callback(hObject, eventdata, handles)
-% hObject    handle to KaiserWindowMenu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 handles = deactivate_windows(hObject, handles);
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
-% --------------------------------------------------------------------
 function HannWindowMenu_Callback(hObject, eventdata, handles)
-% hObject    handle to HannWindowMenu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 handles = deactivate_windows(hObject, handles);
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
+% --- Executes on button press in buttonCalculatePower.
 function [text] = generate_statistics(signal, signalname)
 global fs
 % Signal:
@@ -305,7 +272,6 @@ text = {...
 	['Interval: ' num2str(signalinterval)];...
 	['Recording time: ' num2str(signalrecordingtime)]};
 
-% --- Executes on button press in buttonCalculatePower.
 function buttonCalculatePower_Callback(hObject, eventdata, handles)
 set(handles.labelPower, 'Enable', 'on');
 signal = handles.signals{get(handles.listRecordings, 'Value')};

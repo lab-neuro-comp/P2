@@ -22,7 +22,7 @@ function varargout = timemodule2(varargin)
 
 % Edit the above text to modify the response to help timemodule2
 
-% Last Modified by GUIDE v2.5 12-Nov-2015 11:16:25
+% Last Modified by GUIDE v2.5 04-Dec-2015 10:34:22
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -290,3 +290,11 @@ for line = 1:length(output)
 	fprintf(outlet, '%s\r\n', output{line});
 end
 fclose(outlet);
+
+% --- Executes on button press in ButtonSave.
+function ButtonSave_Callback(hObject, eventdata, handles)
+figure
+signal = handles.signals{get(handles.PopupChooseSignal, 'Value')};
+handle = plot(get_step(signal), signal);
+[filename pathname] = uiputfile('*.png', 'Save statistics');
+saveas(handle, [pathname filename]);
