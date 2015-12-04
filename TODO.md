@@ -37,10 +37,9 @@
 	- [x] Identicar funcionalidades.
 	- [ ] Fazer design da UI.
       - [ ] Descobrir como fazer o módulo escolher somente uma janela para a transformada.
-      - [ ] Estudar como plotar várias funções em um mesmo gráfico usando cores diferentes.
-        + Já sabemos como plotar várias funções no mesmo gráfico. Falta descobrir como mudar a cor de cada função.
-    - [ ] Decidir onde calcular a transformada de Fourier do sinal.
-	- [ ] Estudar como o MATLAB lida com a transformada de Fourier.
+      - [x] Estudar como plotar várias funções em um mesmo gráfico usando cores diferentes.
+    - [x] Decidir onde calcular a transformada de Fourier do sinal.
+	- [x] Estudar como o MATLAB lida com a transformada de Fourier.
   - [ ] STFT
     + O módulo original não funciona.
   - [ ] CWT

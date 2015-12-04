@@ -55,7 +55,9 @@ function fourier2_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.signals = {};
 handles.signalnames = {};
 handles.intervals = {};
+handles.durations = {};
 handles.plots = {};
+handles.colors = {'r' 'b' 'g' 'c' 'm' 'y' 'k'};
 handles.output = hObject;
 
 if strcmp(get(hObject,'Visible'),'off')
@@ -69,7 +71,6 @@ guidata(hObject, handles);
 
 % UIWAIT makes fourier2 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
-
 
 % --- Outputs from this function are returned to the command line.
 function varargout = fourier2_OutputFcn(hObject, eventdata, handles)
@@ -95,9 +96,6 @@ end
 
 % --- Executes on button press in buttonToggleSignal.
 function buttonToggleSignal_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonToggleSignal (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA
 
 % Hints: contents = cellstr(get(hObject,'String')) returns listRecordings contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from listRecordings
@@ -106,10 +104,10 @@ item = get(handles.listRecordings, 'Value');
 handles.plots{item} = ~handles.plots{item};
 
 plot(0);
-hold on;
+hold all;
 for index = 1:length(handles.plots)
     if handles.plots{index}
-        context_plot(handles.signals{index});
+        context_plot(handles.signals{index}, handles.colors{index});
     end
 end
 hold off;
@@ -129,8 +127,8 @@ global fs
 step = 0:1/fs:(length(signal) - 1)/fs;
 
 % --- Plots the current
-function context_plot(signal)
-plot(get_step(signal), signal);
+function context_plot(signal, colour)
+plot(get_step(signal), signal, colour);
 
 % --------------------------------------------------------------------
 function OpenMenuItem_Callback(hObject, eventdata, handles)
@@ -140,16 +138,20 @@ global fa fb fc fs
 if ~isequal(signalname, 0)
 	signal = load(strcat(signalpath, signalname));
     signal = (signal + fa)*fb - fc;
+    spectrum = imag(fft(signal));
 	signalname = signalname(1:length(signalname)-6);
 	interval = 0:1/fs:(length(signal) - 1)/fs;
+    duration = length(signal)/fs;
 
 	handles.signalnames{length(handles.signalnames)+1} = signalname;
-	handles.signals{length(handles.signals)+1} = signal;
+	handles.signals{length(handles.signals)+1} = spectrum;
 	handles.intervals{length(handles.intervals)+1} = interval;
     handles.plots{length(handles.plots)+1} = true;
+    handles.durations{length(handles.durations)+1} = duration;
+
 	set(handles.listRecordings, 'String', handles.signalnames);
 	if isequal(length(handles.signals), 1)
-		context_plot(signal);
+		context_plot(spectrum, handles.colors{length(handles.signals)});
         set(handles.buttonToggleSignal, 'Enable', 'on');
         set(handles.buttonCalculatePower, 'Enable', 'on');
         set(handles.labelPower, 'Enable', 'on');
