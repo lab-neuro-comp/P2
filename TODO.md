@@ -12,43 +12,44 @@
   + Este módulo não existe no P2
 - [x] Verificar quais módulos já foram tratados quanto ao uso de strings
   + Somente os módulos Fourier e (o novo) ECG foram aparentemente tratados com relação ao uso de reflexão, será necessário reescrever todos os outros módulos para que se encaixem no novo padrão.
+- [x] Identicar a funcionalidade da opção Transfer Function em P2
+- [ ] Padronizar interface dos módulos
+- [x] Colocar a definição da taxa de amostragem como entrada de dados
+- [ ] Otimizar edição (mais de um arquivo por vez quando possível)
+  + Requer que todos os módulos estejam prontos para que possamos decidir como padronizar esta interface.
+
 - [ ] Reescrever módulos
-  - [x] Time/Spec
-    - [x] Consertar conversão do sinal usando a equação `(s+fa)*fb+fc`
-    - [x] Criar opção de corte
-	  - [x] Criar opções de filtro
-	  - [ ] Testar filtros
-    - [ ] Criar opção de desfazer o que foi feito
-  - [ ] DWT
+  - [x] Time domain
     - [x] Abrir arquivo
+    - [x] Consertar conversão do sinal usando a equação `(s+fa)*fb+fc`
+    - [ ] Criar opção de desfazer o que foi feito
+    - [ ] Testar filtros
+    - [x] Criar opções de filtro
+    - [x] Criar opção de corte
+  - [ ] DWT
+    + Vamos deixar este módulo para depois.
     - [x] Decompor sinal
     - [ ] Mostrar decomposições do sinal
     - [ ] Criar ferramentas de edição
-	- [ ] Mostrar reconstrução do sinal
-	+ Vamos deixar este módulo para depois.
-  - [x] Time domain
+    - [ ] Mostrar reconstrução do sinal
+  - [x] Time/Spec
+    - [x] Identicar funcionalidades.
+    - [x] Criar ferramentas para cortar o sinal
     - [x] Criar ferramentas para gerar estatísticas do sinal
-	  - [x] Criar ferramentas para cortar o sinal
-	  - [x] Exportar estatística do sinal	  
-      - [ ] Gerar figura do sinal
-	  + Decisão de design: mostrar sinal ao selecioná-lo no eixo?
+    - [ ] Gerar figura do sinal
+    - [x] Exportar estatística do sinal	  
   - [ ] Fourier
     + O módulo original não funciona.
-	- [x] Identicar funcionalidades.
-	- [ ] Fazer design da UI.
-      - [ ] Descobrir como fazer o módulo escolher somente uma janela para a transformada.
-      - [x] Estudar como plotar várias funções em um mesmo gráfico usando cores diferentes.
+    - [x] Estudar como o MATLAB lida com a transformada de Fourier.
     - [x] Decidir onde calcular a transformada de Fourier do sinal.
-	- [x] Estudar como o MATLAB lida com a transformada de Fourier.
+    - [x] Estudar como plotar várias funções em um mesmo gráfico usando cores diferentes.
+    - [x] Descobrir como fazer o módulo escolher somente uma janela para a transformada.
+    - [ ] Aplicar a transformada de Fourier usando a janela selecionada.
   - [ ] STFT
     + O módulo original não funciona.
   - [ ] CWT
     - [ ] Checar funcionalidades
-- [x] Colocar a definição da taxa de amostragem como entrada de dados
-- [x] Identicar a funcionalidade da opção Transfer Function em P2
-- [ ] Padronizar interface dos módulos
-  + Requer que todos os módulos estejam prontos para que possamos decidir como padronizar esta interface.
-- [ ] Otimizar edição (mais de um arquivo por vez quando possível)
+
 - [ ] Escrever documentação
   - [x] Escrever introdução
   - [ ] Checar pré-requisitos
