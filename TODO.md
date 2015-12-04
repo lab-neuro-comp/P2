@@ -36,7 +36,7 @@
     - [x] Identicar funcionalidades.
     - [x] Criar ferramentas para cortar o sinal
     - [x] Criar ferramentas para gerar estatísticas do sinal
-    - [ ] Gerar figura do sinal
+    - [x] Gerar figura do sinal
     - [x] Exportar estatística do sinal	  
   - [ ] Fourier
     + O módulo original não funciona.
@@ -45,6 +45,9 @@
     - [x] Estudar como plotar várias funções em um mesmo gráfico usando cores diferentes.
     - [x] Descobrir como fazer o módulo escolher somente uma janela para a transformada.
     - [ ] Aplicar a transformada de Fourier usando a janela selecionada.
+    - [ ] Gerar estatísticas do sinal.
+    - [ ] Salvar estatísticas do espectro.
+    - [ ] Salvar figura do espectro.
   - [ ] STFT
     + O módulo original não funciona.
   - [ ] CWT
