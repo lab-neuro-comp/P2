@@ -52,13 +52,14 @@ function fourier2_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to fourier2 (see VARARGIN)
 
 % Choose default command line output for fourier2
-handles.signals = {};
+handles.spectra = {};
 handles.signalnames = {};
 handles.intervals = {};
 handles.durations = {};
 handles.plots = {};
 handles.colors = {'r' 'b' 'g' 'c' 'm' 'y' 'k'};
 handles.output = hObject;
+handles.window = 'hamming';
 
 if strcmp(get(hObject,'Visible'),'off')
     plot(0);
@@ -94,12 +95,23 @@ for hay = haystack
     end
 end
 
+% --- Calculate the Fourier transform
+function [spectrum] = calculate_fourier_transform(signal, window_name)
+global fs fa fb fc
+% v1newfft=fft(v1newsignal(v1tpointinicial:v1tpointfinalref).*v1jandata)./length(v1newsignal(v1tpointinicial:v1tpointfinalref));
+
+switch window_name
+case 'hamming'
+    ns = signal.*hamming(length(signal));
+otherwise
+    spectrum = real(fft(signal));
+    return
+end
+
+spectrum = fft(ns)./length(signal(1:length(signal)));
+
 % --- Executes on button press in buttonToggleSignal.
 function buttonToggleSignal_Callback(hObject, eventdata, handles)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns listRecordings contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from listRecordings
-
 item = get(handles.listRecordings, 'Value');
 handles.plots{item} = ~handles.plots{item};
 
@@ -107,7 +119,7 @@ plot(0);
 hold all;
 for index = 1:length(handles.plots)
     if handles.plots{index}
-        context_plot(handles.signals{index}, handles.colors{index});
+        context_plot(handles.spectra{index}, handles.colors{index});
     end
 end
 hold off;
@@ -121,7 +133,7 @@ function FileMenu_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
-% --- gets that signal parameter [si it the discrete signal step?]
+% --- gets that signal parameter
 function [step] = get_step(signal)
 global fs
 step = 0:1/fs:(length(signal) - 1)/fs;
@@ -138,20 +150,20 @@ global fa fb fc fs
 if ~isequal(signalname, 0)
 	signal = load(strcat(signalpath, signalname));
     signal = (signal + fa)*fb - fc;
-    spectrum = imag(fft(signal));
+    spectrum = calculate_fourier_transform(signal, handles.window);
 	signalname = signalname(1:length(signalname)-6);
 	interval = 0:1/fs:(length(signal) - 1)/fs;
     duration = length(signal)/fs;
 
 	handles.signalnames{length(handles.signalnames)+1} = signalname;
-	handles.signals{length(handles.signals)+1} = spectrum;
+	handles.spectra{length(handles.spectra)+1} = spectrum;
 	handles.intervals{length(handles.intervals)+1} = interval;
     handles.plots{length(handles.plots)+1} = true;
     handles.durations{length(handles.durations)+1} = duration;
 
 	set(handles.listRecordings, 'String', handles.signalnames);
-	if isequal(length(handles.signals), 1)
-		context_plot(spectrum, handles.colors{length(handles.signals)});
+	if isequal(length(handles.spectra), 1)
+		context_plot(spectrum, handles.colors{1});
         set(handles.buttonToggleSignal, 'Enable', 'on');
         set(handles.buttonCalculatePower, 'Enable', 'on');
         set(handles.labelPower, 'Enable', 'on');
@@ -226,31 +238,43 @@ set(handles.HannWindowMenu, 'Checked', 'off');
 
 function HammingWindowMenu_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
+set(handles.labelWindow, 'String', 'Window: Hamming');
+handles.window = 'hamming';
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
 function GaussianWindowMenu_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
+set(handles.labelWindow, 'String', 'Window: Gaussian');
+handles.window = 'gaussian';
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
 function BlackmanWindowMenu_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
+set(handles.labelWindow, 'String', 'Window: Blackman');
+handles.window = 'blackman';
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
 function HanningWindowMenu_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
+set(handles.labelWindow, 'String', 'Window: Hanning');
+handles.window = 'hanning';
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
 function KaiserWindowMenu_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
+set(handles.labelWindow, 'String', 'Window: Kaiser');
+handles.window = 'kaiser';
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
 function HannWindowMenu_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
+set(handles.labelWindow, 'String', 'Window: Hann');
+handles.window = 'hann';
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
@@ -264,11 +288,9 @@ for n = f1p:f2p
     power = power + spectrum(n).^2;
 end
 
-function [text] = generate_statistics(signal, signalname)
+function [text] = generate_statistics(spectrum, signalname)
 global fs deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 betaf1 betaf2 gammaf1 gammaf2
-signalinterval = length(signal) / fs;
-signalrecordingtime = signalinterval;
-spectrum = real(fft(signal));
+signalinterval = length(spectrum) / fs;
 deltapot = calculate_power(spectrum, deltaf1, deltaf2);
 thetapot = calculate_power(spectrum, thetaf1, thetaf2);
 alphapot = calculate_power(spectrum, alphaf1, alphaf2);
@@ -291,9 +313,9 @@ text = {...
 
 function buttonCalculatePower_Callback(hObject, eventdata, handles)
 set(handles.labelPower, 'Enable', 'on');
-signal = handles.signals{get(handles.listRecordings, 'Value')};
+spectrum = handles.spectra{get(handles.listRecordings, 'Value')};
 signalname = handles.signalnames{get(handles.listRecordings, 'Value')};
-set(handles.labelPower, 'String', generate_statistics(signal, signalname));
+set(handles.labelPower, 'String', generate_statistics(spectrum, signalname));
 guidata(hObject, handles);
 
 % --- Executes on selection change in listRecordings.
