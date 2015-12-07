@@ -45,7 +45,7 @@
     - [x] Estudar como plotar várias funções em um mesmo gráfico usando cores diferentes.
     - [x] Descobrir como fazer o módulo escolher somente uma janela para a transformada.
     - [ ] Aplicar a transformada de Fourier usando a janela selecionada.
-    - [ ] Gerar estatísticas do sinal.
+    - [x] Gerar estatísticas do sinal.
     - [ ] Salvar estatísticas do espectro.
     - [ ] Salvar figura do espectro.
   - [ ] STFT

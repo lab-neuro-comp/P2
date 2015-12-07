@@ -63,7 +63,7 @@ guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = rhythmconfig_OutputFcn(hObject, eventdata, handles) 
+function varargout = rhythmconfig_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -78,7 +78,7 @@ function okrythms_Callback(hObject, eventdata, handles)
 % hObject    handle to okrythms (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 bethaf1 bethaf2 gammaf1 gammaf2
+global deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 betaf1 betaf2 gammaf1 gammaf2
 error=checkvalue(handles.deltaf1);
 switch error
     case 1
@@ -121,18 +121,18 @@ switch error
         msgbox('An error ocurred in the definition of higher Alpha frequency')
         return
 end
-error=checkvalue(handles.bethaf1);
+error=checkvalue(handles.betaf1);
 switch error
     case 1
-        set(handles.bethaf1,'string',num2str(bethaf1))
-        msgbox('An error ocurred in the definition of lower Betha frequency')
+        set(handles.betaf1,'string',num2str(betaf1))
+        msgbox('An error ocurred in the definition of lower beta frequency')
         return
 end
-error=checkvalue(handles.bethaf2);
+error=checkvalue(handles.betaf2);
 switch error
     case 1
-        set(handles.bethaf2,'string',num2str(bethaf2))
-        msgbox('An error ocurred in the definition of higher Betha frequency')
+        set(handles.betaf2,'string',num2str(betaf2))
+        msgbox('An error ocurred in the definition of higher beta frequency')
         return
 end
 error=checkvalue(handles.gammaf1);
@@ -156,8 +156,8 @@ thetaf1=str2double(get(handles.thetaf1,'string'));
 thetaf2=str2double(get(handles.thetaf2,'string'));
 alphaf1=str2double(get(handles.alphaf1,'string'));
 alphaf2=str2double(get(handles.alphaf2,'string'));
-bethaf1=str2double(get(handles.bethaf1,'string'));
-bethaf2=str2double(get(handles.bethaf2,'string'));
+betaf1=str2double(get(handles.betaf1,'string'));
+betaf2=str2double(get(handles.betaf2,'string'));
 gammaf1=str2double(get(handles.gammaf1,'string'));
 gammaf2=str2double(get(handles.gammaf2,'string'));
 close(handles.rhythmconfig)
@@ -267,17 +267,17 @@ set(hObject,'string',num2str(gammaf1))
 
 
 function bethaf1_Callback(hObject, eventdata, handles)
-% hObject    handle to bethaf1 (see GCBO)
+% hObject    handle to betaf1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of bethaf1 as text
-%        str2double(get(hObject,'String')) returns contents of bethaf1 as a double
+% Hints: get(hObject,'String') returns contents of betaf1 as text
+%        str2double(get(hObject,'String')) returns contents of betaf1 as a double
 
 
 % --- Executes during object creation, after setting all properties.
 function bethaf1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to bethaf1 (see GCBO)
+% hObject    handle to betaf1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -286,23 +286,23 @@ function bethaf1_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-global bethaf1
-set(hObject,'string',num2str(bethaf1))
+global betaf1
+set(hObject,'string',num2str(betaf1))
 
 
 
 function bethaf2_Callback(hObject, eventdata, handles)
-% hObject    handle to bethaf2 (see GCBO)
+% hObject    handle to betaf2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of bethaf2 as text
-%        str2double(get(hObject,'String')) returns contents of bethaf2 as a double
+% Hints: get(hObject,'String') returns contents of betaf2 as text
+%        str2double(get(hObject,'String')) returns contents of betaf2 as a double
 
 
 % --- Executes during object creation, after setting all properties.
 function bethaf2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to bethaf2 (see GCBO)
+% hObject    handle to betaf2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -311,8 +311,8 @@ function bethaf2_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-global bethaf2
-set(hObject,'string',num2str(bethaf2))
+global betaf2
+set(hObject,'string',num2str(betaf2))
 
 
 

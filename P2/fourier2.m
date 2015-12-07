@@ -255,22 +255,39 @@ set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
 % --- Executes on button press in buttonCalculatePower.
-function [text] = generate_statistics(signal, signalname)
+function [power] = calculate_power(spectrum, f1, f2)
 global fs
-% Signal:
-% Interval:
-% Delta:
-% Theta:
-% Alpha:
-% Beta:
-% Gamma:
-% Total:
+f1p = round(f1*length(spectrum)/fs);
+f2p = round(f2*length(spectrum)/fs);
+power = 0;
+for n = f1p:f2p
+    power = power + spectrum(n).^2;
+end
+
+function [text] = generate_statistics(signal, signalname)
+global fs deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 betaf1 betaf2 gammaf1 gammaf2
 signalinterval = length(signal) / fs;
 signalrecordingtime = signalinterval;
+spectrum = real(fft(signal));
+deltapot = calculate_power(spectrum, deltaf1, deltaf2);
+thetapot = calculate_power(spectrum, thetaf1, thetaf2);
+alphapot = calculate_power(spectrum, alphaf1, alphaf2);
+betapot = calculate_power(spectrum, betaf1, betaf2);
+gammapot = calculate_power(spectrum, gammaf1, gammaf2);
+total = 0;
+for n = 1:length(spectrum)/2
+    total = total + spectrum(n).^2;
+end
+
 text = {...
 	['Signal: ' signalname];...
 	['Interval: ' num2str(signalinterval)];...
-	['Recording time: ' num2str(signalrecordingtime)]};
+    ['Delta: ' num2str(deltapot)];...
+    ['Theta: ' num2str(thetapot)];...
+    ['Alpha: ' num2str(alphapot)];...
+    ['Beta: ' num2str(betapot)];...
+    ['Gamma: ' num2str(gammapot)];...
+	['Total: ' num2str(total)]};
 
 function buttonCalculatePower_Callback(hObject, eventdata, handles)
 set(handles.labelPower, 'Enable', 'on');

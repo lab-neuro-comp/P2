@@ -46,7 +46,7 @@ end
 
 % --- Executes just before protolize2 is made visible.
 function protolize2_OpeningFcn(hObject, eventdata, handles, varargin)
-global deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 bethaf1 bethaf2 gammaf1 gammaf2 fa fb fc fs frhzoom hfourier pcalc
+global deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 betaf1 betaf2 gammaf1 gammaf2 fa fb fc fs frhzoom hfourier pcalc
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -66,8 +66,8 @@ thetaf1=3.5;
 thetaf2=7;
 alphaf1=8;
 alphaf2=13;
-bethaf1=15;
-bethaf2=24;
+betaf1=15;
+betaf2=24;
 gammaf1=30;
 gammaf2=70;
 fs=200;
