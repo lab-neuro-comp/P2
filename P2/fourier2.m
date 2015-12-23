@@ -22,7 +22,7 @@ function varargout = fourier2(varargin)
 
 % Edit the above text to modify the response to help fourier2
 
-% Last Modified by GUIDE v2.5 04-Dec-2015 10:20:47
+% Last Modified by GUIDE v2.5 23-Dec-2015 09:33:03
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -98,7 +98,6 @@ end
 % --- Calculate the Fourier transform
 function [spectrum] = calculate_fourier_transform(signal, window_name)
 global fs fa fb fc
-% v1newfft=fft(v1newsignal(v1tpointinicial:v1tpointfinalref).*v1jandata)./length(v1newsignal(v1tpointinicial:v1tpointfinalref));
 
 switch window_name
 case 'hamming'
@@ -108,7 +107,7 @@ otherwise
     return
 end
 
-spectrum = fft(ns)./length(signal(1:length(signal)));
+spectrum = fft(ns)./length(signal);
 
 % --- Executes on button press in buttonToggleSignal.
 function buttonToggleSignal_Callback(hObject, eventdata, handles)
@@ -166,6 +165,7 @@ if ~isequal(signalname, 0)
 		context_plot(spectrum, handles.colors{1});
         set(handles.buttonToggleSignal, 'Enable', 'on');
         set(handles.buttonCalculatePower, 'Enable', 'on');
+        set(handles.buttonExportPower, 'Enable', 'on');
         set(handles.labelPower, 'Enable', 'on');
 	end
 end
@@ -340,3 +340,24 @@ if ispc && isequal(get(hObject,'BackgroundColor'), ...
                    get(0, 'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes during object creation, after setting all properties.
+function textFrequency_CreateFcn(hObject, eventdata, handles)
+global fs
+set(hObject, 'String', ['Frequency: ' num2str(fs)]);
+guidata(hObject, handles);
+
+% --- Executes on button press in buttonExportPower.
+function buttonExportPower_Callback(hObject, eventdata, handles)
+index = get(handles.listRecordings, 'Value');
+spectrum = handles.spectra{index};
+spectrum_name = handles.signalnames{index};
+output = generate_statistics(spectrum, spectrum_name);
+
+[filename pathname] = uiputfile('*.txt', 'Save statistics');
+outlet = fopen([pathname filename], 'w');
+for line = 1:length(output)
+	fprintf(outlet, '%s\n', output{line});
+end
+fclose(outlet);
