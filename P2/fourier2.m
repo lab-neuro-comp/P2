@@ -101,13 +101,13 @@ global fs fa fb fc
 
 switch window_name
 case 'hamming'
-    ns = signal.*hamming(length(signal));
+    ns = hamming(length(signal)) * signal;
 otherwise
     spectrum = real(fft(signal));
     return
 end
 
-spectrum = fft(ns)./length(signal);
+spectrum = real(fft(ns)) / length(signal);
 
 % --- Executes on button press in buttonToggleSignal.
 function buttonToggleSignal_Callback(hObject, eventdata, handles)
