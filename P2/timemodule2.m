@@ -285,11 +285,13 @@ signal = handles.signals{signalname};
 output = generate_statistics(signal, signalname);
 
 [filename pathname] = uiputfile('*.txt', 'Save statistics');
-outlet = fopen([pathname filename], 'w');
-for line = 1:length(output)
-	fprintf(outlet, '%s\r\n', output{line});
+if ~isequal(filename, false) and ~isequal(pathname, false)
+    outlet = fopen([pathname filename], 'w');
+    for line = 1:length(output)
+    	fprintf(outlet, '%s\r\n', output{line});
+    end
+    fclose(outlet);
 end
-fclose(outlet);
 
 % --- Executes on button press in ButtonSave.
 function ButtonSave_Callback(hObject, eventdata, handles)
@@ -297,4 +299,6 @@ figure
 signal = handles.signals{get(handles.PopupChooseSignal, 'Value')};
 handle = plot(get_step(signal), signal);
 [filename pathname] = uiputfile('*.png', 'Save statistics');
-saveas(handle, [pathname filename]);
+if ~isequal(filename, false) and ~isequal(pathname, false)
+    saveas(handle, [pathname filename]);
+end

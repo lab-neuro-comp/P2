@@ -22,7 +22,7 @@ function varargout = fourier2(varargin)
 
 % Edit the above text to modify the response to help fourier2
 
-% Last Modified by GUIDE v2.5 23-Dec-2015 09:33:03
+% Last Modified by GUIDE v2.5 24-Dec-2015 12:42:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -83,18 +83,6 @@ function varargout = fourier2_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
-% --------------------------------------------------------------------------
-function [index] = find_this_string(needle, haystack)
-index = 1;
-for hay = haystack
-    hay
-    if isequal(needle, hay)
-        break;
-    else
-        index = index + 1;
-    end
-end
-
 % --- Calculate the Fourier transform
 function [spectrum] = calculate_fourier_transform(signal, window_name)
 global fs fa fb fc
@@ -102,6 +90,14 @@ global fs fa fb fc
 switch window_name
 case 'hamming'
     ns = hamming(length(signal)) * signal;
+case 'gaussian'
+    ns = gausswin(length(signal)) * signal;
+case 'blackman'
+    ns = blackman(length(signal)) * signal;
+case 'hanning'
+    ns = hann(length(signal)) * signal;
+case 'kaiser'
+    ns = kaiser(length(signal)) * signal;Settings
 otherwise
     spectrum = real(fft(signal));
     return
@@ -234,7 +230,6 @@ set(handles.GaussianWindowMenu, 'Checked', 'off');
 set(handles.BlackmanWindowMenu, 'Checked', 'off');
 set(handles.HanningWindowMenu, 'Checked', 'off');
 set(handles.KaiserWindowMenu, 'Checked', 'off');
-set(handles.HannWindowMenu, 'Checked', 'off');
 
 function HammingWindowMenu_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
@@ -268,13 +263,6 @@ function KaiserWindowMenu_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
 set(handles.labelWindow, 'String', 'Window: Kaiser');
 handles.window = 'kaiser';
-set(hObject, 'Checked', 'on');
-guidata(hObject, handles);
-
-function HannWindowMenu_Callback(hObject, eventdata, handles)
-handles = deactivate_windows(hObject, handles);
-set(handles.labelWindow, 'String', 'Window: Hann');
-handles.window = 'hann';
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
@@ -356,8 +344,20 @@ spectrum_name = handles.signalnames{index};
 output = generate_statistics(spectrum, spectrum_name);
 
 [filename pathname] = uiputfile('*.txt', 'Save statistics');
-outlet = fopen([pathname filename], 'w');
-for line = 1:length(output)
-	fprintf(outlet, '%s\n', output{line});
+if ~isequal(filename, false) and ~isequal(pathname, false)
+    outlet = fopen([pathname filename], 'w');
+    for line = 1:length(output)
+    	fprintf(outlet, '%s\n', output{line});
+    end
+    fclose(outlet);
 end
-fclose(outlet);
+
+% --- Executes on button press in buttonSaveFigure.
+function buttonSaveFigure_Callback(hObject, eventdata, handles)
+figure
+spectrum = handles.spectra{get(handles.listRecordings, 'Value')};
+handle = plot(get_step(spectrum), spectrum);
+[filename pathname] = uiputfile('*.png', 'Save statistics');
+if ~isequal(filename, false) and ~isequal(pathname, false)
+    saveas(handle, [pathname filename]);
+end
