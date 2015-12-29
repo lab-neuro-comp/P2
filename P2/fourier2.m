@@ -51,7 +51,6 @@ function fourier2_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to fourier2 (see VARARGIN)
 
-% Choose default command line output for fourier2
 handles.spectra = {};
 handles.signalnames = {};
 handles.intervals = {};
@@ -133,7 +132,7 @@ function [step] = get_step(signal)
 global fs
 step = 0:1/fs:(length(signal) - 1)/fs;
 
-% --- Plots the current
+% --- Plots the current spectrum
 function context_plot(signal, colour)
 plot(get_step(signal), signal, colour);
 
@@ -163,6 +162,7 @@ if ~isequal(signalname, 0)
         set(handles.buttonCalculatePower, 'Enable', 'on');
         set(handles.buttonExportPower, 'Enable', 'on');
         set(handles.labelPower, 'Enable', 'on');
+        set(handles.labelPower, 'String', generate_statistics(spectrum, signalname));
 	end
 end
 
@@ -181,7 +181,6 @@ if strcmp(selection,'No')
 end
 
 delete(handles.figure1)
-
 
 % --- Executes on selection change in popupmenu1.
 function popupmenu1_Callback(hObject, eventdata, handles)
