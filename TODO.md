@@ -1,6 +1,6 @@
 # PROTOLIZE! como um todo
 
-﻿- [x] Colocar menu do P1 no P2: "Arquivo | Ajuda"
+- [x] Colocar menu do P1 no P2: "Arquivo | Ajuda"
 - [x] Adicionar menu "Configuração"
 - [x] Manter Sample Frequency no menu "Configuração" em P2, renomeando para "Definir Taxa de Amostragem"
 - [x] Ativar em P2: "Configurar Ritmo" e "Configurar parâmetros" no menu "Configuração"
@@ -49,8 +49,8 @@
   - [x] Decidir onde calcular a transformada de Fourier do sinal.
   - [x] Estudar como plotar várias funções em um mesmo gráfico usando cores diferentes.
   - [x] Descobrir como fazer o módulo escolher somente uma janela para a   transformada.
-  - [ ] Aplicar a transformada de Fourier usando a janela selecionada.
-    - [ ] Checar se a aplicação da transformada é correta.
+  - [x] Aplicar a transformada de Fourier usando a janela selecionada.
+  - [ ] Checar se a aplicação da transformada é correta.
   - [x] Gerar estatísticas do sinal.
   - [x] Salvar estatísticas do espectro.
   - [x] Salvar figura do espectro.
@@ -58,7 +58,8 @@
 - [ ] STFT
   - [ ] Checar funcionalidades
   - [ ] Descobrir como plotar um gráfico 3D
-  - [ ] Implementar opções para escolher somente uma janela para aplicação da transformada.
+    + Existem várias funções do matlab para isso. Precisamos definir qual delas usar.
+  - [x] Implementar opções para escolher somente uma janela para aplicação da transformada.
 - [ ] CWT
   - [ ] Checar funcionalidades
 

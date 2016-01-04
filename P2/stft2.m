@@ -22,7 +22,7 @@ function varargout = stft2(varargin)
 
 % Edit the above text to modify the response to help stft2
 
-% Last Modified by GUIDE v2.5 29-Dec-2015 09:09:09
+% Last Modified by GUIDE v2.5 04-Jan-2016 09:10:13
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -59,7 +59,8 @@ handles.spectra = {};
 handles.names = {};
 handles.intervals = {};
 handles.durations = {};
-handles.window = 'hamming';
+handles.window = 'Hamming';
+handles.windows = {'Hamming' 'Gaussian' 'Blackman' 'Hanning' 'Kaiser'};
 
 % Update handles structure
 guidata(hObject, handles);
@@ -99,8 +100,16 @@ function [spectrum] = calculate_transform(signal, window)
 global fs fa fb fc
 
 switch window
-case 'hamming'
+case 'Hamming'
     spectrum = hamming(length(signal)) * signal;
+case 'Gaussian'
+    spectrum = gausswin(length(signal)) * signal;
+case 'Blackman'
+    spectrum = blackman(length(signal)) * signal;
+case 'Hanning'
+    spectrum = hann(length(signal)) * signal;
+case 'Kaiser'
+    spectrum = kaiser(length(signal)) * signal;
 otherwise
     spectrum = fft(signal);
 end
@@ -148,16 +157,17 @@ end
 
 delete(handles.figure1)
 
-
 % --- Executes on selection change in popupSpectra.
 function popupSpectra_Callback(hObject, eventdata, handles)
 % hObject    handle to popupSpectra (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns popupSpectra contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupSpectra
-
+contents = cellstr(get(hObject, 'String'));
+signalname = contents{get(hObject, 'Value')};
+spectrum = handles.spectra{find_in_list(handles.names, signalname)};
+surface_plot(spectrum);
+guidata(hObject, handles);
+% surface_plot(handles.spectra{find_in_list(handles.names, cellstr(get(hObject, 'String')){get(hOjbect, 'Value')})});
 
 % --- Executes during object creation, after setting all properties.
 function popupSpectra_CreateFcn(hObject, eventdata, handles)
@@ -203,7 +213,20 @@ function popupWindow_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns popupWindow contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupWindow
-
+contents = cellstr(get(hObject, 'String'));
+switch contents{get(hObject, 'Value')}
+case 'Hamming'
+    menuHamming_Callback(hObject, eventdata, handles);
+case 'Gaussian'
+    menuGaussian_Callback(hObject, eventdata, handles);
+case 'Blackman'
+    menuBlackman_Callback(hObject, eventdata, handles);
+case 'Hanning'
+    menuHanning_Callback(hObject, eventdata, handles);
+case 'Kaiser'
+    menuKaiser_Callback(hObject, eventdata, handles);
+end
+guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function popupWindow_CreateFcn(hObject, eventdata, handles)
@@ -218,7 +241,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), ...
     set(hObject,'BackgroundColor','white');
 end
 
-set(hObject, 'String', {'Hamming' 'Gaussian' 'Blackman'});
+set(hObject, 'String', {'Hamming' 'Gaussian' 'Blackman' 'Hanning' 'Kaiser'});
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -232,16 +255,61 @@ guidata(hObject, handles);
 
 % --------------------------------------------------------------------
 
+function [handles] = deactivate_windows(hObject, handles)
+set(handles.menuHamming, 'Checked', 'off');
+set(handles.menuGaussian, 'Checked', 'off');
+set(handles.menuBlackman, 'Checked', 'off');
+set(handles.menuHanning, 'Checked', 'off');
+set(handles.menuKaiser, 'Checked', 'off');
+
+function [index] = find_in_list(list, window)
+index = 1;
+while index <= length(list)
+    if isequal(list{index}, window)
+        return
+    else
+        index = index + 1;
+    end
+end
 
 % --------------------------------------------------------------------
 function menuHamming_Callback(hObject, eventdata, handles)
-% hObject    handle to menuHamming (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
+handles = deactivate_windows(hObject, handles);
+set(handles.menuHamming, 'Checked', 'on');
+set(handles.popupWindow, 'Value', find_in_list(handles.windows, 'Hamming'));
+handles.window = 'Hamming';
+guidata(hObject, handles);
 
 % --------------------------------------------------------------------
 function menuGaussian_Callback(hObject, eventdata, handles)
-% hObject    handle to menuGaussian (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+handles = deactivate_windows(hObject, handles);
+set(handles.menuGaussian, 'Checked', 'on');
+set(handles.popupWindow, 'Value', find_in_list(handles.windows, 'Gaussian'));
+handles.window = 'Gaussian';
+guidata(hObject, handles);
+
+% --------------------------------------------------------------------
+function menuBlackman_Callback(hObject, eventdata, handles)
+handles = deactivate_windows(hObject, handles);
+set(handles.menuBlackman, 'Checked', 'on');
+set(handles.popupWindow, 'Value', find_in_list(handles.windows, 'Blackman'));
+handles.window = 'Blackman';
+guidata(hObject, handles);
+
+
+% --------------------------------------------------------------------
+function menuHanning_Callback(hObject, eventdata, handles)
+handles = deactivate_windows(hObject, handles);
+set(handles.menuHanning, 'Checked', 'on');
+set(handles.popupWindow, 'Value', find_in_list(handles.windows, 'Hanning'));
+handles.window = 'Hanning';
+guidata(hObject, handles);
+
+
+% --------------------------------------------------------------------
+function menuKaiser_Callback(hObject, eventdata, handles)
+handles = deactivate_windows(hObject, handles);
+set(handles.menuKaiser, 'Checked', 'on');
+set(handles.popupWindow, 'Value', find_in_list(handles.windows, 'Kaiser'));
+handles.window = 'Kaiser';
+guidata(hObject, handles);

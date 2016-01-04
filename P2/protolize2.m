@@ -95,21 +95,21 @@ function timedombut_Callback(hObject, eventdata, handles)
 % hObject    handle to timedombut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-timemodule2; % under construction
+timemodule2;
 
 % --- Executes on button press in fourierbut.
 function fourierbut_Callback(hObject, eventdata, handles)
 % hObject    handle to fourierbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-fourier2; % under construction
+fourier2; % done but needs some changes
 
 % --- Executes on button press in stftbut.
 function stftbut_Callback(hObject, eventdata, handles)
 % hObject    handle to stftbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% stft2; % don't run it! it crashes MATLAB!
+stft2; % under construction
 
 % --- Executes on button press in cwtbut.
 function cwtbut_Callback(hObject, eventdata, handles)
@@ -123,7 +123,7 @@ function ecgbut_Callback(hObject, eventdata, handles)
 % hObject    handle to ecgbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-ecgmodule;
+ecgmodule; % needs to be checked
 
 % --- Executes on button press in timespecbut.
 function timespecbut_Callback(hObject, eventdata, handles)

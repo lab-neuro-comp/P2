@@ -96,13 +96,14 @@ case 'blackman'
 case 'hanning'
     ns = hann(length(signal)) * signal;
 case 'kaiser'
-    ns = kaiser(length(signal)) * signal;Settings
+    ns = kaiser(length(signal)) * signal;
 otherwise
     spectrum = real(fft(signal));
     return
 end
 
-spectrum = real(fft(ns)) / length(signal);
+% spectrum = real(fft(ns)) / length(signal);
+spectrum = real(fft(ns));
 
 % --- Executes on button press in buttonToggleSignal.
 function buttonToggleSignal_Callback(hObject, eventdata, handles)
