@@ -130,9 +130,8 @@ case 'Kaiser'
     windowfunction = @kaiser;
 end
 
-w = windowfunction(s);
-s = floor(windowsize/fs);
-spectrum = calcstft(signal, w, s)
+windowsize = floor(windowsize*fs);
+spectrum = calcstft(signal, windowfunction(windowsize), windowsize);
 
 % --------------------------------------------------------------------
 function OpenMenuItem_Callback(hObject, eventdata, handles)
