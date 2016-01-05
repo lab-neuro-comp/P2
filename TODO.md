@@ -55,6 +55,7 @@
   - [x] Salvar estatísticas do espectro.
   - [x] Salvar figura do espectro.
   - [ ] Trocar o texto que mostra qual janela está selecionada por um menu popup.
+  - [ ] Trocar 'Hanning' por 'Hann', já que esta é a janela de Julius von Hann.
 - [ ] STFT
   - [ ] Checar funcionalidades
   - [ ] Descobrir como plotar um gráfico 3D

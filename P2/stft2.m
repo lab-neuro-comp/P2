@@ -22,7 +22,7 @@ function varargout = stft2(varargin)
 
 % Edit the above text to modify the response to help stft2
 
-% Last Modified by GUIDE v2.5 04-Jan-2016 09:10:13
+% Last Modified by GUIDE v2.5 05-Jan-2016 08:34:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -60,7 +60,7 @@ handles.names = {};
 handles.intervals = {};
 handles.durations = {};
 handles.window = 'Hamming';
-handles.windows = {'Hamming' 'Gaussian' 'Blackman' 'Hanning' 'Kaiser'};
+handles.windows = {'Hamming' 'Gaussian' 'Blackman' 'Hann' 'Kaiser'};
 
 % Update handles structure
 guidata(hObject, handles);
@@ -106,13 +106,33 @@ case 'Gaussian'
     spectrum = gausswin(length(signal)) * signal;
 case 'Blackman'
     spectrum = blackman(length(signal)) * signal;
-case 'Hanning'
+case 'Hann'
     spectrum = hann(length(signal)) * signal;
 case 'Kaiser'
     spectrum = kaiser(length(signal)) * signal;
 otherwise
     spectrum = fft(signal);
 end
+
+function [spectrum] = altcalctrans(signal, window, windowsize)
+global fs
+
+switch window
+case 'Hamming'
+    windowfunction = @hamming;
+case 'Gaussian'
+    windowfunction = @gausswin;
+case 'Blackman'
+    windowfunction = @blackman;
+case 'Hann'
+    windowfunction = @hann;
+case 'Kaiser'
+    windowfunction = @kaiser;
+end
+
+w = windowfunction(s);
+s = floor(windowsize/fs);
+spectrum = calcstft(signal, w, s)
 
 % --------------------------------------------------------------------
 function OpenMenuItem_Callback(hObject, eventdata, handles)
@@ -125,7 +145,8 @@ global fa fb fc fs
 if ~isequal(signalname, 0)
 	signal = load(strcat(signalpath, signalname));
     signal = (signal + fa)*fb - fc;
-    spectrum = calculate_transform(signal, handles.window);
+    windowsize = str2num(get(handles.editWindowSize, 'String'));
+    spectrum = altcalctrans(signal, handles.window, windowsize);
 	signalname = signalname(1:length(signalname)-6);
 	interval = 0:1/fs:(length(signal) - 1)/fs;
     duration = length(signal)/fs;
@@ -221,8 +242,8 @@ case 'Gaussian'
     menuGaussian_Callback(hObject, eventdata, handles);
 case 'Blackman'
     menuBlackman_Callback(hObject, eventdata, handles);
-case 'Hanning'
-    menuHanning_Callback(hObject, eventdata, handles);
+case 'Hann'
+    menuHann_Callback(hObject, eventdata, handles);
 case 'Kaiser'
     menuKaiser_Callback(hObject, eventdata, handles);
 end
@@ -241,7 +262,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), ...
     set(hObject,'BackgroundColor','white');
 end
 
-set(hObject, 'String', {'Hamming' 'Gaussian' 'Blackman' 'Hanning' 'Kaiser'});
+set(hObject, 'String', {'Hamming' 'Gaussian' 'Blackman' 'Hann' 'Kaiser'});
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -259,7 +280,7 @@ function [handles] = deactivate_windows(hObject, handles)
 set(handles.menuHamming, 'Checked', 'off');
 set(handles.menuGaussian, 'Checked', 'off');
 set(handles.menuBlackman, 'Checked', 'off');
-set(handles.menuHanning, 'Checked', 'off');
+set(handles.menuHann, 'Checked', 'off');
 set(handles.menuKaiser, 'Checked', 'off');
 
 function [index] = find_in_list(list, window)
@@ -298,11 +319,11 @@ guidata(hObject, handles);
 
 
 % --------------------------------------------------------------------
-function menuHanning_Callback(hObject, eventdata, handles)
+function menuHann_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
-set(handles.menuHanning, 'Checked', 'on');
-set(handles.popupWindow, 'Value', find_in_list(handles.windows, 'Hanning'));
-handles.window = 'Hanning';
+set(handles.menuHann, 'Checked', 'on');
+set(handles.popupWindow, 'Value', find_in_list(handles.windows, 'Hann'));
+handles.window = 'Hann';
 guidata(hObject, handles);
 
 
@@ -313,3 +334,27 @@ set(handles.menuKaiser, 'Checked', 'on');
 set(handles.popupWindow, 'Value', find_in_list(handles.windows, 'Kaiser'));
 handles.window = 'Kaiser';
 guidata(hObject, handles);
+
+
+
+function editWindowSize_Callback(hObject, eventdata, handles)
+% hObject    handle to editWindowSize (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editWindowSize as text
+%        str2double(get(hObject,'String')) returns contents of editWindowSize as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editWindowSize_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editWindowSize (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'),...
+                   get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
