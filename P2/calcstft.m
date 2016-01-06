@@ -1,23 +1,24 @@
 function [spectrum] = calcstft(signal, window, winsize)
 limit = length(signal);
-spectrum = zeros(limit, winsize); % TODO: add zero paddings!
-halfwin = floor(winsize/2);
+padding = floor(winsize/2); % half window
+signal = signal_with_padding(signal, padding);
+spectrum = zeros(limit, winsize);
 
 for n = 1:limit
-    fa = n - halfwin; % where signal begins
-    fz = n-1 + halfwin; % where signal ends
-    wa = 1; % where window begins
-    wz = winsize; % where window ends
-
-    if fa <= 0
-        wa = wa - fa + 1;
-        fa = 1;
-    elseif fz > limit
-        wz = wz - limit;
-        fz = limit;
+    term = [];
+    beginning = n + padding;
+    for m = 1:winsize
+        term(m) = window(m) * signal(beginning+m);
     end
+    tfft = real(fft(term));
+    for m = 1:winsize
+        spectrum(n, m) = tfft(m);
+    end
+end
 
-    fprintf('%d %d %d %d\n', fa, fz, wa, wz);
-    term = window(wa:wz) * signal(fa:fz);
-    spectrum(:,n) = real(fft(term));
+function [newsignal] = signal_with_padding(signal, padding)
+limit = length(signal);
+newsignal = zeros(2*padding + limit);
+for n = 1:limit
+    newsignal(n+padding) = signal(n);
 end

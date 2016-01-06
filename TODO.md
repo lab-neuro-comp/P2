@@ -61,7 +61,8 @@
   - [ ] Descobrir como plotar um gráfico 3D
     + Existem várias funções do matlab para isso. Precisamos definir qual delas usar.
   - [x] Implementar opções para escolher somente uma janela para aplicação da transformada.
-  - [ ] Calcular STFT no arquivo `calcstft.m`
+  - [x] Calcular STFT no arquivo `calcstft.m`
+  - [ ] Checar se cálculo da STFT está correto.
 - [ ] CWT
   - [ ] Checar funcionalidades
 
