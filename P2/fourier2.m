@@ -22,7 +22,7 @@ function varargout = fourier2(varargin)
 
 % Edit the above text to modify the response to help fourier2
 
-% Last Modified by GUIDE v2.5 24-Dec-2015 12:42:50
+% Last Modified by GUIDE v2.5 11-Jan-2016 10:02:39
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -58,7 +58,7 @@ handles.durations = {};
 handles.plots = {};
 handles.colors = {'r' 'b' 'g' 'c' 'm' 'y' 'k'};
 handles.output = hObject;
-handles.window = 'hamming';
+handles.window = 'Hamming';
 
 if strcmp(get(hObject,'Visible'),'off')
     plot(0);
@@ -83,27 +83,28 @@ function varargout = fourier2_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 % --- Calculate the Fourier transform
-function [spectrum] = calculate_fourier_transform(signal, window_name)
-global fs fa fb fc
-
-switch window_name
-case 'hamming'
-    ns = hamming(length(signal)) * signal;
-case 'gaussian'
-    ns = gausswin(length(signal)) * signal;
-case 'blackman'
-    ns = blackman(length(signal)) * signal;
-case 'hanning'
-    ns = hann(length(signal)) * signal;
-case 'kaiser'
-    ns = kaiser(length(signal)) * signal;
-otherwise
-    spectrum = real(fft(signal));
-    return
-end
-
-% spectrum = real(fft(ns)) / length(signal);
-spectrum = real(fft(ns));
+function [spectrum] = calculate_transform(signal, window)
+spectrum = real(fft(signal));
+% global fs
+%
+% switch window
+% case 'Blackman'
+%     windowfunction = @gausswin;
+% case 'Blackman'
+%     windowfunction = @blackman;
+% case 'Hann'
+%     windowfunction = @hann;
+% case 'Kaiser'
+%     windowfunction = @kaiser;
+% otherwise
+%     windowfunction = @hamming;
+% end
+%
+% spectrum = [];
+% window = windowfunction(length(signal));
+% for n = 1:length(signal)
+%     spectrum(n) = signal(n) * window(n);
+% end
 
 % --- Executes on button press in buttonToggleSignal.
 function buttonToggleSignal_Callback(hObject, eventdata, handles)
@@ -145,7 +146,7 @@ global fa fb fc fs
 if ~isequal(signalname, 0)
 	signal = load(strcat(signalpath, signalname));
     signal = (signal + fa)*fb - fc;
-    spectrum = calculate_fourier_transform(signal, handles.window);
+    spectrum = calculate_transform(signal, handles.window);
 	signalname = signalname(1:length(signalname)-6);
 	interval = 0:1/fs:(length(signal) - 1)/fs;
     duration = length(signal)/fs;
@@ -218,10 +219,15 @@ function ChooseWindowMenu_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-
 % --------------------------------------------------------------------
 function EEGMenu_Callback(hObject, eventdata, handles)
 rhythmconfig;
+
+% --------------------------------------------------------------------
+function ParamMenu_Callback(hObject, eventdata, handles)
+global fs
+paramconfig;
+set(handles.textFrequency, 'String', ['Frequency: ' num2str(fs)]);
 
 % --------------------------------------------------------------------
 function [handles] = deactivate_windows(hObject, handles)
@@ -234,56 +240,47 @@ set(handles.KaiserWindowMenu, 'Checked', 'off');
 function HammingWindowMenu_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
 set(handles.labelWindow, 'String', 'Window: Hamming');
-handles.window = 'hamming';
+handles.window = 'Hamming';
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
 function GaussianWindowMenu_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
 set(handles.labelWindow, 'String', 'Window: Gaussian');
-handles.window = 'gaussian';
+handles.window = 'Gaussian';
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
 function BlackmanWindowMenu_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
 set(handles.labelWindow, 'String', 'Window: Blackman');
-handles.window = 'blackman';
+handles.window = 'Blackman';
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
 function HanningWindowMenu_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
 set(handles.labelWindow, 'String', 'Window: Hanning');
-handles.window = 'hanning';
+handles.window = 'Hanning';
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
 function KaiserWindowMenu_Callback(hObject, eventdata, handles)
 handles = deactivate_windows(hObject, handles);
 set(handles.labelWindow, 'String', 'Window: Kaiser');
-handles.window = 'kaiser';
+handles.window = 'Kaiser';
 set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
 % --- Executes on button press in buttonCalculatePower.
-function [power] = calculate_power(spectrum, f1, f2)
-global fs
-f1p = round(f1*length(spectrum)/fs);
-f2p = round(f2*length(spectrum)/fs);
-power = 0;
-for n = f1p:f2p
-    power = power + spectrum(n).^2;
-end
-
 function [text] = generate_statistics(spectrum, signalname)
 global fs deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 betaf1 betaf2 gammaf1 gammaf2
 signalinterval = length(spectrum) / fs;
-deltapot = calculate_power(spectrum, deltaf1, deltaf2);
-thetapot = calculate_power(spectrum, thetaf1, thetaf2);
-alphapot = calculate_power(spectrum, alphaf1, alphaf2);
-betapot = calculate_power(spectrum, betaf1, betaf2);
-gammapot = calculate_power(spectrum, gammaf1, gammaf2);
+deltapot = calculate_power(spectrum, deltaf1, deltaf2, fs);
+thetapot = calculate_power(spectrum, thetaf1, thetaf2, fs);
+alphapot = calculate_power(spectrum, alphaf1, alphaf2, fs);
+betapot = calculate_power(spectrum, betaf1, betaf2, fs);
+gammapot = calculate_power(spectrum, gammaf1, gammaf2, fs);
 total = 0;
 for n = 1:length(spectrum)/2
     total = total + spectrum(n).^2;
