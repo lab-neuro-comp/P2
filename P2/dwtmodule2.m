@@ -51,16 +51,53 @@ function dwtmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to dwtmodule2 (see VARARGIN)
 
-% Choose default command line output for dwtmodule2
 handles.output = hObject;
-handles.signals = {};
-handles.signalnames = {};
+handles.signal = [];
+handles.signalname = [];
+handles.level = 1;
 handles.wavelets = [];
+handles.plots = [handles.axes1,...
+                 handles.axes2,...
+                 handles.axes3,...
+                 handles.axes4,...
+                 handles.axes5,...
+                 handles.axes6,...
+                 handles.axes7,...
+                 handles.axes8,...
+                 handles.axes9,...
+                 handles.axes10,...
+                 handles.axes11];
 
 % Update handles structure
 guidata(hObject, handles);
 
 % ---------------------------------------------------------------------
+function how_many_plots(plots, many)
+% plots handles to GUIDE's axes
+% many  how many plots we want
+
+% disable every plot
+for p = plots
+    set(p, 'Visible', 'off');
+end
+
+% enable and scale just the necessary number
+if isequal(many, 1)
+    p = plots(many);
+    set(p, 'Visible', 'on');
+    set(p, 'Position', [0.1 0.1 0.85 0.85])
+    return
+end
+
+% TODO: display and scale the needed number of plots
+for index = 1:many
+    p = plots(index);
+    set(p, 'Visible', 'on');
+end
+
+function choose_plot(plots, what)
+axes(plots(what))
+
 function [step] = get_step(signal)
 global fs
 step = 0:1/fs:(length(signal) - 1)/fs;
@@ -94,12 +131,12 @@ if ~isequal(signalname, 0)
 	signal = (load(strcat(signalpath, signalname)) + fa)*fb - fc;
 	signalname = signalname(1:length(signalname)-6);
 
-	handles.signalnames{length(handles.signalnames)+1} = signalname;
-	handles.signals{length(handles.signals)+1} = signal;
+	handles.signalname = signalname;
+	handles.signal = signal;
 	set(handles.textSignalName, 'String', signalname);
-	if isequal(length(handles.signals), 1)
-		context_plot(signal);
-	end
+    how_many_plots(handles.plots, 1);
+    choose_plot(handles.plots, 1);
+	context_plot(signal);
 end
 
 guidata(hObject, handles);
@@ -162,8 +199,6 @@ contents = cellstr(get(hObject, 'String'));
 wavelet = contents{get(hObject, 'Value')};
 
 switch wavelet
-case 'Haar'
-	set(handles.PopupWaveletVar, 'String', {'Std'});
 case 'Daubechies'
 	set(handles.PopupWaveletVar, 'String', ...
 	   {'db1' 'db2' 'db3' 'db4' 'db5' 'db6' 'db7' 'db8' 'db9' 'db10'});
@@ -181,6 +216,8 @@ case 'R Biorthogonal'
 	set(handles.PopupWaveletVar, 'String', ...
 	   {'1.1' '1.3' '1.5' '2.2' '2.4' '2.6' '2.8' ...
 		'3.1' '3.3' '3.5' '3.7' '3.9' '4.4' '5.5' '6.8'});
+otherwise
+    set(handles.PopupWaveletVar, 'String', {'Std'});
 end
 
 guidata(hObject, handles);
@@ -261,6 +298,9 @@ case 'R Biorthogonal'
 end
 
 function ButtonCalculate_Callback(hObject, eventdata, handles)
+set(handles.axes1, 'Position', [0.1 0.1 0.75 0.75]);
+return
+
 contents = get(handles.PopupWaveletKind, 'string');
 signal = handles.signals{1};
 level = get(handles.PopupWaveletLevel, 'Value');

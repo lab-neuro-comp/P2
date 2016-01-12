@@ -33,6 +33,7 @@
   - [x] Criar opção de corte
 - [ ] DWT
   + Vamos deixar este módulo para depois.
+  + Este módulo deve trabalhar com um único sinal de cada vez? Ou ele deve permitir uma lista de sinais?
   - [x] Decompor sinal
   - [ ] Mostrar decomposições do sinal
   - [ ] Criar ferramentas de edição
@@ -51,11 +52,12 @@
   - [x] Descobrir como fazer o módulo escolher somente uma janela para a   transformada.
   - [x] Aplicar a transformada de Fourier usando a janela selecionada.
   - [ ] Checar se a aplicação da transformada é correta.
+    + Talvez deveríamos tirar a opção de calcular a transformada usando a janela neste módulo.
   - [x] Gerar estatísticas do sinal.
   - [x] Salvar estatísticas do espectro.
   - [x] Salvar figura do espectro.
   - [ ] Trocar o texto que mostra qual janela está selecionada por um menu popup.
-  - [ ] Trocar 'Hanning' por 'Hann', já que esta é a janela de Julius von Hann.
+  - [x] Trocar 'Hanning' por 'Hann', já que esta é a janela de Julius von Hann.
 - [ ] STFT
   - [ ] Checar funcionalidades
   - [ ] Descobrir como plotar um gráfico 3D
