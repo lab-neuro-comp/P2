@@ -72,6 +72,7 @@ handles.plots = [handles.axes1,...
 guidata(hObject, handles);
 
 % ---------------------------------------------------------------------
+% Changes the number of plots and scale them to fit in their panel.
 function how_many_plots(plots, many)
 % plots handles to GUIDE's axes
 % many  how many plots we want
@@ -83,20 +84,28 @@ end
 
 % enable and scale just the necessary number
 if isequal(many, 1)
-    p = plots(many);
-    set(p, 'Visible', 'on');
-    set(p, 'Position', [0.1 0.1 0.85 0.85])
+    set(plots(1), 'Visible', 'on');
+    set(plots(1), 'Position', [0.1 0.1 0.8 0.8]);
     return
 end
 
-% TODO: display and scale the needed number of plots
+moo = 0.1;
+width = 0.8;
+height = width * (1-moo) * (many-1) / many;
+padding = moo * width;
+margin = 0.1;
+
 for index = 1:many
+    x = margin;
+    y = margin + (many - index)*(height + padding);
     p = plots(index);
+
     set(p, 'Visible', 'on');
+    set(p, 'Position', [x y width height]);
 end
 
 function choose_plot(plots, what)
-axes(plots(what))
+axes(plots(what));
 
 function [step] = get_step(signal)
 global fs
@@ -104,6 +113,23 @@ step = 0:1/fs:(length(signal) - 1)/fs;
 
 function context_plot(signal)
 plot(get_step(signal), signal);
+
+% ---------------------------------------------------------------------------
+function plot_decomposition(handles, decomposition, bookkeeping)
+limit = length(bookkeeping)-1;
+offset = 1;
+
+how_many_plots(handles.plots, limit);
+choose_plot(handles.plots, 1);
+context_plot(handles.signal);
+
+% TODO: why is everything so small?
+for index = 2:limit
+    choose_plot(handles.plots, index);
+    where = offset + bookkeeping(index);
+    context_plot(decomposition(offset:where));
+    offset = where;
+end
 
 % --- Outputs from this function are returned to the command line.
 function varargout = dwtmodule2_OutputFcn(hObject, eventdata, handles)
@@ -298,17 +324,13 @@ case 'R Biorthogonal'
 end
 
 function ButtonCalculate_Callback(hObject, eventdata, handles)
-set(handles.axes1, 'Position', [0.1 0.1 0.75 0.75]);
-return
-
 contents = get(handles.PopupWaveletKind, 'string');
-signal = handles.signals{1};
 level = get(handles.PopupWaveletLevel, 'Value');
 wavelet_family = get(handles.PopupWaveletKind, 'Value');
 wavelet_kind = get(handles.PopupWaveletVar, 'Value');
 wavelet = get_choosen_wavelet(wavelet_family, wavelet_kind);
-[decomposition bookkeeping] = wavedec(signal, level, wavelet);
-plot(decomposition);
+[decomposition bookkeeping] = wavedec(handles.signal, level, wavelet);
+plot_decomposition(handles, decomposition, bookkeeping);
 
 % --------------------------------------------------------------------
 function VisualizeMenu_Callback(hObject, eventdata, handles)

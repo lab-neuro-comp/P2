@@ -36,6 +36,7 @@
   + Este módulo deve trabalhar com um único sinal de cada vez? Ou ele deve permitir uma lista de sinais?
   - [x] Decompor sinal
   - [ ] Mostrar decomposições do sinal
+    + Descobrir por que o MATLAB plota as decomposições tão pequenas.
   - [ ] Criar ferramentas de edição
   - [ ] Mostrar reconstrução do sinal
 - [x] Time/Spec
