@@ -66,20 +66,23 @@ handles.plots = [handles.axes1,...
                  handles.axes8,...
                  handles.axes9,...
                  handles.axes10,...
-                 handles.axes11];
+                 handles.axes11,...
+                 handles.axes12];
 
 % Update handles structure
 guidata(hObject, handles);
 
 % ---------------------------------------------------------------------
 % Changes the number of plots and scale them to fit in their panel.
-function how_many_plots(plots, many)
-% plots handles to GUIDE's axes
-% many  how many plots we want
+function how_many_plots(handles, many)
+% handles handles to GUIDE's structs
+% many    how many plots we want
+plots = handles.plots;
 
 % disable every plot
 for p = plots
     set(p, 'Visible', 'off');
+    set(p, 'FontSize', 0.035);
 end
 
 % enable and scale just the necessary number
@@ -89,18 +92,26 @@ if isequal(many, 1)
     return
 end
 
-moo = 0.1;
-width = 0.8;
-height = width * (1-moo) * (many-1) / many;
-padding = moo * width;
-margin = 0.1;
+position = get(handles.PanelPlot, 'Position');
+xposition = position(1);
+yposition = position(2);
+panelwidth = position(3);
+panelheight = position(4);
 
+moo = 0.1;
+width = (1-2*moo) * panelwidth;
+height = (1-2*moo) * panelheight * (1-moo) / many;
+padding = moo * (1-2*moo) * panelheight / (many-1);
+xmargin = moo * panelwidth;
+ymargin = moo * panelheight;
+
+x = xmargin;
 for index = 1:many
-    x = margin;
-    y = margin + (many - index)*(height + padding);
+    y = ymargin + (many-index) * (height+padding);
     p = plots(index);
 
     set(p, 'Visible', 'on');
+    set(p, 'FontSize', 0.035);
     set(p, 'Position', [x y width height]);
 end
 
@@ -119,7 +130,7 @@ function plot_decomposition(handles, decomposition, bookkeeping)
 limit = length(bookkeeping)-1;
 offset = 1;
 
-how_many_plots(handles.plots, limit);
+how_many_plots(handles, limit+1);
 choose_plot(handles.plots, 1);
 context_plot(handles.signal);
 
@@ -160,7 +171,7 @@ if ~isequal(signalname, 0)
 	handles.signalname = signalname;
 	handles.signal = signal;
 	set(handles.textSignalName, 'String', signalname);
-    how_many_plots(handles.plots, 1);
+    how_many_plots(handles, 1);
     choose_plot(handles.plots, 1);
 	context_plot(signal);
 end
@@ -314,20 +325,21 @@ wavecode = 'haar';
 
 switch family
 case 'Daubechies'
-	wavecode = 'db' + kind;
+	wavecode = ['db' kind];
 case 'Coiflets'
-	wavecode = 'coif' + kind;
+	wavecode = ['coif' kind];
 case 'Biorthogonal'
-	wavecode = 'bior' + kind;
+	wavecode = ['bior' kind];
 case 'R Biorthogonal'
-	wavecode = 'rbio' + kind;
+	wavecode = ['rbio' kind];
 end
 
 function ButtonCalculate_Callback(hObject, eventdata, handles)
-contents = get(handles.PopupWaveletKind, 'string');
+families = cellstr(get(handles.PopupWaveletKind, 'String'));
+kinds = cellstr(get(handles.PopupWaveletVar, 'String'));
+wavelet_family = families{get(handles.PopupWaveletKind, 'Value')};
+wavelet_kind = kinds{get(handles.PopupWaveletVar, 'Value')};
 level = get(handles.PopupWaveletLevel, 'Value');
-wavelet_family = get(handles.PopupWaveletKind, 'Value');
-wavelet_kind = get(handles.PopupWaveletVar, 'Value');
 wavelet = get_choosen_wavelet(wavelet_family, wavelet_kind);
 [decomposition bookkeeping] = wavedec(handles.signal, level, wavelet);
 plot_decomposition(handles, decomposition, bookkeeping);
