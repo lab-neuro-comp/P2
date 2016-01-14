@@ -68,6 +68,7 @@ handles.plots = [handles.axes1,...
                  handles.axes10,...
                  handles.axes11,...
                  handles.axes12];
+handles.decomposition = {};
 
 % Update handles structure
 guidata(hObject, handles);
@@ -111,7 +112,7 @@ for index = 1:many
     p = plots(index);
 
     set(p, 'Visible', 'on');
-    set(p, 'FontSize', 0.035);
+    set(p, 'FontSize', 8);
     set(p, 'Position', [x y width height]);
 end
 
@@ -126,20 +127,29 @@ function context_plot(signal)
 plot(get_step(signal), signal);
 
 % ---------------------------------------------------------------------------
-function plot_decomposition(handles, decomposition, bookkeeping)
+function [approximation] = get_decomposition(decomposition, bookkeeping)
 limit = length(bookkeeping)-1;
+approximation = {};
 offset = 1;
 
-how_many_plots(handles, limit+1);
+for index = 2:limit
+    where = offset + bookkeeping(index);
+    chop = decomposition(offset:where);
+    approximation{length(approximation)+1} = chop;
+    offset = where;
+end
+
+function plot_decomposition(handles)
+decomposition = handles.decomposition;
+limit = length(decomposition)+1;
+
+how_many_plots(handles, limit);
 choose_plot(handles.plots, 1);
 context_plot(handles.signal);
 
-% TODO: why is everything so small?
 for index = 2:limit
     choose_plot(handles.plots, index);
-    where = offset + bookkeeping(index);
-    context_plot(decomposition(offset:where));
-    offset = where;
+    context_plot(handles.decomposition{index-1});
 end
 
 % --- Outputs from this function are returned to the command line.
@@ -325,7 +335,7 @@ wavecode = 'haar';
 
 switch family
 case 'Daubechies'
-	wavecode = ['db' kind];
+	wavecode = kind;
 case 'Coiflets'
 	wavecode = ['coif' kind];
 case 'Biorthogonal'
@@ -342,7 +352,8 @@ wavelet_kind = kinds{get(handles.PopupWaveletVar, 'Value')};
 level = get(handles.PopupWaveletLevel, 'Value');
 wavelet = get_choosen_wavelet(wavelet_family, wavelet_kind);
 [decomposition bookkeeping] = wavedec(handles.signal, level, wavelet);
-plot_decomposition(handles, decomposition, bookkeeping);
+handles.decomposition = get_decomposition(decomposition, bookkeeping);
+plot_decomposition(handles);
 
 % --------------------------------------------------------------------
 function VisualizeMenu_Callback(hObject, eventdata, handles)
