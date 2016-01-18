@@ -22,7 +22,7 @@ function varargout = dwtmodule2(varargin)
 
 % Edit the above text to modify the response to help dwtmodule2
 
-% Last Modified by GUIDE v2.5 18-Jan-2016 09:20:51
+% Last Modified by GUIDE v2.5 18-Jan-2016 09:24:39
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -139,7 +139,7 @@ for index = 2:limit
     offset = where;
 end
 
-function plot_decomposition(handles)
+function [handles] = plot_decomposition(handles)
 decomposition = handles.decomposition;
 limit = length(decomposition)+1;
 
@@ -353,7 +353,8 @@ level = get(handles.PopupWaveletLevel, 'Value');
 wavelet = get_choosen_wavelet(wavelet_family, wavelet_kind);
 [decomposition bookkeeping] = wavedec(handles.signal, level, wavelet);
 handles.decomposition = get_decomposition(decomposition, bookkeeping);
-plot_decomposition(handles);
+handles = populate_popup(plot_decomposition(handles));
+guidata(hObject, handles);
 
 % --------------------------------------------------------------------
 function VisualizeMenu_Callback(hObject, eventdata, handles)
@@ -380,10 +381,20 @@ function PopupCurrentSignal_CreateFcn(hObject, eventdata, handles)
 
 % Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
+function [handles] = populate_popup(handles)
+limit = length(handles.decomposition);
+box = {};
+
+for n = 1:limit
+    box{n} = sprintf('cD%d', n);
+end
+
+set(handles.PopupCurrentSignal, 'String', box);
 
 
 function EditMinTime_Callback(hObject, eventdata, handles)
@@ -430,15 +441,24 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
+%------------------------------------------------------------------------------
+function [handles] = disable_radio_buttons(hObject, handles)
+set(handles.RadioReplace, 'Value', 0);
+set(handles.RadioConstrain, 'Value', 0);
+set(handles.RadioEOG, 'Value', 0);
+set(hObject, 'Value', 1);
+guidata(hObject, handles);
 
-% --- Executes on button press in CheckReplace.
-function CheckReplace_Callback(hObject, eventdata, handles)
-% hObject    handle to CheckReplace (see GCBO)
+% --- Executes on button press in RadioReplace.
+function RadioReplace_Callback(hObject, eventdata, handles)
+% hObject    handle to RadioReplace (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hint: get(hObject,'Value') returns toggle state of CheckReplace
-
+% Hint: get(hObject,'Value') returns toggle state of RadioReplace
+disable_radio_buttons(hObject, handles);
+set(handles.EditV1, 'Enable', 'on');
+set(handles.EditV2, 'Enable', 'off');
 
 % --- Executes on button press in RadioConstrain.
 function RadioConstrain_Callback(hObject, eventdata, handles)
@@ -447,7 +467,9 @@ function RadioConstrain_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of RadioConstrain
-
+disable_radio_buttons(hObject, handles);
+set(handles.EditV1, 'Enable', 'on');
+set(handles.EditV2, 'Enable', 'on');
 
 % --- Executes on button press in RadioEOG.
 function RadioEOG_Callback(hObject, eventdata, handles)
@@ -456,8 +478,9 @@ function RadioEOG_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of RadioEOG
-
-
+disable_radio_buttons(hObject, handles);
+set(handles.EditV1, 'Enable', 'on');
+set(handles.EditV2, 'Enable', 'on');
 
 function EditV1_Callback(hObject, eventdata, handles)
 % hObject    handle to EditV1 (see GCBO)
@@ -499,35 +522,46 @@ function EditV2_CreateFcn(hObject, eventdata, handles)
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc && isequal(get(hObject,'BackgroundColor'),...
+                   get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
+% -------------------------------------------------------------------------------
 
 % --- Executes on button press in ButtonEdit.
 function ButtonEdit_Callback(hObject, eventdata, handles)
-% hObject    handle to ButtonEdit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+global fs
+popupindex = get(handles.PopupCurrentSignal, 'Value');
+currentsignal = handles.decomposition{popupindex};
 
+% which procedure?
+switch true
+case get(handles.RadioEOG, 'Value')
+    questdlg(['Option not implemented yet'],...
+             ['Not implemented...'],...
+             'Sorry :(', 'Working on this', 'Sorry :(');
+    return
+case get(handles.RadioConstrain, 'Value')
+    editedsignal = constrain_signal(currentsignal,...
+                                    str2num(get(handles.EditV1, 'String')),...
+                                    str2num(get(handles.EditV2, 'String')));
+otherwise
+    editedsignal = replace_signal(currentsignal,...
+                                  str2num(get(handles.EditV1, 'String')));
+end
 
-% --- Executes on button press in radiobutton7.
-function radiobutton7_Callback(hObject, eventdata, handles)
-% hObject    handle to radiobutton7 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+% only interval?
+if get(handles.CheckInterval ,'Value')
+    minmom = floor(str2num(get(handles.EditMinTime, 'String')) * fs);
+    maxmom = floor(str2num(get(handles.EditMaxTime, 'String')) * fs);
+    currentsignal(minmom:maxmom) = editedsignal(minmom:maxmom);
+else
+    currentsignal = editedsignal;
+end
 
-% Hint: get(hObject,'Value') returns toggle state of radiobutton7
-
-
-% --- Executes on button press in radiobutton8.
-function radiobutton8_Callback(hObject, eventdata, handles)
-% hObject    handle to radiobutton8 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of radiobutton8
-
+handles.decomposition{popupindex} = currentsignal;
+plot_decomposition(handles);
 
 % --- Executes on button press in ButtonReconstruct.
 function ButtonReconstruct_Callback(hObject, eventdata, handles)
@@ -545,8 +579,10 @@ function ButtonUndo_Callback(hObject, eventdata, handles)
 
 % --- Executes on button press in CheckInterval.
 function CheckInterval_Callback(hObject, eventdata, handles)
-% hObject    handle to CheckInterval (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
 % Hint: get(hObject,'Value') returns toggle state of CheckInterval
+state = 'off';
+if get(hObject, 'Value')
+    state = 'on';
+end
+set(handles.EditMinTime, 'Enable', state);
+set(handles.EditMaxTime, 'Enable', state);
