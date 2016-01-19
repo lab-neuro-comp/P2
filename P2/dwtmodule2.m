@@ -22,7 +22,7 @@ function varargout = dwtmodule2(varargin)
 
 % Edit the above text to modify the response to help dwtmodule2
 
-% Last Modified by GUIDE v2.5 18-Jan-2016 09:24:39
+% Last Modified by GUIDE v2.5 19-Jan-2016 09:49:04
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -41,6 +41,9 @@ if nargout
 else
     gui_mainfcn(gui_State, varargin{:});
 end
+
+addpath([cd '/util']);
+addpath([cd '/math']);
 % End initialization code - DO NOT EDIT
 
 % --- Executes just before dwtmodule2 is made visible.
@@ -69,6 +72,10 @@ handles.plots = [handles.axes1,...
                  handles.axes11,...
                  handles.axes12];
 handles.decomposition = {};
+handles.bookkeeping = {};
+handles.approximation = {};
+handles.detail = {};
+handles.lastwavelet = {};
 
 % Update handles structure
 guidata(hObject, handles);
@@ -116,31 +123,34 @@ for index = 1:many
     set(p, 'Position', [x y width height]);
 end
 
-function choose_plot(plots, what)
+function choose_plot(plots, what) % determines which plot to use
 axes(plots(what));
 
-function [step] = get_step(signal)
+function [step] = get_step(signal) % get step to use in plot based on Frequency
 global fs
 step = 0:1/fs:(length(signal) - 1)/fs;
 
-function context_plot(signal)
+function context_plot(signal) % plot the current signal on screen
 plot(get_step(signal), signal);
 
 % ---------------------------------------------------------------------------
-function [approximation] = get_decomposition(decomposition, bookkeeping)
-limit = length(bookkeeping)-1;
-approximation = {};
-offset = 1;
+function [data] = what_to_plot(decomposition, what)
+data = decomposition;
+return;
 
-for index = 2:limit
-    where = offset + bookkeeping(index);
-    chop = decomposition(offset:where);
-    approximation{length(approximation)+1} = chop;
-    offset = where;
+% TODO: implement division of data here.
+if isequal(what, 'Approximations')
+    data = {};
+elseif isequal(what, 'Details')
+    data = decomposition;
 end
 
+function [y] = get_yielding(handles)
+y = cellstr(get(handles.PopupYield, 'String')){get(handles.PopupYield, 'Value')};
+
+% ---------------------------------------------------------------------------
 function [handles] = plot_decomposition(handles)
-decomposition = handles.decomposition;
+decomposition = what_to_plot(handles.decomposition, get_yielding(handles));
 limit = length(decomposition)+1;
 
 how_many_plots(handles, limit);
@@ -354,6 +364,7 @@ wavelet = get_choosen_wavelet(wavelet_family, wavelet_kind);
 [decomposition bookkeeping] = wavedec(handles.signal, level, wavelet);
 handles.decomposition = get_decomposition(decomposition, bookkeeping);
 handles = populate_popup(plot_decomposition(handles));
+handles.lastwavelet = {wavelet level};
 guidata(hObject, handles);
 
 % --------------------------------------------------------------------
@@ -414,7 +425,8 @@ function EditMinTime_CreateFcn(hObject, eventdata, handles)
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
@@ -437,7 +449,8 @@ function EditMaxTime_CreateFcn(hObject, eventdata, handles)
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc && isequal(get(hObject,'BackgroundColor'),...
+                   get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
@@ -499,7 +512,8 @@ function EditV1_CreateFcn(hObject, eventdata, handles)
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc && isequal(get(hObject,'BackgroundColor'),....
+                   get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
@@ -536,17 +550,16 @@ popupindex = get(handles.PopupCurrentSignal, 'Value');
 currentsignal = handles.decomposition{popupindex};
 
 % which procedure?
-switch true
-case get(handles.RadioEOG, 'Value')
+if get(handles.RadioEOG, 'Value')
     questdlg(['Option not implemented yet'],...
              ['Not implemented...'],...
              'Sorry :(', 'Working on this', 'Sorry :(');
     return
-case get(handles.RadioConstrain, 'Value')
+elseif get(handles.RadioConstrain, 'Value')
     editedsignal = constrain_signal(currentsignal,...
                                     str2num(get(handles.EditV1, 'String')),...
                                     str2num(get(handles.EditV2, 'String')));
-otherwise
+else
     editedsignal = replace_signal(currentsignal,...
                                   str2num(get(handles.EditV1, 'String')));
 end
@@ -562,6 +575,7 @@ end
 
 handles.decomposition{popupindex} = currentsignal;
 plot_decomposition(handles);
+guidata(hObject, handles);
 
 % --- Executes on button press in ButtonReconstruct.
 function ButtonReconstruct_Callback(hObject, eventdata, handles)
@@ -569,6 +583,8 @@ function ButtonReconstruct_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+% waverec will be used here
+% I will need
 
 % --- Executes on button press in ButtonUndo.
 function ButtonUndo_Callback(hObject, eventdata, handles)
@@ -586,3 +602,34 @@ if get(hObject, 'Value')
 end
 set(handles.EditMinTime, 'Enable', state);
 set(handles.EditMaxTime, 'Enable', state);
+
+
+% --- Executes on selection change in PopupYield.
+function PopupYield_Callback(hObject, eventdata, handles)
+% hObject    handle to PopupYield (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns PopupYield contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from PopupYield
+
+
+% --- Executes during object creation, after setting all properties.
+function PopupYield_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PopupYield (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in ButtonVisualize.
+function ButtonVisualize_Callback(hObject, eventdata, handles)
+% hObject    handle to ButtonVisualize (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

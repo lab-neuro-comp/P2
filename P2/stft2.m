@@ -41,6 +41,8 @@ if nargout
 else
     gui_mainfcn(gui_State, varargin{:});
 end
+
+addpath([cd '/math']);
 % End initialization code - DO NOT EDIT
 
 % --- Executes just before stft2 is made visible.

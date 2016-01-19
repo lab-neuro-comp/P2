@@ -35,10 +35,13 @@
   + Vamos deixar este módulo para depois.
   + Este módulo deve trabalhar com um único sinal de cada vez? Ou ele deve permitir uma lista de sinais?
   - [x] Decompor sinal
-  - [x] Mostrar decomposições do sinal
-    + O módulo original faz uma distinção entre aproximações e detalhes.
+  - [ ] Mostrar decomposições do sinal
+    - [ ] Aproximações
+    - [x] Detalhes
   - [ ] Criar ferramentas de edição
-    + Quais são as ferramentas de edição? O que este módulo precisa?
+    - [x] Substituir
+    - [x] Limitar
+    - [ ] EOG
   - [ ] Reconstruir sinal
 - [x] Time/Spec
   - [x] Identicar funcionalidades.
