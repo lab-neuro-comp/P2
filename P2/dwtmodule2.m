@@ -107,7 +107,7 @@ panelwidth = position(3);
 panelheight = position(4);
 
 moo = 0.1;
-width = (1-2*moo) * panelwidth;
+width = (1-moo) * panelwidth;
 height = (1-2*moo) * panelheight * (1-moo) / many;
 padding = moo * (1-2*moo) * panelheight / (many-1);
 xmargin = moo * panelwidth;
@@ -123,6 +123,7 @@ for index = 1:many
     set(p, 'Position', [x y width height]);
 end
 
+% ---------------------------------------------------------------------------
 function choose_plot(plots, what) % determines which plot to use
 axes(plots(what));
 
@@ -133,22 +134,21 @@ step = 0:1/fs:(length(signal) - 1)/fs;
 function context_plot(signal) % plot the current signal on screen
 plot(get_step(signal), signal);
 
-% ---------------------------------------------------------------------------
-function [data] = what_to_plot(decomposition, what)
-data = decomposition;
-return;
-
+function [data] = what_to_plot(decomposition, what) % determines whether one should plot
+                                                    % approximations or details
 % TODO: implement division of data here.
+limit = length(decomposition)
 if isequal(what, 'Approximations')
-    data = {};
+    data = decomposition{1:limit/2};
 elseif isequal(what, 'Details')
-    data = decomposition;
+    data = decomposition{((limit/2)+1):limit};
 end
 
-function [y] = get_yielding(handles)
-y = cellstr(get(handles.PopupYield, 'String')){get(handles.PopupYield, 'Value')};
-
 % ---------------------------------------------------------------------------
+function [y] = get_yielding(handles)
+bacon = cellstr(get(handles.PopupYield, 'String'));
+y = bacon{get(handles.PopupYield, 'Value')};
+
 function [handles] = plot_decomposition(handles)
 decomposition = what_to_plot(handles.decomposition, get_yielding(handles));
 limit = length(decomposition)+1;
@@ -159,7 +159,7 @@ context_plot(handles.signal);
 
 for index = 2:limit
     choose_plot(handles.plots, index);
-    context_plot(handles.decomposition{index-1});
+    context_plot(decomposition{index-1});
 end
 
 % --- Outputs from this function are returned to the command line.
@@ -401,8 +401,15 @@ function [handles] = populate_popup(handles)
 limit = length(handles.decomposition);
 box = {};
 
-for n = 1:limit
-    box{n} = sprintf('cD%d', n);
+yielding = get_yielding(handles);
+if isequal(yielding, 'Details')
+    formatstring = 'cD%d';
+else
+    formatstring = 'cA%d';
+end
+
+for n = 1:limit/2
+    box{n} = [sprintf('cD%d', n)];
 end
 
 set(handles.PopupCurrentSignal, 'String', box);

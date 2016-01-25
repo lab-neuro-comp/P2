@@ -37,6 +37,7 @@
   - [x] Decompor sinal
   - [ ] Mostrar decomposições do sinal
     - [ ] Aproximações
+      - [ ] Descobrir como obter as aproximações
     - [x] Detalhes
   - [ ] Criar ferramentas de edição
     - [x] Substituir

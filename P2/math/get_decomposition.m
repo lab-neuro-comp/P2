@@ -1,6 +1,4 @@
 function [data] = get_decomposition(decomposition, bookkeeping)
-% data = old_get_decomposition(decomposition, bookkeeping);
-
 approximations = {};
 details = {};
 data = {};
@@ -8,21 +6,35 @@ data = {};
 % get details
 limit = length(bookkeeping)-1;
 offset = bookkeeping(1);
-for n = 2:limit-1
+approximations{length(approximations)+1} = decomposition(1:offset);
+for n = 2:limit
     where = bookkeeping(n) + offset;
     details{length(details)+1} = decomposition(offset:where);
     offset = where;
 end
 
 % get approximations
-% TODO: get approximations
+% TODO: debug this
+limit = length(details);
+for s = 1:limit
+    sc = approximations{s};
+    wc = details{s};
+    approximation = [];
+    for n = min(length(sc), length(wc))
+        approximation(length(approximation)+1) = (sc(n)-wc(n))/2;
+        approximation(length(approximation)+1) = (sc(n)+wc(n))/2;
+    end
+    approximations{length(approximations)+1} = approximation;
+end
 
 % wrap up
-for approximation = approximations
-    data{length(data)+1} = approximation;
+limit = length(approximations);
+for d = 1:limit
+    data{length(data)+1} = approximations{limit-d+1};
 end
-for detail = invert_cell_array(details);
-    data{length(data)+1} = detail;
+limit = length(details);
+for d = 1:limit
+    data{length(data)+1} = details{limit-d+1};
 end
 
 % ------------------------------------------------------------------------------
