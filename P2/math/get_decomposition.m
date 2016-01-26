@@ -1,4 +1,6 @@
 function [data] = get_decomposition(decomposition, bookkeeping)
+% decomposition  vector containing the last approximations and the details
+% bookkeeping    where the signals on the decomposition vector
 approximations = {};
 details = {};
 data = {};
@@ -8,19 +10,18 @@ limit = length(bookkeeping)-1;
 offset = bookkeeping(1);
 approximations{length(approximations)+1} = decomposition(1:offset);
 for n = 2:limit
-    where = bookkeeping(n) + offset;
+    where = bookkeeping(n) + offset - 1;
     details{length(details)+1} = decomposition(offset:where);
     offset = where;
 end
 
 % get approximations
 % TODO: debug this
-limit = length(details);
-for s = 1:limit
+for s = 1:(length(details)-1)
     sc = approximations{s};
     wc = details{s};
     approximation = [];
-    for n = min(length(sc), length(wc))
+    for n = 1:length(wc)
         approximation(length(approximation)+1) = (sc(n)-wc(n))/2;
         approximation(length(approximation)+1) = (sc(n)+wc(n))/2;
     end
@@ -36,9 +37,6 @@ limit = length(details);
 for d = 1:limit
     data{length(data)+1} = details{limit-d+1};
 end
-length(approximations)
-length(details)
-length(data)
 
 % ------------------------------------------------------------------------------
 function [approximation] = old_get_decomposition(decomposition, bookkeeping)

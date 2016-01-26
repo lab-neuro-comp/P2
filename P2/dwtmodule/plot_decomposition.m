@@ -1,5 +1,5 @@
 function [handles] = plot_decomposition(handles)
-% handles the handles for the
+% Plots many DWT signals
 decomposition = what_to_plot(handles.decomposition, get_yielding(handles));
 limit = length(decomposition)+1;
 
@@ -13,19 +13,30 @@ for index = 2:limit
 end
 
 % ---------------------------------------------------------------------------
-function [data] = what_to_plot(decomposition, what) % determines whether one should plot
-                                                    % approximations or details or nothing
-if isequal(length(decomposition), 0)
-    data = {};
-    return
+function [data] = what_to_plot(decomposition, what)
+% Determines whether one should plot approximations or details or nothing
+whos decomposition
+data = {};
+
+if ~isequal(length(decomposition), 0)
+    % TODO: implement division of data here.
+    [lowerbound, upperbound] = get_boundaries(what, length(decomposition));
+
+    for n = lowerbound:upperbound
+        data{length(data)+1} = decomposition{n};
+    end
 end
 
-% TODO: implement division of data here.
-limit = length(decomposition);
+whos data
+
+% ---------------------------------------------------------------------------
+function [lowerbound, upperbound] = get_boundaries(what, limit)
 if isequal(what, 'Approximations')
-    data = decomposition{1:limit/2};
-elseif isequal(what, 'Details')
-    data = decomposition{((limit/2)+1):limit};
+    lowerbound = 1;
+    upperbound = limit/2;
+else
+    lowerbound = limit/2 + 1;
+    upperbound = limit;
 end
 
 % ---------------------------------------------------------------------------
