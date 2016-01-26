@@ -36,6 +36,9 @@ limit = length(details);
 for d = 1:limit
     data{length(data)+1} = details{limit-d+1};
 end
+length(approximations)
+length(details)
+length(data)
 
 % ------------------------------------------------------------------------------
 function [approximation] = old_get_decomposition(decomposition, bookkeeping)

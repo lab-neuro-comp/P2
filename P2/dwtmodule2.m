@@ -44,6 +44,7 @@ end
 
 addpath([cd '/util']);
 addpath([cd '/math']);
+addpath([cd '/dwtmodule']);
 % End initialization code - DO NOT EDIT
 
 % --- Executes just before dwtmodule2 is made visible.
@@ -80,88 +81,6 @@ handles.lastwavelet = {};
 % Update handles structure
 guidata(hObject, handles);
 
-% ---------------------------------------------------------------------
-% Changes the number of plots and scale them to fit in their panel.
-function how_many_plots(handles, many)
-% handles handles to GUIDE's structs
-% many    how many plots we want
-plots = handles.plots;
-
-% disable every plot
-for p = plots
-    set(p, 'Visible', 'off');
-    set(p, 'FontSize', 0.035);
-end
-
-% enable and scale just the necessary number
-if isequal(many, 1)
-    set(plots(1), 'Visible', 'on');
-    set(plots(1), 'Position', [0.1 0.1 0.8 0.8]);
-    return
-end
-
-position = get(handles.PanelPlot, 'Position');
-xposition = position(1);
-yposition = position(2);
-panelwidth = position(3);
-panelheight = position(4);
-
-moo = 0.1;
-width = (1-moo) * panelwidth;
-height = (1-2*moo) * panelheight * (1-moo) / many;
-padding = moo * (1-2*moo) * panelheight / (many-1);
-xmargin = moo * panelwidth;
-ymargin = moo * panelheight;
-
-x = xmargin;
-for index = 1:many
-    y = ymargin + (many-index) * (height+padding);
-    p = plots(index);
-
-    set(p, 'Visible', 'on');
-    set(p, 'FontSize', 8);
-    set(p, 'Position', [x y width height]);
-end
-
-% ---------------------------------------------------------------------------
-function choose_plot(plots, what) % determines which plot to use
-axes(plots(what));
-
-function [step] = get_step(signal) % get step to use in plot based on Frequency
-global fs
-step = 0:1/fs:(length(signal) - 1)/fs;
-
-function context_plot(signal) % plot the current signal on screen
-plot(get_step(signal), signal);
-
-function [data] = what_to_plot(decomposition, what) % determines whether one should plot
-                                                    % approximations or details
-% TODO: implement division of data here.
-limit = length(decomposition)
-if isequal(what, 'Approximations')
-    data = decomposition{1:limit/2};
-elseif isequal(what, 'Details')
-    data = decomposition{((limit/2)+1):limit};
-end
-
-% ---------------------------------------------------------------------------
-function [y] = get_yielding(handles)
-bacon = cellstr(get(handles.PopupYield, 'String'));
-y = bacon{get(handles.PopupYield, 'Value')};
-
-function [handles] = plot_decomposition(handles)
-decomposition = what_to_plot(handles.decomposition, get_yielding(handles));
-limit = length(decomposition)+1;
-
-how_many_plots(handles, limit);
-choose_plot(handles.plots, 1);
-context_plot(handles.signal);
-
-for index = 2:limit
-    choose_plot(handles.plots, index);
-    context_plot(decomposition{index-1});
-end
-
 % --- Outputs from this function are returned to the command line.
 function varargout = dwtmodule2_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
@@ -191,9 +110,7 @@ if ~isequal(signalname, 0)
 	handles.signalname = signalname;
 	handles.signal = signal;
 	set(handles.textSignalName, 'String', signalname);
-    how_many_plots(handles, 1);
-    choose_plot(handles.plots, 1);
-	context_plot(signal);
+    plot_decomposition(handles);
 end
 
 guidata(hObject, handles);
@@ -285,6 +202,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), ...
 	               get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
 
 
 % --- Executes on selection change in PopupWaveletVar.
@@ -461,14 +379,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'),...
     set(hObject,'BackgroundColor','white');
 end
 
-%------------------------------------------------------------------------------
-function [handles] = disable_radio_buttons(hObject, handles)
-set(handles.RadioReplace, 'Value', 0);
-set(handles.RadioConstrain, 'Value', 0);
-set(handles.RadioEOG, 'Value', 0);
-set(hObject, 'Value', 1);
-guidata(hObject, handles);
-
 % --- Executes on button press in RadioReplace.
 function RadioReplace_Callback(hObject, eventdata, handles)
 % hObject    handle to RadioReplace (see GCBO)
@@ -609,7 +519,6 @@ if get(hObject, 'Value')
 end
 set(handles.EditMinTime, 'Enable', state);
 set(handles.EditMaxTime, 'Enable', state);
-
 
 % --- Executes on selection change in PopupYield.
 function PopupYield_Callback(hObject, eventdata, handles)
