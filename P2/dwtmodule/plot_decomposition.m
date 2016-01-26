@@ -15,7 +15,6 @@ end
 % ---------------------------------------------------------------------------
 function [data] = what_to_plot(decomposition, what)
 % Determines whether one should plot approximations or details or nothing
-whos decomposition
 data = {};
 
 if ~isequal(length(decomposition), 0)
@@ -26,8 +25,6 @@ if ~isequal(length(decomposition), 0)
         data{length(data)+1} = decomposition{n};
     end
 end
-
-whos data
 
 % ---------------------------------------------------------------------------
 function [lowerbound, upperbound] = get_boundaries(what, limit)

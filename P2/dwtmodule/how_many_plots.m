@@ -1,6 +1,5 @@
-% ---------------------------------------------------------------------
-% Changes the number of plots and scale them to fit in their panel.
 function how_many_plots(handles, many)
+% Changes the number of plots and scale them to fit in their panel.
 % handles handles to GUIDE's structs
 % many    how many plots we want
 plots = handles.plots;

@@ -285,6 +285,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), ...
     set(hObject,'BackgroundColor','white');
 end
 
+% ----------------------------------------------------------------------------
 function [handles] = populate_popup(handles)
 limit = length(handles.decomposition);
 box = {};
@@ -297,11 +298,10 @@ else
 end
 
 for n = 1:limit/2
-    box{n} = [sprintf('cD%d', n)];
+    box{length(box)+1} = [sprintf(formatstring, n)];
 end
 
 set(handles.PopupCurrentSignal, 'String', box);
-
 
 function EditMinTime_Callback(hObject, eventdata, handles)
 % hObject    handle to EditMinTime (see GCBO)
@@ -342,8 +342,6 @@ function EditMaxTime_CreateFcn(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'),...
                    get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
@@ -403,8 +401,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'),....
                    get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
 
 function EditV2_Callback(hObject, eventdata, handles)
 % hObject    handle to EditV2 (see GCBO)
@@ -519,3 +515,5 @@ function ButtonVisualize_Callback(hObject, eventdata, handles)
 % hObject    handle to ButtonVisualize (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+handles = populate_popup(plot_decomposition(handles));
+guidata(hObject, handles);
