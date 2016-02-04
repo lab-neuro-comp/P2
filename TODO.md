@@ -21,6 +21,7 @@
 - [ ] Otimizar edição (mais de um arquivo por vez quando possível)
   + Requer que todos os módulos estejam prontos para que possamos decidir como padronizar esta interface.
 - [ ] Tornar persistente a escolha das frequências dos ritmos de EEG e de amostragem.
+- [ ] Organizar cada módulo segundo a arquitetura MVC.
 
 # Módulos em particular
 
@@ -35,9 +36,8 @@
   + Vamos deixar este módulo para depois.
   + Este módulo deve trabalhar com um único sinal de cada vez? Ou ele deve permitir uma lista de sinais?
   - [x] Decompor sinal
-  - [ ] Mostrar decomposições do sinal
-    - [ ] Aproximações
-      - [ ] Descobrir como obter as aproximações
+  - [x] Mostrar decomposições do sinal
+    - [x] Aproximações
     - [x] Detalhes
   - [ ] Criar ferramentas de edição
     - [x] Substituir

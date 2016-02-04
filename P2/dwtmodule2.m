@@ -429,8 +429,7 @@ end
 % --- Executes on button press in ButtonEdit.
 function ButtonEdit_Callback(hObject, eventdata, handles)
 global fs
-popupindex = get(handles.PopupCurrentSignal, 'Value');
-currentsignal = handles.decomposition{popupindex};
+currentsignal = get_signal_to_analyze(handles);
 
 % which procedure?
 if get(handles.RadioEOG, 'Value')
@@ -440,8 +439,8 @@ if get(handles.RadioEOG, 'Value')
     return
 elseif get(handles.RadioConstrain, 'Value')
     editedsignal = constrain_signal(currentsignal,...
-                                    str2num(get(handles.EditV1, 'String')),...
-                                    str2num(get(handles.EditV2, 'String')));
+                                    str2num(get(handles.EditV2, 'String')), ...
+                                    str2num(get(handles.EditV1, 'String')));
 else
     editedsignal = replace_signal(currentsignal,...
                                   str2num(get(handles.EditV1, 'String')));
@@ -456,7 +455,7 @@ else
     currentsignal = editedsignal;
 end
 
-handles.decomposition{popupindex} = currentsignal;
+handles = set_signal_to_analyze(handles, currentsignal);
 plot_decomposition(handles);
 guidata(hObject, handles);
 
