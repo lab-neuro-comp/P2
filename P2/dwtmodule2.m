@@ -73,9 +73,6 @@ handles.plots = [handles.axes1,...
                  handles.axes11,...
                  handles.axes12];
 handles.decomposition = {};
-handles.bookkeeping = {};
-handles.approximation = {};
-handles.detail = {};
 handles.lastwavelet = {};
 
 % Update handles structure
@@ -243,12 +240,8 @@ end
 
 % ---------------------------------------------------------------------
 function ButtonCalculate_Callback(hObject, eventdata, handles)
-families = cellstr(get(handles.PopupWaveletKind, 'String'));
-kinds = cellstr(get(handles.PopupWaveletVar, 'String'));
-wavelet_family = families{get(handles.PopupWaveletKind, 'Value')};
-wavelet_kind = kinds{get(handles.PopupWaveletVar, 'Value')};
 level = get(handles.PopupWaveletLevel, 'Value');
-wavelet = get_choosen_wavelet(wavelet_family, wavelet_kind);
+wavelet = get_choosen_wavelet(handles);
 [decomposition bookkeeping] = wavedec(handles.signal, level, wavelet);
 handles.decomposition = get_decomposition(decomposition, bookkeeping);
 handles = populate_popup(plot_decomposition(handles));
@@ -464,9 +457,12 @@ function ButtonReconstruct_Callback(hObject, eventdata, handles)
 % hObject    handle to ButtonReconstruct (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-% waverec will be used here
-% I will need
+handles.signal = waverec(get_decomposition_for_rec(handles), ...
+                         get_bookkeeping_for_rec(handles), ...
+                         get_choosen_wavelet(handles));
+handles.decomposition = {};
+plot_decomposition(handles);
+guidata(hObject, handles);
 
 % --- Executes on button press in ButtonUndo.
 function ButtonUndo_Callback(hObject, eventdata, handles)

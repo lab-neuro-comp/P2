@@ -1,4 +1,11 @@
-function [wavecode] = get_choosen_wavelet(family, kind)
+function [wavelet] = get_choosen_wavelet(handles)
+families = cellstr(get(handles.PopupWaveletKind, 'String'));
+kinds = cellstr(get(handles.PopupWaveletVar, 'String'));
+wavelet_family = families{get(handles.PopupWaveletKind, 'Value')};
+wavelet_kind = kinds{get(handles.PopupWaveletVar, 'Value')};
+wavelet = get_choosen_wavecode(wavelet_family, wavelet_kind);
+
+function [wavecode] = get_choosen_wavecode(family, kind)
 % Wavelet Families | Wavelets
 %
 % Daubechies: 'db1' or 'haar', 'db2', ... ,'db10', ... , 'db45'
