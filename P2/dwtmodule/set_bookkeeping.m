@@ -1,4 +1,4 @@
-function [bookkeeping] = get_bookkeeping_for_rec(handles)
+function [bookkeeping] = set_bookkeeping(handles)
 % extracts the bookkeeping needed for reconstruction
 % from the handles for the signal decomposition and
 % the current signal

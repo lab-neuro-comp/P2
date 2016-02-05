@@ -1,7 +1,7 @@
 function [newsig] = replace_signal(oldsig, value)
-newsig = [];
+limit = length(oldsig);
+newsig = zeros(1, limit);
 
-for it = oldsig
-    newsig(length(newsig)+1) = value;
-    % yeah i'm missing it
+for n = 1:limit
+    newsig(n) = value;
 end

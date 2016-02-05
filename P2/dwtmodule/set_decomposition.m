@@ -1,4 +1,4 @@
-function [outlet] = get_decomposition_for_rec(handles)
+function [outlet] = set_decomposition(handles)
 % extracts the decomposition needed for reconstruction
 % from the handles for the signal decomposition
 inlet = handles.decomposition;
