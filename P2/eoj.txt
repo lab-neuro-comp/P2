@@ -1,8 +1,8 @@
-Signal: 1.01.1.1.1.t7
-Interval: 25.61
-Delta: 47474659.4638
-Theta: 1410583.3748
-Alpha: 720499.9482
-Beta: 714702.3369
-Gamma: 5935677.0115
-Total: 1716338223696.136
+Signal: testelinhadebase.EXT
+Interval: 43
+Delta: 1.0622e-029
+Theta: 9.2053e-031
+Alpha: 3.3043e-031
+Beta: 1.8911e-031
+Gamma: 2.3915e-031
+Total: 68897.4373

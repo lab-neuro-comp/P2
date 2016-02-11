@@ -41,6 +41,10 @@ if nargout
 else
     gui_mainfcn(gui_State, varargin{:});
 end
+
+addpath('./util');
+addpath('./math');
+addpath('./fourier');
 % End initialization code - DO NOT EDIT
 
 % --- Executes just before fourier2 is made visible.
@@ -115,7 +119,7 @@ plot(0);
 hold all;
 for index = 1:length(handles.plots)
     if handles.plots{index}
-        context_plot(handles.spectra{index}, handles.colors{index});
+        colored_plot(handles.spectra{index}, handles.colors{index});
     end
 end
 hold off;
@@ -128,15 +132,6 @@ function FileMenu_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-
-% --- gets that signal parameter
-function [step] = get_step(signal)
-global fs
-step = 0:1/fs:(length(signal) - 1)/fs;
-
-% --- Plots the current spectrum
-function context_plot(signal, colour)
-plot(get_step(signal), signal, colour);
 
 % --------------------------------------------------------------------
 function OpenMenuItem_Callback(hObject, eventdata, handles)
@@ -159,7 +154,7 @@ if ~isequal(signalname, 0)
 
 	set(handles.listRecordings, 'String', handles.signalnames);
 	if isequal(length(handles.spectra), 1)
-		context_plot(spectrum, handles.colors{1});
+		colored_plot(spectrum, handles.colors{1});
         set(handles.buttonToggleSignal, 'Enable', 'on');
         set(handles.buttonCalculatePower, 'Enable', 'on');
         set(handles.buttonExportPower, 'Enable', 'on');
@@ -273,29 +268,6 @@ set(hObject, 'Checked', 'on');
 guidata(hObject, handles);
 
 % --- Executes on button press in buttonCalculatePower.
-function [text] = generate_statistics(spectrum, signalname)
-global fs deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 betaf1 betaf2 gammaf1 gammaf2
-signalinterval = length(spectrum) / fs;
-deltapot = calculate_power(spectrum, deltaf1, deltaf2, fs);
-thetapot = calculate_power(spectrum, thetaf1, thetaf2, fs);
-alphapot = calculate_power(spectrum, alphaf1, alphaf2, fs);
-betapot = calculate_power(spectrum, betaf1, betaf2, fs);
-gammapot = calculate_power(spectrum, gammaf1, gammaf2, fs);
-total = 0;
-for n = 1:length(spectrum)/2
-    total = total + spectrum(n).^2;
-end
-
-text = {...
-	['Signal: ' signalname];...
-	['Interval: ' num2str(signalinterval)];...
-    ['Delta: ' num2str(deltapot)];...
-    ['Theta: ' num2str(thetapot)];...
-    ['Alpha: ' num2str(alphapot)];...
-    ['Beta: ' num2str(betapot)];...
-    ['Gamma: ' num2str(gammapot)];...
-	['Total: ' num2str(total)]};
-
 function buttonCalculatePower_Callback(hObject, eventdata, handles)
 set(handles.labelPower, 'Enable', 'on');
 spectrum = handles.spectra{get(handles.listRecordings, 'Value')};
@@ -341,7 +313,7 @@ spectrum_name = handles.signalnames{index};
 output = generate_statistics(spectrum, spectrum_name);
 
 [filename pathname] = uiputfile('*.txt', 'Save statistics');
-if ~isequal(filename, false) and ~isequal(pathname, false)
+if and(~isequal(filename, false), ~isequal(pathname, false))
     outlet = fopen([pathname filename], 'w');
     for line = 1:length(output)
     	fprintf(outlet, '%s\n', output{line});
@@ -353,8 +325,8 @@ end
 function buttonSaveFigure_Callback(hObject, eventdata, handles)
 figure
 spectrum = handles.spectra{get(handles.listRecordings, 'Value')};
-handle = plot(get_step(spectrum), spectrum);
+handle = plot(std_get_step(spectrum), spectrum);
 [filename pathname] = uiputfile('*.png', 'Save statistics');
-if ~isequal(filename, false) and ~isequal(pathname, false)
+if and(~isequal(filename, false), ~isequal(pathname, false))
     saveas(handle, [pathname filename]);
 end

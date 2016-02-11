@@ -42,7 +42,9 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 
-addpath([cd '/math']);
+addpath('./util');
+addpath('./math');
+addpath('./stft');
 % End initialization code - DO NOT EDIT
 
 % --- Executes just before stft2 is made visible.
@@ -92,32 +94,6 @@ function FileMenu_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % --------------------------------------------------------------------
-
-% --- Plots the current spectrum
-function surface_plot(spectrum)
-surfc(spectrum);
-
-% --------------------------------------------------------------------
-function [spectrum] = calculate_transform(signal, window, windowsize)
-global fs
-
-switch window
-case 'Gaussian'
-    windowfunction = @gausswin;
-case 'Blackman'
-    windowfunction = @blackman;
-case 'Hann'
-    windowfunction = @hann;
-case 'Kaiser'
-    windowfunction = @kaiser;
-otherwise
-    windowfunction = @hamming;
-end
-
-windowsize = floor(windowsize*fs);
-spectrum = calcstft(signal, windowfunction(windowsize), windowsize);
-
-% --------------------------------------------------------------------
 function OpenMenuItem_Callback(hObject, eventdata, handles)
 % hObject    handle to OpenMenuItem (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -129,7 +105,7 @@ if ~isequal(signalname, 0)
 	signal = load(strcat(signalpath, signalname));
     signal = (signal + fa)*fb - fc;
     windowsize = str2num(get(handles.editWindowSize, 'String'));
-    spectrum = calculate_transform(signal, handles.window, windowsize);
+    spectrum = calculate_short_transform(signal, handles.window, windowsize);
 	signalname = signalname(1:length(signalname)-6);
 	interval = 0:1/fs:(length(signal) - 1)/fs;
     duration = length(signal)/fs;
