@@ -1,6 +1,7 @@
 function [data] = get_decomposition(decomposition, bookkeeping)
-% decomposition  vector containing the last approximations and the details
-% bookkeeping    where the signals on the decomposition vector
+% @param   decomposition  vector containing the last approximations and the details
+% @param   bookkeeping    where the signals on the decomposition vector are
+% @return  a cellstr containing all approximations followed by all details
 approximations = {};
 details = {};
 data = {};
