@@ -72,8 +72,8 @@ handles.plots = [handles.axes1,...
                  handles.axes10,...
                  handles.axes11,...
                  handles.axes12];
-handles.decomposition = {};
-handles.lastwavelet = {};
+handles.decomposition = {}; % structure to hold approximations and details
+handles.lastwavelet = {}; % structure to remember last operation
 
 % Update handles structure
 guidata(hObject, handles);
@@ -318,8 +318,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), ...
     set(hObject,'BackgroundColor','white');
 end
 
-
-
 function EditMaxTime_Callback(hObject, eventdata, handles)
 % hObject    handle to EditMaxTime (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -448,6 +446,7 @@ else
     currentsignal = editedsignal;
 end
 
+% save stuff
 handles = set_signal_to_analyze(handles, currentsignal);
 plot_decomposition(handles);
 guidata(hObject, handles);

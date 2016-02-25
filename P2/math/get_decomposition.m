@@ -38,16 +38,3 @@ limit = length(details);
 for d = 1:limit
     data{length(data)+1} = details{limit-d+1};
 end
-
-% ------------------------------------------------------------------------------
-function [approximation] = old_get_decomposition(decomposition, bookkeeping)
-limit = length(bookkeeping)-1;
-approximation = {};
-offset = 1;
-
-for index = 2:limit
-    where = offset + bookkeeping(index);
-    chop = decomposition(offset:where);
-    approximation{length(approximation)+1} = chop;
-    offset = where;
-end
