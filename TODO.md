@@ -33,12 +33,9 @@
   - [x] Criar opções de filtro
   - [x] Criar opção de corte
 - [ ] DWT
-  + Vamos deixar este módulo para depois.
-  + Este módulo deve trabalhar com um único sinal de cada vez? Ou ele deve permitir uma lista de sinais?
-  - [x] Decompor sinal
-  - [x] Mostrar decomposições do sinal
-    - [x] Aproximações
-    - [x] Detalhes
+  - [ ] Decompor sinal
+  + Estamos retrabalhando esta parte nas funções `wavelets_transform` e `inverse_wavelets_transform`.
+  - [ ] Mostrar decomposições do sinal
   - [ ] Criar ferramentas de edição
     - [x] Substituir
     - [x] Limitar
