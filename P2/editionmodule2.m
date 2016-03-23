@@ -41,6 +41,9 @@ if nargout
 else
     gui_mainfcn(gui_State, varargin{:});
 end
+
+addpath('./util');
+addpath('./edition');
 % End initialization code - DO NOT EDIT
 
 % --- Executes just before editionmodule2 is made visible.
@@ -71,10 +74,10 @@ end
 % handles.v5refselect=0;
 % handles.v5promon=0;
 % handles.v5errorfile=0;
+handles.current = [];
 handles.v5signalname = '.ascii';
 handles.signalnames = {};
 handles.signals = {};
-handles.intervals = {};
 
 % UIWAIT makes editionmodule2 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -87,15 +90,6 @@ guidata(hObject, handles);
 function varargout = editionmodule2_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
-% --- gets that signal parameter [si it the discrete signal step?]
-function [step] = get_step(signal)
-global fs
-step = 0:1/fs:(length(signal) - 1)/fs;
-
-% --- Plots the current
-function context_plot(signal)
-plot(get_step(signal), signal);
-
 % --- Executes on button press in plotbutton.
 function plotbutton_Callback(hObject, eventdata, handles)
 axes(handles.axes1);
@@ -104,7 +98,7 @@ ylabel('Amplitude [s]');
 cla;
 
 if length(handles.signals) > 0
-	context_plot(handles.signals{get(handles.popupmenu1, 'Value')});
+	standard_plot(handles.signals{get(handles.popupmenu1, 'Value')});
 end
 
 % --------------------------------------------------------------------
@@ -124,15 +118,12 @@ if ~isequal(signalname, 0)
     signal = (signal + fa)*fb - fc;
 	signalname = signalname(1:length(signalname)-6);
 
-	v5t = 0:1/fs:(length(signal) - 1)/fs;
-	% v5treg = sprintf(' %5.2f', max(v5t));
-
 	handles.signalnames{length(handles.signalnames)+1} = signalname;
 	handles.signals{length(handles.signals)+1} = signal;
-	handles.intervals{length(handles.intervals)+1} = v5t;
 	set(handles.popupmenu1, 'String', handles.signalnames);
 	if isequal(length(handles.signals), 1)
-		context_plot(signal);
+		standard_plot(signal);
+        handles.current = signal;
 	end
 end
 
@@ -201,7 +192,8 @@ function tfinal_edit_CreateFcn(hObject, eventdata, handles)
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
@@ -224,13 +216,10 @@ if and(beginning, ending)
 		warndlg('Initial time frame is bigger than final time frame');
 	else
 		index = get(handles.popupmenu1, 'Value');
-		signal = handles.signals{index};
-		beginning = beginning * fs;
-		ending = ending * fs;
-		signal = (signal(beginning:ending));
-		context_plot(signal);
-		handles.signals{index} = signal;
-		handles.intervals{index} = get_step(signal);
+		signal = chop_signal(handles.signals{index}, beginning, ending);
+		standard_plot(signal);
+        handles.current = signal;
+		% handles.signals{index} = signal;
 	end
 end
 guidata(hObject, handles);
@@ -293,58 +282,11 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-% --- discovers which filter is currently selected in the available filter lists
-function [fk] = get_filter_kind(handles)
-k = 1;
-
-switch k
-case get(handles.lowpassbutton, 'Value')
-	fprintf('low pass filter\n');
-	fk = 'lowpass';
-case get(handles.highpassbutton, 'Value')
-	fprintf('high pass filter\n');
-	fk = 'highpass';
-case get(handles.bandpassbutton, 'Value')
-	fprintf('band pass filter\n');
-	fk = 'bandpass';
-case get(handles.bandstopbutton, 'Value')
-	fprintf('notch filter\n');
-	fk = 'bandstop';
-end
-
-% --- filters the signal using a filter. is based on the fourier transform
-function [signal] = filter_signal(signal, minfreq, maxfreq, kind)
-global fs;
-
-spectre = fft(signal);
-tamint = length(signal) / fs;
-maxpoint = round(maxfreq*tamint/fs);
-maxpoint2 = length(spectre) - maxpoint;
-minpoint = round(minfreq*tamint/fs);
-minpoint2 = length(spectre) - minpoint;
-
-switch kind
-case 'lowpass'
-	spectre(maxpoint:maxpoint2) = 0;
-case 'highpass'
-	spectre(1:minpoint) = 0;
-	spectre(minpoint2:length(spectre)) = 0;
-case 'bandpass'
-	spectre(1:minpoint) = 0;
-	spectre(minpoint2:length(spectre)) = 0;
-	spectre(maxpoint:maxpoint2) = 0;
-case 'bandstop'
-	spectre(minpoint:maxpoint) = 0;
-	spectre(maxpoint2:minpoint2) = 0;
-end
-
-signal = real(ifft(spectre));
-
 % --- Executes on button press in filterbutton.
 function filterbutton_Callback(hObject, eventdata, handles)
 global fs;
 
-fk = get_filter_kind(handles); % fk <- filter kind
+fk = get_filter_kind(handles);
 minimum = 0;
 maximum = realmax;
 if isequal(fk, 'highpass') || isequal(fk, 'bandpass') || isequal(fk, 'bandstop')
@@ -361,7 +303,8 @@ if and(minimum, maximum)
 		signal = handles.signals{get(handles.popupmenu1, 'Value')};
 		signal = filter_signal(signal, minimum, maximum, fk);
 		% handles.signals{get(handles.popupmenu1, 'Value')} = signal;
-		context_plot(signal);
+		standard_plot(signal);
+        handles.current = signal;
 	end
 end
 
