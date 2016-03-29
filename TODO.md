@@ -33,14 +33,13 @@
   - [x] Criar opções de filtro
   - [x] Criar opção de corte
 - [ ] DWT
-  - [ ] Decompor sinal
-  + Estamos retrabalhando esta parte nas funções `wavelets_transform` e `inverse_wavelets_transform`.
+  - [X] Decompor sinal
   - [ ] Mostrar decomposições do sinal
   - [ ] Criar ferramentas de edição
     - [x] Substituir
     - [x] Limitar
     - [ ] EOG
-  - [ ] Reconstruir sinal
+  - [X] Reconstruir sinal
 - [x] Time/Spec
   - [x] Identicar funcionalidades.
   - [x] Criar ferramentas para cortar o sinal

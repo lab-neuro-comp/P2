@@ -3,6 +3,8 @@ function [handles] = set_signal_to_analyze(handles, inlet)
 % @param  handles  the handles to the structures in the window.
 % @param  inlet    the edited decomposed signal.
 % @return handles with the appropriate side-effects.
+
+% TODO Update this to support the new decomposition structure
 currentsignal_index = get(handles.PopupCurrentSignal, 'Value');
 memory = handles.lastwavelet;
 choosen_wavelet = memory{1};

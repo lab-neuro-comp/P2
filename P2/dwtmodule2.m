@@ -72,7 +72,8 @@ handles.plots = [handles.axes1,...
                  handles.axes10,...
                  handles.axes11,...
                  handles.axes12];
-handles.decomposition = {}; % structure to hold approximations and details
+handles.approximations = {};
+handles.details = {};
 handles.lastwavelet = {}; % structure to remember last operation
 
 % Update handles structure
@@ -200,8 +201,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), ...
     set(hObject,'BackgroundColor','white');
 end
 
-
-
 % --- Executes on selection change in PopupWaveletVar.
 function PopupWaveletVar_Callback(hObject, eventdata, handles)
 % hObject    handle to PopupWaveletVar (see GCBO)
@@ -242,9 +241,10 @@ end
 function ButtonCalculate_Callback(hObject, eventdata, handles)
 level = get(handles.PopupWaveletLevel, 'Value');
 wavelet = get_choosen_wavelet(handles);
-[decomposition bookkeeping] = wavedec(handles.signal, level, wavelet);
-handles.decomposition = get_decomposition(decomposition, bookkeeping);
-handles = populate_popup(plot_decomposition(handles));
+[approximations details] = wavelets_transform(handles.signal, level, wavelet);
+handles.approximations = approximations;
+handles.details = details;
+% TODO Plot either approximations or details
 handles.lastwavelet = {wavelet level};
 guidata(hObject, handles);
 
@@ -280,17 +280,16 @@ end
 
 % ----------------------------------------------------------------------------
 function [handles] = populate_popup(handles)
-limit = length(handles.decomposition);
+limit = length(handles.approximations);
+formatstring = 'cA%d';
 box = {};
 
-yielding = get_yielding(handles);
-if isequal(yielding, 'Details')
+if isequal(get_yielding(handles), 'Details')
+    limit = length(handles.details);
     formatstring = 'cD%d';
-else
-    formatstring = 'cA%d';
 end
 
-for n = 1:limit/2
+for n = 1:limit
     box{length(box)+1} = [sprintf(formatstring, n)];
 end
 
@@ -388,9 +387,9 @@ function EditV1_CreateFcn(hObject, eventdata, handles)
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'),....
-                   get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+if ispc && isequal(get(hObject, 'BackgroundColor'), ...
+                   get(0, 'defaultUicontrolBackgroundColor'))
+    set(hObject, 'BackgroundColor', 'white');
 end
 
 function EditV2_Callback(hObject, eventdata, handles)
@@ -456,10 +455,12 @@ function ButtonReconstruct_Callback(hObject, eventdata, handles)
 % hObject    handle to ButtonReconstruct (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.signal = waverec(set_decomposition(handles), ...
-                         set_bookkeeping(handles), ...
-                         get_choosen_wavelet(handles));
-handles.decomposition = {};
+
+handles.signal = inverse_wavelets_transform(handles.approximations, ...
+                                            handles.details, ...
+                                            handles.lastwavelet{1});
+handles.approximations = {};
+handles.details = {};
 plot_decomposition(handles);
 guidata(hObject, handles);
 
