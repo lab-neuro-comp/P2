@@ -1,5 +1,7 @@
 function [handles] = plot_decomposition(handles)
 % plot many DWT transformed signals
+
+% # get correct decompositions
 decomposition = handles.approximations;
 if isequal(get_yielding(handles), 'Details')
     decomposition = handles.details;
@@ -17,7 +19,7 @@ width = panelplot_dimensions(3);
 height = panelplot_dimensions(4);
 no_squares = 1 + length(decomposition);
 g = 0;
-h = (height * (1-moo)^2) / no_squares;
+h = (height * ((1-moo) ^ 2)) / no_squares;
 w = width * (1-moo);
 x = width * moo / 2;
 
@@ -28,9 +30,9 @@ end
 % # resize and draw plots
 % first plot
 axes(handles.plots(1));
-set(handles.plots(1), 'Position', [x ... % x coordinate
-                                   (height*moo/2) + (h+g) ... % y coordinate
-                                   w ... % width
+set(handles.plots(1), 'Position', [x, ... % x coordinate
+                                   height - (height*moo/2) - (h+g), ... % y coordinate
+                                   w, ... % width
                                    h]); % height
 standard_plot(handles.signal);
 % next plots
@@ -39,9 +41,9 @@ what = 2;
 while what < limit
     p = handles.plots(what);
     set(p, 'visible', 'on');
-    set(p, 'position', [x ... % x
-                        height*moo/2 + what*(h+g) ... % y
-                        w ... % width
+    set(p, 'position', [x, ... % x
+                        height - height*moo/2 - what*(h+g), ... % y
+                        w, ... % width
                         h]); % height
     axes(p);
     standard_plot(decomposition{what-1});
