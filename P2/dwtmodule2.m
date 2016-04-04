@@ -246,7 +246,7 @@ wavelet = get_choosen_wavelet(handles);
 [approximations details] = wavelets_transform(handles.signal, level, wavelet);
 handles.approximations = approximations;
 handles.details = details;
-% TODO Plot either approximations or details
+populate_popup(plot_decomposition(handles));
 handles.lastwavelet = {wavelet level};
 guidata(hObject, handles);
 

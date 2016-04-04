@@ -24,7 +24,7 @@ w = width * (1-moo);
 x = width * moo / 2;
 
 if no_squares > 1
-    gap = (height * moo * (1-moo)) / (no_squares-1);
+    g = (height * moo * (1-moo)) / (no_squares-1);
 end
 
 % # resize and draw plots
@@ -36,12 +36,11 @@ set(handles.plots(1), 'Position', [x, ... % x coordinate
                                    h]); % height
 standard_plot(handles.signal);
 % next plots
-limit = length(decomposition);
 what = 2;
-while what < limit
+while what <= no_squares
     p = handles.plots(what);
-    set(p, 'visible', 'on');
-    set(p, 'position', [x, ... % x
+    set(p, 'Visible', 'on');
+    set(p, 'Position', [x, ... % x
                         height - height*moo/2 - what*(h+g), ... % y
                         w, ... % width
                         h]); % height
