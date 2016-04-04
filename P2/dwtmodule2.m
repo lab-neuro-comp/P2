@@ -107,6 +107,8 @@ if ~isequal(signalname, 0)
 
 	handles.signalname = signalname;
 	handles.signal = signal;
+    handles.approximations = { };
+    handles.details = { };
 	set(handles.textSignalName, 'String', signalname);
     plot_decomposition(handles);
 end
