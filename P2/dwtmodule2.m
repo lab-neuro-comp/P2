@@ -22,7 +22,7 @@ function varargout = dwtmodule2(varargin)
 
 % Edit the above text to modify the response to help dwtmodule2
 
-% Last Modified by GUIDE v2.5 19-Jan-2016 09:49:04
+% Last Modified by GUIDE v2.5 05-Apr-2016 14:55:05
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -490,3 +490,10 @@ function ButtonVisualize_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 handles = populate_popup(plot_decomposition(handles));
 guidata(hObject, handles);
+
+
+% --- Executes on button press in ButtonSave.
+function ButtonSave_Callback(hObject, eventdata, handles)
+% hObject    handle to ButtonSave (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
