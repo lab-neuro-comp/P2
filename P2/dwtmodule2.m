@@ -297,6 +297,7 @@ end
 
 set(handles.PopupCurrentSignal, 'String', box);
 
+% --------------------------------------------------------------------------------
 function EditMinTime_Callback(hObject, eventdata, handles)
 % hObject    handle to EditMinTime (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -420,35 +421,10 @@ end
 
 % --- Executes on button press in ButtonEdit.
 function ButtonEdit_Callback(hObject, eventdata, handles)
-global fs
-currentsignal = get_signal_to_analyze(handles);
-
-% which procedure?
-if get(handles.RadioEOG, 'Value')
-    questdlg(['Option not implemented yet'],...
-             ['Not implemented...'],...
-             'Sorry :(', 'Working on this', 'Sorry :(');
-    return
-elseif get(handles.RadioConstrain, 'Value')
-    editedsignal = constrain_signal(currentsignal,...
-                                    str2num(get(handles.EditV2, 'String')), ...
-                                    str2num(get(handles.EditV1, 'String')));
-else
-    editedsignal = replace_signal(currentsignal,...
-                                  str2num(get(handles.EditV1, 'String')));
-end
-
-% only interval?
-if get(handles.CheckInterval ,'Value')
-    minmom = floor(str2num(get(handles.EditMinTime, 'String')) * fs);
-    maxmom = floor(str2num(get(handles.EditMaxTime, 'String')) * fs);
-    currentsignal(minmom:maxmom) = editedsignal(minmom:maxmom);
-else
-    currentsignal = editedsignal;
-end
-
-% save stuff
-handles = set_signal_to_analyze(handles, currentsignal);
+% hObject    handle to ButtonReconstruct (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles = ButtonEdit_View(handles);
 plot_decomposition(handles);
 guidata(hObject, handles);
 
