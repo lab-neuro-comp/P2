@@ -22,7 +22,7 @@ function varargout = editionmodule2(varargin)
 
 % Edit the above text to modify the response to help editionmodule2
 
-% Last Modified by GUIDE v2.5 21-Oct-2015 16:49:09
+% Last Modified by GUIDE v2.5 11-Apr-2016 08:32:10
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -64,16 +64,6 @@ if strcmp(get(hObject,'Visible'),'off')
 end
 
 % % Setup context variables
-% handles.edit_enable=1;
-% handles.v5tipofiltro=1;
-% handles.v5nedit=1;
-% handles.v5tiniok=0;
-% handles.v5fminok=0;
-% handles.v5fmaxok=fs/2;
-% handles.v5numsig=1;
-% handles.v5refselect=0;
-% handles.v5promon=0;
-% handles.v5errorfile=0;
 handles.current = [];
 handles.v5signalname = '.ascii';
 handles.signalnames = {};
@@ -219,7 +209,7 @@ if and(beginning, ending)
 		signal = chop_signal(handles.signals{index}, beginning, ending);
 		standard_plot(signal);
         handles.current = signal;
-		% handles.signals{index} = signal;
+		handles.signals{index} = signal;
 	end
 end
 guidata(hObject, handles);
@@ -302,10 +292,22 @@ if and(minimum, maximum)
 	elseif length(handles.signals) > 0
 		signal = handles.signals{get(handles.popupmenu1, 'Value')};
 		signal = filter_signal(signal, minimum, maximum, fk);
-		% handles.signals{get(handles.popupmenu1, 'Value')} = signal;
+		handles.signals{get(handles.popupmenu1, 'Value')} = signal;
 		standard_plot(signal);
         handles.current = signal;
 	end
 end
 
 guidata(hObject, handles);
+
+
+% --- Executes on button press in savebutton.
+function savebutton_Callback(hObject, eventdata, handles)
+% hObject    handle to savebutton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[filename pathname] = uiputfile('*.ascii', 'Save statistics');
+if and(~isequal(filename, false), ~isequal(pathname, false))
+    write_signal(handles.signals{get(handles.popupmenu1, 'Value')}, ...
+                 strcat(pathname, filename));
+end
