@@ -497,3 +497,9 @@ function ButtonSave_Callback(hObject, eventdata, handles)
 % hObject    handle to ButtonSave (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+figure
+handle = standard_plot(handles.signal);
+[filename pathname] = uiputfile('*.png', 'Save statistics');
+if and(~isequal(filename, false), ~isequal(pathname, false))
+    saveas(handle, [pathname filename]);
+end
