@@ -22,7 +22,7 @@ function varargout = protolize2(varargin)
 
 % Edit the above text to modify the response to help protolize2
 
-% Last Modified by GUIDE v2.5 08-Oct-2015 10:04:25
+% Last Modified by GUIDE v2.5 18-Apr-2016 10:22:53
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -213,3 +213,17 @@ function docmain_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 web('file:///', cd, 'doc.html');
+
+
+% --------------------------------------------------------------------
+function mainstudies_Callback(hObject, eventdata, handles)
+% hObject    handle to mainstudies (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function studies_main_Callback(hObject, eventdata, handles)
+% hObject    handle to studies_main (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
