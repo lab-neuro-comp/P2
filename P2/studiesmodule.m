@@ -11,7 +11,7 @@ function varargout = studiesmodule(varargin)
 %
 %      STUDIESMODULE('Property','Value',...) creates a new STUDIESMODULE or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before studiesmodule_OpeningFcn gets called.  An
+%      applied to the GUI before studiesmodule_OpeningFunction gets called.  An
 %      unrecognized property name or invalid value makes property application
 %      stop.  All inputs are passed to studiesmodule_OpeningFcn via varargin.
 %
@@ -20,9 +20,11 @@ function varargout = studiesmodule(varargin)
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
+% Copyright 2002-2003 The MathWorks, Inc.
+
 % Edit the above text to modify the response to help studiesmodule
 
-% Last Modified by GUIDE v2.5 18-Apr-2016 10:27:02
+% Last Modified by GUIDE v2.5 25-Apr-2016 09:46:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -73,31 +75,84 @@ function varargout = studiesmodule_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on selection change in listbox1.
-function listbox1_Callback(hObject, eventdata, handles)
-% hObject    handle to listbox1 (see GCBO)
+% --- Executes on selection change in listActions.
+function listActions_Callback(hObject, eventdata, handles)
+% hObject    handle to listActions (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = cellstr(get(hObject,'String')) returns listbox1 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from listbox1
+% Hints: contents = get(hObject,'String') returns listActions contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from listActions
 
 
 % --- Executes during object creation, after setting all properties.
-function listbox1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to listbox1 (see GCBO)
+function listActions_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to listActions (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
 % Hint: listbox controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc
     set(hObject,'BackgroundColor','white');
+else
+    set(hObject,'BackgroundColor',get(0,'defaultUicontrolBackgroundColor'));
 end
 
 
-% --- Executes on button press in pushbutton1.
-function pushbutton1_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton1 (see GCBO)
+% --- Executes on button press in buttonAdd.
+function buttonAdd_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonAdd (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in buttonRun.
+function buttonRun_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonRun (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function menuNew_Callback(hObject, eventdata, handles)
+% hObject    handle to menuNew (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function menuSave_Callback(hObject, eventdata, handles)
+% hObject    handle to menuSave (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function menuLoad_Callback(hObject, eventdata, handles)
+% hObject    handle to menuLoad (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function menuQuit_Callback(hObject, eventdata, handles)
+% hObject    handle to menuQuit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function menuRun_Callback(hObject, eventdata, handles)
+% hObject    handle to menuRun (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function menuFile_Callback(hObject, eventdata, handles)
+% hObject    handle to menuFile (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
