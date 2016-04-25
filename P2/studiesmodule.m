@@ -81,8 +81,10 @@ function listActions_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = get(hObject,'String') returns listActions contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from listActions
+% Hints: contents = get(hObject,'String') 
+%            returns listActions contents as cell array                                        
+%        contents{get(hObject,'Value')} 
+%            returns selected item from listActions
 
 
 % --- Executes during object creation, after setting all properties.
@@ -94,20 +96,24 @@ function listActions_CreateFcn(hObject, eventdata, handles)
 % Hint: listbox controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc
-    set(hObject,'BackgroundColor','white');
+    set(hObject, ...
+        'BackgroundColor', ...
+        'white');
 else
-    set(hObject,'BackgroundColor',get(0,'defaultUicontrolBackgroundColor'));
+    set(hObject, ...
+        'BackgroundColor', ...
+        get(0,'defaultUicontrolBackgroundColor'));
 end
 
 
-% --- Executes on button press in buttonAdd.
+% --- Executes on button press in buttonAdd. -------------------------
 function buttonAdd_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonAdd (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 
-% --- Executes on button press in buttonRun.
+% --- Executes on button press in buttonRun. -------------------------
 function buttonRun_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonRun (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -155,4 +161,10 @@ function menuFile_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+% --- Common UI functions --------------------------------------------
 
+% Run callback
+function [outlet] = run_view(handles)
+outlet = '';
+
+% 

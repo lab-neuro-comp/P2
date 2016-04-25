@@ -1,0 +1,6 @@
+---
+DWT:
+  - Apply the discrete wavelets transform to the dataset. The inlet is a signal. The outlets are an array containing the approximations and another containing the details. The first parameter is how many levels deep the transform must go. The second is which transform should be used.
+  - wavelets_transform
+  - '2'
+...
