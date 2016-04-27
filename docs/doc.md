@@ -69,7 +69,7 @@ Time / Spectre
 
 Este módulo fornece algumas ferramentas para edição de sinais no domínio do tempo. Em sua interface, pode-se notar que há ferramentas para cortar e para filtrar o sinal.
 
-![time/spec module](assets/timespec.jpg "'Time/Spec' Module")
+![time/spec module](assets/timespec.png "'Time/Spec' Module")
 
 Inicialmente, carrega-se um sinal usando a opção `Open` no menu `File` da barra de ferramentas. Este sinal aparecerá na lista `Data registry`, no canto superior direito. Para mostrar este sinal na tela, aperte o botão `Plot`. Para cortar o sinal, digite os valores mínimo e máximo nas caixas `Min` e `Max`, respectivamente, e aperte o botão `Crop`. Para filtrar o sinal, existem 4 opções de filtros: passa-baixa, passa-alta, passa-banda ou rejeita-banda. Escolha o filtro e os intervalos de frequência desejados.
 
@@ -78,11 +78,11 @@ Para executar este módulo em separado, execute a função `editionmodule2`.
 Discrete Wavelets Transform (DWT)
 ---------------------------------
 
-O módulo DWT permite descontruir um sinal usando diversas transformadas de wavelets; fazer edições em seus coeficientes (isto é, em suas aproximações e detalhes); e reconstruir o sinal editado. 
+O módulo DWT permite descontruir um sinal usando diversas transformadas de wavelets; fazer edições em seus coeficientes (isto é, em suas aproximações e detalhes); e reconstruir o sinal editado.
 
-`TODO: ADICIONAR IMAGEM DO MÓDULO`
+![dwt module](assets/dwt2.png "'DWT' Module")
 
-Este módulo permite que apenas um sinal seja trabalhado por vez. Para carregar um sinal na memória, abre o submenu `File` e selecione `Open` para escolher o arquivo com o sinal desejado. No canto superior esquerdo, há um painel com as opções de transformada de Wavelets: família de wavelets, tipo de wavelet e nível desejado.
+Este módulo permite que apenas um sinal seja trabalhado por vez. Para carregar um sinal na memória, abre o submenu `File` e selecione `Open` para escolher o arquivo com o sinal desejado. No canto superior esquerdo, há um painel com as opções de transformada de Wavelets: família de wavelets, tipo de wavelet e nível desejado. O botão `Calculate` determinará os coeficientes do sinal em memória.
 
 Após a aplicação da transformada, pode-se escolher visualizar as aproximações ou os detalhes do sinal escolhido. Para editá-los, estão disponíveis as ferramentas no painel no lado direito. Nominalmente, pode-se substituir um coeficiente por um valor contínuo; e limitar os valores do coeficiente dentro de um intervalo.
 
@@ -102,7 +102,7 @@ Time Domain
 
 A análise em domínio do tempo gera uma análise estatística do sinal em um período de tempo determinado. Selecione um sinal usando a opção `Open` no menu `File`. Este sinal pode ser cortado em um intervalo menor usando a opção `Crop`.
 
-![time domain module](assets/timedomain.jpg "'Time domain' Module")
+![time domain module](assets/timedomain.png "'Time domain' Module")
 
 Para gerar uma análise deste sinal, aperte o botão `Generate Statistics`. A análise produzida poderá ser vista no painel ao lado direito, e poderá ser salva apertando o botão `Export statistics`.
 
@@ -111,12 +111,12 @@ Este módulo pode ser executado em separado usando o script `timemodule2`.
 Fourier analysis
 ----------------
 
-<span style="background-color: #BDC3CE">`O módulo ainda está em construção`</span>
+<span style="background-color: #BDC3CE">`TODO: ESCREVER DOCUMENTAÇÃO`</span>
 
 Short Time Fourier Transform (STFT)
 -----------------------------------
 
-<span style="background-color: #BDC3CE">`O módulo ainda está em construção`</span>
+<span style="background-color: #BDC3CE">`TODO: ESCREVER DOCUMENTAÇÃO`</span>
 
 Continuous Wavelet Transform (CWT)
 ----------------------------------

@@ -64,11 +64,11 @@ guidata(hObject, handles);
 % uiwait(handles.figure1);
 
 % adding relevant paths
-addpath('./edfp2ascii');
+addpath(strcat(cd, '\edfp2ascii'));
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = edfp2ascii_OutputFcn(hObject, eventdata, handles) 
+function varargout = edfp2ascii_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB

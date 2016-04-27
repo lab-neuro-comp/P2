@@ -9,11 +9,11 @@ function varargout = recordmodule(varargin)
 %      RECORDMODULE('CALLBACK',hObject,eventData,handles,...) calls the local
 %      function named CALLBACK in RECORDMODULE.M with the given input arguments.
 %
-%      RECORDMODULE('Property','Value',...) creates a new RECORDMODULE or 
-%      raises the existing singleton*.  Starting from the left, property 
-%      value pairs are applied to the GUI before recordmodule_OpeningFunction 
-%      gets called.  An unrecognized property name or invalid value makes 
-%      property application stop.  All inputs are passed to 
+%      RECORDMODULE('Property','Value',...) creates a new RECORDMODULE or
+%      raises the existing singleton*.  Starting from the left, property
+%      value pairs are applied to the GUI before recordmodule_OpeningFunction
+%      gets called.  An unrecognized property name or invalid value makes
+%      property application stop.  All inputs are passed to
 %      recordmodule_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
@@ -66,7 +66,7 @@ guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = recordmodule_OutputFcn(hObject, eventdata, handles) 
+function varargout = recordmodule_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -82,7 +82,7 @@ function popupMode_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = get(hObject,'String') 
+% Hints: contents = get(hObject,'String')
 %        returns popupMode contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupMode
 
@@ -107,7 +107,6 @@ function buttonRun_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonRun (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-ConvertEDF2ASCII('nothing', 'yet');
 edfp2ascii;
 
 % --------------------------------------------------------------------
@@ -142,5 +141,3 @@ function editMenu_Callback(hObject, eventdata, handles)
 % hObject    handle to editMenu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-
