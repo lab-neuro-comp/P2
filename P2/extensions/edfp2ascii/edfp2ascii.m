@@ -113,7 +113,6 @@ else
         get(0, 'defaultUicontrolBackgroundColor'));
 end
 
-
 % --- Executes on button press in buttonTranslate.
 function buttonTranslate_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonTranslate (see GCBO)

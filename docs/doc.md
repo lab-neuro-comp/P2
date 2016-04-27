@@ -62,7 +62,7 @@ Por enquanto, temos 2 protocolos disponíveis: o TSST e o REFLEX.
 Módulos de edição
 =================
 
-Para podermos visualizar e editar visualmente o sinal, há as ferramentas `Time/Spec` e `DWT`.
+Para podermos visualizar e editar o sinal, há as ferramentas `Time/Spec` e `DWT`.
 
 Time / Spectre
 --------------
@@ -71,14 +71,24 @@ Este módulo fornece algumas ferramentas para edição de sinais no domínio do 
 
 ![time/spec module](assets/timespec.jpg "'Time/Spec' Module")
 
-Inicialmente, carrega-se um sinal usando a opção `Open` no menu `File` da barra de ferramentas. Este sinal aparecerá na lista de `Data registry` no canto superior direito. Para mostrar este sinal na tela, aperte o botão `Plot`. Para cortar o sinal, digite os valores mínimo e máximo nas caixas `Min` e `Max`, respectivamente, e aperte o botão `Crop`. Para filtrar o sinal, existem 4 opções de filtros: passa-baixa, passa-alta, passa-banda ou rejeita-banda. Escolha o filtro e os intervalos de frequência desejados. Lembre-se que, para cada filtro, há uma forma correspondente de preencher os parâmetros de filtro.
+Inicialmente, carrega-se um sinal usando a opção `Open` no menu `File` da barra de ferramentas. Este sinal aparecerá na lista `Data registry`, no canto superior direito. Para mostrar este sinal na tela, aperte o botão `Plot`. Para cortar o sinal, digite os valores mínimo e máximo nas caixas `Min` e `Max`, respectivamente, e aperte o botão `Crop`. Para filtrar o sinal, existem 4 opções de filtros: passa-baixa, passa-alta, passa-banda ou rejeita-banda. Escolha o filtro e os intervalos de frequência desejados.
 
 Para executar este módulo em separado, execute a função `editionmodule2`.
 
 Discrete Wavelets Transform (DWT)
 ---------------------------------
 
-<span style="background-color: #BDC3CE">`O módulo ainda está em construção`</span>
+O módulo DWT permite descontruir um sinal usando diversas transformadas de wavelets; fazer edições em seus coeficientes (isto é, em suas aproximações e detalhes); e reconstruir o sinal editado. 
+
+`TODO: ADICIONAR IMAGEM DO MÓDULO`
+
+Este módulo permite que apenas um sinal seja trabalhado por vez. Para carregar um sinal na memória, abre o submenu `File` e selecione `Open` para escolher o arquivo com o sinal desejado. No canto superior esquerdo, há um painel com as opções de transformada de Wavelets: família de wavelets, tipo de wavelet e nível desejado.
+
+Após a aplicação da transformada, pode-se escolher visualizar as aproximações ou os detalhes do sinal escolhido. Para editá-los, estão disponíveis as ferramentas no painel no lado direito. Nominalmente, pode-se substituir um coeficiente por um valor contínuo; e limitar os valores do coeficiente dentro de um intervalo.
+
+Com os coeficientes editados, pode-se reconstruir o sinal clicando no botão `Reconstruct`. Para salvar o novo sinal, aperte o botão `Save`.
+
+Para usar este módulo em separado, use o comando `dwtmodule2`. As funções relacionadas à transformada discreta de Wavelets estão disponíveis na pasta `math`; enquanto que as funções de edição dos coeficientes (que, por sinal, podem ser usadas para qualquer sinal) estão na pasta `util`.
 
 <a name="analysis"></a>
 
