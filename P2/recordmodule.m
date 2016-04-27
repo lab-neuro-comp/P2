@@ -97,7 +97,7 @@ function popupMode_CreateFcn(hObject, eventdata, handles)
 %       See ISPC and COMPUTER.
 beck = 'white';
 if ~ispc
-    beck = get(0,'defaultUicontrolBackgroundColor');
+    beck = get(0, 'defaultUicontrolBackgroundColor');
 end
 set(hObject, 'BackgroundColor', beck);
 
@@ -107,7 +107,8 @@ function buttonRun_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonRun (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+ConvertEDF2ASCII('nothing', 'yet');
+edfp2ascii;
 
 % --------------------------------------------------------------------
 function quitMenu_Callback(hObject, eventdata, handles)
@@ -115,7 +116,7 @@ function quitMenu_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 selection = questdlg(['Close module?'], ...
-                     ['Close module...'], ...
+                     ['Closing module...'], ...
                      'Yes', 'No', 'Yes');
 if strcmp(selection, 'No')
     return;
