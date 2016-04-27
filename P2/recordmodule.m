@@ -9,11 +9,12 @@ function varargout = recordmodule(varargin)
 %      RECORDMODULE('CALLBACK',hObject,eventData,handles,...) calls the local
 %      function named CALLBACK in RECORDMODULE.M with the given input arguments.
 %
-%      RECORDMODULE('Property','Value',...) creates a new RECORDMODULE or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before recordmodule_OpeningFunction gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to recordmodule_OpeningFcn via varargin.
+%      RECORDMODULE('Property','Value',...) creates a new RECORDMODULE or 
+%      raises the existing singleton*.  Starting from the left, property 
+%      value pairs are applied to the GUI before recordmodule_OpeningFunction 
+%      gets called.  An unrecognized property name or invalid value makes 
+%      property application stop.  All inputs are passed to 
+%      recordmodule_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
@@ -81,7 +82,8 @@ function popupMode_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = get(hObject,'String') returns popupMode contents as cell array
+% Hints: contents = get(hObject,'String') 
+%        returns popupMode contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupMode
 
 
@@ -93,11 +95,11 @@ function popupMode_CreateFcn(hObject, eventdata, handles)
 
 % Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc
-    set(hObject,'BackgroundColor','white');
-else
-    set(hObject,'BackgroundColor',get(0,'defaultUicontrolBackgroundColor'));
+beck = 'white';
+if ~ispc
+    beck = get(0,'defaultUicontrolBackgroundColor');
 end
+set(hObject, 'BackgroundColor', beck);
 
 
 % --- Executes on button press in buttonRun.
@@ -112,7 +114,13 @@ function quitMenu_Callback(hObject, eventdata, handles)
 % hObject    handle to quitMenu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+selection = questdlg(['Close module?'], ...
+                     ['Close module...'], ...
+                     'Yes', 'No', 'Yes');
+if strcmp(selection, 'No')
+    return;
+end
+delete(handles.figure1)
 
 % --------------------------------------------------------------------
 function settingsMenu_Callback(hObject, eventdata, handles)
