@@ -2,18 +2,18 @@
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>Menu principal</title>
+    <title>﻿PROTOLIZE! 2</title>
     <link rel="stylesheet" type="text/css" href="default.css" />
 </head>
 <body>
 
-<p>﻿# PROTOLIZE! 2</p>
+<h1>﻿PROTOLIZE! 2</h1>
 
-<p>O PROTOLIZE! é uma ferramenta escrita em MATLAB para processamento de sinais de caráter biológico. Inicialmente <a href="http://repositorio.unb.br/bitstream/10482/4213/1/2009_SergioAndresCondeOcazionez.pdf">feito</a> pelo professor <a href="http://buscatextual.cnpq.br/buscatextual/visualizacv.do?id=K4245801A8">Sergio Ocazionez</a>, que hoje se encontra no <a href="http://www.neuro.ufrn.br/incerebro/">Instituto do Cérebro da Universidade Federal do Rio Grande do Norte</a>, durante sua tese de mestrado na Universidade de Brasília, ele está sendo trabalhado no Laboratório de Neurociências e Comportamento da Universidade de Brasília.</p>
+<p>O PROTOLIZE! é uma ferramenta escrita em MATLAB para processamento de sinais de caráter biológico. Inicialmente <a href="http://repositorio.unb.br/bitstream/10482/4213/1/2009_SergioAndresCondeOcazionez.pdf">feito</a> pelo professor <a href="http://lattes.cnpq.br/7159531395590165">Sergio Ocazionez</a>, que hoje se encontra no <a href="http://www.neuro.ufrn.br/incerebro/">Instituto do Cérebro da Universidade Federal do Rio Grande do Norte</a>, durante sua tese de mestrado na Universidade de Brasília, ele está sendo trabalhado no Laboratório de Neurociências e Comportamento da Universidade de Brasília.</p>
 
 <p><img src="assets/p2mainpage.jpg" alt="Protolize 2"/></p>
 
-<p>Ele está sendo escrito no MATLAB 2010, com o editor de textos <a href="https://atom.io/">Atom</a>. Este documento está sendo escrito em markdown e sendo traduzido em HTML usando o script <a href="https://github.com/mpeterv/markdown">markdown.lua</a> feito por <a href="https://github.com/mpeterv">@mpeterv</a>.</p>
+<p>O PROTOLIZE!2 está sendo escrito em MATLAB 2010 com auxílio do editor de textos <a href="https://atom.io/">Atom</a>. Esta documentação está sendo escrita em <a href="https://daringfireball.net/projects/markdown/">Markdown</a> e sendo traduzido em HTML usando o script <a href="https://github.com/mpeterv/markdown">markdown.lua</a> feito por <a href="https://github.com/mpeterv">@mpeterv</a>.</p>
 
 <h2>Pré-requisitos</h2>
 
@@ -66,21 +66,31 @@
 
 <h1>Módulos de edição</h1>
 
-<p>Para podermos visualizar e editar visualmente o sinal, há as ferramentas <code>Time/Spec</code> e <code>DWT</code>.</p>
+<p>Para podermos visualizar e editar o sinal, há as ferramentas <code>Time/Spec</code> e <code>DWT</code>.</p>
 
 <h2>Time / Spectre</h2>
 
 <p>Este módulo fornece algumas ferramentas para edição de sinais no domínio do tempo. Em sua interface, pode-se notar que há ferramentas para cortar e para filtrar o sinal.</p>
 
-<p><img src="assets/timespec.jpg" alt="time/spec module" title="'Time/Spec' Module"/></p>
+<p><img src="assets/timespec.png" alt="time/spec module" title="'Time/Spec' Module"/></p>
 
-<p>Inicialmente, carrega-se um sinal usando a opção <code>Open</code> no menu <code>File</code> da barra de ferramentas. Este sinal aparecerá na lista de <code>Data registry</code> no canto superior direito. Para mostrar este sinal na tela, aperte o botão <code>Plot</code>. Para cortar o sinal, digite os valores mínimo e máximo nas caixas <code>Min</code> e <code>Max</code>, respectivamente, e aperte o botão <code>Crop</code>. Para filtrar o sinal, existem 4 opções de filtros: passa-baixa, passa-alta, passa-banda ou rejeita-banda. Escolha o filtro e os intervalos de frequência desejados. Lembre-se que, para cada filtro, há uma forma correspondente de preencher os parâmetros de filtro.</p>
+<p>Inicialmente, carrega-se um sinal usando a opção <code>Open</code> no menu <code>File</code> da barra de ferramentas. Este sinal aparecerá na lista <code>Data registry</code>, no canto superior direito. Para mostrar este sinal na tela, aperte o botão <code>Plot</code>. Para cortar o sinal, digite os valores mínimo e máximo nas caixas <code>Min</code> e <code>Max</code>, respectivamente, e aperte o botão <code>Crop</code>. Para filtrar o sinal, existem 4 opções de filtros: passa-baixa, passa-alta, passa-banda ou rejeita-banda. Escolha o filtro e os intervalos de frequência desejados.</p>
 
 <p>Para executar este módulo em separado, execute a função <code>editionmodule2</code>.</p>
 
 <h2>Discrete Wavelets Transform (DWT)</h2>
 
-<p><span style="background-color: #BDC3CE"><code>O módulo ainda está em construção</code></span></p>
+<p>O módulo DWT permite descontruir um sinal usando diversas transformadas de wavelets; fazer edições em seus coeficientes (isto é, em suas aproximações e detalhes); e reconstruir o sinal editado.</p>
+
+<p><img src="assets/dwt2.png" alt="dwt module" title="'DWT' Module"/></p>
+
+<p>Este módulo permite que apenas um sinal seja trabalhado por vez. Para carregar um sinal na memória, abre o submenu <code>File</code> e selecione <code>Open</code> para escolher o arquivo com o sinal desejado. No canto superior esquerdo, há um painel com as opções de transformada de Wavelets: família de wavelets, tipo de wavelet e nível desejado. O botão <code>Calculate</code> determinará os coeficientes do sinal em memória.</p>
+
+<p>Após a aplicação da transformada, pode-se escolher visualizar as aproximações ou os detalhes do sinal escolhido. Para editá-los, estão disponíveis as ferramentas no painel no lado direito. Nominalmente, pode-se substituir um coeficiente por um valor contínuo; e limitar os valores do coeficiente dentro de um intervalo.</p>
+
+<p>Com os coeficientes editados, pode-se reconstruir o sinal clicando no botão <code>Reconstruct</code>. Para salvar o novo sinal, aperte o botão <code>Save</code>.</p>
+
+<p>Para usar este módulo em separado, use o comando <code>dwtmodule2</code>. As funções relacionadas à transformada discreta de Wavelets estão disponíveis na pasta <code>math</code>; enquanto que as funções de edição dos coeficientes (que, por sinal, podem ser usadas para qualquer sinal) estão na pasta <code>util</code>.</p>
 
 <p><a name="analysis"></a></p>
 
@@ -92,7 +102,7 @@
 
 <p>A análise em domínio do tempo gera uma análise estatística do sinal em um período de tempo determinado. Selecione um sinal usando a opção <code>Open</code> no menu <code>File</code>. Este sinal pode ser cortado em um intervalo menor usando a opção <code>Crop</code>.</p>
 
-<p><img src="assets/timedomain.jpg" alt="time domain module" title="'Time domain' Module"/></p>
+<p><img src="assets/timedomain.png" alt="time domain module" title="'Time domain' Module"/></p>
 
 <p>Para gerar uma análise deste sinal, aperte o botão <code>Generate Statistics</code>. A análise produzida poderá ser vista no painel ao lado direito, e poderá ser salva apertando o botão <code>Export statistics</code>.</p>
 
@@ -100,11 +110,11 @@
 
 <h2>Fourier analysis</h2>
 
-<p><span style="background-color: #BDC3CE"><code>O módulo ainda está em construção</code></span></p>
+<p><span style="background-color: #BDC3CE"><code>TODO: ESCREVER DOCUMENTAÇÃO</code></span></p>
 
 <h2>Short Time Fourier Transform (STFT)</h2>
 
-<p><span style="background-color: #BDC3CE"><code>O módulo ainda está em construção</code></span></p>
+<p><span style="background-color: #BDC3CE"><code>TODO: ESCREVER DOCUMENTAÇÃO</code></span></p>
 
 <h2>Continuous Wavelet Transform (CWT)</h2>
 
