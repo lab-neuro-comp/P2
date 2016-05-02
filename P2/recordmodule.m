@@ -193,13 +193,12 @@ else
 end
 
 
-% --- Executes on button press in buttonSearch.
+% --- Executes on button press in buttonSearch. ---------------------
 function buttonSearch_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonSearch (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 [filename, pathname] = uigetfile('MultiSelect', 'on');
-
 if iscell(filename)
     set(handles.editInput, ...
         'String', ...
