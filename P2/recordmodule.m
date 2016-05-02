@@ -25,7 +25,7 @@ function varargout = recordmodule(varargin)
 
 % Edit the above text to modify the response to help recordmodule
 
-% Last Modified by GUIDE v2.5 27-Apr-2016 08:46:14
+% Last Modified by GUIDE v2.5 02-May-2016 11:49:11
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -61,6 +61,10 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
+% Import needed folders
+addpath(strcat(cd, '/util'));
+addpath(strcat(cd, '/recordmodule'));
+
 % UIWAIT makes recordmodule wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
@@ -82,9 +86,10 @@ function popupMode_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = get(hObject,'String')
-%        returns popupMode contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupMode
+% Hints: - `contents = get(hObject, 'String')` returns popupMode 
+%          contents as cell array
+%        - `contents{get(hObject, 'Value')}` returns selected item 
+%          from popupMode
 
 
 % --- Executes during object creation, after setting all properties.
@@ -95,19 +100,25 @@ function popupMode_CreateFcn(hObject, eventdata, handles)
 
 % Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-beck = 'white';
+color = 'white';
 if ~ispc
-    beck = get(0, 'defaultUicontrolBackgroundColor');
+    color = get(0, 'defaultUicontrolBackgroundColor');
 end
-set(hObject, 'BackgroundColor', beck);
+set(hObject, 'BackgroundColor', color);
 
 
-% --- Executes on button press in buttonRun.
+% --- Executes on button press in buttonRun. -------------------------
 function buttonRun_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonRun (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-edfp2ascii;
+set(handles.buttonRun, 'String', 'Running...');
+stuff = split_string(get(handles.editInput, 'String'), ';');
+for i = 1:length(stuff)
+    ConvertEDF2ASCII(stuff{i}, get(handles.checkMultiple, 'Value'));
+end
+set(handles.buttonRun, 'String', 'Run');
+msgbox('Done! :)');
 
 % --------------------------------------------------------------------
 function quitMenu_Callback(hObject, eventdata, handles)
@@ -141,3 +152,63 @@ function editMenu_Callback(hObject, eventdata, handles)
 % hObject    handle to editMenu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in checkMultiple. ---------------------
+function checkMultiple_Callback(hObject, eventdata, handles)
+% hObject    handle to checkMultiple (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkMultiple
+
+
+% --------------------------------------------------------------------
+function editInput_Callback(hObject, eventdata, handles)
+% hObject    handle to editInput (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: - get(hObject,'String') returns contents of editInput as text
+%        - str2double(get(hObject,'String')) returns contents of editInput 
+%          as a double
+
+
+% --- Executes during object creation, after setting all properties. -
+function editInput_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editInput (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc
+    set(hObject, ...
+        'BackgroundColor', ...
+        'white');
+else
+    set(hObject, ...
+        'BackgroundColor', ...
+        get(0, 'defaultUicontrolBackgroundColor'));
+end
+
+
+% --- Executes on button press in buttonSearch.
+function buttonSearch_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonSearch (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[filename, pathname] = uigetfile('MultiSelect', 'on');
+
+if iscell(filename)
+    set(handles.editInput, ...
+        'String', ...
+        join_strings(append_on_each_one(filename, ...
+                                        pathname), ... 
+                     ';'));
+else
+    set(handles.editInput, ...
+        'String', ...
+        strcat(pathname, ...
+               filename));
+end
