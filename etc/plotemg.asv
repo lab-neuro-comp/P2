@@ -1,0 +1,78 @@
+function n=plotemg(pasta, sujeito,teste,tentativa,registro)
+%arqecg formato idsujeito;nomearqecg
+clc
+%Definiçao da localizaçao dos arquivos
+localorigem = 'C:\Users\t\Documents\UnB\Pesquisa\Tratados\asciiA\cortados\'; 
+localdestino = 'C:\Users\t\Documents\UnB\Pesquisa\Analises\';
+
+localorigem = strcat(localorigem, char(pasta), '\')
+
+n = 0;
+
+%(ASCII+32768)*0,250003814755474-8192
+fa=32768;
+fb=0,250003814755474;
+fc=8192;
+fs=2000;
+
+
+int1=0
+int2=1
+
+%Ajusta o intervalo a amostragem
+int1=int1*fs;
+int2=int2*fs;
+
+if int1==0
+   int1=1
+end;
+%Iniciar varredura para calculo do emg
+ sujeito=char(sujeito);
+ teste= char(teste);
+ tentativa=char(tentativa);
+ rec=char(registro);
+
+ %Define o nome dos arquivos de emg
+ arq=strcat(localorigem, sujeito,teste,tentativa,rec,'.ascii');
+ 
+ %emgrfunc(arqemg)
+ ampsemg=load(arq);
+ 
+  DIM=size(ampsemg)
+
+if DIM(1)>=int2 
+    %Extrai os dados no intervalo de dados
+    %ampsemg=ampsemg(int1:int2);
+    ampsemg=ampsemg(1:2000,:);
+end;
+
+ if size(ampsemg)>0 
+     %prepara média R
+     
+     DIM=size(ampsemg)
+
+    %ampsemg=((ampsemg+fa)*fb)-fc; 
+     
+     emgm = mean(ampsemg);
+     emgsd = std(ampsemg);
+     emgvar = var(ampsemg);
+        
+    specdata=abs(fft(ampsemg.*hanning(length(ampsemg))))./length(ampsemg);
+     
+    powtotal=0;
+    for i6=1:length(specdata)/2
+        powtotal=powtotal+specdata(i6)^2;
+    end
+    
+    disp(powtotal);
+    
+    subplot(2,1,1) 
+    plot(ampsemg)
+    title('original')
+    subplot(2,1,2) 
+    plot(specdata)
+    title('filtrado') 
+
+ end;
+  
+
