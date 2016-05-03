@@ -92,7 +92,13 @@ function popupMode_Callback(hObject, eventdata, handles)
 %          contents as cell array
 %        - `contents{get(hObject, 'Value')}` returns selected item 
 %          from popupMode
-
+contents = get(handles.popupMode, 'String');
+runningmode = contents{get(handles.popupMode, 'Value')};
+if isequal(runningmode, 'Protolize!!')
+    setup_for_protolize(handles);
+else % is EEGLAB
+    setup_for_eeglab(handles);
+end
 
 % --- Executes during object creation, after setting all properties.
 function popupMode_CreateFcn(hObject, eventdata, handles)
@@ -114,13 +120,13 @@ function buttonRun_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonRun (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-set(handles.buttonRun, 'String', 'Running...');
-stuff = split_string(get(handles.editInput, 'String'), ';');
-for i = 1:length(stuff)
-    ConvertEDF2ASCII(stuff{i}, get(handles.checkMultiple, 'Value'));
+contents = get(handles.popupMode, 'String');
+runningmode = contents{get(handles.popupMode, 'Value')};
+if isequal(runningmode, 'Protolize!!')
+    run_for_protolize(handles);
+else % is EEGLAB
+    run_for_eeglab(handles);
 end
-set(handles.buttonRun, 'String', 'Run');
-msgbox('Done! :)');
 
 % --------------------------------------------------------------------
 function quitMenu_Callback(hObject, eventdata, handles)

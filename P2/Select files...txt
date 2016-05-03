@@ -1,0 +1,27 @@
+panic: runtime error: integer divide by zero
+[signal 0xc0000094 code=0x1001f addr=0x0 pc=0x42f37e]
+
+goroutine 16 [running]:
+runtime.panic(0x4b0240, 0x5343d7)
+	C:/Go/src/pkg/runtime/panic.c:279 +0xe9
+_/C_/Documents_and_Settings/Laboratorio.LABORATO-6A7377/Meus_documentos/software/EEG/src/EDF/src/edf.separateString(0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
+	C:/Documents and Settings/Laboratorio.LABORATO-6A7377/Meus documentos/software/EEG/src/EDF/src/edf/useful.go:7 +0x4e
+_/C_/Documents_and_Settings/Laboratorio.LABORATO-6A7377/Meus_documentos/software/EEG/src/EDF/src/edf.getNumberSamples(0x10af95c0, 0x0, 0x0, 0x0)
+	C:/Documents and Settings/Laboratorio.LABORATO-6A7377/Meus documentos/software/EEG/src/EDF/src/edf/edfReader.go:122 +0xe5
+_/C_/Documents_and_Settings/Laboratorio.LABORATO-6A7377/Meus_documentos/software/EEG/src/EDF/src/edf.ReadRecords(0x0, 0x10af95c0, 0x0, 0x0, 0x0)
+	C:/Documents and Settings/Laboratorio.LABORATO-6A7377/Meus documentos/software/EEG/src/EDF/src/edf/edfReader.go:72 +0x70
+_/C_/Documents_and_Settings/Laboratorio.LABORATO-6A7377/Meus_documentos/software/EEG/src/EDF/src/edf.ReadFile(0x10af8240, 0xf, 0x0, 0x0, 0x0, 0x0)
+	C:/Documents and Settings/Laboratorio.LABORATO-6A7377/Meus documentos/software/EEG/src/EDF/src/edf/edfReader.go:21 +0xe3
+main.main()
+	C:/Documents and Settings/Laboratorio.LABORATO-6A7377/Meus documentos/software/EEG/src/EDF/src/edfp2notes.go:7 +0x3c
+
+goroutine 19 [finalizer wait]:
+runtime.park(0x4124d0, 0x537520, 0x5368a9)
+	C:/Go/src/pkg/runtime/proc.c:1369 +0x94
+runtime.parkunlock(0x537520, 0x5368a9)
+	C:/Go/src/pkg/runtime/proc.c:1385 +0x3f
+runfinq()
+	C:/Go/src/pkg/runtime/mgc0.c:2644 +0xc5
+runtime.goexit()
+	C:/Go/src/pkg/runtime/proc.c:1445
+
