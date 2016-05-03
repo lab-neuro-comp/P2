@@ -57,6 +57,7 @@ if strcmp(get(hObject,'Visible'),'off')
     plot(0);
 end
 
+handles.constants = load_constants();
 handles.signalnames = {};
 handles.signals = {};
 guidata(hObject, handles);
@@ -66,12 +67,11 @@ function varargout = timemodule2_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 % --- Plots the signal on chosen axes.
-function [step] = get_step(signal)
-global fs
+function [step] = get_step(signal, fs)
 step = 0:1/fs:(length(signal) - 1)/fs;
 
-function context_plot(signal)
-plot(get_step(signal), signal);
+function context_plot(signal, fs)
+plot(get_step(signal, fs), signal);
 
 % --- Executes on button press in plotbutton.
 function plotbutton_Callback(hObject, eventdata, handles)
@@ -93,7 +93,10 @@ function FileMenu_Callback(hObject, eventdata, handles)
 
 % --------------------------------------------------------------------
 function OpenMenuItem_Callback(hObject, eventdata, handles)
-global fa fb fc fs
+fa = str2num(handles.constants.get('fa'));
+fb = str2num(handles.constants.get('fb'));
+fc = str2num(handles.constants.get('fc'));
+fs = str2num(handles.constants.get('fs'));
 [signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
 
 if ~isequal(signalname, 0)
@@ -106,7 +109,7 @@ if ~isequal(signalname, 0)
 	set(handles.ListboxSignal, 'String', handles.signalnames);
 	set(handles.PopupChooseSignal, 'String', handles.signalnames);
 	if isequal(length(handles.signals), 1)
-		context_plot(signal);
+		context_plot(signal, fs);
 	end
 end
 
@@ -134,8 +137,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'),...
 end
 
 % --- Executes on button press in ButtonStatistics.
-function text = generate_statistics(signal, signalname)
-global fs
+function text = generate_statistics(signal, signalname, fs)
 % # Statistics text
 % Signal:
 % Interval:
@@ -170,7 +172,11 @@ function ButtonStatistics_Callback(hObject, eventdata, handles)
 set(handles.textStatistics, 'Enable', 'on');
 signal = handles.signals{get(handles.ListboxSignal, 'Value')};
 signalname = handles.signalnames{get(handles.ListboxSignal, 'Value')};
-set(handles.textStatistics, 'String', generate_statistics(signal, signalname));
+set(handles.textStatistics, ...
+    'String', ...
+    generate_statistics(signal, ...
+                        signalname, ...
+                        str2num(handles.constants.get('fs'))));
 guidata(hObject, handles);
 
 % --- Executes on selection change in popupmenu2.
@@ -241,7 +247,7 @@ end
 
 % --- Executes on button press in ButtonAdjust.
 function ButtonAdjust_Callback(hObject, eventdata, handles)
-global fs
+fs = str2num(handles.constants.get('fs'));
 beginning = round(str2num(get(handles.editMin, 'String')) * fs);
 ending = round(str2num(get(handles.editMax, 'String')) * fs);
 index = get(handles.ListboxSignal, 'Value');
@@ -297,7 +303,7 @@ end
 function ButtonSave_Callback(hObject, eventdata, handles)
 figure
 signal = handles.signals{get(handles.PopupChooseSignal, 'Value')};
-handle = plot(get_step(signal), signal);
+handle = plot(get_step(signal, str2num(handles.constants.get('fs'))), signal);
 [filename pathname] = uiputfile('*.png', 'Save statistics');
 if ~isequal(filename, false) and ~isequal(pathname, false)
     saveas(handle, [pathname filename]);

@@ -55,6 +55,7 @@ function dwtmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to dwtmodule2 (see VARARGIN)
 
+handles.constants = load_constants();
 handles.output = hObject;
 handles.signal = [];
 handles.signalname = [];
@@ -98,7 +99,9 @@ function FileMenu_Callback(hObject, eventdata, handles)
 
 % --------------------------------------------------------------------
 function AddMenuItem_Callback(hObject, eventdata, handles)
-global fa fb fc fs
+fa = str2num(handles.constants.get('fa'));
+fb = str2num(handles.constants.get('fb'));
+fc = str2num(handles.constants.get('fc'));
 [signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
 
 if ~isequal(signalname, 0)

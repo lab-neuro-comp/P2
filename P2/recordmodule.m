@@ -85,9 +85,9 @@ function popupMode_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: - `contents = get(hObject, 'String')` returns popupMode 
+% Hints: - `contents = get(hObject, 'String')` returns popupMode
 %          contents as cell array
-%        - `contents{get(hObject, 'Value')}` returns selected item 
+%        - `contents{get(hObject, 'Value')}` returns selected item
 %          from popupMode
 contents = get(handles.popupMode, 'String');
 runningmode = contents{get(handles.popupMode, 'Value')};
@@ -175,7 +175,7 @@ function editInput_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hints: - get(hObject,'String') returns contents of editInput as text
-%        - str2double(get(hObject,'String')) returns contents of editInput 
+%        - str2double(get(hObject,'String')) returns contents of editInput
 %          as a double
 
 
@@ -203,12 +203,12 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonSearch (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[filename, pathname] = uigetfile('MultiSelect', 'on');
+[filename, pathname] = uigetfile('*', 'MultiSelect', 'on');
 if iscell(filename)
     set(handles.editInput, ...
         'String', ...
         join_strings(append_on_each_one(filename, ...
-                                        pathname), ... 
+                                        pathname), ...
                      ';'));
 else
     set(handles.editInput, ...

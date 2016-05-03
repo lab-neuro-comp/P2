@@ -13,6 +13,7 @@ for index = 1:length(handles.plots)
 end
 
 % # set parameters
+fs = str2num(handles.constants.get('fs'));
 phi = (1 + sqrt(5)) / 2;
 moo = 0.1;
 panelplot_dimensions = get(handles.PanelPlot, 'Position');
@@ -35,7 +36,7 @@ set(handles.plots(1), 'Position', [x, ... % x coordinate
                                    height - (h+g), ... % y coordinate
                                    w, ... % width
                                    h]); % height
-standard_plot(handles.signal);
+standard_plot(handles.signal, fs);
 % next plots
 what = 2;
 while what <= no_squares
@@ -46,6 +47,6 @@ while what <= no_squares
                         w, ... % width
                         h]); % height
     axes(p);
-    standard_plot(decomposition{what-1});
+    standard_plot(decomposition{what-1}, fs);
     what = what + 1;
 end

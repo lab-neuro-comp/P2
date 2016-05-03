@@ -22,7 +22,7 @@ function varargout = rhythmconfig(varargin)
 
 % Edit the above text to modify the response to help rhythmconfig
 
-% Last Modified by GUIDE v2.5 26-Nov-2015 09:53:58
+% Last Modified by GUIDE v2.5 03-May-2016 17:05:51
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -54,6 +54,19 @@ function rhythmconfig_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for rhythmconfig
 handles.output = hObject;
+
+% Load constants
+handles.constants = load_constants();
+set(handles.deltaf1, 'String', handles.constants.get('deltaf1'));
+set(handles.deltaf2, 'String', handles.constants.get('deltaf2'));
+set(handles.thetaf1, 'String', handles.constants.get('thetaf1'));
+set(handles.thetaf2, 'String', handles.constants.get('thetaf2'));
+set(handles.alphaf1, 'String', handles.constants.get('alphaf1'));
+set(handles.alphaf2, 'String', handles.constants.get('alphaf2'));
+set(handles.betaf1, 'String', handles.constants.get('betaf1'));
+set(handles.betaf2, 'String', handles.constants.get('betaf2'));
+set(handles.gammaf1, 'String', handles.constants.get('gammaf1'));
+set(handles.gammaf2, 'String', handles.constants.get('gammaf2'));
 
 % Update handles structure
 guidata(hObject, handles);
@@ -150,17 +163,18 @@ switch error
         return
 end
 
-deltaf1=str2double(get(handles.deltaf1,'string'));
-deltaf2=str2double(get(handles.deltaf2,'string'));
-thetaf1=str2double(get(handles.thetaf1,'string'));
-thetaf2=str2double(get(handles.thetaf2,'string'));
-alphaf1=str2double(get(handles.alphaf1,'string'));
-alphaf2=str2double(get(handles.alphaf2,'string'));
-betaf1=str2double(get(handles.betaf1,'string'));
-betaf2=str2double(get(handles.betaf2,'string'));
-gammaf1=str2double(get(handles.gammaf1,'string'));
-gammaf2=str2double(get(handles.gammaf2,'string'));
-close(handles.rhythmconfig)
+handles.constants.put('deltaf1', get(handles.deltaf1,'string'));
+handles.constants.put('deltaf2', get(handles.deltaf2,'string'));
+handles.constants.put('thetaf1', get(handles.thetaf1,'string'));
+handles.constants.put('thetaf2', get(handles.thetaf2,'string'));
+handles.constants.put('alphaf1', get(handles.alphaf1,'string'));
+handles.constants.put('alphaf2', get(handles.alphaf2,'string'));
+handles.constants.put('betaf1', get(handles.betaf1,'string'));
+handles.constants.put('betaf2', get(handles.betaf2,'string'));
+handles.constants.put('gammaf1', get(handles.gammaf1,'string'));
+handles.constants.put('gammaf2', get(handles.gammaf2,'string'));
+save_constants(handles.constants);
+close(handles.rhythmconfig);
 
 
 % --- Executes on button press in cancelrhytms.
@@ -266,7 +280,7 @@ set(hObject,'string',num2str(gammaf1))
 
 
 
-function bethaf1_Callback(hObject, eventdata, handles)
+function betaf1_Callback(hObject, eventdata, handles)
 % hObject    handle to betaf1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -276,7 +290,7 @@ function bethaf1_Callback(hObject, eventdata, handles)
 
 
 % --- Executes during object creation, after setting all properties.
-function bethaf1_CreateFcn(hObject, eventdata, handles)
+function betaf1_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to betaf1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
@@ -291,7 +305,7 @@ set(hObject,'string',num2str(betaf1))
 
 
 
-function bethaf2_Callback(hObject, eventdata, handles)
+function betaf2_Callback(hObject, eventdata, handles)
 % hObject    handle to betaf2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -301,7 +315,7 @@ function bethaf2_Callback(hObject, eventdata, handles)
 
 
 % --- Executes during object creation, after setting all properties.
-function bethaf2_CreateFcn(hObject, eventdata, handles)
+function betaf2_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to betaf2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called

@@ -1,2 +1,3 @@
-function [handle] = standard_plot(signal) % plot the current signal on screen
-handle = plot(std_get_step(signal), signal);
+%% plot the current signal on screen
+function [handle] = standard_plot(signal, fs)
+handle = plot(std_get_step(signal, fs), signal);

@@ -41,10 +41,6 @@ if nargout
 else
     gui_mainfcn(gui_State, varargin{:});
 end
-
-addpath('./util');
-addpath('./math');
-addpath('./fourier');
 % End initialization code - DO NOT EDIT
 
 % --- Executes just before fourier2 is made visible.
@@ -55,6 +51,10 @@ function fourier2_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to fourier2 (see VARARGIN)
 
+addpath(strcat(cd, '/util'));
+addpath(strcat(cd, '/math'));
+addpath(strcat(cd, '/fourier'));
+
 handles.spectra = {};
 handles.signalnames = {};
 handles.intervals = {};
@@ -63,6 +63,7 @@ handles.plots = {};
 handles.colors = {'r' 'b' 'g' 'c' 'm' 'y' 'k'};
 handles.output = hObject;
 handles.window = 'Hamming';
+handles.constants = load_constants();
 
 if strcmp(get(hObject,'Visible'),'off')
     plot(0);
@@ -112,6 +113,7 @@ spectrum = real(fft(signal));
 
 % --- Executes on button press in buttonToggleSignal.
 function buttonToggleSignal_Callback(hObject, eventdata, handles)
+fs = str2num(handles.constants.get('fs'));
 item = get(handles.listRecordings, 'Value');
 handles.plots{item} = ~handles.plots{item};
 
@@ -119,7 +121,7 @@ plot(0);
 hold all;
 for index = 1:length(handles.plots)
     if handles.plots{index}
-        colored_plot(handles.spectra{index}, handles.colors{index});
+        colored_plot(handles.spectra{index}, handles.colors{index}, fs);
     end
 end
 hold off;
@@ -135,7 +137,10 @@ function FileMenu_Callback(hObject, eventdata, handles)
 
 % --------------------------------------------------------------------
 function OpenMenuItem_Callback(hObject, eventdata, handles)
-global fa fb fc fs
+fa = str2num(handles.constants.get('fa'));
+fb = str2num(handles.constants.get('fb'));
+fc = str2num(handles.constants.get('fc'));
+fs = str2num(handles.constants.get('fs'));
 [signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
 
 if ~isequal(signalname, 0)
@@ -154,12 +159,12 @@ if ~isequal(signalname, 0)
 
 	set(handles.listRecordings, 'String', handles.signalnames);
 	if isequal(length(handles.spectra), 1)
-		colored_plot(spectrum, handles.colors{1});
+		colored_plot(spectrum, handles.colors{1}, fs);
         set(handles.buttonToggleSignal, 'Enable', 'on');
         set(handles.buttonCalculatePower, 'Enable', 'on');
         set(handles.buttonExportPower, 'Enable', 'on');
         set(handles.labelPower, 'Enable', 'on');
-        set(handles.labelPower, 'String', generate_statistics(spectrum, signalname));
+        set(handles.labelPower, 'String', generate_statistics(spectrum, signalname, handles.constants));
 	end
 end
 
@@ -220,7 +225,7 @@ rhythmconfig;
 
 % --------------------------------------------------------------------
 function ParamMenu_Callback(hObject, eventdata, handles)
-global fs
+fs = str2num(handles.constants.get('fs'));
 paramconfig;
 set(handles.textFrequency, 'String', ['Frequency: ' num2str(fs)]);
 
@@ -272,7 +277,7 @@ function buttonCalculatePower_Callback(hObject, eventdata, handles)
 set(handles.labelPower, 'Enable', 'on');
 spectrum = handles.spectra{get(handles.listRecordings, 'Value')};
 signalname = handles.signalnames{get(handles.listRecordings, 'Value')};
-set(handles.labelPower, 'String', generate_statistics(spectrum, signalname));
+set(handles.labelPower, 'String', generate_statistics(spectrum, signalname, handles.constants));
 guidata(hObject, handles);
 
 % --- Executes on selection change in listRecordings.
@@ -301,7 +306,8 @@ end
 
 % --- Executes during object creation, after setting all properties.
 function textFrequency_CreateFcn(hObject, eventdata, handles)
-global fs
+c = load_constants();
+fs = str2num(c.get('fs'));
 set(hObject, 'String', ['Frequency: ' num2str(fs)]);
 guidata(hObject, handles);
 
@@ -310,7 +316,7 @@ function buttonExportPower_Callback(hObject, eventdata, handles)
 index = get(handles.listRecordings, 'Value');
 spectrum = handles.spectra{index};
 spectrum_name = handles.signalnames{index};
-output = generate_statistics(spectrum, spectrum_name);
+output = generate_statistics(spectrum, spectrum_name, handles.constants);
 
 [filename pathname] = uiputfile('*.txt', 'Save statistics');
 if and(~isequal(filename, false), ~isequal(pathname, false))
@@ -325,7 +331,7 @@ end
 function buttonSaveFigure_Callback(hObject, eventdata, handles)
 figure
 spectrum = handles.spectra{get(handles.listRecordings, 'Value')};
-handle = plot(std_get_step(spectrum), spectrum);
+handle = plot(std_get_step(spectrum, str2num(handles.constants.get('fs'))), spectrum);
 [filename pathname] = uiputfile('*.png', 'Save statistics');
 if and(~isequal(filename, false), ~isequal(pathname, false))
     saveas(handle, [pathname filename]);

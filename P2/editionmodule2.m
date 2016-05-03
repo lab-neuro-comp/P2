@@ -42,8 +42,6 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 
-addpath('./util');
-addpath('./edition');
 % End initialization code - DO NOT EDIT
 
 % --- Executes just before editionmodule2 is made visible.
@@ -63,11 +61,16 @@ if strcmp(get(hObject,'Visible'),'off')
     plot(0);
 end
 
+% Adding path
+addpath(strcat(cd, '/util'));
+addpath(strcat(cd, '/edition'));
+
 % % Setup context variables
 handles.current = [];
 handles.v5signalname = '.ascii';
 handles.signalnames = {};
 handles.signals = {};
+handles.constants = load_constants();
 
 % UIWAIT makes editionmodule2 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -100,7 +103,10 @@ function FileMenu_Callback(hObject, eventdata, handles)
 
 % --------------------------------------------------------------------
 function OpenMenuItem_Callback(hObject, eventdata, handles)
-global fa fb fc fs
+fa = str2num(handles.constants.get('fa'));
+fb = str2num(handles.constants.get('fb'));
+fc = str2num(handles.constants.get('fc'));
+fs = str2num(handles.constants.get('fs'));
 [signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
 
 if ~isequal(signalname, 0)
@@ -112,7 +118,7 @@ if ~isequal(signalname, 0)
 	handles.signals{length(handles.signals)+1} = signal;
 	set(handles.popupmenu1, 'String', handles.signalnames);
 	if isequal(length(handles.signals), 1)
-		standard_plot(signal);
+		standard_plot(signal, fs);
         handles.current = signal;
 	end
 end
