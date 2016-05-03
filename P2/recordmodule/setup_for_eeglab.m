@@ -1,4 +1,8 @@
 %% setup_for_eeglab: gets the UI ready for the EEGLAB processing program
 function [errors] = setup_for_eeglab(handles)
-set(handles.checkMultiple ,'Visible', 'off');
 errors = false;
+
+% turn off P!! stuff
+set(handles.checkMultiple ,'Visible', 'off');
+
+% turn on EEGLAB stuff

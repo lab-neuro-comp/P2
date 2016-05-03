@@ -67,9 +67,6 @@ addpath(strcat(cd, '/util'));
 addpath(strcat(cd, '/recordmodule'));
 add_eeglab_path(handles.constants.get('EEGLAB_PATH'));
 
-% UIWAIT makes recordmodule wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
-
 
 % --- Outputs from this function are returned to the command line.
 function varargout = recordmodule_OutputFcn(hObject, eventdata, handles)
