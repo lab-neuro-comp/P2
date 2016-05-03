@@ -57,6 +57,7 @@ function recordmodule_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for recordmodule
 handles.output = hObject;
+handles.constants = load_constants();
 
 % Update handles structure
 guidata(hObject, handles);
@@ -64,6 +65,7 @@ guidata(hObject, handles);
 % Import needed folders
 addpath(strcat(cd, '/util'));
 addpath(strcat(cd, '/recordmodule'));
+add_eeglab_path(handles.constants.get('EEGLAB_PATH'));
 
 % UIWAIT makes recordmodule wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
