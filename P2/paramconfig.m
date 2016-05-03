@@ -55,17 +55,23 @@ function paramconfig_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for paramconfig
 handles.output = hObject;
 
-% Update handles structure
-guidata(hObject, handles);
-
 % UIWAIT makes paramconfig wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
+
+% Write parameters from constants file here
+handles.constants = load_constants();
+set(handles.fa_edit, 'String', str2num(handles.constants.get('fa')));
+set(handles.fb_edit, 'String', str2num(handles.constants.get('fb')));
+set(handles.fc_edit, 'String', str2num(handles.constants.get('fc')));
+set(handles.fs_edit, 'String', str2num(handles.constants.get('fs')));
 
 % % Atempt to make fb_edit remember their previous value
 % handles.fbprev = 0.061043;
 % handles.fb = handles.fbprev;
 % set(handles.fb, 'String', num2str(handles.fbprev));
-% guidata(hojbect, handles);
+
+% Update handles structure
+guidata(hObject, handles);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = paramconfig_OutputFcn(hObject, eventdata, handles)
@@ -159,11 +165,17 @@ function updatebutton_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global fs fa fb fc
 
-fs = str2num(get(handles.fs_edit, 'String'));
-fa = str2num(get(handles.fa_edit, 'String'));
-fb = str2num(get(handles.fb_edit, 'String'));
-fc = str2num(get(handles.fc_edit, 'String'));
+fs = get(handles.fs_edit, 'String');
+fa = get(handles.fa_edit, 'String');
+fb = get(handles.fb_edit, 'String');
+fc = get(handles.fc_edit, 'String');
 % fprintf('%f %f %f %f\n', fs, fa, fb, fc);
+
+handles.constants.put('fs', fs);
+handles.constants.put('fa', fa);
+handles.constants.put('fb', fb);
+handles.constants.put('fc', fc);
+save_constants(handles.constants);
 close;
 
 function fs_edit_Callback(hObject, eventdata, handles)

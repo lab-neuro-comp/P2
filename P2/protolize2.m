@@ -60,6 +60,7 @@ handles.output = hObject;
 guidata(hObject, handles);
 
 % SETUP GLOBALS
+handles.constants = load_constants();
 deltaf1=0.5;
 deltaf2=3.5;
 thetaf1=3.5;
@@ -227,3 +228,4 @@ function studies_main_Callback(hObject, eventdata, handles)
 % hObject    handle to studies_main (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+recordmodule;
