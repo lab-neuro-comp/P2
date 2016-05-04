@@ -25,7 +25,7 @@ function varargout = recordmodule(varargin)
 
 % Edit the above text to modify the response to help recordmodule
 
-% Last Modified by GUIDE v2.5 02-May-2016 11:49:11
+% Last Modified by GUIDE v2.5 04-May-2016 09:18:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -44,6 +44,11 @@ if nargout
 else
     gui_mainfcn(gui_State, varargin{:});
 end
+
+% Import needed folders. Yeah, I'm editing the initialization code
+addpath(strcat(cd, '/util'));
+addpath(strcat(cd, '/recordmodule'));
+
 % End initialization code - DO NOT EDIT
 
 
@@ -57,15 +62,11 @@ function recordmodule_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for recordmodule
 handles.output = hObject;
-handles.constants = load_constants();
 
 % Update handles structure
-guidata(hObject, handles);
-
-% Import needed folders
-addpath(strcat(cd, '/util'));
-addpath(strcat(cd, '/recordmodule'));
+handles.constants = load_constants();
 add_eeglab_path(handles.constants.get('EEGLAB_PATH'));
+guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
@@ -167,6 +168,95 @@ function checkMultiple_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of checkMultiple
 
+% --- Executes on button press in checkRerefer. ---------------------
+function checkRerefer_Callback(hObject, eventdata, handles)
+% hObject    handle to checkRerefer (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkRerefer
+value = 'off';
+if get(handles.checkRerefer, 'Value')
+    value = 'on';
+end
+set(handles.editRerefer, 'Enable', value);
+
+% -------------------------------------------------------------------
+function editRerefer_Callback(hObject, eventdata, handles)
+% hObject    handle to editRerefer (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: - get(hObject,'String') returns contents of editRerefer as text
+%        - str2double(get(hObject,'String')) returns contents of 
+%          editRerefer as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editRerefer_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editRerefer (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc
+    set(hObject,'BackgroundColor','white');
+else
+    set(hObject, ...
+        'BackgroundColor', ...
+        get(0,'defaultUicontrolBackgroundColor'));
+end
+
+% --- Executes on button press in checkResample. --------------------
+function checkResample_Callback(hObject, eventdata, handles)
+% hObject    handle to checkResample (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkResample
+value = 'off';
+if get(handles.checkResample, 'Value')
+    value = 'on';
+end
+set(handles.editResample, 'Enable', value);
+
+function editResample_Callback(hObject, eventdata, handles)
+% hObject    handle to editResample (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: - get(hObject,'String') returns contents of editResample as text
+%        - str2double(get(hObject,'String')) returns contents of 
+%          editResample as a double
+
+
+% --- Executes during object creation, after setting all properties. -
+function editResample_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editResample (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc
+    set(hObject, 'BackgroundColor', 'white');
+else
+    set(hObject, ...
+        'BackgroundColor', ...
+        get(0,'defaultUicontrolBackgroundColor'));
+end
+
+% --- Executes on button press in checkICA. -------------------------
+function checkICA_Callback(hObject, eventdata, handles)
+% hObject    handle to checkICA (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkICA
+
+
+
 
 % --------------------------------------------------------------------
 function editInput_Callback(hObject, eventdata, handles)
@@ -216,3 +306,6 @@ else
         strcat(pathname, ...
                filename));
 end
+
+
+
