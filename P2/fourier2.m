@@ -164,7 +164,11 @@ if ~isequal(signalname, 0)
         set(handles.buttonCalculatePower, 'Enable', 'on');
         set(handles.buttonExportPower, 'Enable', 'on');
         set(handles.labelPower, 'Enable', 'on');
-        set(handles.labelPower, 'String', generate_statistics(spectrum, signalname, handles.constants));
+        set(handles.labelPower, ...
+            'String', ...
+            generate_statistics(spectrum, ...
+                                signalname, ...
+                                handles.constants));
 	end
 end
 
@@ -277,7 +281,8 @@ function buttonCalculatePower_Callback(hObject, eventdata, handles)
 set(handles.labelPower, 'Enable', 'on');
 spectrum = handles.spectra{get(handles.listRecordings, 'Value')};
 signalname = handles.signalnames{get(handles.listRecordings, 'Value')};
-set(handles.labelPower, 'String', generate_statistics(spectrum, signalname, handles.constants));
+set(handles.labelPower, 'String', ...
+    generate_statistics(spectrum, signalname, handles.constants));
 guidata(hObject, handles);
 
 % --- Executes on selection change in listRecordings.
