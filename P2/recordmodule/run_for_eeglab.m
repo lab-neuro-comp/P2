@@ -1,22 +1,16 @@
 %% run_for_protolize: Runs the Protolize processing program
 function [errors] = run_for_eeglab(handles)
-% handles  the handles variable from the UI
+% handles  the handles variable from GUIDE
 errors = false;
 
 % gets and sets variables
 set(handles.buttonRun, 'String', 'Running...');
 must_chop = get(handles.checkMultiple, 'Value');
-must_rerefer = get(handles.checkRerefer, 'Value');
-must_resample = get(handles.checkResample, 'Value');
-sampling_rate= str2num(handles.constants.get('fs'));
-new_reference = '';
-resample_rate = -1;
-if must_rerefer
-	new_reference = get(handles.editRerefer, 'String');
-end
-if must_resample
-	resample_rate = str2num(get(handles.editResample, 'String'));
-end
+sampling_rate = str2num(handles.constants.get('fs'));
+new_reference = iff(get(handles.checkRerefer, 'Value'), ...
+                    get(handles.editRerefer, 'String'), '');
+resample_rate = iff(get(handles.checkResample, 'Value'), ...
+                    str2num(get(handles.editResample, 'String')), -1);
 
 % loop through files
 stuff = split_string(get(handles.editInput, 'String'), ';');
