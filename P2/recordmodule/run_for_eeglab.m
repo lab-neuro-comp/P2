@@ -8,7 +8,7 @@ set(handles.buttonRun, 'String', 'Running...');
 must_chop = get(handles.checkMultiple, 'Value');
 sampling_rate = str2num(handles.constants.get('fs'));
 new_reference = iff(get(handles.checkRerefer, 'Value'), ...
-                    get(handles.editRerefer, 'String'), '');
+                    str2num(get(handles.editRerefer, 'String')), -1);
 resample_rate = iff(get(handles.checkResample, 'Value'), ...
                     str2num(get(handles.editResample, 'String')), -1);
 
