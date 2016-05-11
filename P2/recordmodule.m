@@ -168,7 +168,7 @@ function checkMultiple_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of checkMultiple
 
-% --- Executes on button press in checkRerefer. ---------------------
+% --- Executes on button press in checkRerefer. ----------------------
 function checkRerefer_Callback(hObject, eventdata, handles)
 % hObject    handle to checkRerefer (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -294,7 +294,9 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 [filename, pathname] = uigetfile('*', 'MultiSelect', 'on');
-if iscell(filename)
+if isnumeric(filename)
+    return
+elseif iscell(filename)
     set(handles.editInput, ...
         'String', ...
         join_strings(append_on_each_one(filename, ...
