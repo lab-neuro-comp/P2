@@ -6,6 +6,7 @@ errors = false;
 % gets and sets variables
 set(handles.buttonRun, 'String', 'Running...');
 must_chop = get(handles.checkMultiple, 'Value');
+must_ica = get(handles.checkICA, 'Value');
 sampling_rate = str2num(handles.constants.get('fs'));
 new_reference = iff(get(handles.checkRerefer, 'Value'), ...
                     str2num(get(handles.editRerefer, 'String')), -1);
@@ -19,7 +20,8 @@ for i = 1:length(stuff)
                      must_chop, ...
                      new_reference, ...
                      resample_rate, ...
-                     sampling_rate);
+                     sampling_rate, ...
+                     must_ica);
 end
 
 % return to previous UI state
