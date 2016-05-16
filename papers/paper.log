@@ -1,0 +1,18 @@
+This is TeX, Version 3.1415926 (MiKTeX 2.9 64-bit) (preloaded format=tex 2016.4.21)  16 MAY 2016 11:12
+**paper.tex
+(paper.tex
+! Undefined control sequence.
+l.1 \documentclass
+                  [11pt](article)
+? 
+! Undefined control sequence.
+l.3 \begin
+          (document)
+? 
+Missing character: There is no ^^c2 in font cmr10!
+Missing character: There is no ^^ae in font cmr10!
+Missing character: There is no ^^e2 in font cmr10!
+Missing character: There is no ^^80 in font cmr10!
+Missing character: There is no ^^99 in font cmr10!
+[1] )
+Output written on paper.dvi (1 page, 1224 bytes).
