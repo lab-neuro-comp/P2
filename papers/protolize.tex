@@ -8,6 +8,7 @@
 
 \title{Protolize!: A new computational tool for frequency analysis of electroencephalographic signals}
 \author{Sergio Conde, Alexandre Ricardo Romariz, Carlos Tomaz}
+\date{}
 \maketitle
 
 \begin{abstract}
@@ -20,11 +21,11 @@ In this research a computational tool named $Protolize!$ was developed for biolo
 
 \section{About the authors}
 
-Sergio Conde (sconde@unb.br), Laboratory of Neuroscience and Behavior, Department of Physiological Sciences, Institute of Biology, University of Brasília, CEP 70910-900 Brasília, DF,  Brazil.
+Sergio Conde (sconde@unb.br), Laboratory of Neuroscience and Behavior, Department of Physiological Sciences, Institute of Biology, University of Brasilia, CEP 70910-900 Brasilia, DF,  Brazil.
 
-Alexandre Ricardo Romariz (romariz@ene.unb.br), School of Technology, Department of Electric Engineering, University of Brasília, Brasília, Brazil.
+Alexandre Ricardo Romariz (romariz@ene.unb.br), School of Technology, Department of Electric Engineering, University of Brasilia, Brasilia, Brazil.
 
-Carlos Tomaz (ctomaz@unb.br), Laboratory of Neuroscience and Behavior, Department of Physiological Sciences, Institute of Biology, University of Brasília, CEP 70910-900 Brasília, DF,  Brazil.
+Carlos Tomaz (ctomaz@unb.br), Laboratory of Neuroscience and Behavior, Department of Physiological Sciences, Institute of Biology, University of Brasilia, CEP 70910-900 Brasilia, DF,  Brazil.
 
 \section{Introduction}
 
@@ -61,7 +62,7 @@ uses a basis of functions named wavelets, defined by (Eq. (5))
 \begin{equation}
 \Psi_{a,b} = \frac{1}{\sqrt{a}} \Psi(\frac{t-b}{a})
 \end{equation}
-where $ a \in \Re \\ {0} $ is a scalar parameter, and $ b \in \Re $ a shift parameter. The CWT calculation, however, result in an enormous quantity of redundant information, thus, it is common to use values for $a$ and $b$ defined by (Eq. (6)) and (Eq. (7)) changing the basis of functions to (Eq. (8)).
+where $ a \in \Re $ is a scalar parameter, and $ b \in \Re $ a shift parameter. The CWT calculation, however, result in an enormous quantity of redundant information, thus, it is common to use values for $a$ and $b$ defined by (Eq. (6)) and (Eq. (7)) changing the basis of functions to (Eq. (8)).
 \begin{equation}
 a = a_{0}^{n} : n \in Z
 \end{equation}
@@ -92,19 +93,23 @@ With $ \varphi_{n,k} $ and $ \psi_{n,k} $ defined as (Eq. (9). The functions $\v
 \end{equation}
 This process can be continued until the n-th decomposition level resulting in a multi-resolution analysis (MRA) represented by (Fig. 1) 
 
-% \begin{center}
-% \includegraphics{path}
-%
-% Figure 1
-% \end{center}
+\begin{center}
+\includegraphics{image001.png}
+
+Figure 1: Schematic representation of Multi-Resolution Analysis (MRA) 
+\end{center}
 
 
 \section{Program description}
 
 $Protolize!$ has a main panel (Fig. 2) from where a set of interfaces (modules) is accessed, that makes possible an easy and intuitive use of the frequency analysis techniques. 
-$$Insert Figure 2 about here$$
+\begin{center}
+\includegraphics[width=15cm]{image002.jpg}
 
+Figure 2: Main panel of $Protolize!$ with buttons to access each analysis module.
+\end{center}
 All modules were programmed to read ASCII files and to export to text or Excel files the data resulting from the analysis. Here we describe the main features offered by each module. 
+
 
 The Fourier Module (Fig. 3) offers the following options:
 \begin{itemize}
@@ -117,6 +122,7 @@ The Fourier Module (Fig. 3) offers the following options:
 \end{itemize}
 $$Insert Figure 3 about here$$
 
+
 The STFT Module (Fig. 4) offers the following options:
 \begin{itemize}
 \item Choose between six different windows types: Hamming, Gaussian, Blackman, Hanning, Kaiser or Hann.
@@ -126,6 +132,7 @@ The STFT Module (Fig. 4) offers the following options:
 \item Visualization of a specific frequency power trough time.
 \end{itemize}
 $$Insert Figure 4 about here$$
+
 
 The CWT module (Fig. 5) offers the following options:
 \begin{itemize}
@@ -149,21 +156,91 @@ The DWT Module (Fig. 6) offers the following options:
 \end{itemize}
 $$Insert Figure 6 about here$$
 
+
 \section{System performance and examples}
 
 To illustrate the system performance we used $Protolize!$ to detect the classical phenomenon of alpha block.  It is well know that during relaxing periods, with closed eyes, an increase in alpha rhythm power can be detected [15]. This increase is blocked in presence of visual or auditory stimuli. 
 
-In order to reproduce and detect this phenomenon by using $Protolize!$, a set of EEG signals was collected, from 47 students of University of Brasília, using an equipment Neuromap® (Neurotec®) model 40i and $Ag-AgCl$ electrodes located according to the 10-20 system in the positions $t3$ and $t4$. The impedances were kept under $5k\Omega$. The signal was acquired with a $256 Hz$ sample rate and band-pass filtered between $0.01 Hz$ and $100 Hz$ using Neuromap v.2.03 software. The study was approved by the Ethical Committee from the University of Brasília, Faculty of Health Sciences. The signal contained three intervals of one minute each: the first and third intervals corresponded to time intervals where the subject was asked to relax and keep their eyes closed. At the second interval, the subject was asked to keep their eyes opened. Using the Fourier Module, the power of the alpha rhythm for each subject was calculated at each interval.  An ANOVA test to compare the alpha power at t3 electrode showed statistically significant differences between intervals ($F_{2,39}=5.88, p=0.006$). The Bonferroni test showed that the alpha power in the second (eyes opened) interval was significantly lower than first ($t=3.08, p=0.011$) and third ($t=2.83, p=0.022$) intervals (eyes closed). But there was no differences between the first and the third intervals ($t=0.198, p=1$). The same result was obtained for the t4 electrode. An ANOVA test showed differences between intervals ($F_{2,39}=8.143, p=0.001$) and Bonferroni showed differences between the first  ($t=3.523, p=0.003$) and third ($t=3.445, p=0.004$) intervals if compared with the second interval, but no differences between them ($t=0.141, p=1$) (Fig. 7).
-$$Insert Figure 7 about here$$
+In order to reproduce and detect this phenomenon by using $Protolize!$, a set of EEG signals was collected, from 47 students of University of Brasilia, using an equipment Neuromap® (Neurotec®) model 40i and $Ag-AgCl$ electrodes located according to the 10-20 system in the positions $t3$ and $t4$. The impedances were kept under $5k\Omega$. The signal was acquired with a $256 Hz$ sample rate and band-pass filtered between $0.01 Hz$ and $100 Hz$ using Neuromap v.2.03 software. The study was approved by the Ethical Committee from the University of Brasilia, Faculty of Health Sciences. The signal contained three intervals of one minute each: the first and third intervals corresponded to time intervals where the subject was asked to relax and keep their eyes closed. At the second interval, the subject was asked to keep their eyes opened. Using the Fourier Module, the power of the alpha rhythm for each subject was calculated at each interval.  An ANOVA test to compare the alpha power at t3 electrode showed statistically significant differences between intervals ($F_{2,39}=5.88, p=0.006$). The Bonferroni test showed that the alpha power in the second (eyes opened) interval was significantly lower than first ($t=3.08, p=0.011$) and third ($t=2.83, p=0.022$) intervals (eyes closed). But there was no differences between the first and the third intervals ($t=0.198, p=1$). The same result was obtained for the t4 electrode. An ANOVA test showed differences between intervals ($F_{2,39}=8.143, p=0.001$) and Bonferroni showed differences between the first  ($t=3.523, p=0.003$) and third ($t=3.445, p=0.004$) intervals if compared with the second interval, but no differences between them ($t=0.141, p=1$) (Fig. 7).
+\begin{center}
+\includegraphics{image007.png}
+
+Figure 7: Mean $pm$ SE of alpha power in each interval. * Differences statistically significantly between interval 2 (opened eyes) and intervals 1 and 3 (closed eyes)
+\end{center}
 
 \section{Hardware and software requirements}
 
+To run $Protolize!$, Matlab® R2007b or newer is necessary and a computer with at least it $512MB$ RAM is recommended. The program was written using the Matlab basic functions, and the GUIDE, Signal Processing and Wavelets toolboxes.
+
 \section{Advantages and availability}
+
+$Protolize!$ is a powerful tool in frequency domain analysis. It allows noise reduction, main frequency components identification, calculation of main EEG rhythms power, time-frequency analysis and multi-resolution analysis. In spite of the pre-defined options for EEG analysis, Protolize! is not limited to this signal and can be used to analyze other kinds of signals as well. There are several computational tools for biological signal analysis commercially available [19] but normally they have a high cost or are linked to specific equipment or offer less analysis methods implemented. Protlize! is an open source, free distributed program available in GitHub through https://github.com/ishiikurisu/P2, making it a good option as a tool for biological signal processing. 
 
 \section{Recomendations}
 
+A pre-processing of the signal is desirable. Signals as EEG commonly have many artifacts produced by interference of signals such as electrocardiography and/or electrooculgraphy that can modify the results obtained. These artifacts also can be detected and minimized using techniques based in the methods offered by Protolize! [16,17] 
+
+The use of STFT implies a compromise between time and frequency resolution. Choosing a very high time resolution by setting a window of very short duration leads to a decrease in the number of samples considered in the Fourier Transform calculation which could result in a low frequency resolution. 
+
+It is recommended to consider effects as Gibbs phenomenon [18] to choose correctly the window to be used.
+
+The calculation of CWT demands a high computational effort, thus it is not convenient to set a very high scales resolution (about $1/50$ of the scale interval desired). This could result in a high delay in the process and in an increase of memory needed to complete the calculation. 
+
 \section{Acknowledgements}
 
+This study was supported by grants from FINATEC and CNPq. S. Conde was the recipient of a CAPES fellowship. 
+
 \section{References}
+
+\begin{enumerate}
+
+\item  S. W. Smith, (1998). The Scientist and Engineer's Guide to Digital Signal Processing. www.DSPguide.com. April 23, 2007.
+
+\item  T. Miyashita, K. Ogawa, H. Itoh, Y. Arai, M. Ashidagawa, M. Uchiyama, Y. Koide,
+T. Andoh, Y. Yamada, (2003). Spectral analyses of electroencephalography and
+heart rate variability during sleep in normal subjects. Autonomic Neuroscience:
+Basic and Clinical, 103(1-2), 114-120.
+
+\item  M. Pedemonte, A. Rodriguez-Alvez, R.A. Velluti,  (2005). "Electroencephalographic
+frequencies associated with heart changes in RR interval variability during
+paradoxical sleep." Autonomic Neuroscience: Basic and Clinical, 123(1-2), 82-
+86.
+
+\item  N. V. Lutsyuk, E. V. Éismont, and V. B. Pavlenko, (2006). "Correlation of the Characteristics of EEG Potentials with the Indices of Attention in 12- to 13-Year-Old Children." Neurophysiology, 38(3), 209-216.
+
+\item  L. V. Marcuse, M. Schneider, K. A. Mortati, K. M. Donnelly, V. Arnedo, and A. C. Grant, (2008). Quantitative analysis of the EEG posterior-dominant rhythm in healthy adolescents. Clinical Neurophysiology, 119(8), 1778-1781.
+
+\item   K. M. Spencer, J. Polich, (1999). Poststimulus EEG spectral analysis and P300: Attention, task, and probability. Psychophysiology, 36(2), 220-232.
+
+\item  P. J. Durka,  J. Zygierewics, H. Klekowicz, J. Ginter, K.J. Blinowska, (2004). On the statistical significance of event-related EEG desynchronization and synchronization in the time-frequency plane. Biomedical Engineering, IEEE Transactions, 51(7), 1167 - 1175.
+
+\item  C. H. Yang,, Chi-Wan Lai, Hsien Yong Lai, T.B.J. Kuo, (2002). Relationship between electroencephalogram slow-wave magnitude and heart rate variability during sleep in humans. Neuroscience Letters, 329(2), 213-216.
+
+\item  Q. R. Quiroga, O.A Rosso, and Basar, E. . (1999). Wavelets entropy: a measure of order in evoked potentials. Functional Neuroscience: Evoked Potentials and Magnetic Fields, 49, 299-303.
+
+\item  Q. R. Quiroga, O.W. Sakowitz, E. Basar, and M. Schurmann, (2001 ). Wavelet Transform in the analysis of the frequency composition of evoked potentials. Brain Research Protocols, 8(1), 16-24.
+
+\item  A. P. Bradley, and W. J. Wilson, (2004). On wavelet analysis of auditory evoked potentials. Clinical Neurophysiology, 115(5), 1114-1128.
+
+
+\item  A. Subasi, (2005). Automatic recognition of alertness level from EEG by using neural network and wavelet coefficients. Expert Systems with Applications, 28(4), 701-711.
+
+\item  D. Cvetkovic, E. D. Übeyli, and I. Cosic, (2008). Wavelet transform feature extraction from human PPG, ECG, and EEG signal responses to ELF PEMF exposures: A pilot study. Digital Signal Processing, 18(5), 861-874.
+
+\item  S. G. Mallat, (1989). A Theory for Multiresolution Signal Decomposition: The Wavelet Representation. IEEE Transactions on Pattern Analysis and Machine Intelligence, 11(7), 674-693 
+
+\item  F. W. Ganong, Alert Behavior, Sleep \& the Electrical Activity of the Brain. In: Medical Physiology, 2005. MacGraw-Hill, 22th Edition, Chapter 11, 192-201
+
+\item  D. V. Moretti, F. Babiloni, F. Carducci, F. Cincotti, E. Remondini, P. M. Rossini, S. Salinari, and C. Babiloni, (2003). Computerized processing of EEG-EOG-EMG artifacts for multi-centric studies in EEG oscillations and event-related potentials. International journal of psychophysiology 47(3), 199–216.
+
+\item  A. Gutiérrez, M. Lara, and P. R. Hernández, (2005). Evaluación de un Detector de Complejo QRS Basado en la Wavelet de Haar, usando las Bases de Datos MIT-BIH de Arritmias y Europea del Segmento ST y de la Onda T. Computación y Sistemas, 8(4), 293-302
+
+\item  T. Masters, Neural, Novel \& Hybrid Algorithms for Time Series Prediction, John 
+Wiley \& Sons, Inc., USA,1995.
+
+\item  M. A. Guevara, J. Ramos, M. Hernandez-Gonzalez, and M. Corsi-Cabrera, (2005). FILDIG: A program to filter brain electrical signals in the frequency domain. Computer Methods and Programs in Biomedicine, 80, 165-172
+
+
+\end{enumerate}
 
 \end{document}
