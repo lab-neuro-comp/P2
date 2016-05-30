@@ -13,7 +13,7 @@
 
 \begin{abstract}
 
-In this research a computational tool named $Protolize!$ was developed for biological signal processing, with emphasis on electroencephalographic signals, in the time-frequency domain. The tool performs analysis using the Fourier Transform, the Short Time Fourier Transform, the Continuous Wavelet Transform and multi-resolution analysis through Discrete Wavelet Transform. It offers configuration options to choose between different kinds of windows and wavelets families. Performance and usefulness of the computational tool were illustrated by processing electroencephalography signals collected, in 47 volunteers, where alpha block phenomenon was reproduced. $Protolize!$ was implemented using Matlab® R2007b, and it’s a free tool available in a public repository. 
+In this research a computational tool named $Protolize!$ was developed for biological signal processing, with emphasis on electroencephalographic signals, in the time-frequency domain. The tool performs analysis using the Fourier Transform, the Short Time Fourier Transform, the Continuous Wavelet Transform and multi-resolution analysis through Discrete Wavelet Transform. It offers configuration options to choose between different kinds of windows and wavelets families. Performance and usefulness of the computational tool were illustrated by processing electroencephalography signals collected, in 47 volunteers, where alpha block phenomenon was reproduced. $Protolize!$ was implemented using Matlab® R2010b, and it’s a free tool available in a public repository. 
 
 \end{abstract}
 
@@ -110,7 +110,7 @@ Figure 2: Main panel of $Protolize!$ with buttons to access each analysis module
 \end{center}
 All modules were programmed to read ASCII files and to export to text or CSV files the data resulting from the analysis. Here we describe the main features offered by each module. As $Protolize!$ is focused in EEG signals, the main EEG rhythms delta ($0.5Hz-3.5Hz$), theta ($3.5Hz-7Hz$), alpha ($8Hz-13Hz$), beta ($13Hz-24Hz$) and gamma ($30Hz-70Hz$) are included to be used on many parts of the application.
 
-There are two kinds of modules: the edition modules, for processing and filtering the signal; and the analysis modules, for extracting numerical information and graphics from the signal.
+There are two kinds of modules: the edition modules (namely, Time/spec and DWT), for processing and filtering the signal; and the analysis modules (Time Domain, Fourier, STFT and CWT), for extracting numerical information and graphics from the signal. Moreover $Protolize!$ integrates with EEGLAB (through the Studies module) for further signal processing.
 
 The Time/Spec Module (Fig. 3) offers the following options:
 \begin{itemize}
@@ -147,20 +147,22 @@ The Fourier Module (Fig. 5) offers the following options:
 \item Select a specific time interval of the signal(s) analyzed in order to calculate the power spectrum only for that interval.
 \end{itemize}
 \begin{center}
-\includegraphics[width=15cm]{dwt2.png}
+\includegraphics[width=15cm]{fourier.png}
 
 Figure 5: the Fourier module interface.
 \end{center}
 
 The Time Domain Module (Fig. 6) offers the following options:
 \begin{itemize}
-\item Choose between six different windows types: Hamming, Gaussian, Blackman, Hanning, Kaiser or Hann.
-\item Define the time resolution by setting the window size and overlapping. 
-\item Generate the spectrogram with a possibility of rotate it in three dimensions. 
-\item Visualization of the power spectrum from each time interval separately.
-\item Visualization of a specific frequency power trough time.
+\item Plot as many signals as desired on a single frame.
+\item Export the plot of a signal to a PNG picture.
+\item Generate statistics of a signal, such as mean, standard deviation and median.
 \end{itemize}
-$$Insert Figure 6 about here$$
+\begin{center}
+\includegraphics[width=15cm]{timedomain.png}
+
+Figure 6: the Time Domain module interface.
+\end{center}
 
 The STFT Module (Fig. 7) offers the following options:
 \begin{itemize}
@@ -186,27 +188,41 @@ The CWT module (Fig. 8) offers the following options:
 \item Plot separately all scales values of one specific time selected by the user.
 \item Scale/Pseudo-frequency converter.
 \end{itemize}
-$$Insert Figure 8 about here$$
+\begin{center}
+\includegraphics[width=15cm]{cwt.png}
 
+Figure 8: the CWT module interface.
+\end{center}
+
+$Protolize!$ also allows an integration with EEGLAB using the Studies Tool (Fig. 9). It contains the following options:
+\begin{itemize}
+\item Write about it;
+\item Thank you.
+\end{itemize}
+\begin{center}
+\includegraphics[width=15cm]{cwt.png}
+
+Figure 9: the Studies module.
+\end{center}
 
 \section{System performance and examples}
 
 To illustrate the system performance we used $Protolize!$ to detect the classical phenomenon of alpha block.  It is well know that during relaxing periods, with closed eyes, an increase in alpha rhythm power can be detected [15]. This increase is blocked in presence of visual or auditory stimuli. 
 
-In order to reproduce and detect this phenomenon by using $Protolize!$, a set of EEG signals was collected, from 47 students of University of Brasilia, using an equipment Neuromap® (Neurotec®) model 40i and $Ag-AgCl$ electrodes located according to the 10-20 system in the positions $t3$ and $t4$. The impedances were kept under $5k\Omega$. The signal was acquired with a $256 Hz$ sample rate and band-pass filtered between $0.01 Hz$ and $100 Hz$ using Neuromap v.2.03 software. The study was approved by the Ethical Committee from the University of Brasilia, Faculty of Health Sciences. The signal contained three intervals of one minute each: the first and third intervals corresponded to time intervals where the subject was asked to relax and keep their eyes closed. At the second interval, the subject was asked to keep their eyes opened. Using the Fourier Module, the power of the alpha rhythm for each subject was calculated at each interval.  An ANOVA test to compare the alpha power at t3 electrode showed statistically significant differences between intervals ($F_{2,39}=5.88, p=0.006$). The Bonferroni test showed that the alpha power in the second (eyes opened) interval was significantly lower than first ($t=3.08, p=0.011$) and third ($t=2.83, p=0.022$) intervals (eyes closed). But there was no differences between the first and the third intervals ($t=0.198, p=1$). The same result was obtained for the t4 electrode. An ANOVA test showed differences between intervals ($F_{2,39}=8.143, p=0.001$) and Bonferroni showed differences between the first  ($t=3.523, p=0.003$) and third ($t=3.445, p=0.004$) intervals if compared with the second interval, but no differences between them ($t=0.141, p=1$) (Fig. 7).
+In order to reproduce and detect this phenomenon by using $Protolize!$, a set of EEG signals was collected, from 47 students of University of Brasilia, using an equipment Neuromap® (Neurotec®) model 40i and $Ag-AgCl$ electrodes located according to the 10-20 system in the positions $t3$ and $t4$. The impedances were kept under $5k\Omega$. The signal was acquired with a $256 Hz$ sample rate and band-pass filtered between $0.01 Hz$ and $100 Hz$ using Neuromap v.2.03 software. The study was approved by the Ethical Committee from the University of Brasilia, Faculty of Health Sciences. The signal contained three intervals of one minute each: the first and third intervals corresponded to time intervals where the subject was asked to relax and keep their eyes closed. At the second interval, the subject was asked to keep their eyes opened. Using the Fourier Module, the power of the alpha rhythm for each subject was calculated at each interval.  An ANOVA test to compare the alpha power at t3 electrode showed statistically significant differences between intervals ($F_{2,39}=5.88, p=0.006$). The Bonferroni test showed that the alpha power in the second (eyes opened) interval was significantly lower than first ($t=3.08, p=0.011$) and third ($t=2.83, p=0.022$) intervals (eyes closed). But there was no differences between the first and the third intervals ($t=0.198, p=1$). The same result was obtained for the t4 electrode. An ANOVA test showed differences between intervals ($F_{2,39}=8.143, p=0.001$) and Bonferroni showed differences between the first  ($t=3.523, p=0.003$) and third ($t=3.445, p=0.004$) intervals if compared with the second interval, but no differences between them ($t=0.141, p=1$) (Fig. 10).
 \begin{center}
 \includegraphics{image009.png}
 
-Figure 9: Mean $pm$ SE of alpha power in each interval. * Differences statistically significantly between interval 2 (opened eyes) and intervals 1 and 3 (closed eyes)
+Figure 10: Mean $pm$ SE of alpha power in each interval. * Differences statistically significantly between interval 2 (opened eyes) and intervals 1 and 3 (closed eyes)
 \end{center}
 
 \section{Hardware and software requirements}
 
-To run $Protolize!$, Matlab® R2010b or newer is necessary and a computer with at least it $1GB$ RAM is recommended. The program was written using the Matlab basic functions and the GUIDE, Signal Processing and Wavelets toolboxes.
+To run $Protolize!$, Matlab® R2010b or newer is necessary and a computer with at least $1GB$ RAM is recommended. The program was written using the Matlab basic functions and the GUIDE, Signal Processing and Wavelets toolboxes.
 
 \section{Advantages and availability}
 
-$Protolize!$ is a powerful tool in frequency domain analysis. It allows noise reduction, main frequency components identification, calculation of main EEG rhythms power, time-frequency analysis and multi-resolution analysis. In spite of the pre-defined options for EEG analysis, Protolize! is not limited to this signal and can be used to analyze other kinds of signals as well. There are several computational tools for biological signal analysis commercially available [19] but normally they have a high cost or are linked to specific equipment or offer less analysis methods implemented. Protlize! is an open source, free distributed program available in GitHub through https://github.com/ishiikurisu/P2, making it a good option as a tool for biological signal processing. 
+$Protolize!$ is a powerful tool in frequency domain analysis. It allows noise reduction, main frequency components identification, calculation of main EEG rhythms power, time-frequency analysis and multi-resolution analysis. In spite of the pre-defined options for EEG analysis, $Protolize!$ is not limited to this signal and can be used to analyze other kinds of signals as well. There are several computational tools for biological signal analysis commercially available [19] but they normally have a high cost or are linked to specific equipment or offer less analysis methods implemented. $Protolize!$ is an open source, free distributed program available in GitHub through https://github.com/ishiikurisu/P2, making it a good option as a tool for biological signal processing. 
 
 \section{Recomendations}
 
