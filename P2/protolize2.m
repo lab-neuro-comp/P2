@@ -53,6 +53,7 @@ global deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 betaf1 betaf2 gammaf1 gam
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to protolize2 (see VARARGIN)
 
+addpath(strcat(cd, '/util'));
 % Choose default command line output for protolize2
 handles.output = hObject;
 
@@ -110,7 +111,7 @@ function stftbut_Callback(hObject, eventdata, handles)
 % hObject    handle to stftbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-stft2; % under construction
+sfft2; % under construction
 
 % --- Executes on button press in cwtbut.
 function cwtbut_Callback(hObject, eventdata, handles)
@@ -138,7 +139,7 @@ function dwtbut_Callback(hObject, eventdata, handles)
 % hObject    handle to dwtbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-dwtmodule2; % under construction
+dwtmodule2;
 
 % --- Executes on button press in tsstbut.
 function tsstbut_Callback(hObject, eventdata, handles)
