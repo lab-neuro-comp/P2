@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/W32TeX) (preloaded format=pdflatex 2016.5.16)  23 MAY 2016 10:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/W32TeX) (preloaded format=pdflatex 2016.5.16)  30 MAY 2016 09:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -461,82 +461,103 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <14.4> on input line 11.
+(Font)              <14.4> on input line 12.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 11.
+(Font)              <7> on input line 12.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 15.
+(Font)              <10.95> on input line 16.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 15.
+(Font)              <8> on input line 16.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 15.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 15.
+(Font)              <6> on input line 16.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 16.
 
 (c:/texlive/2015/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 15.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 16.
  [1
 
 {c:/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 35.
+(Font)              <12> on input line 36.
  [2]
 <image001.png, id=21, 191.21437pt x 299.61937pt>
 File: image001.png Graphic file (type png)
  <use image001.png>
-Package pdftex.def Info: image001.png used on input line 96.
+Package pdftex.def Info: image001.png used on input line 97.
 (pdftex.def)             Requested size: 191.2139pt x 299.61864pt.
  [3 <./image001.png>] <image002.jpg, id=25, 542.025pt x 377.91188pt>
 File: image002.jpg Graphic file (type jpg)
  <use image002.jpg>
-Package pdftex.def Info: image002.jpg used on input line 106.
+Package pdftex.def Info: image002.jpg used on input line 107.
 (pdftex.def)             Requested size: 426.79134pt x 297.57834pt.
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 114.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 117.
 
-[4 <./image002.jpg>] [5] <image007.png, id=32, 630.85687pt x 316.93407pt>
-File: image007.png Graphic file (type png)
-
-<use image007.png>
-Package pdftex.def Info: image007.png used on input line 161.
+<timespec.png, id=26, 595.47469pt x 365.86688pt>
+File: timespec.png Graphic file (type png)
+ <use timespec.png>
+Package pdftex.def Info: timespec.png used on input line 121.
+(pdftex.def)             Requested size: 426.79134pt x 262.22368pt.
+ [4 <./image002.jpg>] <dwt2.png, id=30, 613.54219pt x 354.57469pt>
+File: dwt2.png Graphic file (type png)
+ <use dwt2.png>
+Package pdftex.def Info: dwt2.png used on input line 135.
+(pdftex.def)             Requested size: 426.79134pt x 246.64781pt.
+ [5 <./timespec.png> <./dwt2.png>]
+File: dwt2.png Graphic file (type png)
+ <use dwt2.png>
+Package pdftex.def Info: dwt2.png used on input line 150.
+(pdftex.def)             Requested size: 426.79134pt x 246.64781pt.
+ [6]
+<stft1.png, id=37, 1028.34187pt x 578.16pt>
+File: stft1.png Graphic file (type png)
+ <use stft1.png>
+Package pdftex.def Info: stft1.png used on input line 175.
+(pdftex.def)             Requested size: 426.79134pt x 239.95839pt.
+ [7 <./stft1.png>]
+<image009.png, id=42, 630.85687pt x 316.93407pt>
+File: image009.png Graphic file (type png)
+ <use image009.png>
+Package pdftex.def Info: image009.png used on input line 199.
 (pdftex.def)             Requested size: 630.85533pt x 316.93329pt.
 
-Overfull \hbox (118.7057pt too wide) in paragraph at lines 161--162
+Overfull \hbox (118.7057pt too wide) in paragraph at lines 199--200
  [] 
  []
 
-[6 <./image007.png>]
-Overfull \hbox (58.57968pt too wide) in paragraph at lines 192--193
+[8 <./image009.png>]
+Overfull \hbox (58.57968pt too wide) in paragraph at lines 230--231
 []\OT1/cmr/m/n/12 S. W. Smith, (1998). The Sci-en-tist and En-gi-neer's Guide t
 o Dig-i-tal Sig-nal Pro-cess-ing. www.DSPguide.com.
  []
 
-[7] [8] (./protolize.aux) ) 
+[9] [10] (./protolize.aux) ) 
 Here is how much of TeX's memory you used:
- 1983 strings out of 493027
- 25890 string characters out of 6137684
- 90226 words of memory out of 5000000
- 5505 multiletter control sequences out of 15000+600000
+ 1998 strings out of 493027
+ 26092 string characters out of 6137684
+ 89226 words of memory out of 5000000
+ 5517 multiletter control sequences out of 15000+600000
  9725 words of font info for 34 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  37i,6n,43p,1763b,197s stack positions out of 5000i,500n,10000p,200000b,80000s
-<c:/texlive/2015/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmbx10.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-bx12.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
-<c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texli
-ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2015/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2015/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2015/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmr17.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmr8.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
-><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on protolize.pdf (8 pages, 219900 bytes).
+<c:/texlive/2015/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmbx10.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mbx12.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
+><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texl
+ive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2015/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2015/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2015/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmr17.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmr8.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pf
+b><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on protolize.pdf (10 pages, 280817 bytes).
 PDF statistics:
- 82 PDF objects out of 1000 (max. 8388607)
- 56 compressed objects within 1 object stream
+ 91 PDF objects out of 1000 (max. 8388607)
+ 60 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
