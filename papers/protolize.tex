@@ -108,22 +108,51 @@ $Protolize!$ has a main panel (Fig. 2) from where a set of interfaces (modules) 
 
 Figure 2: Main panel of $Protolize!$ with buttons to access each analysis module.
 \end{center}
-All modules were programmed to read ASCII files and to export to text or Excel files the data resulting from the analysis. Here we describe the main features offered by each module. 
+All modules were programmed to read ASCII files and to export to text or CSV files the data resulting from the analysis. Here we describe the main features offered by each module. As $Protolize!$ is focused in EEG signals, the main EEG rhythms delta ($0.5Hz-3.5Hz$), theta ($3.5Hz-7Hz$), alpha ($8Hz-13Hz$), beta ($13Hz-24Hz$) and gamma ($30Hz-70Hz$) are included to be used on many parts of the application.
 
+There are two kinds of modules: the edition modules, for processing and filtering the signal; and the analysis modules, for extracting numerical information and graphics from the signal.
 
-The Fourier Module (Fig. 3) offers the following options:
+The Time/Spec Module (Fig. 3) offers the following options:
+\begin{itemize}
+\item Chop the signal on an user defined interval. 
+\item Filter the signal using Fourier transform-based Low-pass, High-pass, Band-pass and Band-stop filters.
+\end{itemize}
+\begin{center}
+\includegraphics[width=15cm]{timespec.png}
+
+Figure 3: the Time/Spec module interface.
+\end{center}
+
+The DWT Module (Fig. 4) offers the following options:
+\begin{itemize}
+\item Calculate the Discrete Wavelet Transform using one of six different wavelets families available. (Haar, Daubechies, Symlets, Coiflets, Biorthogonal, R Biorthogonal)
+\item Decompose the signal defining one of the 10 first levels of resolution (Multi Resolution Analysis). 
+\item View the coefficients or reconstruction of details and approximations at any calculated level. 
+\item Edit the coefficients of any detail level or/and last approximation. 
+\item Reconstruct the signal from details and last approximation after their edition process.
+\end{itemize}
+\begin{center}
+\includegraphics[width=15cm]{dwt2.png}
+
+Figure 4: the DWT module interface.
+\end{center}
+
+The Fourier Module (Fig. 5) offers the following options:
 \begin{itemize}
 \item Process up to seven different signals simultaneously.
 \item Calculate the power spectrum of each signal. 
 \item Show, according to the user’s choice, besides the power spectrum, also the signals in the time domain for a better visual relationship between the two domains. 
-\item As the module is focused in EEG signals, a power calculation of the main EEG rhythms delta ($0.5Hz-3.5Hz$), theta ($3.5Hz-7Hz$), alpha ($8Hz-13Hz$), beta ($13Hz-24Hz$) and gamma ($30Hz-70Hz$) was included.
+\item As the module is focused in EEG signals, a power calculation of the main EEG rhythms was included.
 \item The user can define a different band frequency for each EEG rhythm if necessary.
 \item Select a specific time interval of the signal(s) analyzed in order to calculate the power spectrum only for that interval.
 \end{itemize}
-$$Insert Figure 3 about here$$
+\begin{center}
+\includegraphics[width=15cm]{dwt2.png}
 
+Figure 5: the Fourier module interface.
+\end{center}
 
-The STFT Module (Fig. 4) offers the following options:
+The Time Domain Module (Fig. 6) offers the following options:
 \begin{itemize}
 \item Choose between six different windows types: Hamming, Gaussian, Blackman, Hanning, Kaiser or Hann.
 \item Define the time resolution by setting the window size and overlapping. 
@@ -131,10 +160,24 @@ The STFT Module (Fig. 4) offers the following options:
 \item Visualization of the power spectrum from each time interval separately.
 \item Visualization of a specific frequency power trough time.
 \end{itemize}
-$$Insert Figure 4 about here$$
+$$Insert Figure 6 about here$$
+
+The STFT Module (Fig. 7) offers the following options:
+\begin{itemize}
+\item Choose between six different windows types: Hamming, Gaussian, Blackman, Hanning, Kaiser or Hann.
+\item Define the time resolution by setting the window size and overlapping. 
+\item Generate the spectrogram with a possibility of rotate it in three dimensions. 
+\item Visualization of the power spectrum from each time interval separately.
+\item Visualization of a specific frequency power trough time.
+\end{itemize}
+\begin{center}
+\includegraphics[width=15cm]{stft1.png}
+
+Figure 7: the STFT module interface.
+\end{center}
 
 
-The CWT module (Fig. 5) offers the following options:
+The CWT module (Fig. 8) offers the following options:
 \begin{itemize}
 \item Calculate the Continuous Wavelet Transform using one of ten different wavelets families (Haar, Daubechies, Symlets, Coiflets, Biorthogonal, R Biorthogonal, Meyer, Gaussian, Mexican, Morlet)
 \item Choose the scale interval and resolution.
@@ -143,18 +186,7 @@ The CWT module (Fig. 5) offers the following options:
 \item Plot separately all scales values of one specific time selected by the user.
 \item Scale/Pseudo-frequency converter.
 \end{itemize}
-$$Insert Figure 5 about here$$
-
-
-The DWT Module (Fig. 6) offers the following options:
-\begin{itemize}
-\item Calculate the Discrete Wavelet Transform using one of six different wavelets families available. (Haar, Daubechies, Symlets, Coiflets, Biorthogonal, R Biorthogonal)
-\item Decompose the signal defining one of the 10 first levels of resolution (Multi Resolution Analysis). 
-\item View the coefficients or reconstruction of details and approximations at any calculated level. 
-\item Edit the coefficients of any detail level or/and last approximation. 
-\item Reconstruct the signal from details and last approximation after their edit process.
-\end{itemize}
-$$Insert Figure 6 about here$$
+$$Insert Figure 8 about here$$
 
 
 \section{System performance and examples}
@@ -163,14 +195,14 @@ To illustrate the system performance we used $Protolize!$ to detect the classica
 
 In order to reproduce and detect this phenomenon by using $Protolize!$, a set of EEG signals was collected, from 47 students of University of Brasilia, using an equipment Neuromap® (Neurotec®) model 40i and $Ag-AgCl$ electrodes located according to the 10-20 system in the positions $t3$ and $t4$. The impedances were kept under $5k\Omega$. The signal was acquired with a $256 Hz$ sample rate and band-pass filtered between $0.01 Hz$ and $100 Hz$ using Neuromap v.2.03 software. The study was approved by the Ethical Committee from the University of Brasilia, Faculty of Health Sciences. The signal contained three intervals of one minute each: the first and third intervals corresponded to time intervals where the subject was asked to relax and keep their eyes closed. At the second interval, the subject was asked to keep their eyes opened. Using the Fourier Module, the power of the alpha rhythm for each subject was calculated at each interval.  An ANOVA test to compare the alpha power at t3 electrode showed statistically significant differences between intervals ($F_{2,39}=5.88, p=0.006$). The Bonferroni test showed that the alpha power in the second (eyes opened) interval was significantly lower than first ($t=3.08, p=0.011$) and third ($t=2.83, p=0.022$) intervals (eyes closed). But there was no differences between the first and the third intervals ($t=0.198, p=1$). The same result was obtained for the t4 electrode. An ANOVA test showed differences between intervals ($F_{2,39}=8.143, p=0.001$) and Bonferroni showed differences between the first  ($t=3.523, p=0.003$) and third ($t=3.445, p=0.004$) intervals if compared with the second interval, but no differences between them ($t=0.141, p=1$) (Fig. 7).
 \begin{center}
-\includegraphics{image007.png}
+\includegraphics{image009.png}
 
-Figure 7: Mean $pm$ SE of alpha power in each interval. * Differences statistically significantly between interval 2 (opened eyes) and intervals 1 and 3 (closed eyes)
+Figure 9: Mean $pm$ SE of alpha power in each interval. * Differences statistically significantly between interval 2 (opened eyes) and intervals 1 and 3 (closed eyes)
 \end{center}
 
 \section{Hardware and software requirements}
 
-To run $Protolize!$, Matlab® R2007b or newer is necessary and a computer with at least it $512MB$ RAM is recommended. The program was written using the Matlab basic functions, and the GUIDE, Signal Processing and Wavelets toolboxes.
+To run $Protolize!$, Matlab® R2010b or newer is necessary and a computer with at least it $1GB$ RAM is recommended. The program was written using the Matlab basic functions and the GUIDE, Signal Processing and Wavelets toolboxes.
 
 \section{Advantages and availability}
 
