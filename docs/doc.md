@@ -5,17 +5,17 @@ O PROTOLIZE! é uma ferramenta escrita em MATLAB para processamento de sinais de
 
 ![Protolize 2](assets/p2mainpage.jpg)
 
-O PROTOLIZE!2 está sendo escrito em MATLAB 2010 com auxílio do editor de textos [Atom](https://atom.io/). Esta documentação está sendo escrita em [Markdown](https://daringfireball.net/projects/markdown/) e sendo traduzido em HTML usando o script [markdown.lua](https://github.com/mpeterv/markdown) feito por [@mpeterv](https://github.com/mpeterv).
+O Protolize! está sendo escrito em MATLAB 2010 com auxílio do editor de textos [Atom](https://atom.io/). Esta documentação está sendo escrita em [Markdown](https://daringfireball.net/projects/markdown/) e sendo traduzido em HTML usando o script [markdown.lua](https://github.com/mpeterv/markdown) feito por [@mpeterv](https://github.com/mpeterv).
 
 Pré-requisitos
 --------------
 
---- Checar pré-requisitos ---
+Protolize! requer MATLAB 2010 rodando em um computador rodando Microsoft Windows 7 ou posterior com no mínimo 1GB RAM.
 
 Instalação
 ----------
 
-Para fazer o download do PROTOLIZE!2, baixe o arquivo `P2.zip` e extraia seu conteudo em um pasta específica. Inicie o MATLAB e vá à pasta onde você extraiu a sua versão do PROTOLIZE!2. Dentro desta pasta, entre o comando <span style="background-color: #BDC3CE">`protolize2`</span>. Se não houver nenhum problema, o menu principal do PROTOLIZE!2 aparecerá, indicando que ele está pronto para uso.
+Para fazer o download do Protolize!, baixe o arquivo `P2.zip` e extraia seu conteudo em um pasta específica. Inicie o MATLAB e vá à pasta onde você extraiu a sua versão do Protolize!. Dentro desta pasta, entre o comando <span style="background-color: #BDC3CE">`protolize2`</span>. Se não houver nenhum problema, o menu principal do Protolize! aparecerá, indicando que ele está pronto para uso.
 
 Outras informações relevantes
 -----------------------------
@@ -25,9 +25,9 @@ Os sinais a serem processados deverão estar no formato `*.ASCII`.
 Menu principal
 ==============
 
-O menu principal contém 3 divisões: [`Protocols`](#protocols), [`Edition`](#edition) e [`Analysis`](#analysis). A partir delas, podemos acessar as diversas funcionalidades do PROTOLIZE!2 como descritas em suas respectivas sessões.
+O menu principal contém 3 divisões: [`Protocols`](#protocols), [`Edition`](#edition) e [`Analysis`](#analysis). A partir delas, podemos acessar as diversas funcionalidades do Protolize! como descritas em suas respectivas sessões.
 
-Além disso, há uma [barra de ferramentas](#toolbar) para acesso rápido de diversos ajustes do programa e do arquivo de ajuda.
+Além disso, há uma [barra de ferramentas](#toolbar) para acesso rápido de diversos ajustes do programa, do módulo de estudos e do arquivo de ajuda.
 
 <a name="toolbar"></a>
 
@@ -38,7 +38,7 @@ No topo da janela principal, temos uma barra de ferramentas com as opções `Fil
 
 Em `File`, pode-se sair do programa ou do módulo; ou abrir ou salvar arquivos de acordo com o módulo que está sendo usado.
 
-Em `Settings`, pode-se alterar diversos valores usados na análise de sinais, em especial a taxa de amostragem (chamada de `fs`); e os ritmos mentais usados no estudo em questão. O software sempre abre com os seguintes valores para os ritmos:
+Em `Settings`, pode-se alterar diversos valores usados na análise de sinais, em especial a taxa de amostragem (chamada de `fs`); e os ritmos mentais usados no estudo em questão. O software define, por padrão, os seguinte ritmos mentais:
 
 + Delta: 0.5 a 3.5Hz
 + Theta: 3.5 a 7Hz
@@ -46,10 +46,11 @@ Em `Settings`, pode-se alterar diversos valores usados na análise de sinais, em
 + Beta: 15 a 24Hz
 + Gamma: 30 a 70Hz
 
-Estes valores podem ser ajustados de acordo com a necessidade do usuário, e todos os parâmetros disponíveis para ajuste ficam guardados até o fim da sessão do programa.
+Também pode-se ajustar o caminho em disco para o EEGLAB, caso disponível no computador do usuário, para que ambos possam atuar no processamento de sinais. Estes valores podem ser ajustados de acordo com a necessidade do usuário, e todos os parâmetros disponíveis para ajuste ficam guardados em memória para uso futuro.
+
+Em `Studies`, pode-se acessar o [módulo de estudos](#studies); que permite processar arquivos em lote.
 
 Em `Help`, tem-se acesso a este arquivo de ajuda que você está lendo.
-
 
 <a name="protocols"></a>
 
@@ -96,7 +97,7 @@ Para usar este módulo em separado, use o comando `dwtmodule2`. As funções rel
 Módulos de análise
 ==================
 
-O PROTOLIZE!2 possui 4 ferramentas de análise de dados: análise no domínio do tempo (`Time domain`); análise por transformada de Fourier (`Fourier`); por transforma de Fourier de curta duração (`STFT`); e por transformada contínua de Wavelets (`CWT`).
+O Protolize! possui 4 ferramentas de análise de dados: análise no domínio do tempo (`Time domain`); análise por transformada de Fourier (`Fourier`); por transforma de Fourier de curta duração (`STFT`); e por transformada contínua de Wavelets (`CWT`).
 
 Time Domain
 -----------
@@ -123,3 +124,31 @@ Continuous Wavelet Transform (CWT)
 ----------------------------------
 
 <span style="background-color: #BDC3CE">`O módulo ainda está em construção`</span>
+
+<a name="studies"></a>
+
+Módulo de Estudos
+=================
+
+O Protolize! contém um módulo para análise de vários arquivos em lote, chamado de _Studies module_. A entrada deste módulo é um arquivo CSV, sobre o qual eu tenho que escrever ainda.
+
+Para rodar este módulo em separado, use o comando `recordmodule`.
+
+Modo Protolize!
+---------------
+
+O modo Protolize! permite converter arquivos no formato EDF+ para o formato ASCII, separando o canal de anotações para um texto em separado.
+
+![Studies module on Protolize! mode](assets/rec-p.png "'Studies Module")
+
+Modo EEGLAB
+-----------
+
+O modo EEGLAB usa funções do próprio EEGLAB no Protolize para realizar ações comums no processamento digital de sinais. Nele, o usuário pode escolher quais ações tomar naquele processamento, sendo elas:
+
++ Cortar o sinal em um intervalo definido no arquivo de entrada;
++ Rerreferenciar os canais;
++ Reamostrar os sinais para uma taxa fornecida pelo usuário;
++ Rodar detecção de ICA em cada sinal.
+
+![Studies module on EEGLAB mode](assets/rec-eeglab.png "'Studies Module")
