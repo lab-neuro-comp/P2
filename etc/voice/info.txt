@@ -1,0 +1,11 @@
+hilbert_test.m:
+- Applies a Hilbert transform on the signal
+- "Uses" an ANN to extract when speech begins
+
+voicerecognition.wav:
+- 6s of a random recording
+- Takes 15s to be analyzed on Molang
+
+actualcase.wav:
+- 34s of a Stroop test recording
+- Takes forever to be analyzed, regardless of computer
