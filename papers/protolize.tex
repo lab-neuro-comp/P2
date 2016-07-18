@@ -13,7 +13,7 @@
 
 \begin{abstract}
 
-In this research a computational tool named $Protolize!$ was developed for biological signal processing, with emphasis on electroencephalographic signals, in the time-frequency domain. The tool performs analysis using the Fourier Transform, the Short Time Fourier Transform, the Continuous Wavelet Transform and multi-resolution analysis through Discrete Wavelet Transform. It offers configuration options to choose between different kinds of windows and wavelets families. Performance and usefulness of the computational tool were illustrated by processing electroencephalography signals collected, in 47 volunteers, where alpha block phenomenon was reproduced. $Protolize!$ was implemented using Matlab® R2010b, and it’s a free tool available in a public repository.
+In this research a computational tool named $Protolize!$ was developed for biological signal processing, with emphasis on electroencephalographic signals, in the time-frequency domain. The tool performs analysis using the Fourier Transform, the Short Time Fourier Transform, the Continuous Wavelet Transform and multi-resolution analysis through Discrete Wavelet Transform. It offers configuration options to choose between different kinds of windows and wavelets families. Performance and usefulness of the computational tool were illustrated by processing electroencephalography signals collected, in 47 volunteers, where alpha block phenomenon was reproduced. $Protolize!$ was implemented using Matlab® R2010b, and it is an open source tool available in a public repository.
 
 \end{abstract}
 
@@ -181,7 +181,7 @@ Figure 7: the STFT module interface.
 
 The CWT module (Fig. 8) offers the following options:
 \begin{itemize}
-\item Calculate the Continuous Wavelet Transform using one of ten different wavelets families (Haar, Daubechies, Symlets, Coiflets, Biorthogonal, R Biorthogonal, Meyer, Gaussian, Mexican, Morlet)
+\item Calculate the Continuous Wavelet Transform using one of the ten different wavelets families (Haar, Daubechies, Symlets, Coiflets, Biorthogonal, R Biorthogonal, Meyer, Gaussian, Mexican, Morlet)
 \item Choose the scale interval and resolution.
 \item Pre-defined scale configuration in order to represent one of the EEG rhythms of interest.
 \item Plot separately the variation of one specific scale, selected by the user, through time.
@@ -194,7 +194,7 @@ The CWT module (Fig. 8) offers the following options:
 Figure 8: the CWT module interface.
 \end{center}
 
-$Protolize!$ also allows an integration with EEGLAB using the Studies Tool (Fig. 9). This module operates under two modes: the $Protolize!$ mode and the EEGLAB. It contains the following options:
+$Protolize!$ also allows an integration with EEGLAB using the Studies Tool (Fig. 9). This module operates under two modes: the $Protolize!$ one and the EEGLAB one. It contains the following options:
 \begin{itemize}
 \item Using the $Protolize!$ mode, the user can convert EDF+ files to the ASCII format as accepted by this program.
 \item Using the $EEGLAB$ mode, the following options are available:
@@ -211,7 +211,7 @@ $Protolize!$ also allows an integration with EEGLAB using the Studies Tool (Fig.
 Figure 9: the Studies module.
 \end{center}
 
-All of these options use their respective EEGLAB functions.
+All these options use their respective EEGLAB functions.
 
 \section{System performance and examples}
 
@@ -230,7 +230,7 @@ To run $Protolize!$, Matlab® R2010b or newer is necessary and a computer with a
 
 \section{Advantages and availability}
 
-$Protolize!$ is a powerful tool in frequency domain analysis. It allows noise reduction, main frequency components identification, calculation of main EEG rhythms power, time-frequency analysis and multi-resolution analysis. In spite of the pre-defined options for EEG analysis, $Protolize!$ is not limited to this signal and can be used to analyze other kinds of signals as well. There are several computational tools for biological signal analysis commercially available [19] but they normally have a high cost or are linked to specific equipment or offer less analysis methods implemented. $Protolize!$ is an open source, free distributed program available in GitHub through https://github.com/ishiikurisu/P2, making it a good option as a tool for biological signal processing. Anyone interested in collaborating to this project is welcome, as further development and improvement of the current methods is intended.
+$Protolize!$ is a powerful tool in frequency domain analysis. It allows noise reduction, main frequency components identification, calculation of main EEG rhythms power, time-frequency analysis and multi-resolution analysis. In spite of the pre-defined options for EEG analysis, $Protolize!$ is not limited to this signal and can be used to analyze other kinds of signals as well. There are several computational tools for biological signal analysis commercially available [19] but they normally have a high cost or are linked to specific equipment or offer less analysis methods implemented. $Protolize!$ is a free distributed program available in GitHub through https://github.com/lab-neuro-comp/P2, making it a good option as a tool for biological signal processing. It is available under the MIT license, making this an open source project, so anyone interested in collaborating to it is welcome, as further development and improvement of the current methods is intended.
 
 \section{Recomendations}
 
