@@ -76,6 +76,7 @@ handles.constants = load_constants();
 % uiwait(handles.figure1);
 
 % Update handles structure
+set(handles.figure1, 'Name', 'Time/Spec Module');
 guidata(hObject, handles);
 % clc;
 
