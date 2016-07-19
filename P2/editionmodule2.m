@@ -92,7 +92,8 @@ ylabel('Amplitude [s]');
 cla;
 
 if length(handles.signals) > 0
-	standard_plot(handles.signals{get(handles.popupmenu1, 'Value')});
+    standard_plot(handles.signals{get(handles.popupmenu1, 'Value')}, ...
+                  str2num(get(handles.constants, 'fs')));
 end
 
 % --------------------------------------------------------------------
@@ -111,17 +112,17 @@ fs = str2num(handles.constants.get('fs'));
 [signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
 
 if ~isequal(signalname, 0)
-	signal = load(strcat(signalpath, signalname));
+    signal = load(strcat(signalpath, signalname));
     signal = (signal + fa)*fb - fc;
-	signalname = signalname(1:length(signalname)-6);
+    signalname = signalname(1:length(signalname)-6);
 
-	handles.signalnames{length(handles.signalnames)+1} = signalname;
-	handles.signals{length(handles.signals)+1} = signal;
-	set(handles.popupmenu1, 'String', handles.signalnames);
-	if isequal(length(handles.signals), 1)
-		standard_plot(signal, fs);
+    handles.signalnames{length(handles.signalnames)+1} = signalname;
+    handles.signals{length(handles.signals)+1} = signal;
+    set(handles.popupmenu1, 'String', handles.signalnames);
+    if isequal(length(handles.signals), 1)
+        standard_plot(signal, fs);
         handles.current = signal;
-	end
+    end
 end
 
 guidata(hObject, handles);
@@ -197,27 +198,26 @@ end
 
 % --- Executes on button press in chopbutton.
 function chopbutton_Callback(hObject, eventdata, handles)
-global fs
-
+fs = str2num(get(handles.constants, 'fs'));
 tinitial = get(handles.tinitial_edit, 'String');
 tfinal = get(handles.tfinal_edit, 'String');
 beginning = str2num(tinitial);
 ending = str2num(tfinal);
 
 if beginning == 0
-	beginning = beginning + 1;
+    beginning = beginning + 1;
 end
 
 if and(beginning, ending)
-	if beginning >= ending
-		warndlg('Initial time frame is bigger than final time frame');
-	else
-		index = get(handles.popupmenu1, 'Value');
-		signal = chop_signal(handles.signals{index}, beginning, ending);
-		standard_plot(signal);
+    if beginning >= ending
+        warndlg('Initial time frame is bigger than final time frame');
+    else
+        index = get(handles.popupmenu1, 'Value');
+        signal = chop_signal(handles.signals{index}, beginning, ending);
+        standard_plot(signal);
         handles.current = signal;
-		handles.signals{index} = signal;
-	end
+        handles.signals{index} = signal;
+    end
 end
 guidata(hObject, handles);
 
@@ -281,28 +281,37 @@ end
 
 % --- Executes on button press in filterbutton.
 function filterbutton_Callback(hObject, eventdata, handles)
-global fs;
-
+fs = str2num(get(handles.constants, 'fs'));
 fk = get_filter_kind(handles);
-minimum = 0;
+minimum = 1;
 maximum = realmax;
 if isequal(fk, 'highpass') || isequal(fk, 'bandpass') || isequal(fk, 'bandstop')
-	minimum = str2num(get(handles.minedit, 'String'));
+    minimum = str2num(get(handles.minedit, 'String'));
 end
 if isequal(fk, 'lowpass') || isequal(fk, 'bandpass') || isequal(fk, 'bandstop')
-	maximum = str2num(get(handles.maxedit, 'String'));
+    maximum = str2num(get(handles.maxedit, 'String'));
 end
 
 if and(minimum, maximum)
-	if minimum >= maximum
-		warndlg('Minimum frequency is bigger than maximum frequency');
-	elseif length(handles.signals) > 0
-		signal = handles.signals{get(handles.popupmenu1, 'Value')};
-		signal = filter_signal(signal, minimum, maximum, fk);
-		handles.signals{get(handles.popupmenu1, 'Value')} = signal;
-		standard_plot(signal);
+    if minimum >= maximum
+        warndlg('Minimum frequency is bigger than maximum frequency');
+    elseif length(handles.signals) > 0
+        where = get(handles.popupmenu1, 'Value');
+        signal = handles.signals{where};
+        switch fk
+            case 'lowpass'
+                signal = lowpass(signal, fs, maximum);
+            case 'highpass' 
+                signal = highpass(signal, fs, minimum);
+            case 'bandpass'
+                signal = bandpass(signal, fs, minimum, maximum);
+            case 'bandstop'
+                signal = bandstop(signal, fs, minimum, maximum);
+        end
+        handles.signals{where} = signal;
+        standard_plot(signal, fs);
         handles.current = signal;
-	end
+    end
 end
 
 guidata(hObject, handles);

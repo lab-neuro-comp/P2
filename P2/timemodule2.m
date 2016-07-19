@@ -60,6 +60,7 @@ end
 handles.constants = load_constants();
 handles.signalnames = {};
 handles.signals = {};
+set(handles.figure1, 'Name', 'Time Domain Module');
 guidata(hObject, handles);
 
 % --- Outputs from this function are returned to the command line.

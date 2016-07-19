@@ -78,6 +78,7 @@ handles.details = {};
 handles.lastwavelet = {}; % structure to remember last operation
 
 % Update handles structure
+set(handles.figure1, 'Name', 'DWT Module');
 guidata(hObject, handles);
 
 % --- Outputs from this function are returned to the command line.

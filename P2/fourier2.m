@@ -72,6 +72,7 @@ end
 axes(handles.axes1);
 cla;
 % Update handles structure
+set(handles.figure1, 'Name', 'Fourier Module');
 guidata(hObject, handles);
 
 % UIWAIT makes fourier2 wait for user response (see UIRESUME)
