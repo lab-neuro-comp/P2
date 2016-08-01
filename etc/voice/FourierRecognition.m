@@ -1,22 +1,28 @@
 function FourierRecognition(testcase, density, windowsize)
-% Recognizes where the voice in a WAV file begins based on
-% the chosen density and window size using the 
-% windowed Fourier transform
+% Recognizes where the voice in a WAV file begins based on the chosen density 
+% and window size using the windowed Fourier transform.
+
+% performing analysis
 [recording, samplerate, nbits] = wavread(testcase);
 limit = length(recording);
+tic
 outlet = recognize_voice(recording, hamming(windowsize), windowsize);
+fprintf('%s: <%.5f>\n', testcase, mean(outlet) + std(outlet));
+% TODO Apply threshold logic to this outlet variable
+toc
+
+% plotting results
 figure;
 plot(1:length(outlet), outlet);
-% Note: the usable voice frequency ranges from 300Hz to 3400Hz, approximately
 
 % --- WINDOWED FOURIER TRANSFORM ----------------------------------------------
 function [presence] = recognize_voice(signal, window, windowsize)
-% Recognizes if there is a voice signal for each window using
+% Recognizes if there is a voice signal for each window using the FFT
 limit = length(signal);
 presence = [];
 
-% maybe I should use file structures?
-% if that is the case, work with queues and incorporate the padding logic
+% maybe I should use file structures? If that is the case, work with queues
+% and incorporate the padding logic.
 n = 1;
 while n < limit - windowsize
     % analyzing each window
@@ -28,15 +34,14 @@ while n < limit - windowsize
             return
         end
     end
-    tfft = real(fft(term));
-    presence(n+1) = contains_voice(tfft);
+    presence(n+1) = contains_voice(term);
     n = n + windowsize;
 end
 
 % --- SPECTRUM ANALYSIS -------------------------------------------------------
 function [result] = contains_voice(window)
 % Indicates if there is a voice
-result = mean(window);
+result = mean(abs(real(fft(window))));
 
 % --- FILE IO -----------------------------------------------------------------
 % TODO Export file
