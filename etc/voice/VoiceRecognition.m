@@ -119,7 +119,7 @@ function pushbuttonSearch_Callback(hObject, eventdata, handles)
 if ischar(filename)
     outlet = strcat(pathname, filename);
 elseif iscell(filename)
-    outlet = reduce_for_buttonSearch(filename, pathname)
+    outlet = reduce_for_buttonSearch(filename, pathname);
 end
 set(handles.editFiles, 'String', outlet);
 
@@ -270,7 +270,8 @@ testcases = split_string(get(handles.editFiles, 'String'), ';');
 threshold = str2num(get(handles.editThreshold, 'String'));
 windowsize = str2num(get(handles.editWindow, 'String'));
 for n = 1:length(testcases)
-    RecognizeVoice(testcases{n}, threshold, windowsize);
+    % RecognizeVoice(testcases{n}, threshold, windowsize);
+    FourierRecognition(testcases{n}, threshold, windowsize);
 end
 set(hObject, 'String', 'Run');
 

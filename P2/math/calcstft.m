@@ -1,4 +1,5 @@
 function [spectrum] = calcstft(signal, window, winsize)
+% Calculates the short time Fourier transform
 limit = length(signal);
 padding = floor(winsize/2); % half window
 signal = signal_with_padding(signal, padding);
