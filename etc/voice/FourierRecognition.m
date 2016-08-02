@@ -6,9 +6,7 @@ function FourierRecognition(testcase, threshold, windowsize)
 [recording, samplerate, nbits] = wavread(testcase);
 limit = length(recording);
 tic
-spectrum = winfourier(recording, hamming(windowsize), windowsize, threshold);
-outlet = apply_threshold(spectrum, threshold);
-% TODO Apply threshold logic to this outlet variable
+outlet = winfourier(recording, hamming(windowsize), windowsize, threshold/10);
 toc
 
 % plotting results
@@ -25,7 +23,7 @@ presence = [];
 % and incorporate the padding logic.
 n = 1;
 while n < limit - windowsize
-    % analyzing each window
+    % constructing window
     term = [];
     for m = 1:windowsize
         if n + m < limit
@@ -34,6 +32,8 @@ while n < limit - windowsize
             return
         end
     end
+
+    % applying threshold
     result = 0;
     if wfft(term) > threshold
         result = 1;
