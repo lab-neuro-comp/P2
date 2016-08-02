@@ -1,20 +1,20 @@
 function varargout = VoiceRecognition(varargin)
 % VOICERECOGNITION M-file for VoiceRecognition.fig
-%      VOICERECOGNITION, by itself, creates a new VOICERECOGNITION 
+%      VOICERECOGNITION, by itself, creates a new VOICERECOGNITION
 %      or raises the existing singleton*.
 %
-%      H = VOICERECOGNITION returns the handle to a new VOICERECOGNITION 
+%      H = VOICERECOGNITION returns the handle to a new VOICERECOGNITION
 %      or the handle to the existing singleton*.
 %
 %      VOICERECOGNITION('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in VOICERECOGNITION.M with the given input 
+%      function named CALLBACK in VOICERECOGNITION.M with the given input
 %      arguments.
 %
-%      VOICERECOGNITION('Property','Value',...) creates a new VOICERECOGNITION 
-%      or raises the existing singleton*.  Starting from the left, property value 
-%      pairs are applied to the GUI before VoiceRecognition_OpeningFunction gets 
-%      called.  An unrecognized property name or invalid value makes property 
-%      application stop.  All inputs are passed to VoiceRecognition_OpeningFcn 
+%      VOICERECOGNITION('Property','Value',...) creates a new VOICERECOGNITION
+%      or raises the existing singleton*.  Starting from the left, property value
+%      pairs are applied to the GUI before VoiceRecognition_OpeningFunction gets
+%      called.  An unrecognized property name or invalid value makes property
+%      application stop.  All inputs are passed to VoiceRecognition_OpeningFcn
 %      via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
@@ -67,7 +67,7 @@ guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = VoiceRecognition_OutputFcn(hObject, eventdata, handles) 
+function varargout = VoiceRecognition_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -84,7 +84,7 @@ function editFiles_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hints: get(hObject,'String') returns contents of editFiles as textFiles
-%        str2double(get(hObject,'String')) returns contents of 
+%        str2double(get(hObject,'String')) returns contents of
 %        editFiles as a double
 
 
@@ -152,7 +152,7 @@ function editThreshold_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hints: get(hObject,'String') returns contents of editThreshold as textFiles
-%        str2double(get(hObject,'String')) returns contents of editThreshold 
+%        str2double(get(hObject,'String')) returns contents of editThreshold
 %        as a double
 set(handles.sliderThreshold, 'Value', str2num(get(hObject, 'String')));
 
@@ -271,9 +271,8 @@ threshold = str2num(get(handles.editThreshold, 'String'));
 windowsize = str2num(get(handles.editWindow, 'String'));
 for n = 1:length(testcases)
     % RecognizeVoice(testcases{n}, threshold, windowsize);
-    FourierRecognition(testcases{n}, threshold, windowsize);
+    outlet = FourierRecognition(testcases{n}, threshold, windowsize);
+    figure;
+    plot(1:length(outlet), outlet);
 end
 set(hObject, 'String', 'Run');
-
-
-

@@ -1,5 +1,5 @@
-function FourierRecognition(testcase, threshold, windowsize)
-% Recognizes where the voice in a WAV file begins based on the chosen density 
+function [outlet] = FourierRecognition(testcase, threshold, windowsize)
+% Recognizes where the voice in a WAV file begins based on the chosen density
 % and window size using the windowed Fourier transform.
 
 % performing analysis
@@ -7,12 +7,8 @@ function FourierRecognition(testcase, threshold, windowsize)
 limit = length(recording);
 tic
 outlet = winfourier(recording, hamming(windowsize), windowsize, threshold/10);
+fprintf('%.4f\n', 10*(mean(outlet) + std(outlet)));
 toc
-
-% plotting results
-% TODO move this plotting part to the GUI layer
-figure;
-plot(1:length(outlet), outlet);
 
 % --- WINDOWED FOURIER TRANSFORM ----------------------------------------------
 function [presence] = winfourier(signal, window, windowsize, threshold)
