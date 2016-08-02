@@ -10,6 +10,7 @@ outlet = winfourier(recording, hamming(windowsize), windowsize, threshold/10);
 toc
 
 % plotting results
+% TODO move this plotting part to the GUI layer
 figure;
 plot(1:length(outlet), outlet);
 
@@ -44,19 +45,3 @@ end
 
 function [result] = wfft(window)
 result = mean(abs(real(fft(window))));
-
-% --- THRESHOLD APPLICATION ---------------------------------------------------
-function [outlet] = apply_threshold(inlet, threshold)
-outlet = [];
-limit = length(inlet);
-
-for n = 1:limit
-    result = 0;
-    if inlet(n) > threshold
-        result = 1;
-    end
-    outlet(n) = result;
-end
-
-% --- FILE IO -----------------------------------------------------------------
-% TODO Export file
