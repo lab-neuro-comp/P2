@@ -1,4 +1,4 @@
-function FourierRecognition(testcase, density, windowsize)
+function FourierRecognition(testcase, threshold, windowsize)
 % Recognizes where the voice in a WAV file begins based on the chosen density 
 % and window size using the windowed Fourier transform.
 
@@ -6,8 +6,8 @@ function FourierRecognition(testcase, density, windowsize)
 [recording, samplerate, nbits] = wavread(testcase);
 limit = length(recording);
 tic
-outlet = recognize_voice(recording, hamming(windowsize), windowsize);
-fprintf('%s: <%.5f>\n', testcase, mean(outlet) + std(outlet));
+spectrum = winfourier(recording, hamming(windowsize), windowsize, threshold);
+outlet = apply_threshold(spectrum, threshold);
 % TODO Apply threshold logic to this outlet variable
 toc
 
@@ -16,7 +16,7 @@ figure;
 plot(1:length(outlet), outlet);
 
 % --- WINDOWED FOURIER TRANSFORM ----------------------------------------------
-function [presence] = recognize_voice(signal, window, windowsize)
+function [presence] = winfourier(signal, window, windowsize, threshold)
 % Recognizes if there is a voice signal for each window using the FFT
 limit = length(signal);
 presence = [];
@@ -34,14 +34,29 @@ while n < limit - windowsize
             return
         end
     end
-    presence(n+1) = contains_voice(term);
+    result = 0;
+    if wfft(term) > threshold
+        result = 1;
+    end
+    presence(n) = result;
     n = n + windowsize;
 end
 
-% --- SPECTRUM ANALYSIS -------------------------------------------------------
-function [result] = contains_voice(window)
-% Indicates if there is a voice
+function [result] = wfft(window)
 result = mean(abs(real(fft(window))));
+
+% --- THRESHOLD APPLICATION ---------------------------------------------------
+function [outlet] = apply_threshold(inlet, threshold)
+outlet = [];
+limit = length(inlet);
+
+for n = 1:limit
+    result = 0;
+    if inlet(n) > threshold
+        result = 1;
+    end
+    outlet(n) = result;
+end
 
 % --- FILE IO -----------------------------------------------------------------
 % TODO Export file
