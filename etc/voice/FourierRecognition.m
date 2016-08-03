@@ -47,7 +47,6 @@ while ~isequal(testcase(index), '.')
     index = index - 1;
 end
 
-testcase(index:length(testcase))
 if isequal(testcase(index:length(testcase)), '.wav')
     [recording, samplerate, nbits] = wavread(testcase);
     fprintf('%s %.3f\n', testcase, samplerate);
