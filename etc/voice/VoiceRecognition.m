@@ -150,10 +150,6 @@ function editThreshold_Callback(hObject, eventdata, handles)
 % hObject    handle to editThreshold (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of editThreshold as textFiles
-%        str2double(get(hObject,'String')) returns contents of editThreshold
-%        as a double
 set(handles.sliderThreshold, 'Value', str2num(get(hObject, 'String')));
 
 % --- Executes during object creation, after setting all properties.
@@ -182,8 +178,6 @@ function sliderThreshold_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 set(handles.editThreshold, 'String', num2str(get(hObject, 'Value')));
 
 % --- Executes during object creation, after setting all properties.
@@ -270,8 +264,20 @@ testcases = split_string(get(handles.editFiles, 'String'), ';');
 threshold = str2num(get(handles.editThreshold, 'String'));
 windowsize = str2num(get(handles.editWindow, 'String'));
 for n = 1:length(testcases)
+    % # Approach 1
+    % ``` MATLAB
     % RecognizeVoice(testcases{n}, threshold, windowsize);
-    outlet = FourierRecognition(testcases{n}, threshold, windowsize);
+    % ```
+
+    % # Approach 2
+    % ``` MATLAB
+    temp_file = 'fourier.ascii';
+    stuff = FourierRecognition(testcases{n}, threshold, windowsize);
+    save_to_file(temp_file, stuff); limit = length(stuff); clear stuff;
+    intervals_file = recognize_density(temp_file, threshold, windowsize);
+    outlet = load_intervals(intervals_file, limit);
+    % ```
+
     figure;
     plot(1:length(outlet), outlet);
 end
