@@ -271,11 +271,13 @@ for n = 1:length(testcases)
 
     % # Approach 2
     % ``` MATLAB
+    tic
     temp_file = 'fourier.ascii';
     stuff = FourierRecognition(testcases{n}, threshold, windowsize);
     save_to_file(temp_file, stuff); limit = length(stuff); clear stuff;
     intervals_file = recognize_density(temp_file, threshold, windowsize);
     outlet = load_intervals(intervals_file, limit);
+    toc
     % ```
 
     figure;

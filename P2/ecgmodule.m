@@ -85,7 +85,7 @@ maxfig(gcf,1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = ecgmodule_OutputFcn(hObject, eventdata, handles) 
+function varargout = ecgmodule_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -153,7 +153,7 @@ try
     t=0:1/fs:(length(ecg)-1)/fs;
     axes(handles.ecgaxes)
     ecgplot=plot(t,ecg);
-    axis([0 max(t) min(ecg) max(ecg)]) 
+    axis([0 max(t) min(ecg) max(ecg)])
     xlabel('[seg]')
     ylabel('uV')
     grid on
@@ -295,7 +295,7 @@ switch isempty(nn50detect)
     case 1
         set(handles.pnn50,'string','pNN50:0')
         ecgexportmx{6,2}=0;
-    case 0 
+    case 0
         set(handles.pnn50,'string',strcat('pNN50:',num2str(length(nn50detect)/length(vhr))))
         ecgexportmx{6,2}=length(nn50detect)/length(vhr);
 end
@@ -364,7 +364,7 @@ switch isempty(datainfo)
            temp(index)=spotposition(2);
            temp(index+1:length(r_matrix)+1)=r_matrix(index:length(r_matrix));
         else
-           temp=[spotposition(2) r_matrix]; 
+           temp=[spotposition(2) r_matrix];
         end
         r_matrix=temp;
         delete(hpeack)
@@ -502,5 +502,3 @@ function processoption_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
