@@ -58,10 +58,13 @@ handles.output = hObject;
 guidata(hObject, handles);
 clear global yaxis_r r_matrix vhr vhrspectrum t hvhr hvhrspec hpeack ecgplot vhrspectrum ecgexportmx
 global fs fa fb fc
-fs=1000;
-fa=4096;
-fb=0.0610426077402027;
-fc=250;
+
+%Physical value uV = (ASCII+32768)*0,200808728160525-6580
+fa=32768;
+fb=0.200808728160525;
+fc=6580;
+fs=2000;
+
 %uV=(ASCII+fa)*fb-fc
 axes(handles.vhraxes)
 xlabel('[s]')
@@ -85,7 +88,7 @@ maxfig(gcf,1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = ecgmodule_OutputFcn(hObject, eventdata, handles)
+function varargout = ecgmodule_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -129,7 +132,7 @@ function ecgfile_Callback(hObject, eventdata, handles)
 
 % --------------------------------------------------------------------
 function ecgopen_Callback(hObject, eventdata, handles)
-global fa fb fc fs t ecgplot ecgexportmx
+global fa fb fc fs t ecgplot ecgexportmx filetrvalues yaxis_r r_matrix
 % hObject    handle to ecgopen (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -141,7 +144,23 @@ end;
 try
     ecg=load(strcat(filepath,ecgext));
     ecgexportmx{1,1}='File:';
-    ecgexportmx{1,2}=ecgext;
+    ecgexportmx{1,2}=strcat(filepath,ecgext);
+    
+    [pathstr, filename, ext, versn] = fileparts(ecgexportmx{1,2});
+    
+    filetrvalues = strcat(pathstr, '\', filename, '.txt')
+    
+    if exist(filetrvalues)==2
+        
+        trvalues = load(filetrvalues);
+        yaxis_r=trvalues(1,:); r_matrix=trvalues(2,:);
+        
+        vhrfcn(yaxis_r,r_matrix,handles);
+        set([handles.editr handles.zoombutton handles.slide handles.ecgrestart],'enable','on')
+        set([handles.ecgopen handles.invert],'enable','off')  
+        
+    end;
+    
     set(handles.ecgname,'string',strcat('Signal:',ecgext(1:length(ecgext-6))))
     set(handles.ecgduration,'string',strcat('Duration:',sprintf('%4.3f',length(ecg)/fs),'[s]'))
     ecgexportmx{1,4}='Duration:';
@@ -153,7 +172,7 @@ try
     t=0:1/fs:(length(ecg)-1)/fs;
     axes(handles.ecgaxes)
     ecgplot=plot(t,ecg);
-    axis([0 max(t) min(ecg) max(ecg)])
+    axis([0 max(t) min(ecg) max(ecg)]) 
     xlabel('[seg]')
     ylabel('uV')
     grid on
@@ -163,12 +182,12 @@ catch error
     return
 end
 
-
 % --------------------------------------------------------------------
 function ecgexit_Callback(hObject, eventdata, handles)
 % hObject    handle to ecgexit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+close();
 
 
 % --- Executes on button press in process.
@@ -177,13 +196,23 @@ global t ecgplot r_matrix yaxis_r ecgexportmx
 % hObject    handle to process (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 ecg=get(ecgplot,'ydata');
+
+r_matrix=0; yaxis_r=0;
 
 deriv2=[0 diff(diff(ecg)) 0];
 sqderiv2=deriv2.^2;
 
-level1=prctile(sqderiv2,98);
-level2=prctile(sqderiv2,97);
+%dois limiares como sendo percentis do sinal... 
+%o 1 sempre deve ser maior que o 2 
+%mas quanto mais perto do 100 (nunca deve chegar lá) e menor diferenca entre os dois, o negocio é mais seletivo
+
+l1=99
+l2=99
+
+level1=prctile(sqderiv2,l1);
+level2=prctile(sqderiv2,l2);
 
 for i=1:length(sqderiv2)
     if sqderiv2(i)<level1
@@ -200,19 +229,19 @@ for i=1:length(sqderiv2)
         r_seg=r_seg+1;
     else
         if r_start==1
-            delta=i-(r_seg);
+           delta=i-(r_seg);
            yaxis_r(i_rm)=t(delta);
            r_matrix(i_rm)=ecg(delta);
             if r_matrix(i_rm)>level2
                 i_rm=i_rm+1;
             end
-            r_start=0;
-            r_seg=0;
+           r_start=0;
+           r_seg=0;
          end
     end
 end
 
-check=diff(yaxis_r);
+check=diff(yaxis_r)
 repeated=find(check<(60/180));
 yaxis_r(repeated+1)=[];
 r_matrix(repeated+1)=[];
@@ -222,6 +251,7 @@ if r_matrix(length(r_matrix))<level2
     yaxis_r=yaxis_r(1:length(yaxis_r)-1);
 end
 ecgexportmx{9,1}='Peaks Detected';
+
 for ex=1:length(yaxis_r)
     ecgexportmx{9+ex,1}=yaxis_r(ex);
 end
@@ -232,7 +262,7 @@ set([handles.ecgopen handles.invert],'enable','off')
 
 
 function vhrfcn(tvalue,rvalue,handles)
-global hvhr hvhrspec hpeack vhrspectrum faxis ecgexportmx
+global hvhr hvhrspec hpeack vhrspectrum faxis ecgexportmx filetrvalues
 vhr=diff(tvalue);
 ecgexportmx{9,3}='HRV(R-R)[s]';
 for ex=1:length(vhr)
@@ -295,12 +325,20 @@ switch isempty(nn50detect)
     case 1
         set(handles.pnn50,'string','pNN50:0')
         ecgexportmx{6,2}=0;
-    case 0
+    case 0 
         set(handles.pnn50,'string',strcat('pNN50:',num2str(length(nn50detect)/length(vhr))))
         ecgexportmx{6,2}=length(nn50detect)/length(vhr);
 end
 set(handles.showdc,'enable','on','value',1)
 set([handles.figurevhr handles.figurevhrspec handles.ecgexport],'enable','on')
+
+
+[pathstr, filename, ext, versn] = fileparts(ecgexportmx{1,2});
+    
+filetrvalues = strcat(pathstr, '\', filename, '.txt');
+    
+save (filetrvalues, 'tvalue', 'rvalue', '-ASCII');
+
 % --- Executes on button press in editr.
 function editr_Callback(hObject, eventdata, handles)
 % hObject    handle to editr (see GCBO)
@@ -364,12 +402,13 @@ switch isempty(datainfo)
            temp(index)=spotposition(2);
            temp(index+1:length(r_matrix)+1)=r_matrix(index:length(r_matrix));
         else
-           temp=[spotposition(2) r_matrix];
+           temp=[spotposition(2) r_matrix]; 
         end
         r_matrix=temp;
         delete(hpeack)
         delete(hvhr)
         delete(hvhrspec)
+        
         vhrfcn(yaxis_r,r_matrix,handles)
     case 1
         msgbox('Make sure there is one point selected');
@@ -411,7 +450,7 @@ function ecgrestart_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global hvhr hvhrspec hpeack ecgplot
-restartans=questdlg('Are you sure you want to restart the module?','Attention','No');
+restartans= 'Yes'; %questdlg('Are you sure you want to restart the module?','Attention','Yes');
 switch restartans
     case 'Yes'
         delete(hvhr)
@@ -461,8 +500,13 @@ end
 % --------------------------------------------------------------------
 function ecgexport_Callback(hObject, eventdata, handles)
 global ecgexportmx
-[xlsfile xlspath]=uiputfile('*.xls','Save File');
-xlswrite(strcat(xlspath,xlsfile),ecgexportmx)
+
+[pathstr, filename, ext, versn] = fileparts(ecgexportmx{1,2});
+filedata = strcat(pathstr, '\data\', filename, '.xls');
+xlswrite(filedata, ecgexportmx)
+
+%[xlsfile xlspath]=uiputfile('*.xls','Save File');
+%xlswrite(strcat(xlspath,xlsfile),ecgexportmx)
 % hObject    handle to ecgexportmx (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -502,3 +546,5 @@ function processoption_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
