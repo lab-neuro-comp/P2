@@ -63,7 +63,7 @@ global fs fa fb fc
 fa=32768;
 fb=0.200808728160525;
 fc=6580;
-fs=2000;
+fs=200;
 
 %uV=(ASCII+fa)*fb-fc
 axes(handles.vhraxes)
@@ -80,7 +80,7 @@ axes(handles.ecgaxes)
 xlabel('[s]')
 ylabel('[uV]')
 grid on
-maxfig(gcf,1);
+% maxfig(gcf,1);
 
 
 % UIWAIT makes ecgmodule wait for user response (see UIRESUME)
@@ -201,8 +201,6 @@ global t ecgplot r_matrix yaxis_r ecgexportmx
 
 ecg=get(ecgplot,'ydata');
 
-r_matrix=0; yaxis_r=0;
-
 deriv2=[0 diff(diff(ecg)) 0];
 sqderiv2=deriv2.^2;
 
@@ -210,39 +208,44 @@ sqderiv2=deriv2.^2;
 %o 1 sempre deve ser maior que o 2
 %mas quanto mais perto do 100 (nunca deve chegar l�) e menor diferenca entre os dois, o negocio � mais seletivo
 
-l1=99;
+% Apparently applying threshold to signal
+l1=99.1;
 l2=99;
-
-level1=prctile(sqderiv2,l1);
-level2=prctile(sqderiv2,l2);
-
+level1=prctile(sqderiv2,l1)
+level2=prctile(sqderiv2,l2)
 for i=1:length(sqderiv2)
     if sqderiv2(i)<level1
         sqderiv2(i)=0;
     end
 end
+
+% Checking 2nd derivative
+figure
+plot(1:length(sqderiv2), sqderiv2)
+
+% No idea yet
+r_matrix=0;
+yaxis_r=0;
 r_start=0;
 r_seg=0;
 i_rm=1;
-
 for i=1:length(sqderiv2)
     if sqderiv2(i)>0
         r_start=1;
         r_seg=r_seg+1;
-    else
-        if r_start==1
-           delta=i-(r_seg);
-           yaxis_r(i_rm)=t(delta);
-           r_matrix(i_rm)=ecg(delta);
-            if r_matrix(i_rm)>level2
-                i_rm=i_rm+1;
-            end
-           r_start=0;
-           r_seg=0;
-         end
+    elseif r_start==1
+        delta=i-(r_seg);
+        yaxis_r(i_rm)=t(delta);
+        r_matrix(i_rm)=ecg(delta);
+        if r_matrix(i_rm)>level2
+            i_rm=i_rm+1;
+        end
+        r_start=0;
+        r_seg=0;
     end
 end
 
+% Apparently checking for quality
 check=diff(yaxis_r);
 repeated=find(check<(60/180));
 yaxis_r(repeated+1)=[];
@@ -257,6 +260,8 @@ ecgexportmx{9,1}='Peaks Detected';
 for ex=1:length(yaxis_r)
     ecgexportmx{9+ex,1}=yaxis_r(ex);
 end
+
+% plotting results
 vhrfcn(yaxis_r,r_matrix,handles)
 set([handles.editr handles.zoombutton handles.slide handles.ecgrestart],'enable','on')
 set([handles.ecgopen handles.invert],'enable','off')
