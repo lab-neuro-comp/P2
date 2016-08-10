@@ -88,7 +88,7 @@ maxfig(gcf,1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = ecgmodule_OutputFcn(hObject, eventdata, handles) 
+function varargout = ecgmodule_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -145,22 +145,23 @@ try
     ecg=load(strcat(filepath,ecgext));
     ecgexportmx{1,1}='File:';
     ecgexportmx{1,2}=strcat(filepath,ecgext);
-    
+
     [pathstr, filename, ext, versn] = fileparts(ecgexportmx{1,2});
-    
-    filetrvalues = strcat(pathstr, '\', filename, '.txt')
-    
+
+    filetrvalues = strcat(pathstr, '\', filename, '.ascii');
+
     if exist(filetrvalues)==2
-        
+
         trvalues = load(filetrvalues);
-        yaxis_r=trvalues(1,:); r_matrix=trvalues(2,:);
-        
+        yaxis_r = trvalues(1,:);
+        r_matrix = trvalues(2,:);
+
         vhrfcn(yaxis_r,r_matrix,handles);
-        set([handles.editr handles.zoombutton handles.slide handles.ecgrestart],'enable','on')
-        set([handles.ecgopen handles.invert],'enable','off')  
-        
+        set([handles.editr handles.zoombutton handles.slide handles.ecgrestart],'enable','on');
+        set([handles.ecgopen handles.invert],'enable','off')  ;
+
     end;
-    
+
     set(handles.ecgname,'string',strcat('Signal:',ecgext(1:length(ecgext-6))))
     set(handles.ecgduration,'string',strcat('Duration:',sprintf('%4.3f',length(ecg)/fs),'[s]'))
     ecgexportmx{1,4}='Duration:';
@@ -172,13 +173,14 @@ try
     t=0:1/fs:(length(ecg)-1)/fs;
     axes(handles.ecgaxes)
     ecgplot=plot(t,ecg);
-    axis([0 max(t) min(ecg) max(ecg)]) 
+    axis([0 max(t) min(ecg) max(ecg)])
     xlabel('[seg]')
     ylabel('uV')
     grid on
     set([handles.process handles.invert handles.zoombutton],'enable','on')
 catch error
     error
+    disp(error.message);
     return
 end
 
@@ -204,12 +206,12 @@ r_matrix=0; yaxis_r=0;
 deriv2=[0 diff(diff(ecg)) 0];
 sqderiv2=deriv2.^2;
 
-%dois limiares como sendo percentis do sinal... 
-%o 1 sempre deve ser maior que o 2 
-%mas quanto mais perto do 100 (nunca deve chegar lá) e menor diferenca entre os dois, o negocio é mais seletivo
+%dois limiares como sendo percentis do sinal...
+%o 1 sempre deve ser maior que o 2
+%mas quanto mais perto do 100 (nunca deve chegar lï¿½) e menor diferenca entre os dois, o negocio ï¿½ mais seletivo
 
-l1=99
-l2=99
+l1=99;
+l2=99;
 
 level1=prctile(sqderiv2,l1);
 level2=prctile(sqderiv2,l2);
@@ -241,7 +243,7 @@ for i=1:length(sqderiv2)
     end
 end
 
-check=diff(yaxis_r)
+check=diff(yaxis_r);
 repeated=find(check<(60/180));
 yaxis_r(repeated+1)=[];
 r_matrix(repeated+1)=[];
@@ -325,7 +327,7 @@ switch isempty(nn50detect)
     case 1
         set(handles.pnn50,'string','pNN50:0')
         ecgexportmx{6,2}=0;
-    case 0 
+    case 0
         set(handles.pnn50,'string',strcat('pNN50:',num2str(length(nn50detect)/length(vhr))))
         ecgexportmx{6,2}=length(nn50detect)/length(vhr);
 end
@@ -334,9 +336,9 @@ set([handles.figurevhr handles.figurevhrspec handles.ecgexport],'enable','on')
 
 
 [pathstr, filename, ext, versn] = fileparts(ecgexportmx{1,2});
-    
+
 filetrvalues = strcat(pathstr, '\', filename, '.txt');
-    
+
 save (filetrvalues, 'tvalue', 'rvalue', '-ASCII');
 
 % --- Executes on button press in editr.
@@ -402,13 +404,13 @@ switch isempty(datainfo)
            temp(index)=spotposition(2);
            temp(index+1:length(r_matrix)+1)=r_matrix(index:length(r_matrix));
         else
-           temp=[spotposition(2) r_matrix]; 
+           temp=[spotposition(2) r_matrix];
         end
         r_matrix=temp;
         delete(hpeack)
         delete(hvhr)
         delete(hvhrspec)
-        
+
         vhrfcn(yaxis_r,r_matrix,handles)
     case 1
         msgbox('Make sure there is one point selected');
@@ -546,5 +548,3 @@ function processoption_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
