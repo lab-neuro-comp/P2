@@ -1,7 +1,7 @@
 function [outlet] = FourierRecognition(testcase, threshold, windowsize)
 % Recognizes where the voice in a WAV file begins based on the chosen density
 % and window size using the windowed Fourier transform.
-[recording, samplerate, nbits] = wavread(testcase);
+recording = read_file(testcase);
 limit = length(recording);
 tic
 outlet = winfourier(recording, hamming(windowsize), windowsize, threshold/10);
@@ -51,14 +51,8 @@ if isequal(testcase(index:length(testcase)), '.wav')
     [recording, samplerate, nbits] = wavread(testcase);
     fprintf('%s %.3f\n', testcase, samplerate);
 else
-    recording = [];
-    fp = fopen(testcase);
-    line = fgetl(fp);
-    while ischar(line)
-        recording(length(recording)+1) = str2num(line);
-        line = fgetl(fp);
-    end
-    fclose(fp);
+    recording = load(testcase);
+    fprintf('%s\n', testcase);
 end
 
 function to_another_file(filename, data)
