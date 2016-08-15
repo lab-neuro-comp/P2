@@ -3,16 +3,16 @@ function [output_file] = recognize_density(input_file, density, windowsize)
 % Get the dot density of a bitset
 hole = floor(sqrt(windowsize));
 output_file = 'density.ascii';
-% sideeffect_file = 'fx.ascii';
+sideeffect_file = 'fx.ascii';
 inlet = fopen(input_file);
-% fxlet = fopen(sideeffect_file, 'wt');
+fxlet = fopen(sideeffect_file, 'wt');
 outlet = fopen(output_file, 'wt');
 last = 0;
 linenumber = 1;
 queue = make_queue(inlet, windowsize);
 while length(queue) > 0
     dot_density = sigmoid(calculate_dot_density(queue));
-    % fprintf(fxlet, '%f\n', dot_density);
+    fprintf(fxlet, '%f\n', dot_density);
     current = dot_density >= density;
     if current > last % is rising?
         fprintf(outlet, '%f\n', linenumber);
@@ -22,7 +22,7 @@ while length(queue) > 0
     queue = update_queue(inlet, queue, windowsize);
 end
 fclose(inlet);
-% fclose(fxlet);
+fclose(fxlet);
 fclose(outlet);
 
 function [queue] = make_queue(inlet, windowsize)
