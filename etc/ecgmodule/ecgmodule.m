@@ -195,10 +195,6 @@ close();
 % --- Executes on button press in process.
 function process_Callback(hObject, eventdata, handles)
 global t ecgplot r_matrix yaxis_r ecgexportmx
-% hObject    handle to process (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
 ecg=get(ecgplot,'ydata');
 
 deriv2=[0 diff(diff(ecg)) 0];
@@ -206,9 +202,9 @@ sqderiv2=deriv2.^2;
 
 %dois limiares como sendo percentis do sinal...
 %o 1 sempre deve ser maior que o 2
-%mas quanto mais perto do 100 (nunca deve chegar l�) e menor diferenca entre os dois, o negocio � mais seletivo
+%mas quanto mais perto do 100 (nunca deve chegar lá) e menor diferenca entre os dois, o negócio é mais seletivo
 
-% Apparently applying threshold to signal
+% # Apparently applying threshold to signal
 l1=99.1;
 l2=99;
 level1=prctile(sqderiv2,l1)
@@ -219,11 +215,11 @@ for i=1:length(sqderiv2)
     end
 end
 
-% Checking 2nd derivative
-figure
-plot(1:length(sqderiv2), sqderiv2)
+% % # Checking 2nd derivative
+% figure
+% plot(1:length(sqderiv2), sqderiv2)
 
-% No idea yet
+% # No idea yet
 r_matrix=0;
 yaxis_r=0;
 r_start=0;
@@ -234,7 +230,7 @@ for i=1:length(sqderiv2)
         r_start=1;
         r_seg=r_seg+1;
     elseif r_start==1
-        delta=i-(r_seg);
+        delta=i-(r_seg)
         yaxis_r(i_rm)=t(delta);
         r_matrix(i_rm)=ecg(delta);
         if r_matrix(i_rm)>level2
@@ -245,7 +241,7 @@ for i=1:length(sqderiv2)
     end
 end
 
-% Apparently checking for quality
+% # Apparently checking for quality
 check=diff(yaxis_r);
 repeated=find(check<(60/180));
 yaxis_r(repeated+1)=[];
@@ -262,9 +258,9 @@ for ex=1:length(yaxis_r)
 end
 
 % plotting results
-vhrfcn(yaxis_r,r_matrix,handles)
-set([handles.editr handles.zoombutton handles.slide handles.ecgrestart],'enable','on')
-set([handles.ecgopen handles.invert],'enable','off')
+vhrfcn(yaxis_r,r_matrix,handles);
+set([handles.editr handles.zoombutton handles.slide handles.ecgrestart],'enable','on');
+set([handles.ecgopen handles.invert],'enable','off');
 
 
 
