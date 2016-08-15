@@ -1,0 +1,9 @@
++0   
++0   
++0  BACKGROUND TEST 
++12.4799995422363  Linha de base 
++192.259994506836  Linha de base 
++810.434997558594  Linha de base 
++990.465026855469  Linha de base 
+
+

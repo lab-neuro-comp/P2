@@ -1,0 +1,9 @@
+"FileName:C:\Pesquisadores\TreinoCognitivo\EEG\edf\BAC-11-1.edf"
+"Patient:XXX F 26-JUL-1949 BAC"
+"Recording:Neuron-Spectrum, Copyright Neurosoft"
+"StartTime:01.jun.2016 09.44.59"
+"StopTime:01.jun.2016 10.02.44"
+"SignalNumber:22"
+"SignalLabel:ECG"
+"SampleFrequency:200Hz"
+"Physical value uV = (ASCII+32768)*0,200808728160525-6580

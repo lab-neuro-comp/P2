@@ -148,7 +148,7 @@ try
 
     [pathstr, filename, ext, versn] = fileparts(ecgexportmx{1,2});
 
-    filetrvalues = strcat(pathstr, '\', filename, '.ascii');
+    filetrvalues = strcat(pathstr, '\', filename, '.txt');
 
     if exist(filetrvalues)==2
 
@@ -207,8 +207,8 @@ sqderiv2=deriv2.^2;
 % # Apparently applying threshold to signal
 l1=99.1;
 l2=99;
-level1=prctile(sqderiv2,l1)
-level2=prctile(sqderiv2,l2)
+level1=prctile(sqderiv2,l1);
+level2=prctile(sqderiv2,l2);
 for i=1:length(sqderiv2)
     if sqderiv2(i)<level1
         sqderiv2(i)=0;
@@ -230,7 +230,7 @@ for i=1:length(sqderiv2)
         r_start=1;
         r_seg=r_seg+1;
     elseif r_start==1
-        delta=i-(r_seg)
+        delta=i-(r_seg);
         yaxis_r(i_rm)=t(delta);
         r_matrix(i_rm)=ecg(delta);
         if r_matrix(i_rm)>level2
@@ -325,21 +325,17 @@ ecgexportmx{7,2}=lf/hf;
 ecgexportmx{6,1}='pNN50:';
 nn50detect=find(diff(vhr)>0.05);
 switch isempty(nn50detect)
-    case 1
+    case true
         set(handles.pnn50,'string','pNN50:0')
         ecgexportmx{6,2}=0;
-    case 0
+    case false
         set(handles.pnn50,'string',strcat('pNN50:',num2str(length(nn50detect)/length(vhr))))
         ecgexportmx{6,2}=length(nn50detect)/length(vhr);
 end
 set(handles.showdc,'enable','on','value',1)
 set([handles.figurevhr handles.figurevhrspec handles.ecgexport],'enable','on')
-
-
 [pathstr, filename, ext, versn] = fileparts(ecgexportmx{1,2});
-
 filetrvalues = strcat(pathstr, '\', filename, '.txt');
-
 save (filetrvalues, 'tvalue', 'rvalue', '-ASCII');
 
 % --- Executes on button press in editr.

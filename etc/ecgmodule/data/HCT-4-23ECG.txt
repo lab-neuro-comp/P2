@@ -1,0 +1,9 @@
+"FileName:C:\Users\Carlos\Desktop\TREINOCOGNITIVO\Resultados\HCT\HCT-4-23.edf"
+"Patient:XXX F 23-FEB-1940 HCT"
+"Recording:Neuron-Spectrum, Copyright Neurosoft"
+"StartTime:06.jul.2016 10.42.23"
+"StopTime:06.jul.2016 10.58.57"
+"SignalNumber:22"
+"SignalLabel:ECG"
+"SampleFrequency:200Hz"
+"Physical value uV = (ASCII+32768)*0,200808728160525-6580
