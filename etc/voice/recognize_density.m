@@ -1,5 +1,4 @@
 function [output_file] = recognize_density(input_file, density, windowsize)
-% calculate_dot_density: Get the dot density of a bitset
 % Get the dot density of a bitset
 hole = floor(sqrt(windowsize));
 output_file = 'density.ascii';
