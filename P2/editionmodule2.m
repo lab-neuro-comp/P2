@@ -213,7 +213,7 @@ if and(beginning, ending)
         warndlg('Initial time frame is bigger than final time frame');
     else
         index = get(handles.popupmenu1, 'Value');
-        signal = chop_signal(handles.signals{index}, beginning, ending);
+        signal = chop_signal(handles.signals{index}, fs, beginning, ending);
         standard_plot(signal);
         handles.current = signal;
         handles.signals{index} = signal;

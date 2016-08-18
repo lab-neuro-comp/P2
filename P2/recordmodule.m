@@ -48,6 +48,7 @@ end
 % Import needed folders. Yeah, I'm editing the initialization code
 addpath(strcat(cd, '/util'));
 addpath(strcat(cd, '/recordmodule'));
+addpath(strcat(cd, '/edition'));
 
 % End initialization code - DO NOT EDIT
 
