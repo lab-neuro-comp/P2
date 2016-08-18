@@ -92,10 +92,13 @@ function popupMode_Callback(hObject, eventdata, handles)
 %          from popupMode
 contents = get(handles.popupMode, 'String');
 runningmode = contents{get(handles.popupMode, 'Value')};
-if isequal(runningmode, 'Protolize!!')
-    setup_for_protolize(handles);
-else % is EEGLAB
-    setup_for_eeglab(handles);
+switch runningmode
+    case 'Protolize!!'
+        setup_for_protolize(handles);
+    case 'EEGLAB'
+        setup_for_eeglab(handles);
+    case 'Chopping'
+        setup_for_chopping(handles);
 end
 
 % --- Executes during object creation, after setting all properties.
@@ -120,10 +123,13 @@ function buttonRun_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 contents = get(handles.popupMode, 'String');
 runningmode = contents{get(handles.popupMode, 'Value')};
-if isequal(runningmode, 'Protolize!!')
-    run_for_protolize(handles);
-else % is EEGLAB
-    run_for_eeglab(handles);
+switch runningmode
+    case 'Protolize!!'
+        run_for_protolize(handles);
+    case 'EEGLAB'
+        run_for_eeglab(handles);
+    case 'Chopping'
+        run_for_chopping(handles);
 end
 
 % --------------------------------------------------------------------
