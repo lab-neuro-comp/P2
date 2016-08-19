@@ -43,6 +43,8 @@ else
 end
 
 addpath ([cd '/cwtmodule']);
+addpath ([cd '/util']);
+addpath ([cd '/math']);
 % End initialization code - DO NOT EDIT
 
 % --- Executes just before cwtmodule2 is made visible.
@@ -55,6 +57,8 @@ function cwtmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for cwtmodule2
 handles.output = hObject;
+handles.constants = load_constants();
+handles.wavelets = load_wavelets();
 
 % Update handles structure
 guidata(hObject, handles);
@@ -78,7 +82,6 @@ function varargout = cwtmodule2_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-handles.constants = load_constants();
 
 % --- Executes on button press in pushbutton1.
 function pushbutton1_Callback(hObject, eventdata, handles)
@@ -187,11 +190,51 @@ function PopupWaveletType_Callback(hObject, eventdata, handles)
 % + R_Biorthigonal
 %   - 1.1, 1.3, 1.5, 2.2, 2.4, 2.6, 2.8, 3.1, 3.3, 3.5, 3.7, 3.9, 4.4, 5.5, 6.8
 % + Meyer
-%   - 1, 2, ..., 8
 % + Gaussian
 %   - 1, 2, ..., 8
 % + Mexican
 % + Morlet
+
+dbvaropts={'db1','db2','db3','db4','db5','db6','db7','db8','db9','db10'};
+symvaropts={'2','3','4','5','6','7','8'};
+coifvaropts={'1','2','3','4','5'};
+biorvaropts={'1.1','1.3','1.5','2.2','2.4','2.6','2.8','3.1','3.3','3.5','3.7','3.9','4.4','5.5','6.8'};
+rbiovaropts=biorvaropts;
+gausvaropts={'1','2','3','4','5','6','7','8'};
+
+contents = cellstr(get(hObject, 'String'));
+wavelettype = contents{get(hObject, 'Value')};
+
+switch wavelettype
+    case 'Daubechies'
+        set(handles.PopupWaveletVar, 'Visible', 'on');
+        set(handles.PopupWaveletVar, 'String', dbvaropts);
+%        wavename = handles.wavelets.get('Daubechies');
+    case 'Symlets'
+        set(handles.PopupWaveletVar, 'Visible', 'on');
+        set(handles.PopupWaveletVar, 'String', symvaropts);
+%        wavetype = handles.wavelets.get('Symlets');
+    case 'Coiflets'
+        set(handles.PopupWaveletVar, 'Visible', 'on');
+        set(handles.PopupWaveletVar, 'String', coifvaropts);
+%        wavetype = handles.wavelets.get('Coiflets');
+    case 'Biorthogonal'
+        set(handles.PopupWaveletVar, 'Visible', 'on');
+        set(handles.PopupWaveletVar, 'String', biorvaropts);
+%        wavetype = handles.wavelets.get('Biorthogonal');
+    case 'R_Biorthogonal'
+        set(handles.PopupWaveletVar, 'Visible', 'on');
+        set(handles.PopupWaveletVar, 'String', rbiovaropts);
+%        wavetype = handles.wavelets.get('R_Biorthigonal');
+    case 'Gaussian'
+        set(handles.PopupWaveletVar, 'Visible', 'on');
+        set(handles.PopupWaveletVar, 'String', gausvaropts);
+%        wavetype = handles.wavelets.get('Gaussian');
+    otherwise
+        set(handles.PopupWaveletVar, 'Visible', 'off');
+%        wavename = handles.wavelets.get(wavelettype);
+%        set(handles.TextSignal, 'String', wavename);
+end
 
 % Hints: contents = get(hObject,'String') returns PopupWaveletType contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from PopupWaveletType
@@ -215,6 +258,14 @@ function PopupWaveletVar_Callback(hObject, eventdata, handles)
 % hObject    handle to PopupWaveletVar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+contents = cellstr(get(hObject, 'String'));
+waveletsubtype = contents{get(hObject, 'Value')};
+
+wavetype = handles.wavelets.get(handles.PopupWaveletType, 'String');
+wavesubtype = get(hObject, 'String');
+wavename = strcat(wavetype, wavesubtype);
+set(handles.TextSignal, 'String', wavename);
 
 % Hints: contents = get(hObject,'String') returns PopupWaveletVar contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from PopupWaveletVar
