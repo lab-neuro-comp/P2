@@ -214,7 +214,7 @@ if and(beginning, ending)
     else
         index = get(handles.popupmenu1, 'Value');
         signal = chop_signal(handles.signals{index}, fs, beginning, ending);
-        standard_plot(signal);
+        standard_plot(signal, fs);
         handles.current = signal;
         handles.signals{index} = signal;
     end
@@ -301,7 +301,7 @@ if and(minimum, maximum)
         switch fk
             case 'lowpass'
                 signal = lowpass(signal, fs, maximum);
-            case 'highpass' 
+            case 'highpass'
                 signal = highpass(signal, fs, minimum);
             case 'bandpass'
                 signal = bandpass(signal, fs, minimum, maximum);
