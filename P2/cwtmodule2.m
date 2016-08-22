@@ -207,34 +207,37 @@ wavelettype = contents{get(hObject, 'Value')};
 
 switch wavelettype
     case 'Daubechies'
-        set(handles.PopupWaveletVar, 'Visible', 'on');
-        set(handles.PopupWaveletVar, 'String', dbvaropts);
-%        wavename = handles.wavelets.get('Daubechies');
+        set_subwaveopts_on(hObject, handles, dbvaropts);
+        set(handles.TextSignal, 'String', 'db1');
+        wavename = 'db1';
     case 'Symlets'
-        set(handles.PopupWaveletVar, 'Visible', 'on');
-        set(handles.PopupWaveletVar, 'String', symvaropts);
-%        wavetype = handles.wavelets.get('Symlets');
+        set_subwaveopts_on(hObject, handles, symvaropts);
+        set(handles.TextSignal, 'String', 'sym2');
+        wavename = 'sym2';
     case 'Coiflets'
-        set(handles.PopupWaveletVar, 'Visible', 'on');
-        set(handles.PopupWaveletVar, 'String', coifvaropts);
-%        wavetype = handles.wavelets.get('Coiflets');
+        set_subwaveopts_on(hObject, handles, coifvaropts);
+        set(handles.TextSignal, 'String', 'coif1');
+        wavename = 'coif1';
     case 'Biorthogonal'
-        set(handles.PopupWaveletVar, 'Visible', 'on');
-        set(handles.PopupWaveletVar, 'String', biorvaropts);
-%        wavetype = handles.wavelets.get('Biorthogonal');
+        set_subwaveopts_on(hObject, handles, biorvaropts);
+        set(handles.TextSignal, 'String', 'bior1.1');
+        wavename = 'bior1.1';
     case 'R_Biorthogonal'
-        set(handles.PopupWaveletVar, 'Visible', 'on');
-        set(handles.PopupWaveletVar, 'String', rbiovaropts);
-%        wavetype = handles.wavelets.get('R_Biorthigonal');
+        set_subwaveopts_on(hObject, handles, rbiovaropts);
+        set(handles.TextSignal, 'String', 'rbio1.1');
+        wavename = 'rbio1.1';
     case 'Gaussian'
-        set(handles.PopupWaveletVar, 'Visible', 'on');
-        set(handles.PopupWaveletVar, 'String', gausvaropts);
-%        wavetype = handles.wavelets.get('Gaussian');
+        set_subwaveopts_on(hObject, handles, gausvaropts);
+        set(handles.TextSignal, 'String', 'gaus1');
+        wavename = 'gaus1';
     otherwise
         set(handles.PopupWaveletVar, 'Visible', 'off');
-%        wavename = handles.wavelets.get(wavelettype);
-%        set(handles.TextSignal, 'String', wavename);
+        wavename = handles.wavelets.get(wavelettype);
+        set(handles.TextSignal, 'String', wavename);
 end
+
+deltaf1 = str2num(handles.constants.get('deltaf1'));
+set_scales_for_wavelets(hObject, handles, wavename, deltaf1);
 
 % Hints: contents = get(hObject,'String') returns PopupWaveletType contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from PopupWaveletType
@@ -260,12 +263,22 @@ function PopupWaveletVar_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 contents = cellstr(get(hObject, 'String'));
-waveletsubtype = contents{get(hObject, 'Value')};
+wavesubtype = contents{get(hObject, 'Value')};
 
-wavetype = handles.wavelets.get(handles.PopupWaveletType, 'String');
-wavesubtype = get(hObject, 'String');
-wavename = strcat(wavetype, wavesubtype);
+typecontents = get(handles.PopupWaveletType, 'String');
+wavetype = typecontents{get(handles.PopupWaveletType, 'Value')};
+
+switch wavetype
+    case 'Daubechies'
+        wavename = wavesubtype;
+    otherwise
+        wavetype = handles.wavelets.get(wavetype);
+        wavename = strcat(wavetype, wavesubtype);        
+end
+
 set(handles.TextSignal, 'String', wavename);
+deltaf1 = str2num(handles.constants.get('deltaf1'));
+set_scales_for_wavelets(hObject, handles, wavename, deltaf1);
 
 % Hints: contents = get(hObject,'String') returns PopupWaveletVar contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from PopupWaveletVar
@@ -309,6 +322,23 @@ function EditMin_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+wavename = get(handles.TextSignal, 'String');
+
+MinBase = centfrq(wavename)/0.5;
+MinValue = str2num(get(handles.EditMin, 'String'));
+MaxValue = str2num(get(handles.EditMax, 'String'));
+
+if ((MinBase - MinValue) > 0.001)
+    h = msgbox({'The minimum scale corresponds to a' 'pseudofrequency bigger than fs/2.'}, 'Error', 'warn');
+    set(handles.EditMin, 'String', MinBase);
+elseif (MinValue < 0)
+    h = msgbox({'The minimum scale' 'must be positive.'}, 'Error', 'warn');
+    set(handles.EditMin, 'String', MinBase);
+elseif (MinValue > MaxValue)
+    h = msgbox({'The minimum scale must be smaller' 'than the maximum scale.'}, 'Error', 'warn');
+    set(handles.EditMin, 'String', MinBase);
+end
+
 % Hints: get(hObject,'String') returns contents of EditMin as text
 %        str2double(get(hObject,'String')) returns contents of EditMin as a double
 
@@ -332,6 +362,14 @@ function EditInt_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+IntValue = str2num(get(handles.EditInt, 'String'));
+MinValue = str2num(get(handles.EditMin, 'String'));
+MaxValue = str2num(get(handles.EditMax, 'String'));
+
+if (IntValue > (MaxValue - MinValue) | IntValue < 0)
+    h = msgbox({'The interval must be positive and smaller than the' 'difference between the maximum and minimun scales.'}, 'Error', 'warn');
+end
+
 % Hints: get(hObject,'String') returns contents of EditInt as text
 %        str2double(get(hObject,'String')) returns contents of EditInt as a double
 
@@ -354,6 +392,22 @@ function EditMax_Callback(hObject, eventdata, handles)
 % hObject    handle to EditMax (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+fs = str2num(handles.constants.get('fs'));
+deltaf1 = str2num(handles.constants.get('deltaf1'));
+wavename = get(handles.TextSignal, 'String');
+
+MaxBase = centfrq(wavename)/((1/fs)*deltaf1);
+MinValue = str2num(get(handles.EditMin, 'String'));
+MaxValue = str2num(get(handles.EditMax, 'String'));
+
+if (MaxValue < 0)
+    h = msgbox({'The maximum scale' 'must be positive.'}, 'Error', 'warn');
+    set(handles.EditMin, 'String', MaxBase);
+elseif (MinValue > MaxValue)
+    h = msgbox({'The maximum scale must be bigger' 'than the minimum scale.'}, 'Error', 'warn');
+    set(handles.EditMin, 'String', MaxBase);
+end
 
 % Hints: get(hObject,'String') returns contents of EditMax as text
 %        str2double(get(hObject,'String')) returns contents of EditMax as a double
@@ -381,12 +435,12 @@ function RadioDelta_Callback(hObject, eventdata, handles)
 
 enable_predet_opt(hObject, handles);
 
-%deltaf1 = str2num(handles.constants.get('deltaf1'));
-%deltaf2 = str2num(handles.constants.get('deltaf2'));
-maxscale = 11; %centfrq(wtype)/((1/fs)*deltaf1);
-minscale = 1; %centfrq(wtype)/((1/fs)*deltaf2);
-set(handles.EditMin,'String',sprintf('%5.2f',minscale));
-set(handles.EditMax,'String',sprintf('%5.2f',maxscale));
+deltaf1 = str2num(handles.constants.get('deltaf1'));
+deltaf2 = str2num(handles.constants.get('deltaf2'));
+wavename = get(handles.TextSignal, 'String');
+set_predet_scales(hObject, handles, wavename, deltaf1, deltaf2);
+
+%set_predet_scales(hObject, handles, wavename, deltaf1, deltaf2);
 
 % Hint: get(hObject,'Value') returns toggle state of RadioDelta
 
@@ -399,6 +453,11 @@ function RadioTheta_Callback(hObject, eventdata, handles)
 
 enable_predet_opt(hObject, handles);
 
+thetaf1 = str2num(handles.constants.get('thetaf1'));
+thetaf2 = str2num(handles.constants.get('thetaf2'));
+wavename = get(handles.TextSignal, 'String');
+set_predet_scales(hObject, handles, wavename, thetaf1, thetaf2);
+
 % Hint: get(hObject,'Value') returns toggle state of RadioTheta
 
 
@@ -409,6 +468,11 @@ function RadioAlpha_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 enable_predet_opt(hObject, handles);
+
+alphaf1 = str2num(handles.constants.get('alphaf1'));
+alphaf2 = str2num(handles.constants.get('alphaf2'));
+wavename = get(handles.TextSignal, 'String');
+set_predet_scales(hObject, handles, wavename, alphaf1, alphaf2);
 
 % Hint: get(hObject,'Value') returns toggle state of RadioAlpha
 
@@ -421,6 +485,11 @@ function RadioBeta_Callback(hObject, eventdata, handles)
 
 enable_predet_opt(hObject, handles);
 
+betaf1 = str2num(handles.constants.get('betaf1'));
+betaf2 = str2num(handles.constants.get('betaf2'));
+wavename = get(handles.TextSignal, 'String');
+set_predet_scales(hObject, handles, wavename, betaf1, betaf2);
+
 % Hint: get(hObject,'Value') returns toggle state of RadioBeta
 
 
@@ -431,6 +500,11 @@ function RadioGamma_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 enable_predet_opt(hObject, handles);
+
+gammaf1 = str2num(handles.constants.get('gammaf1'));
+gammaf2 = str2num(handles.constants.get('gammaf2'));
+wavename = get(handles.TextSignal, 'String');
+set_predet_scales(hObject, handles, wavename, gammaf1, gammaf2);
 
 % Hint: get(hObject,'Value') returns toggle state of RadioGamma
 
