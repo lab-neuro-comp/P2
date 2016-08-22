@@ -195,7 +195,7 @@ function editRerefer_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hints: - get(hObject,'String') returns contents of editRerefer as text
-%        - str2double(get(hObject,'String')) returns contents of 
+%        - str2double(get(hObject,'String')) returns contents of
 %          editRerefer as a double
 
 
@@ -212,7 +212,7 @@ if ispc
 else
     set(hObject, ...
         'BackgroundColor', ...
-        get(0,'defaultUicontrolBackgroundColor'));
+        get(0, 'defaultUicontrolBackgroundColor'));
 end
 
 % --- Executes on button press in checkResample. --------------------
@@ -234,7 +234,7 @@ function editResample_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hints: - get(hObject,'String') returns contents of editResample as text
-%        - str2double(get(hObject,'String')) returns contents of 
+%        - str2double(get(hObject,'String')) returns contents of
 %          editResample as a double
 
 
@@ -315,6 +315,3 @@ else
         strcat(pathname, ...
                filename));
 end
-
-
-
