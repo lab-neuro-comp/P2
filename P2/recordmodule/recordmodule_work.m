@@ -5,7 +5,8 @@ outlet = { };
 limit = length(filelist);
 for index = 1:limit
     inlet = load(filelist{index});
-    % TODO chop files
+    outlet = chop_signal(inlet, fslist{index}, intslist{index}(1), intslist{index}(2));
     figure;
     plot(1:length(inlet), inlet);
+    plot(1:length(outlet), outlet);
 end
