@@ -11,7 +11,8 @@ set(handles.buttonRun, 'String', 'Run');
 
 disp('# Testing reading input file');
 [filelist fslist intslist] = recordmodule_readcsv(inputfile);
-outlet = recordmodule_work(filelist, fslist, intslist)
+outlet = recordmodule_work(filelist, fslist, intslist);
+recordmodule_savedata(filelist, outlet);
 
 % disp('# Final test');
-% run_for_chopping(handles);
+run_for_chopping(handles);
