@@ -1,4 +1,5 @@
 function [handles] = disable_manual_opts(hObject, handles)
+	
 set(handles.EditMin, 'Enable', 'off');
 set(handles.EditMax, 'Enable', 'off');
 set(handles.RadioDelta, 'Enable', 'on');

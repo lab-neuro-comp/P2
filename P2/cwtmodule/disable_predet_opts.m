@@ -1,4 +1,5 @@
 function [handles] = disable_predet_opts(hObject, handles)
+	
 set(handles.EditMin, 'Enable', 'on');
 set(handles.EditMax, 'Enable', 'on');
 set(handles.RadioDelta, 'Enable', 'off');

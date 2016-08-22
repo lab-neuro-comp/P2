@@ -1,4 +1,5 @@
 function [handles] = enable_predet_opt(hObject, handles)
+	
 set(handles.RadioDelta, 'Value', 0);
 set(handles.RadioTheta, 'Value', 0);
 set(handles.RadioAlpha, 'Value', 0);
