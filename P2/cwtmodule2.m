@@ -22,7 +22,7 @@ function varargout = cwtmodule2(varargin)
 
 % Edit the above text to modify the response to help cwtmodule2
 
-% Last Modified by GUIDE v2.5 17-Aug-2016 09:21:13
+% Last Modified by GUIDE v2.5 24-Aug-2016 09:32:43
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -43,6 +43,8 @@ else
 end
 
 addpath ([cd '/cwtmodule']);
+addpath ([cd '/util']);
+addpath ([cd '/math']);
 % End initialization code - DO NOT EDIT
 
 % --- Executes just before cwtmodule2 is made visible.
@@ -55,15 +57,20 @@ function cwtmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for cwtmodule2
 handles.output = hObject;
+handles.constants = load_constants();
+handles.wavelets = load_wavelets();
+
+handles.approximations = {};
+handles.details = {};
 
 % Update handles structure
 guidata(hObject, handles);
 
 % This sets up the initial plot - only do when we are invisible
 % so window can get raised using cwtmodule2.
-if strcmp(get(hObject,'Visible'),'off')
-    plot(rand(5));
-end
+%if strcmp(get(hObject,'Visible'),'off')
+%    plot(rand(5));
+%end
 
 % UIWAIT makes cwtmodule2 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -78,7 +85,6 @@ function varargout = cwtmodule2_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-handles.constants = load_constants();
 
 % --- Executes on button press in pushbutton1.
 function pushbutton1_Callback(hObject, eventdata, handles)
@@ -115,10 +121,36 @@ function OpenMenuItem_Callback(hObject, eventdata, handles)
 % hObject    handle to OpenMenuItem (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-file = uigetfile('*.ascii');
-if ~isequal(file, 0)
-    open(file);
+
+%file = uigetfile('*.ascii');
+%if ~isequal(file, 0)
+%    open(file);
+%end
+
+fa = str2num(handles.constants.get('fa'));
+fb = str2num(handles.constants.get('fb'));
+fc = str2num(handles.constants.get('fc'));
+fs = str2num(handles.constants.get('fs'));
+[signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
+
+if ~isequal(signalname, 0)
+    signal = (load(strcat(signalpath, signalname)) + fa)*fb - fc;
+    signalname = signalname(1:length(signalname)-6);
+
+    handles.signalname = signalname;
+    handles.signal = signal;
+    %handles.approximations = { };
+    %handles.details = { };
+    set(handles.TextFilename, 'String', signalname);
+    %plot_decomposition(handles);
+    axes(handles.PlotSignal);
+%    set(handles.PlotSignal, 'XLabel', 'Amplitude [uV]');
+    standard_plot(handles.signal, fs);
 end
+
+initialize_module(hObject, handles);
+
+guidata(hObject, handles);
 
 % --------------------------------------------------------------------
 function PrintMenuItem_Callback(hObject, eventdata, handles)
@@ -187,11 +219,54 @@ function PopupWaveletType_Callback(hObject, eventdata, handles)
 % + R_Biorthigonal
 %   - 1.1, 1.3, 1.5, 2.2, 2.4, 2.6, 2.8, 3.1, 3.3, 3.5, 3.7, 3.9, 4.4, 5.5, 6.8
 % + Meyer
-%   - 1, 2, ..., 8
 % + Gaussian
 %   - 1, 2, ..., 8
 % + Mexican
 % + Morlet
+
+dbvaropts={'db1','db2','db3','db4','db5','db6','db7','db8','db9','db10'};
+symvaropts={'2','3','4','5','6','7','8'};
+coifvaropts={'1','2','3','4','5'};
+biorvaropts={'1.1','1.3','1.5','2.2','2.4','2.6','2.8','3.1','3.3','3.5','3.7','3.9','4.4','5.5','6.8'};
+rbiovaropts=biorvaropts;
+gausvaropts={'1','2','3','4','5','6','7','8'};
+
+contents = cellstr(get(hObject, 'String'));
+wavelettype = contents{get(hObject, 'Value')};
+
+switch wavelettype
+    case 'Daubechies'
+        set_subwaveopts_on(hObject, handles, dbvaropts);
+        set(handles.TextSignal, 'String', 'db1');
+        wavename = 'db1';
+    case 'Symlets'
+        set_subwaveopts_on(hObject, handles, symvaropts);
+        set(handles.TextSignal, 'String', 'sym2');
+        wavename = 'sym2';
+    case 'Coiflets'
+        set_subwaveopts_on(hObject, handles, coifvaropts);
+        set(handles.TextSignal, 'String', 'coif1');
+        wavename = 'coif1';
+    case 'Biorthogonal'
+        set_subwaveopts_on(hObject, handles, biorvaropts);
+        set(handles.TextSignal, 'String', 'bior1.1');
+        wavename = 'bior1.1';
+    case 'R_Biorthogonal'
+        set_subwaveopts_on(hObject, handles, rbiovaropts);
+        set(handles.TextSignal, 'String', 'rbio1.1');
+        wavename = 'rbio1.1';
+    case 'Gaussian'
+        set_subwaveopts_on(hObject, handles, gausvaropts);
+        set(handles.TextSignal, 'String', 'gaus1');
+        wavename = 'gaus1';
+    otherwise
+        set(handles.PopupWaveletVar, 'Visible', 'off');
+        wavename = handles.wavelets.get(wavelettype);
+        set(handles.TextSignal, 'String', wavename);
+end
+
+deltaf1 = str2num(handles.constants.get('deltaf1'));
+set_scales_for_wavelets(hObject, handles, wavename, deltaf1);
 
 % Hints: contents = get(hObject,'String') returns PopupWaveletType contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from PopupWaveletType
@@ -215,6 +290,24 @@ function PopupWaveletVar_Callback(hObject, eventdata, handles)
 % hObject    handle to PopupWaveletVar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+contents = cellstr(get(hObject, 'String'));
+wavesubtype = contents{get(hObject, 'Value')};
+
+typecontents = get(handles.PopupWaveletType, 'String');
+wavetype = typecontents{get(handles.PopupWaveletType, 'Value')};
+
+switch wavetype
+    case 'Daubechies'
+        wavename = wavesubtype;
+    otherwise
+        wavetype = handles.wavelets.get(wavetype);
+        wavename = strcat(wavetype, wavesubtype);        
+end
+
+set(handles.TextSignal, 'String', wavename);
+deltaf1 = str2num(handles.constants.get('deltaf1'));
+set_scales_for_wavelets(hObject, handles, wavename, deltaf1);
 
 % Hints: contents = get(hObject,'String') returns PopupWaveletVar contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from PopupWaveletVar
@@ -258,6 +351,23 @@ function EditMin_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+wavename = get(handles.TextSignal, 'String');
+
+MinBase = centfrq(wavename)/0.5;
+MinValue = str2num(get(handles.EditMin, 'String'));
+MaxValue = str2num(get(handles.EditMax, 'String'));
+
+if ((MinBase - MinValue) > 0.001)
+    h = msgbox({'The minimum scale corresponds to a' 'pseudofrequency bigger than fs/2.'}, 'Error', 'warn');
+    set(handles.EditMin, 'String', MinBase);
+elseif (MinValue < 0)
+    h = msgbox({'The minimum scale' 'must be positive.'}, 'Error', 'warn');
+    set(handles.EditMin, 'String', MinBase);
+elseif (MinValue > MaxValue)
+    h = msgbox({'The minimum scale must be smaller' 'than the maximum scale.'}, 'Error', 'warn');
+    set(handles.EditMin, 'String', MinBase);
+end
+
 % Hints: get(hObject,'String') returns contents of EditMin as text
 %        str2double(get(hObject,'String')) returns contents of EditMin as a double
 
@@ -281,6 +391,14 @@ function EditInt_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+IntValue = str2num(get(handles.EditInt, 'String'));
+MinValue = str2num(get(handles.EditMin, 'String'));
+MaxValue = str2num(get(handles.EditMax, 'String'));
+
+if (IntValue > (MaxValue - MinValue) | IntValue < 0)
+    h = msgbox({'The interval must be positive and smaller than the' 'difference between the maximum and minimun scales.'}, 'Error', 'warn');
+end
+
 % Hints: get(hObject,'String') returns contents of EditInt as text
 %        str2double(get(hObject,'String')) returns contents of EditInt as a double
 
@@ -303,6 +421,22 @@ function EditMax_Callback(hObject, eventdata, handles)
 % hObject    handle to EditMax (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+fs = str2num(handles.constants.get('fs'));
+deltaf1 = str2num(handles.constants.get('deltaf1'));
+wavename = get(handles.TextSignal, 'String');
+
+MaxBase = centfrq(wavename)/((1/fs)*deltaf1);
+MinValue = str2num(get(handles.EditMin, 'String'));
+MaxValue = str2num(get(handles.EditMax, 'String'));
+
+if (MaxValue < 0)
+    h = msgbox({'The maximum scale' 'must be positive.'}, 'Error', 'warn');
+    set(handles.EditMin, 'String', MaxBase);
+elseif (MinValue > MaxValue)
+    h = msgbox({'The maximum scale must be bigger' 'than the minimum scale.'}, 'Error', 'warn');
+    set(handles.EditMin, 'String', MaxBase);
+end
 
 % Hints: get(hObject,'String') returns contents of EditMax as text
 %        str2double(get(hObject,'String')) returns contents of EditMax as a double
@@ -330,12 +464,12 @@ function RadioDelta_Callback(hObject, eventdata, handles)
 
 enable_predet_opt(hObject, handles);
 
-%deltaf1 = str2num(handles.constants.get('deltaf1'));
-%deltaf2 = str2num(handles.constants.get('deltaf2'));
-maxscale = 11; %centfrq(wtype)/((1/fs)*deltaf1);
-minscale = 1; %centfrq(wtype)/((1/fs)*deltaf2);
-set(handles.EditMin,'String',sprintf('%5.2f',minscale));
-set(handles.EditMax,'String',sprintf('%5.2f',maxscale));
+deltaf1 = str2num(handles.constants.get('deltaf1'));
+deltaf2 = str2num(handles.constants.get('deltaf2'));
+wavename = get(handles.TextSignal, 'String');
+set_predet_scales(hObject, handles, wavename, deltaf1, deltaf2);
+
+%set_predet_scales(hObject, handles, wavename, deltaf1, deltaf2);
 
 % Hint: get(hObject,'Value') returns toggle state of RadioDelta
 
@@ -348,6 +482,11 @@ function RadioTheta_Callback(hObject, eventdata, handles)
 
 enable_predet_opt(hObject, handles);
 
+thetaf1 = str2num(handles.constants.get('thetaf1'));
+thetaf2 = str2num(handles.constants.get('thetaf2'));
+wavename = get(handles.TextSignal, 'String');
+set_predet_scales(hObject, handles, wavename, thetaf1, thetaf2);
+
 % Hint: get(hObject,'Value') returns toggle state of RadioTheta
 
 
@@ -358,6 +497,11 @@ function RadioAlpha_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 enable_predet_opt(hObject, handles);
+
+alphaf1 = str2num(handles.constants.get('alphaf1'));
+alphaf2 = str2num(handles.constants.get('alphaf2'));
+wavename = get(handles.TextSignal, 'String');
+set_predet_scales(hObject, handles, wavename, alphaf1, alphaf2);
 
 % Hint: get(hObject,'Value') returns toggle state of RadioAlpha
 
@@ -370,6 +514,11 @@ function RadioBeta_Callback(hObject, eventdata, handles)
 
 enable_predet_opt(hObject, handles);
 
+betaf1 = str2num(handles.constants.get('betaf1'));
+betaf2 = str2num(handles.constants.get('betaf2'));
+wavename = get(handles.TextSignal, 'String');
+set_predet_scales(hObject, handles, wavename, betaf1, betaf2);
+
 % Hint: get(hObject,'Value') returns toggle state of RadioBeta
 
 
@@ -381,6 +530,11 @@ function RadioGamma_Callback(hObject, eventdata, handles)
 
 enable_predet_opt(hObject, handles);
 
+gammaf1 = str2num(handles.constants.get('gammaf1'));
+gammaf2 = str2num(handles.constants.get('gammaf2'));
+wavename = get(handles.TextSignal, 'String');
+set_predet_scales(hObject, handles, wavename, gammaf1, gammaf2);
+
 % Hint: get(hObject,'Value') returns toggle state of RadioGamma
 
 
@@ -390,6 +544,153 @@ function ButtonCalculate_Callback(hObject, eventdata, handles)
 % hObject    handle to ButtonCalculate (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function EditScale_Callback(hObject, eventdata, handles)
+% hObject    handle to EditScale (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+fs = str2num(handles.constants.get('fs'));
+wavename = get(handles.TextSignal, 'String');
+
+PsFreqBase = str2num(get(handles.EditPsFreq, 'String'));
+ScaleBase = centfrq(wavename)/((1/fs)*PsFreqBase);
+ScaleValue = str2num(get(handles.EditScale, 'String'));
+
+if (ScaleValue < 0)
+    h = msgbox({'The scale must' 'be positive.'}, 'Error', 'warn');
+    set(handles.EditScale, 'String', ScaleBase);
+end
+PsFreqValue = centfrq(wavename)/((1/fs)*ScaleValue);
+set(handles.EditPsFreq, 'String', sprintf('%5.2f', PsFreqValue));
+
+% Hints: get(hObject,'String') returns contents of EditScale as text
+%        str2double(get(hObject,'String')) returns contents of EditScale as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function EditScale_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to EditScale (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function EditPsFreq_Callback(hObject, eventdata, handles)
+% hObject    handle to EditPsFreq (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+fs = str2num(handles.constants.get('fs'));
+wavename = get(handles.TextSignal, 'String');
+
+ScaleBase = str2num(get(handles.EditScale, 'String'));
+PsFreqBase = centfrq(wavename)/((1/fs)*ScaleBase);
+PsFreqValue = str2num(get(handles.EditPsFreq, 'String'));
+
+if (PsFreqValue < 0)
+    h = msgbox({'The pseudofrequency' 'must be positive.'}, 'Error', 'warn');
+    set(handles.EditPsFreq, 'String', PsFreqBase);
+end
+ScaleValue = centfrq(wavename)/((1/fs)*PsFreqValue);
+set(handles.EditScale, 'String', sprintf('%5.2f', ScaleValue));
+
+% Hints: get(hObject,'String') returns contents of EditPsFreq as text
+%        str2double(get(hObject,'String')) returns contents of EditPsFreq as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function EditPsFreq_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to EditPsFreq (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+% --------------------------------------------------------------------
+% --- Executes on button press in RadioScale.
+function RadioScale_Callback(hObject, eventdata, handles)
+% hObject    handle to RadioScale (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of RadioScale
+
+
+% --- Executes on button press in RadioTime.
+function RadioTime_Callback(hObject, eventdata, handles)
+% hObject    handle to RadioTime (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of RadioTime
+
+
+function EditScaleGraph_Callback(hObject, eventdata, handles)
+% hObject    handle to EditScaleGraph (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of EditScaleGraph as text
+%        str2double(get(hObject,'String')) returns contents of EditScaleGraph as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function EditScaleGraph_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to EditScaleGraph (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function EditTimeGraph_Callback(hObject, eventdata, handles)
+% hObject    handle to EditTimeGraph (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of EditTimeGraph as text
+%        str2double(get(hObject,'String')) returns contents of EditTimeGraph as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function EditTimeGraph_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to EditTimeGraph (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in ButtonView.
+function ButtonView_Callback(hObject, eventdata, handles)
+% hObject    handle to ButtonView (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
 
 
 % --------------------------------------------------------------------

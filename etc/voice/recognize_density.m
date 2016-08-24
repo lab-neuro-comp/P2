@@ -11,6 +11,7 @@ linenumber = 1;
 queue = make_queue(inlet, windowsize);
 while length(queue) > 0
     dot_density = sigmoid(calculate_dot_density(queue));
+    % TODO Analyze derivative of queue
     fprintf(fxlet, '%f\n', dot_density);
     current = dot_density >= density;
     if current > last % is rising?
