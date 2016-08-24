@@ -22,7 +22,7 @@ function varargout = cwtmodule2(varargin)
 
 % Edit the above text to modify the response to help cwtmodule2
 
-% Last Modified by GUIDE v2.5 17-Aug-2016 09:21:13
+% Last Modified by GUIDE v2.5 24-Aug-2016 09:32:43
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -60,14 +60,17 @@ handles.output = hObject;
 handles.constants = load_constants();
 handles.wavelets = load_wavelets();
 
+handles.approximations = {};
+handles.details = {};
+
 % Update handles structure
 guidata(hObject, handles);
 
 % This sets up the initial plot - only do when we are invisible
 % so window can get raised using cwtmodule2.
-if strcmp(get(hObject,'Visible'),'off')
-    plot(rand(5));
-end
+%if strcmp(get(hObject,'Visible'),'off')
+%    plot(rand(5));
+%end
 
 % UIWAIT makes cwtmodule2 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -118,10 +121,36 @@ function OpenMenuItem_Callback(hObject, eventdata, handles)
 % hObject    handle to OpenMenuItem (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-file = uigetfile('*.ascii');
-if ~isequal(file, 0)
-    open(file);
+
+%file = uigetfile('*.ascii');
+%if ~isequal(file, 0)
+%    open(file);
+%end
+
+fa = str2num(handles.constants.get('fa'));
+fb = str2num(handles.constants.get('fb'));
+fc = str2num(handles.constants.get('fc'));
+fs = str2num(handles.constants.get('fs'));
+[signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
+
+if ~isequal(signalname, 0)
+    signal = (load(strcat(signalpath, signalname)) + fa)*fb - fc;
+    signalname = signalname(1:length(signalname)-6);
+
+    handles.signalname = signalname;
+    handles.signal = signal;
+    %handles.approximations = { };
+    %handles.details = { };
+    set(handles.TextFilename, 'String', signalname);
+    %plot_decomposition(handles);
+    axes(handles.PlotSignal);
+%    set(handles.PlotSignal, 'XLabel', 'Amplitude [uV]');
+    standard_plot(handles.signal, fs);
 end
+
+initialize_module(hObject, handles);
+
+guidata(hObject, handles);
 
 % --------------------------------------------------------------------
 function PrintMenuItem_Callback(hObject, eventdata, handles)
@@ -515,6 +544,153 @@ function ButtonCalculate_Callback(hObject, eventdata, handles)
 % hObject    handle to ButtonCalculate (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function EditScale_Callback(hObject, eventdata, handles)
+% hObject    handle to EditScale (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+fs = str2num(handles.constants.get('fs'));
+wavename = get(handles.TextSignal, 'String');
+
+PsFreqBase = str2num(get(handles.EditPsFreq, 'String'));
+ScaleBase = centfrq(wavename)/((1/fs)*PsFreqBase);
+ScaleValue = str2num(get(handles.EditScale, 'String'));
+
+if (ScaleValue < 0)
+    h = msgbox({'The scale must' 'be positive.'}, 'Error', 'warn');
+    set(handles.EditScale, 'String', ScaleBase);
+end
+PsFreqValue = centfrq(wavename)/((1/fs)*ScaleValue);
+set(handles.EditPsFreq, 'String', sprintf('%5.2f', PsFreqValue));
+
+% Hints: get(hObject,'String') returns contents of EditScale as text
+%        str2double(get(hObject,'String')) returns contents of EditScale as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function EditScale_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to EditScale (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function EditPsFreq_Callback(hObject, eventdata, handles)
+% hObject    handle to EditPsFreq (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+fs = str2num(handles.constants.get('fs'));
+wavename = get(handles.TextSignal, 'String');
+
+ScaleBase = str2num(get(handles.EditScale, 'String'));
+PsFreqBase = centfrq(wavename)/((1/fs)*ScaleBase);
+PsFreqValue = str2num(get(handles.EditPsFreq, 'String'));
+
+if (PsFreqValue < 0)
+    h = msgbox({'The pseudofrequency' 'must be positive.'}, 'Error', 'warn');
+    set(handles.EditPsFreq, 'String', PsFreqBase);
+end
+ScaleValue = centfrq(wavename)/((1/fs)*PsFreqValue);
+set(handles.EditScale, 'String', sprintf('%5.2f', ScaleValue));
+
+% Hints: get(hObject,'String') returns contents of EditPsFreq as text
+%        str2double(get(hObject,'String')) returns contents of EditPsFreq as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function EditPsFreq_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to EditPsFreq (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+% --------------------------------------------------------------------
+% --- Executes on button press in RadioScale.
+function RadioScale_Callback(hObject, eventdata, handles)
+% hObject    handle to RadioScale (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of RadioScale
+
+
+% --- Executes on button press in RadioTime.
+function RadioTime_Callback(hObject, eventdata, handles)
+% hObject    handle to RadioTime (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of RadioTime
+
+
+function EditScaleGraph_Callback(hObject, eventdata, handles)
+% hObject    handle to EditScaleGraph (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of EditScaleGraph as text
+%        str2double(get(hObject,'String')) returns contents of EditScaleGraph as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function EditScaleGraph_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to EditScaleGraph (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function EditTimeGraph_Callback(hObject, eventdata, handles)
+% hObject    handle to EditTimeGraph (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of EditTimeGraph as text
+%        str2double(get(hObject,'String')) returns contents of EditTimeGraph as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function EditTimeGraph_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to EditTimeGraph (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in ButtonView.
+function ButtonView_Callback(hObject, eventdata, handles)
+% hObject    handle to ButtonView (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
 
 
 % --------------------------------------------------------------------
