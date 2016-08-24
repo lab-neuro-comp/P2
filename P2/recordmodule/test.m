@@ -14,5 +14,5 @@ disp('# Testing reading input file');
 outlet = recordmodule_work(filelist, fslist, intslist);
 recordmodule_savedata(filelist, outlet);
 
-% disp('# Final test');
+disp('# Final test');
 run_for_chopping(handles);
