@@ -25,3 +25,16 @@ set(handles.EditScale, 'String', '1');
 set(handles.EditPsFreq, 'Enable', 'on');
 PsFreqValue = centfrq(wavename)/(1/fs);
 set(handles.EditPsFreq, 'String', sprintf('%5.2f', PsFreqValue));
+
+set(handles.RadioScaleGraph, 'Enable', 'off');
+set(handles.EditScaleGraph, 'Enable', 'off');
+set(handles.RadioTimeGraph, 'Enable', 'off');
+set(handles.EditTimeGraph, 'Enable', 'off');
+set(handles.ButtonView, 'Enable', 'off');
+set(handles.ButtonZoom, 'Enable', 'off');
+set(handles.ButtonColorbar, 'Enable', 'off');
+set(handles.ButtonReset, 'Enable', 'off');
+
+axes(handles.PlotAnalysis);
+cla reset;
+grid(handles.PlotAnalysis, 'on');
