@@ -148,6 +148,8 @@ if ~isequal(signalname, 0)
     %    set(handles.PlotSignal, 'XLabel', 'Amplitude [uV]');
     standard_plot(handles.signal, fs);
     grid(handles.PlotSignal, 'on');
+    axis tight;
+    ylabel('Amplitude [uV]');
 end
 
 initialize_module(hObject, handles);
@@ -555,15 +557,21 @@ wavename = get(handles.TextSignal, 'String');
 axes(handles.PlotAnalysis);
 clear analysis;
 analysis = cwt(handles.signal, MinValue:IntValue:MaxValue, wavename, 'plot');
+ylabel('Scale');
+
+fs = str2num(handles.constants.get('fs'));
+signaltime = 0:1/fs:(length(handles.signal)-1)/fs;
+RegisteredTime = num2str(max(signaltime));
+xlabel(strcat('Tempo [s]', ' [', '0:', RegisteredTime, ']'));
+title ' ';
 
 set(handles.RadioScaleGraph, 'Enable', 'on');
 set(handles.EditScaleGraph, 'Enable', 'on');
-ScaleValue = get(handles.EditScale, 'String');
-set(handles.EditScaleGraph, 'String', ScaleValue);
+set(handles.EditScaleGraph, 'String', get(handles.EditMin, 'String'));
 
 set(handles.RadioTimeGraph, 'Enable', 'on');
-set(handles.EditTimeGraph, 'Enable', 'on');
-set(handles.EditTimeGraph, 'String', '1');
+set(handles.EditTimeGraph, 'Enable', 'off');
+set(handles.EditTimeGraph, 'String', '0');
 
 set(handles.ButtonView, 'Enable', 'on');
 
@@ -654,7 +662,10 @@ function RadioScaleGraph_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+set(handles.EditScaleGraph, 'Enable', 'on');
+
 set(handles.RadioTimeGraph, 'Value', 0);
+set(handles.EditTimeGraph, 'Enable', 'off');
 
 % Hint: get(hObject,'Value') returns toggle state of RadioScaleGraph
 
@@ -663,6 +674,20 @@ function EditScaleGraph_Callback(hObject, eventdata, handles)
 % hObject    handle to EditScaleGraph (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+ScaleMin = str2num(get(handles.EditMin, 'String'));
+ScaleMax = str2num(get(handles.EditMax, 'String'));
+ScaleGraphValue = str2num(get(handles.EditScaleGraph, 'String'));
+
+if (ScaleGraphValue < ScaleMin)
+    h = msgbox({'The scale input must be within' 'the scale values analysed.'}, 'Error', 'warn');
+    set(handles.EditScaleGraph, 'String', get(handles.EditMin, 'String'));
+elseif (ScaleGraphValue > ScaleMax)
+    h = msgbox({'The scale input must be within' 'the scale values analysed.'}, 'Error', 'warn');
+    set(handles.EditScaleGraph, 'String', get(handles.EditMax, 'String'));
+else
+    body
+end
 
 % Hints: get(hObject,'String') returns contents of EditScaleGraph as text
 %        str2double(get(hObject,'String')) returns contents of EditScaleGraph as a double
@@ -688,7 +713,10 @@ function RadioTimeGraph_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+set(handles.EditTimeGraph, 'Enable', 'on');
+
 set(handles.RadioScaleGraph, 'Value', 0);
+set(handles.EditScaleGraph, 'Enable', 'off');
 
 % Hint: get(hObject,'Value') returns toggle state of RadioTimeGraph
 
@@ -700,8 +728,17 @@ function EditTimeGraph_Callback(hObject, eventdata, handles)
 
 fs = str2num(handles.constants.get('fs'));
 
-signaltime = 0:1/fs:(length(handles.signalname)-1)/fs
-RegisteredTime = max(signaltime)
+signaltime = 0:1/fs:(length(handles.signal)-1)/fs;
+RegisteredTime = max(signaltime);
+TimeGraphValue = str2num(get(handles.EditTimeGraph, 'String'));
+
+if (TimeGraphValue < 0)
+    h = msgbox({'The time input' 'must be positive.'}, 'Error', 'warn');
+    set(handles.EditTimeGraph, 'String', '0');
+elseif (TimeGraphValue > RegisteredTime)
+    h = msgbox({'The time input must be smaller' 'or equal the registered time.'}, 'Error', 'warn');
+    set(handles.EditTimeGraph, 'String', sprintf('%5.2f', RegisteredTime));
+end
 
 % Hints: get(hObject,'String') returns contents of EditTimeGraph as text
 %        str2double(get(hObject,'String')) returns contents of EditTimeGraph as a double
@@ -744,6 +781,16 @@ function ButtonColorbar_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+ColorbarClick = get(handles.ButtonColorbar, 'Value');
+
+switch ColorbarClick
+    case 1
+        axes(handles.PlotAnalysis);
+        colorbar('southoutside', 'fontsize', 8, 'fontname', 'arial');
+    otherwise
+        colorbar('off');
+end
+
 % Hint: get(hObject,'Value') returns toggle state of ButtonColorbar
 
 
@@ -753,4 +800,6 @@ function ButtonReset_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-
+if get(handles.ButtonReset, 'Value')
+    reset_module(hObject, handles);
+end
