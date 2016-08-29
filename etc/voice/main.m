@@ -1,7 +1,6 @@
 %% main: the callback to the run button
 function main(testcase, threshold, windowsize)
 % the callback to the run button
-addpath(pwd);
 tic
 temp_file = 'fourier.ascii';
 stuff = FourierRecognition(testcase, threshold, windowsize);

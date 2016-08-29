@@ -4,32 +4,26 @@ hole = floor(sqrt(windowsize));
 sideeffect_file = 'fx.ascii';
 output_file = 'density.ascii';
 inlet = fopen(input_file);
-fxlet = br.eng.crisjr.buffer.Buffer(sideeffect_file);
-outlet = br.eng.crisjr.buffer.Buffer(output_file);
-% fxlet = fopen(sideeffect_file, 'wt');
-% outlet = fopen(output_file, 'wt');
+fxlet = fopen(sideeffect_file, 'wt');
+outlet = fopen(output_file, 'wt');
 last = 0;
 linenumber = 1;
 queue = make_queue(inlet, windowsize);
 while length(queue) > 0
     % TODO Analyze derivative of queue
     dot_density = sigmoid(calculate_dot_density(queue));
-    fxlet.write(sprintf('%f\n', dot_density));
-    % fprintf(fxlet, '%f\n', dot_density);
+    fprintf(fxlet, '%f\n', dot_density);
     current = dot_density >= density;
     if current > last % is rising?
-        outlet.write(sprintf('%f\n', linenumber));
-        % fprintf(outlet, '%f\n', linenumber);
+        fprintf(outlet, '%f\n', linenumber);
     end
     last = current;
     linenumber = linenumber + hole;
     queue = update_queue(inlet, queue, windowsize);
 end
 fclose(inlet);
-close(fxlet);
-close(outlet);
-% fclose(fxlet);
-% fclose(outlet);
+fclose(fxlet);
+fclose(outlet);
 
 function [queue] = make_queue(inlet, windowsize)
 queue = [];
