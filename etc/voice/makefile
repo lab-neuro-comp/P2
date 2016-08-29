@@ -1,2 +1,4 @@
+version = 1.5
+
 do:
-	javac -target 1.5 -source 1.5 buffer/Buffer.java
+	javac -target $(version) -source $(version) br\eng\crisjr\buffer\Buffer.java
