@@ -3,10 +3,8 @@ function [outlet] = FourierRecognition(testcase, threshold, windowsize)
 % and window size using the windowed Fourier transform.
 recording = read_file(testcase);
 limit = length(recording);
-tic
 outlet = winfourier(recording, hamming(windowsize), windowsize, threshold/10);
-fprintf('%.4f\n', 10*(mean(outlet) + std(outlet)));
-toc
+% fprintf('%.4f\n', 10*(mean(outlet) + std(outlet)));
 
 % --- WINDOWED FOURIER TRANSFORM ----------------------------------------------
 function [presence] = winfourier(signal, window, windowsize, threshold)
@@ -49,10 +47,10 @@ end
 
 if isequal(testcase(index:length(testcase)), '.wav')
     [recording, samplerate, nbits] = wavread(testcase);
-    fprintf('%s %.3f\n', testcase, samplerate);
+    % fprintf('%s %.3f\n', testcase, samplerate);
 else
     recording = load(testcase);
-    fprintf('%s\n', testcase);
+    % fprintf('%s\n', testcase);
 end
 
 function to_another_file(filename, data)
