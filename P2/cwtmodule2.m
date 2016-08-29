@@ -22,7 +22,7 @@ function varargout = cwtmodule2(varargin)
 
 % Edit the above text to modify the response to help cwtmodule2
 
-% Last Modified by GUIDE v2.5 24-Aug-2016 09:32:43
+% Last Modified by GUIDE v2.5 26-Aug-2016 09:46:43
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -144,8 +144,10 @@ if ~isequal(signalname, 0)
     set(handles.TextFilename, 'String', signalname);
     %plot_decomposition(handles);
     axes(handles.PlotSignal);
-%    set(handles.PlotSignal, 'XLabel', 'Amplitude [uV]');
+    cla reset;
+    %    set(handles.PlotSignal, 'XLabel', 'Amplitude [uV]');
     standard_plot(handles.signal, fs);
+    grid(handles.PlotSignal, 'on');
 end
 
 initialize_module(hObject, handles);
@@ -545,6 +547,30 @@ function ButtonCalculate_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+MinValue = str2num(get(handles.EditMin, 'String'));
+IntValue = str2num(get(handles.EditInt, 'String'));
+MaxValue = str2num(get(handles.EditMax, 'String'));
+wavename = get(handles.TextSignal, 'String');
+
+axes(handles.PlotAnalysis);
+clear analysis;
+analysis = cwt(handles.signal, MinValue:IntValue:MaxValue, wavename, 'plot');
+
+set(handles.RadioScaleGraph, 'Enable', 'on');
+set(handles.EditScaleGraph, 'Enable', 'on');
+ScaleValue = get(handles.EditScale, 'String');
+set(handles.EditScaleGraph, 'String', ScaleValue);
+
+set(handles.RadioTimeGraph, 'Enable', 'on');
+set(handles.EditTimeGraph, 'Enable', 'on');
+set(handles.EditTimeGraph, 'String', '1');
+
+set(handles.ButtonView, 'Enable', 'on');
+
+set(handles.ButtonZoom, 'Enable', 'on');
+set(handles.ButtonColorbar, 'Enable', 'on');
+set(handles.ButtonReset, 'Enable', 'on');
+
 
 % --------------------------------------------------------------------
 function EditScale_Callback(hObject, eventdata, handles)
@@ -622,22 +648,15 @@ end
 
 
 % --------------------------------------------------------------------
-% --- Executes on button press in RadioScale.
-function RadioScale_Callback(hObject, eventdata, handles)
-% hObject    handle to RadioScale (see GCBO)
+% --- Executes on button press in RadioScaleGraph.
+function RadioScaleGraph_Callback(hObject, eventdata, handles)
+% hObject    handle to RadioScaleGraph (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hint: get(hObject,'Value') returns toggle state of RadioScale
+set(handles.RadioTimeGraph, 'Value', 0);
 
-
-% --- Executes on button press in RadioTime.
-function RadioTime_Callback(hObject, eventdata, handles)
-% hObject    handle to RadioTime (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of RadioTime
+% Hint: get(hObject,'Value') returns toggle state of RadioScaleGraph
 
 
 function EditScaleGraph_Callback(hObject, eventdata, handles)
@@ -663,10 +682,26 @@ end
 
 
 
+% --- Executes on button press in RadioTimeGraph.
+function RadioTimeGraph_Callback(hObject, eventdata, handles)
+% hObject    handle to RadioTimeGraph (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+set(handles.RadioScaleGraph, 'Value', 0);
+
+% Hint: get(hObject,'Value') returns toggle state of RadioTimeGraph
+
+
 function EditTimeGraph_Callback(hObject, eventdata, handles)
 % hObject    handle to EditTimeGraph (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+fs = str2num(handles.constants.get('fs'));
+
+signaltime = 0:1/fs:(length(handles.signalname)-1)/fs
+RegisteredTime = max(signaltime)
 
 % Hints: get(hObject,'String') returns contents of EditTimeGraph as text
 %        str2double(get(hObject,'String')) returns contents of EditTimeGraph as a double
@@ -703,13 +738,13 @@ function ButtonZoom_Callback(hObject, eventdata, handles)
 % Hint: get(hObject,'Value') returns toggle state of ButtonZoom
 
 
-% --- Executes on button press in ButtomColorbar.
-function ButtomColorbar_Callback(hObject, eventdata, handles)
-% hObject    handle to ButtomColorbar (see GCBO)
+% --- Executes on button press in ButtonColorbar.
+function ButtonColorbar_Callback(hObject, eventdata, handles)
+% hObject    handle to ButtonColorbar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hint: get(hObject,'Value') returns toggle state of ButtomColorbar
+% Hint: get(hObject,'Value') returns toggle state of ButtonColorbar
 
 
 % --- Executes on button press in ButtonReset.
