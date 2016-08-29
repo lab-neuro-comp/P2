@@ -38,3 +38,7 @@ set(handles.ButtonReset, 'Enable', 'off');
 axes(handles.PlotAnalysis);
 cla reset;
 grid(handles.PlotAnalysis, 'on');
+signaltime = 0:1/fs:(length(handles.signal)-1)/fs;
+RegisteredTime = num2str(max(signaltime));
+xlabel(strcat('Tempo [s]', ' [', '0:', RegisteredTime, ']'));
+ylabel('Scale');
