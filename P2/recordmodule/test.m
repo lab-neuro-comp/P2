@@ -10,9 +10,9 @@ set(handles.editInput, 'String', inputfile);
 set(handles.buttonRun, 'String', 'Run');
 
 disp('# Testing reading input file');
-[filelist fslist intslist] = recordmodule_readcsv(inputfile);
+[filelist fslist cutlist intslist] = recordmodule_readcsv(inputfile);
 outlet = recordmodule_work(filelist, fslist, intslist);
-recordmodule_savedata(filelist, outlet);
+recordmodule_savedata(filelist, cutlist, outlet);
 
 disp('# Final test');
 run_for_chopping(handles);
