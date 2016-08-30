@@ -118,7 +118,7 @@ function cwtbut_Callback(hObject, eventdata, handles)
 % hObject    handle to cwtbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-cwtmodule; % imported from P1 % does not work
+cwtmodule2; % imported from P1 % does not work
 
 % --- Executes on button press in ecgbut.
 function ecgbut_Callback(hObject, eventdata, handles)
