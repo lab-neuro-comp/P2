@@ -6,4 +6,5 @@ set(handles.RadioAlpha, 'Value', 0);
 set(handles.RadioBeta, 'Value', 0);
 set(handles.RadioGamma, 'Value', 0);
 set(hObject, 'Value', 1);
+
 guidata(hObject, handles);
