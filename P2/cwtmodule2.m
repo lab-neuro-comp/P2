@@ -22,7 +22,7 @@ function varargout = cwtmodule2(varargin)
 
 % Edit the above text to modify the response to help cwtmodule2
 
-% Last Modified by GUIDE v2.5 26-Aug-2016 09:46:43
+% Last Modified by GUIDE v2.5 31-Aug-2016 09:13:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -59,9 +59,6 @@ function cwtmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 handles.constants = load_constants();
 handles.wavelets = load_wavelets();
-
-handles.approximations = {};
-handles.details = {};
 
 % Update handles structure
 guidata(hObject, handles);
@@ -240,33 +237,33 @@ wavelettype = contents{get(hObject, 'Value')};
 
 switch wavelettype
     case 'Daubechies'
-        set_subwaveopts_on(hObject, handles, dbvaropts);
-        set(handles.TextSignal, 'String', 'db1');
+        set(handles.PopupWaveletVar, 'Visible', 'on', 'Value', 1, 'String', dbvaropts);
+        set(handles.TextWavelet, 'String', 'db1');
         wavename = 'db1';
     case 'Symlets'
-        set_subwaveopts_on(hObject, handles, symvaropts);
-        set(handles.TextSignal, 'String', 'sym2');
+        set(handles.PopupWaveletVar, 'Visible', 'on', 'Value', 1, 'String', symvaropts);
+        set(handles.TextWavelet, 'String', 'sym2');
         wavename = 'sym2';
     case 'Coiflets'
-        set_subwaveopts_on(hObject, handles, coifvaropts);
-        set(handles.TextSignal, 'String', 'coif1');
+        set(handles.PopupWaveletVar, 'Visible', 'on', 'Value', 1, 'String', coifvaropts);
+        set(handles.TextWavelet, 'String', 'coif1');
         wavename = 'coif1';
     case 'Biorthogonal'
-        set_subwaveopts_on(hObject, handles, biorvaropts);
-        set(handles.TextSignal, 'String', 'bior1.1');
+        set(handles.PopupWaveletVar, 'Visible', 'on', 'Value', 1, 'String', biorvaropts);
+        set(handles.TextWavelet, 'String', 'bior1.1');
         wavename = 'bior1.1';
     case 'R_Biorthogonal'
-        set_subwaveopts_on(hObject, handles, rbiovaropts);
-        set(handles.TextSignal, 'String', 'rbio1.1');
+        set(handles.PopupWaveletVar, 'Visible', 'on', 'Value', 1, 'String', rbiovaropts);
+        set(handles.TextWavelet, 'String', 'rbio1.1');
         wavename = 'rbio1.1';
     case 'Gaussian'
-        set_subwaveopts_on(hObject, handles, gausvaropts);
-        set(handles.TextSignal, 'String', 'gaus1');
+        set(handles.PopupWaveletVar, 'Visible', 'on', 'Value', 1, 'String', gausvaropts);
+        set(handles.TextWavelet, 'String', 'gaus1');
         wavename = 'gaus1';
     otherwise
         set(handles.PopupWaveletVar, 'Visible', 'off');
         wavename = handles.wavelets.get(wavelettype);
-        set(handles.TextSignal, 'String', wavename);
+        set(handles.TextWavelet, 'String', wavename);
 end
 
 deltaf1 = str2num(handles.constants.get('deltaf1'));
@@ -309,7 +306,7 @@ switch wavetype
         wavename = strcat(wavetype, wavesubtype);        
 end
 
-set(handles.TextSignal, 'String', wavename);
+set(handles.TextWavelet, 'String', wavename);
 deltaf1 = str2num(handles.constants.get('deltaf1'));
 set_scales_for_wavelets(hObject, handles, wavename, deltaf1);
 
@@ -355,7 +352,7 @@ function EditMin_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-wavename = get(handles.TextSignal, 'String');
+wavename = get(handles.TextWavelet, 'String');
 
 MinBase = centfrq(wavename)/0.5;
 MinValue = str2num(get(handles.EditMin, 'String'));
@@ -428,7 +425,7 @@ function EditMax_Callback(hObject, eventdata, handles)
 
 fs = str2num(handles.constants.get('fs'));
 deltaf1 = str2num(handles.constants.get('deltaf1'));
-wavename = get(handles.TextSignal, 'String');
+wavename = get(handles.TextWavelet, 'String');
 
 MaxBase = centfrq(wavename)/((1/fs)*deltaf1);
 MinValue = str2num(get(handles.EditMin, 'String'));
@@ -470,7 +467,7 @@ enable_predet_opt(hObject, handles);
 
 deltaf1 = str2num(handles.constants.get('deltaf1'));
 deltaf2 = str2num(handles.constants.get('deltaf2'));
-wavename = get(handles.TextSignal, 'String');
+wavename = get(handles.TextWavelet, 'String');
 set_predet_scales(hObject, handles, wavename, deltaf1, deltaf2);
 
 %set_predet_scales(hObject, handles, wavename, deltaf1, deltaf2);
@@ -488,7 +485,7 @@ enable_predet_opt(hObject, handles);
 
 thetaf1 = str2num(handles.constants.get('thetaf1'));
 thetaf2 = str2num(handles.constants.get('thetaf2'));
-wavename = get(handles.TextSignal, 'String');
+wavename = get(handles.TextWavelet, 'String');
 set_predet_scales(hObject, handles, wavename, thetaf1, thetaf2);
 
 % Hint: get(hObject,'Value') returns toggle state of RadioTheta
@@ -504,7 +501,7 @@ enable_predet_opt(hObject, handles);
 
 alphaf1 = str2num(handles.constants.get('alphaf1'));
 alphaf2 = str2num(handles.constants.get('alphaf2'));
-wavename = get(handles.TextSignal, 'String');
+wavename = get(handles.TextWavelet, 'String');
 set_predet_scales(hObject, handles, wavename, alphaf1, alphaf2);
 
 % Hint: get(hObject,'Value') returns toggle state of RadioAlpha
@@ -520,7 +517,7 @@ enable_predet_opt(hObject, handles);
 
 betaf1 = str2num(handles.constants.get('betaf1'));
 betaf2 = str2num(handles.constants.get('betaf2'));
-wavename = get(handles.TextSignal, 'String');
+wavename = get(handles.TextWavelet, 'String');
 set_predet_scales(hObject, handles, wavename, betaf1, betaf2);
 
 % Hint: get(hObject,'Value') returns toggle state of RadioBeta
@@ -536,7 +533,7 @@ enable_predet_opt(hObject, handles);
 
 gammaf1 = str2num(handles.constants.get('gammaf1'));
 gammaf2 = str2num(handles.constants.get('gammaf2'));
-wavename = get(handles.TextSignal, 'String');
+wavename = get(handles.TextWavelet, 'String');
 set_predet_scales(hObject, handles, wavename, gammaf1, gammaf2);
 
 % Hint: get(hObject,'Value') returns toggle state of RadioGamma
@@ -552,7 +549,7 @@ function ButtonCalculate_Callback(hObject, eventdata, handles)
 MinValue = str2num(get(handles.EditMin, 'String'));
 IntValue = str2num(get(handles.EditInt, 'String'));
 MaxValue = str2num(get(handles.EditMax, 'String'));
-wavename = get(handles.TextSignal, 'String');
+wavename = get(handles.TextWavelet, 'String');
 
 axes(handles.PlotAnalysis);
 clear analysis;
@@ -587,7 +584,7 @@ function EditScale_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 fs = str2num(handles.constants.get('fs'));
-wavename = get(handles.TextSignal, 'String');
+wavename = get(handles.TextWavelet, 'String');
 
 PsFreqBase = str2num(get(handles.EditPsFreq, 'String'));
 ScaleBase = centfrq(wavename)/((1/fs)*PsFreqBase);
@@ -624,7 +621,7 @@ function EditPsFreq_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 fs = str2num(handles.constants.get('fs'));
-wavename = get(handles.TextSignal, 'String');
+wavename = get(handles.TextWavelet, 'String');
 
 ScaleBase = str2num(get(handles.EditScale, 'String'));
 PsFreqBase = centfrq(wavename)/((1/fs)*ScaleBase);
@@ -662,10 +659,13 @@ function RadioScaleGraph_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+set(handles.RadioScaleGraph, 'Value', 1);
 set(handles.EditScaleGraph, 'Enable', 'on');
 
 set(handles.RadioTimeGraph, 'Value', 0);
-set(handles.EditTimeGraph, 'Enable', 'off');
+set(handles.EditTimeGraph, 'Enable', 'off', 'Value', 0);
+
+set(handles.ButtonView, 'Enable', 'on');
 
 % Hint: get(hObject,'Value') returns toggle state of RadioScaleGraph
 
@@ -685,9 +685,9 @@ if (ScaleGraphValue < ScaleMin)
 elseif (ScaleGraphValue > ScaleMax)
     h = msgbox({'The scale input must be within' 'the scale values analysed.'}, 'Error', 'warn');
     set(handles.EditScaleGraph, 'String', get(handles.EditMax, 'String'));
-else
-    body
 end
+
+set(handles.ButtonView, 'Enable', 'on');
 
 % Hints: get(hObject,'String') returns contents of EditScaleGraph as text
 %        str2double(get(hObject,'String')) returns contents of EditScaleGraph as a double
@@ -713,10 +713,13 @@ function RadioTimeGraph_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+set(handles.RadioTimeGraph, 'Value', 1);
 set(handles.EditTimeGraph, 'Enable', 'on');
 
 set(handles.RadioScaleGraph, 'Value', 0);
 set(handles.EditScaleGraph, 'Enable', 'off');
+
+set(handles.ButtonView, 'Enable', 'on');
 
 % Hint: get(hObject,'Value') returns toggle state of RadioTimeGraph
 
@@ -737,8 +740,10 @@ if (TimeGraphValue < 0)
     set(handles.EditTimeGraph, 'String', '0');
 elseif (TimeGraphValue > RegisteredTime)
     h = msgbox({'The time input must be smaller' 'or equal the registered time.'}, 'Error', 'warn');
-    set(handles.EditTimeGraph, 'String', sprintf('%5.2f', RegisteredTime));
+    set(handles.EditTimeGraph, 'String', sprintf('%5.3f', RegisteredTime));
 end
+
+set(handles.ButtonView, 'Enable', 'on');
 
 % Hints: get(hObject,'String') returns contents of EditTimeGraph as text
 %        str2double(get(hObject,'String')) returns contents of EditTimeGraph as a double
@@ -763,6 +768,10 @@ function ButtonView_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+set(handles.ButtonView, 'Enable', 'off');
+
+graph_coefficients(hObject, handles);
+
 
 
 % --------------------------------------------------------------------
@@ -786,7 +795,7 @@ ColorbarClick = get(handles.ButtonColorbar, 'Value');
 switch ColorbarClick
     case 1
         axes(handles.PlotAnalysis);
-        colorbar('southoutside', 'fontsize', 8, 'fontname', 'arial');
+        colorbar('southoutside', 'fontsize', 8);
     otherwise
         colorbar('off');
 end
