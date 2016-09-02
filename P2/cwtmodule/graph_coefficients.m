@@ -15,7 +15,7 @@ switch get(handles.RadioScaleGraph, 'Value')
     	f=figure('numbertitle', 'off', 'name', 'Scale Coeficients',...
     	  'color','white', 'menubar', 'none');
     	ScaleValue = str2num(get(handles.EditScaleGraph, 'String'));
-    	ScaleInd = round((ScaleValue - MinValue)/IntValue)+1;
+    	ScaleInd = round((ScaleValue - MinValue)/IntValue)+1
     	plot(signaltime, analysis(ScaleInd, :));
         axis tight
         grid on

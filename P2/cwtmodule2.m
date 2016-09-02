@@ -266,8 +266,7 @@ switch wavelettype
         set(handles.TextWavelet, 'String', wavename);
 end
 
-deltaf1 = str2num(handles.constants.get('deltaf1'));
-set_scales_for_wavelets(hObject, handles, wavename, deltaf1);
+set_scales_for_wavelets(hObject, handles, wavename);
 
 % Hints: contents = get(hObject,'String') returns PopupWaveletType contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from PopupWaveletType
@@ -307,8 +306,7 @@ switch wavetype
 end
 
 set(handles.TextWavelet, 'String', wavename);
-deltaf1 = str2num(handles.constants.get('deltaf1'));
-set_scales_for_wavelets(hObject, handles, wavename, deltaf1);
+set_scales_for_wavelets(hObject, handles, wavename);
 
 % Hints: contents = get(hObject,'String') returns PopupWaveletVar contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from PopupWaveletVar
@@ -781,6 +779,13 @@ function ButtonZoom_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+switch get(handles.ButtonZoom, 'Value')
+    case 1
+        zoom;
+    otherwise
+        zoom off;
+end
+
 % Hint: get(hObject,'Value') returns toggle state of ButtonZoom
 
 
@@ -810,5 +815,8 @@ function ButtonReset_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 if get(handles.ButtonReset, 'Value')
-    reset_module(hObject, handles);
+    selection = questdlg('Reset all the changes?', 'Reset', 'Yes', 'No', 'Yes');
+    if strcmp(selection, 'Yes')
+        reset_module(hObject, handles);
+    end
 end
