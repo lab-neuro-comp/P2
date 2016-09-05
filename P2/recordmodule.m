@@ -100,6 +100,8 @@ switch runningmode
         setup_for_eeglab(handles);
     case 'Chopping'
         setup_for_chopping(handles);
+    case 'EMG-RGP'
+        setup_for_chopping(handles);
 end
 
 % --- Executes during object creation, after setting all properties.
@@ -131,6 +133,8 @@ switch runningmode
         run_for_eeglab(handles);
     case 'Chopping'
         run_for_chopping(handles);
+    case 'EMG-RGP'
+        run_for_emgrgp(handles);
 end
 
 % --------------------------------------------------------------------
@@ -151,7 +155,7 @@ function settingsMenu_Callback(hObject, eventdata, handles)
 % hObject    handle to settingsMenu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+paramconfig;
 
 % --------------------------------------------------------------------
 function menuFile_Callback(hObject, eventdata, handles)
