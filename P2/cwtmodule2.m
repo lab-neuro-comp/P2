@@ -782,20 +782,17 @@ function ButtonZoom_Callback(hObject, eventdata, handles)
 fs = str2num(handles.constants.get('fs'));
 signaltime = 0:1/fs:(length(handles.signal)-1)/fs;
 RegisteredTime = max(signaltime);
+PlottedAxes(1) = handles.PlotSignal;
+PlottedAxes(2) = handles.PlotAnalysis;
 
 switch get(handles.ButtonZoom, 'Value')
     case 1
+        linkaxes(PlottedAxes, 'x');
         zoom;
         disp('Zoooooooom~!');
-        SignalLim = get(handles.PlotSignal, 'xlim');
-        AnalysisLim = get(handles.PlotAnalysis, 'xlim');
-        ProAnalysisLim = AnalysisLim/fs;
-        if ProAnalysisLim(2) > RegisteredTime
-            ProAnalysisLim(2) = RegisteredTime;
-        end
-        set(handles.PlotSignal, 'xlim', ProAnalysisLim);
     case 0
         zoom off;
+        linkaxes(PlottedAxes, 'off');
 end
 
 % Hint: get(hObject,'Value') returns toggle state of ButtonZoom
@@ -807,9 +804,7 @@ function ButtonColorbar_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-ColorbarClick = get(handles.ButtonColorbar, 'Value');
-
-switch ColorbarClick
+switch get(handles.ButtonColorbar, 'Value')
     case 1
         axes(handles.PlotAnalysis);
         colorbar('southoutside', 'fontsize', 8);
