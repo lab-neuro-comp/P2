@@ -793,7 +793,6 @@ switch get(handles.ButtonZoom, 'Value')
         cax = gca;
         switch cax
             case handles.PlotAnalysis
-                disp('Im here!');
                 AnalysisLim = get(handles.PlotAnalysis, 'xlim');
                 ProAnalysisLim = AnalysisLim/fs;
                 if ProAnalysisLim(2) > RegisteredTime
@@ -801,7 +800,6 @@ switch get(handles.ButtonZoom, 'Value')
                 end
                 set(handles.PlotSignal, 'xlim', ProAnalysisLim);
             case handles.PlotSignal
-                disp('Not anymore!');
                 SignalLim = get(handles.PlotSignal, 'xlim');
                 if SignalLim(2) > RegisteredTime;
                     SignalLim(2) = RegisteredTime;
