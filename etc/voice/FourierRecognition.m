@@ -13,7 +13,7 @@ limit = length(signal);
 presence = [];
 
 % maybe I should use file structures? If that is the case, work with queues
-% and incorporate the padding logic.
+% and incorporate padding logic.
 n = 1;
 while n < limit - windowsize
     % constructing window
