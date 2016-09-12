@@ -782,17 +782,33 @@ function ButtonZoom_Callback(hObject, eventdata, handles)
 fs = str2num(handles.constants.get('fs'));
 signaltime = 0:1/fs:(length(handles.signal)-1)/fs;
 RegisteredTime = max(signaltime);
-PlottedAxes(1) = handles.PlotSignal;
-PlottedAxes(2) = handles.PlotAnalysis;
+%PlottedAxes(1) = handles.PlotSignal;
+%PlottedAxes(2) = handles.PlotAnalysis;
 
 switch get(handles.ButtonZoom, 'Value')
     case 1
-        linkaxes(PlottedAxes, 'x');
         zoom;
-        disp('Zoooooooom~!');
     case 0
         zoom off;
-        linkaxes(PlottedAxes, 'off');
+        cax = gca;
+        switch cax
+            case handles.PlotAnalysis
+                disp('Im here!');
+                AnalysisLim = get(handles.PlotAnalysis, 'xlim');
+                ProAnalysisLim = AnalysisLim/fs;
+                if ProAnalysisLim(2) > RegisteredTime
+                    ProAnalysisLim(2) = RegisteredTime;
+                end
+                set(handles.PlotSignal, 'xlim', ProAnalysisLim);
+            case handles.PlotSignal
+                disp('Not anymore!');
+                SignalLim = get(handles.PlotSignal, 'xlim');
+                if SignalLim(2) > RegisteredTime;
+                    SignalLim(2) = RegisteredTime;
+                end;
+                    AnalysisLim = round(SignalLim*fs);
+                    set(handles.PlotAnalysis, 'xlim', AnalysisLim);
+        end
 end
 
 % Hint: get(hObject,'Value') returns toggle state of ButtonZoom
