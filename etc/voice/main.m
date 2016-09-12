@@ -1,28 +1,25 @@
-function main()
+function [windows] = main()
+% Callback to run button
 
+% Loading voice signal
 filename = 'data/voicerecognition.wav';
 [record, fs, nbits] = wavread(filename);
 clc;
+figure;
 plot(1:length(record), record);
 
 %Just trying to see what happens with the old approach
 windowsize = 128;
-[record, queue] = update_queue(record, [], windowsize);
+[record, queue] = update_queue(record, windowsize);
+windows = [];
+n = 1;
 
 while length(queue) > 0
 	% TODO Analyse window
-	[record, queue] = update_queue(record, queue, windowsize);
+	windows(:, n) = wfft(queue); % WARNING might destroy memory
+	n = n+1; % hehehe
+	[record, queue] = update_queue(record, windowsize);
 end
 
-plot(1:length(queue), queue);
-
-function [record, queue] = update_queue(record, queue, windowsize)
-
-n = 1;
-queue = [];
-
-while and((n <= windowsize), (length(record) > 0))
-	queue(n) = record(1);
-	n = n + 1;
-	record = record(2:length(record));
-end
+figure;
+surf(real(windows));
