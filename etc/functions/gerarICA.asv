@@ -1,0 +1,46 @@
+function n=gerarICA()
+%Trata registros
+
+%Definiçao da localizaçao dos arquivos
+localorigem = 'C:\Users\t\Documents\UnB\Pesquisa\edf\';
+localdestino = 'C:\Users\t\Documents\UnB\Pesquisa\Tratados\edfB\';
+
+% Arquivo com intevalos : SUJEITO	Teste	Fragmento	Nome    int1	int2 
+arqints=strcat('C:\Users\t\Documents\UnB\Pesquisa\Tratados\','arqsints2.xls');
+
+arqloc='C:\Users\t\Documents\MATLAB\locs21UP.ced';
+
+% Abrir o arquivo
+[A,T]=xlsread(arqints);
+
+% Open eeglab:
+[ALLEEG EEG CURRENTSET ALLCOM] = eeglab; 
+ALLEEG=[]; EEG=[]; CURRENTSET=[];
+%Iniciar varredura para corte de intervalos
+for i=1:size(A)
+ sujeito=T(i+1,1);
+ teste= T(i+1,2); 
+ arqset = T(i+1,3);
+ int1 = A(i,1);
+ int2 = A(i,2);
+ arqedf = T(i+1, 4)
+ 
+ arqset = strcat(arqset,'.set');
+ 
+ %EEGOUT = pop_loadset( filename, filepath);
+ EEG = pop_loadset( 'filename', char(arqset), 'filepath', localdestino );
+ 
+ EEG = eeg_checkset( EEG );
+ 
+ %EEG = pop_runica( EEG, 'key', 'val' );
+ EEG = pop_runica(EEG, 'icatype', 'runica', 'dataset', 1 ,'options', {'extended' 1}, 'chanind', [1:21] ,'concatenate','off');         
+
+ [ALLEEG EEG] = eeg_store(ALLEEG, EEG); 
+
+ EEG = pop_saveset( EEG, 'savemode','resave');
+ 
+end;
+ disp (i);
+ %ALLEEG = pop_delset( ALLEEG, [1:i] );
+ 
+disp('Fim.');

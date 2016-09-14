@@ -1,0 +1,46 @@
+function exportdataEEG(arqpars)
+%criar um novo estudo, recebe uma planilha como parametro (caminho completo do arquivo dataset | condiçao | sujeito) 
+
+%Definiçao da localizaçao dos arquivos
+localorigem = 'C:\Users\t\Documents\UnB\Pesquisa\Tratados\edfA\R\';
+localdestino = 'C:\Users\t\Documents\UnB\Pesquisa\Analises\eeg\';
+
+arqpars=strcat(localorigem,'arqspar1.xls');
+
+% Open eeglab:
+[ALLEEG EEG CURRENTSET ALLCOM] = eeglab; 
+ALLEEG=[]; EEG=[]; CURRENTSET=[];
+
+
+% Abrir o arquivo
+[N,T]=xlsread(arqpars);
+
+disp(N);
+disp(T);
+
+%Iniciar varredura para leitura dos datasets
+for i=1:size(T)
+ arqset=T(i,1);
+ condicao= T(i,2);
+ sujeito= T(i,3);
+ 
+    [pathstr, filename, ext, versn] = fileparts(char(arqset));
+    
+    arqdata = strcat(pathstr, '\data\', filename, '.data')
+
+    disp (strcat(filename, '.set'));
+    disp (pathstr);
+    disp (strcat (condicao, char(sujeito), '.data'));
+    
+    %EEGOUT = pop_loadset( filename, filepath);
+    %EEG = pop_loadset( 'filename', char(arqset), 'filepath', localdestino );
+ 
+    %EEG = eeg_checkset( EEG );
+    
+    %EEG = pop_export(EEG, arqdata, 'timeunit', '1E-4', 'transpose', 'on' );
+        
+    %[STUDY ALLEEG] = std_editset( STUDY, ALLEEG,'name', estudo, 'task', tarefa, 'commands',{{'index',i,'load',char(arqset)}, {'subject',char(sujeito)}, {'condition', char(condicao)}}, 'filename', arqestudo, 'filepath', localdestino);
+
+end;
+
+disp('Done.');

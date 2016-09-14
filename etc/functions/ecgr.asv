@@ -1,0 +1,43 @@
+clear
+close all
+clc
+
+fs=256;
+
+localorigem = 'C:\Users\t\Documents\UnB\RegistrosPiloto\Registros\cortes\';
+arquivo='S21DMTSECG.ascii';
+
+arquivo = strcat(localorigem,arquivo); 
+
+ecg1=load(arquivo);
+%ecg1=load('ekg(1).ascii');
+%ecg=-1.*ecg1(6000:7100)/length(ecg1);
+%ecg=-1.*ecg1(6000:7100)/length(ecg1);
+dev2_ecg=diff(diff(ecg));
+quad_dev2_ecg=dev2_ecg.^2;
+level=prctile(quad_dev2_ecg,90);
+
+for i=1:length(quad_dev2_ecg)
+    if quad_dev2_ecg(i)<level
+        quad_dev2_ecg(i)=0;
+    end
+end
+ 
+    
+    
+    
+time_axis=0:1/fs:(length(ecg)-1)/fs;
+subplot(3,1,1)
+plot(time_axis,ecg)
+grid
+axis([0 time_axis(length(time_axis)) min(ecg) max(ecg)])
+subplot(3,1,2)
+plot(dev2_ecg)
+grid
+axis([0 length(dev2_ecg) min(dev2_ecg) max(dev2_ecg)])
+subplot(3,1,3)
+plot(quad_dev2_ecg)
+grid
+axis([0 length(quad_dev2_ecg) min(quad_dev2_ecg) max(quad_dev2_ecg)])
+
+

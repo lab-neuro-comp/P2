@@ -1,0 +1,11 @@
+function n=corrigeecg(arqecg)
+
+ecg=load(arqecg);
+
+ecg=-ecg;
+%23,24,33,39,43
+
+
+    fid=fopen(arqecg,'wt');
+    fprintf(fid,'%d\n', ecg);
+    fclose(fid);
