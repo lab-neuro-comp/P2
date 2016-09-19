@@ -21,7 +21,6 @@ figure;
 plot(T, f);
 figure;
 plot(T, analysis);
-fprintf('%d %d\n', length(T), length(analysis));
 
 function [b, a] = transfunc(w)
 

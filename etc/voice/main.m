@@ -1,10 +1,10 @@
-function [windows] = main()
+function [analysis] = main()
 % Callback to run button
 
 % Loading voice signal
 filename = 'data/voicerecognition.wav';
 [record, fs, nbits] = wavread(filename);
-clc;
+%clc;
 figure;
 plot(1:length(record), record);
 
@@ -19,10 +19,10 @@ while length(queue) > 0
 	% TODO Analyse window
 
 	% new lines from here ...
-	b = [1 0 0];
-	a = [1 20 6400];
+	[b, a] = butter(2, [80, 260]/(fs/2));
 	% H(s) = s^2/(s^2 + 20*s + 6400)
-	% Transfer function for a high pass filter with w0 = 80Hz
+	% Transfer function for a bandpass filter with
+	% w0 = 80Hz and w1 = 260 Hz
 	analysis(:, n) = filter(b, a, queue);
 %	if n ==1
 %		figure;
@@ -30,12 +30,12 @@ while length(queue) > 0
 %	end
 	% ... till here
 
-	windows(:, n) = wfft(queue); % WARNING might destroy memory
+	%windows(:, n) = wfft(queue); % WARNING might destroy memory
 	n = n+1; % hehehe
 	[record, queue] = update_queue(record, windowsize);
 end
 
-figure;
-surf(real(windows));
+%figure;
+%surf(real(windows));
 figure;
 surf(analysis);
