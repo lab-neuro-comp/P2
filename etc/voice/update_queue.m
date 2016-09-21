@@ -9,9 +9,11 @@ queue = zeros(1, windowsize);
 if length(record) == 0
 	queue = [];
 else
-	while and((n <= windowsize), (length(record) > 0))
-		queue(n) = record(1);
-		n = n + 1;
-		record = record(2:length(record));
-	end
+	if length(record) >= 128
+		queue = record(1:128);
+		record = record(129:length(record));
+	elseif length(record) < 128
+		queue = record(1:length(record));
+		record = record(129:length(record));
+	end		
 end

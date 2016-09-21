@@ -3,7 +3,7 @@ function [analysis] = main()
 % TODO Queue updating
 
 % Loading voice signal
-filename = 'data/actualcase.wav';
+filename = 'data/voicerecognition.wav';
 [record, fs, nbits] = wavread(filename);
 analysis = [];
 n = 1;
@@ -23,14 +23,18 @@ power = 0;
 while length(queue) > 0
 	% TODO Analyse window
 
-	analysis(n) = calc_power(queue);
+	[analysis(n), sranalysis(n)] = calc_power(queue);
 	n = n + 1;
 	[record, queue] = update_queue(record, windowsize);
 
 end
 
+figure;
 plot(analysis);
+figure;
+plot(sranalysis);
 
-function [power] = calc_power(spectrum)
+function [power, srpower] = calc_power(spectrum)
 
 power = sum(spectrum.^2);
+srpower = sqrt(power);
