@@ -8,7 +8,7 @@ filename = 'data/voicerecognition.wav';
 analysis = [];
 n = 1;
 
-[b, a] = butter(2, [80, 260]/(fs/2));
+[b, a] = butter(4, [80, 260]/(fs/2));
 record = filter(b, a, record);
 
 figure;
@@ -23,7 +23,7 @@ power = 0;
 while length(queue) > 0
 	% TODO Analyse window
 
-	[analysis(n), sranalysis(n)] = calc_power(queue);
+	analysis(n) = calc_power(queue);
 	n = n + 1;
 	[record, queue] = update_queue(record, windowsize);
 
@@ -31,10 +31,16 @@ end
 
 figure;
 plot(analysis);
+
+ignorenoise = [];
+
+% TODO Find a good mathematical way to get a good threshold
+threshold = mean(analysis);
+disp(threshold);
+ignorenoise = ignore_noise(analysis, threshold);
 figure;
-plot(sranalysis);
+plot(ignorenoise);
 
-function [power, srpower] = calc_power(spectrum)
+function [power] = calc_power(spectrum)
 
-power = sum(spectrum.^2);
-srpower = sqrt(power);
+power = sqrt(sum(spectrum.^2));
