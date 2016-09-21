@@ -1,7 +1,5 @@
 function [record, queue] = update_queue(record, windowsize)
 % Updates the record and queue
-% TODO Make this fuction a better thing to work with
-% Probably not using the loop in line 12
 
 n = 1;
 queue = zeros(1, windowsize);
