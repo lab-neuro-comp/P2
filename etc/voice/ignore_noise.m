@@ -9,13 +9,11 @@ if length(signal) == 0
 	corrected = 0;
 else
 	while length(signal) > 0
-		if signal(1) <= threshold
-			n = n + 1;
-			signal = signal(2:length(signal));
-		else
-			corrected(n) = signal(1);
-			n = n + 1;
-			signal = signal(2:length(signal));
+		if signal(1) > threshold
+			% corrected(n) = signal(1);
+			corrected(n) = 1;
 		end
+		n = n + 1;
+		signal = signal(2:length(signal));
 	end
 end

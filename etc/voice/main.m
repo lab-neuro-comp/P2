@@ -30,16 +30,20 @@ while length(queue) > 0
 end
 
 figure;
-plot(analysis);
-
-ignorenoise = [];
+hold on;
+plot(analysis, 'b');
 
 % TODO Find a good mathematical way to get a good threshold
+ignorenoise = [];
 threshold = mean(analysis);
-disp(threshold);
 ignorenoise = ignore_noise(analysis, threshold);
-figure;
-plot(ignorenoise);
+% disp(threshold);
+% plot(ignorenoise, 'g');
+
+% Applying voice logic
+analysis = isvoice(ignorenoise);
+plot(analysis, 'r');
+hold off;
 
 function [power] = calc_power(spectrum)
 
