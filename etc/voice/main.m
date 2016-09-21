@@ -1,9 +1,9 @@
 function [analysis] = main()
 % Callback to run button
-% TODO Queue updating
+% TODO Improve `isvoice` and/or `ignore_voice` functions
 
 % Loading voice signal
-filename = 'data/voicerecognition.wav';
+filename = 'data/actualcase.wav';
 [record, fs, nbits] = wavread(filename);
 analysis = [];
 n = 1;
@@ -12,7 +12,8 @@ n = 1;
 record = filter(b, a, record);
 
 figure;
-plot(record);
+step = 0:(1/fs):(length(record)/fs);
+plot(step(2:length(step)), record);
 
 windowsize = 128;
 analysis = [];
