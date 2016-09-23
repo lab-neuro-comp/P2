@@ -1,5 +1,5 @@
 function [corrected] = ignore_noise(signal, threshold)
-% This function will recieve the analysed power
+% Noise Gate: this function will recieve the analysed power
 % and it'll ignore everything that is below the threshold
 
 corrected = zeros(1, length(signal));
@@ -9,7 +9,7 @@ if length(signal) == 0
 	corrected = 0;
 else
 	while length(signal) > 0
-		if signal(1) > threshold
+		if signal(1) >= threshold
 			% corrected(n) = signal(1);
 			corrected(n) = 1;
 		end
