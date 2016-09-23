@@ -44,6 +44,9 @@ ignorenoise = ignore_noise(analysis, threshold);
 % Applying voice logic
 analysis = isvoice(ignorenoise, threshold);
 plot(analysis, 'r');
+
+lastanalysis = mean_window(ignorenoise, analysis);
+plot(analysis, 'g');
 hold off;
 
 function [power] = calc_power(spectrum)
