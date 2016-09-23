@@ -7,11 +7,11 @@ queue = zeros(1, windowsize);
 if length(record) == 0
 	queue = [];
 else
-	if length(record) >= 128
-		queue = record(1:128);
-		record = record(129:length(record));
-	elseif length(record) < 128
+	if length(record) >= windowsize
+		queue = record(1:windowsize);
+		record = record((windowsize+1):length(record));
+	elseif length(record) < windowsize
 		queue = record(1:length(record));
-		record = record(129:length(record));
+		record = record((windowsize+1):length(record));
 	end		
 end
