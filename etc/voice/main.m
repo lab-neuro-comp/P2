@@ -3,7 +3,7 @@ function [analysis] = main()
 % TODO Improve `isvoice` and/or `ignore_voice` functions
 
 % Loading voice signal
-filename = 'data/actualcase.wav';
+filename = 'data/voicerecognition.wav';
 [record, fs, nbits] = wavread(filename);
 analysis = [];
 n = 1;
@@ -42,7 +42,7 @@ ignorenoise = ignore_noise(analysis, threshold);
 % plot(ignorenoise, 'g');
 
 % Applying voice logic
-analysis = isvoice(ignorenoise);
+analysis = isvoice(ignorenoise, threshold);
 plot(analysis, 'r');
 hold off;
 
