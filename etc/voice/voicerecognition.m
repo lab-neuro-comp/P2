@@ -132,6 +132,7 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonSearch (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 [filename, pathname, filterindex]  = uigetfile('*.wav', 'Select files', ...
                                                'MultiSelect', 'on');
 handles.cases = {};
@@ -144,13 +145,17 @@ elseif iscell(filename)
     end
 end
 
-handles.cases
+outlet = join_string(handles.cases);
+set(handles.editSearch, 'String', outlet);
 
 % --- Executes on button press in buttonRun.
 function buttonRun_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonRun (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+files = strsplit(outlet, ';')
+stuff = java.util.HashMap;
 
 
 % --- Executes on button press in buttonPlot.
