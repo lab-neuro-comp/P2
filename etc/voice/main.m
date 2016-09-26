@@ -1,4 +1,4 @@
-function [analysis] = main()
+function [analysis] = main(filename)
 % Callback to run button
 % TODO Improve `isvoice` and/or `ignore_voice` functions
 
@@ -34,4 +34,3 @@ analysis = isvoice(ignorenoise, threshold);
 lastanalysis = mean_window(length(analysis), ignorenoise, analysis);
 plot(lastanalysis, 'r');
 hold off;
-
