@@ -32,7 +32,7 @@ ignorenoise = ignore_noise(analysis, threshold);
 analysis = isvoice(ignorenoise, threshold);
 %plot(analysis, 'r');
 
-lastanalysis = mean_window(length(record), ignorenoise, analysis);
-plot(analysis, 'g');
+lastanalysis = mean_window(length(analysis), ignorenoise, analysis);
+plot(lastanalysis, 'g');
 hold off;
 

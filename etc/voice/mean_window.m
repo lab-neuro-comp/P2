@@ -2,21 +2,15 @@ function [timevector] = mean_window(limit, signal, timevector)
 % Trying to work out a way to eliminate the ok's 
 % that happen at the end of the word
 
-%limit = length(signal)
-disp('Is it you?')
-disp(length(signal));
 queue = [];
-windowsize = 5;
+disp(limit);
 
-for n = 1:2084
-	if timevector(n) == true
-		disp(n);
-		[signal, queue] = update_queue(signal, windowsize);
-		disp(queue)
-		meanvalue = sum(queue)
-		if meanvalue < 4
-			timevector(n) = 0;
-		end
+for n = 1:limit
+	[signal, queue] = update_queue(signal, 5);
+	meanvalue = sum(queue);
+	if and((meanvalue < 4), (length(queue) == 5))
+		disp(timevector(n*5:(n*5)+4));
+		disp(zeros(1, 5));
+		timevector(n*5:(n*5)+4) = zeros(1, 5);
 	end
-%	disp(n);
 end
