@@ -1,9 +1,8 @@
-function [analysis] = main()
+function [lastanalysis] = main(filename)
 % Callback to run button
 % TODO Improve `isvoice` and/or `ignore_voice` functions
 
 % Loading voice signal
-filename = 'data/actualcase.wav';
 [record, fs, nbits] = wavread(filename);
 analysis = [];
 n = 1;
