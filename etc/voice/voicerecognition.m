@@ -53,6 +53,7 @@ function voicerecognition_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for voicerecognition
 handles.output = hObject;
+handles.cases = {};
 
 % Update handles structure
 guidata(hObject, handles);
@@ -131,7 +132,19 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonSearch (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+[filename, pathname, filterindex]  = uigetfile('*.wav', 'Select files', ...
+                                               'MultiSelect', 'on');
+handles.cases = {};
+if ischar(filename)
+    handles.cases = { strcat(pathname, filename) };
+elseif iscell(filename)
+    handles.cases = {};
+    for n = 1:length(filename)
+        handles.cases{n} = strcat(pathname, filename{n});
+    end
+end
 
+handles.cases
 
 % --- Executes on button press in buttonRun.
 function buttonRun_Callback(hObject, eventdata, handles)
