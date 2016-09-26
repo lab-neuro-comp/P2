@@ -3,7 +3,7 @@ function [analysis] = main()
 % TODO Improve `isvoice` and/or `ignore_voice` functions
 
 % Loading voice signal
-filename = 'data/voicerecognition.wav';
+filename = 'data/actualcase.wav';
 [record, fs, nbits] = wavread(filename);
 analysis = [];
 n = 1;
