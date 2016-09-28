@@ -1,4 +1,4 @@
-function [analysis] = main(filename)
+function [lastanalysis] = main(filename)
 % Callback to run button
 % TODO Improve `isvoice` and/or `ignore_voice` functions
 
@@ -10,7 +10,6 @@ windowsize = 128;
 
 [b, a] = butter(4, [80, 260]/(fs/2));
 record = filter(b, a, record);
-disp(length(record));
 
 figure;
 step = 0:(1/fs):(length(record)/fs);
