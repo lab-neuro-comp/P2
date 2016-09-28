@@ -155,7 +155,7 @@ function buttonRun_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 outlet = get(handles.editSearch, 'String');
-files = split_string(outlet, ';')
+files = split_string(outlet, ';');
 stuff = java.util.HashMap;
 for n = 1:length(files)
     stuff.put(files{n}, main(files{n}));
