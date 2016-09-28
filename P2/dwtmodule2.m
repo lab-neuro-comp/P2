@@ -220,7 +220,7 @@ function PopupWaveletVar_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function PopupWaveletVar_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), ...
-	               get(0,'defaultUicontrolBackgroundColor'))
+	                 get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 

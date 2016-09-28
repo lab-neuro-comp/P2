@@ -53,11 +53,13 @@ function plot_stuff_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to plot_stuff (see VARARGIN)
 
 % Choose default command line output for plot_stuff
+disp('opening function');
 handles.output = hObject;
 handles.files = varargin{1};
 handles.stuff = varargin{2};
 
 % Update handles structure
+set(handles.popupmenuFiles, 'String', handles.files);
 guidata(hObject, handles);
 
 % UIWAIT makes plot_stuff wait for user response (see UIRESUME)
@@ -73,6 +75,7 @@ function varargout = plot_stuff_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
+varargout{2} = handles.stuff; % TODO Check when these objects are returned
 
 % --------------------------------------------------------------------
 function FileMenu_Callback(hObject, eventdata, handles)
@@ -124,14 +127,10 @@ function popupmenuFiles_CreateFcn(hObject, eventdata, handles)
 
 % Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-outlet = '';
-for n = 1:length(handles.files)
-    strcat(outlet, handles.files{n}, '\n');
-end
-set(hObject, 'String', outlet);
 
 % --- Executes on selection change in listboxMoments.
 function listboxMoments_Callback(hObject, eventdata, handles)

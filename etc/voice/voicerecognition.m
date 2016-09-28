@@ -179,7 +179,8 @@ function buttonPlot_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonPlot (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-callPlot(handles.files, handles.stuff);
+handles.stuff = callPlot(handles.files, handles.stuff);
+guidata(hObject, handles);
 
 
 % --- Executes on button press in buttonSave.
