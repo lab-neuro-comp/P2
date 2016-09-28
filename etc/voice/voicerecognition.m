@@ -54,6 +54,8 @@ function voicerecognition_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for voicerecognition
 handles.output = hObject;
 handles.cases = {};
+handles.files = {};
+handles.stuff = {};
 
 % Update handles structure
 guidata(hObject, handles);
@@ -161,6 +163,13 @@ for n = 1:length(files)
     stuff.put(files{n}, main(files{n}));
 end
 
+set(handles.buttonPlot, 'Enable', 'on');
+set(handles.buttonSave, 'Enable', 'on');
+
+handles.files = files;
+handles.stuff = stuff;
+guidata(hObject, handles);
+
 % TODO Cause the appropiate side effects
 % TODO Discover why some test cases are missing
 
@@ -170,6 +179,7 @@ function buttonPlot_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonPlot (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+callPlot(handles.files, handles.stuff);
 
 
 % --- Executes on button press in buttonSave.

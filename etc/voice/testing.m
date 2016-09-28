@@ -1,28 +1,11 @@
-function [analysis] = testing()
-% Testing filter function with the following transfer function:
-% H(s) = s^2/(s^2 + 20*s + 6400)
-% High pass filter with w0 = 80Hz
+function testing()
+% Testing calling plot_stuff
 
-T = 0:0.005:5;
-n = 1;
-w = 1;
-limit = 100;
-f = [];
+files = { 'data/actualcase.wav', 'data/voicerecognition.wav' };
+stuff = java.util.HashMap;
 
-for t = T
-	f(n) = squarewave(t, w, limit);
-	n = n + 1;
+for n = 1:length(files)
+	stuff.put(files{n}, main(files{n}));
 end
 
-%[b, a] = transfunc(2*w);
-[b, a] = butter(2, [1,5]/100);
-analysis = filter(b, a, f);
-figure;
-plot(T, f);
-figure;
-plot(T, analysis);
-
-function [b, a] = transfunc(w)
-
-b = [1 0 0];
-a = [1 w*pi (w*pi)^2];
+plot_stuff(files, stuff);
