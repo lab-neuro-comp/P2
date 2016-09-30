@@ -53,7 +53,6 @@ function plot_stuff_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to plot_stuff (see VARARGIN)
 
 % Choose default command line output for plot_stuff
-disp('opening function');
 handles.output = hObject;
 handles.files = varargin{1};
 handles.stuff = varargin{2};
@@ -122,15 +121,27 @@ function popupmenuFiles_Callback(hObject, eventdata, handles)
 
 contents = cellstr(get(hObject, 'String'));
 filename = contents{get(hObject, 'Value')};
+
+[record, fs, nbits] = wavread(filename);
 moments = handles.stuff.get(filename);
-set(handles.listboxMoments, 'String', moments);
+timemoments = turn_to_time(moments, length(record)/fs);
+maxlist = numel(timemoments);
+set(handles.listboxMoments, 'String', timemoments);
 
 axes(handles.axes1);
 reset(gca);
-[record, fs, nbits] = wavread(filename);
 step = 0:(1/fs):(length(record)/fs);
+
 hold on;
-plot(step(2:length(step)), record);
+plot(step(2:length(step)), record, 'b');
+
+% TODO Keep looking for a better way to plot it
+for n = 1:maxlist
+	xposition = timemoments(n);
+	plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
+		 'MarkerFaceColor', 'r', 'MarkerSize', 10);
+end
+hold off;
 
 
 % --- Executes during object creation, after setting all properties.
