@@ -1,7 +1,8 @@
 function testing()
 % Testing calling plot_stuff
 
-files = { 'data/actualcase.wav' 'data/voicerecognition.wav' };
+files = { 'data/voicerecognition.wav' };
+%files = { 'data/actualcase.wav' 'data/voicerecognition.wav' };
 stuff = java.util.HashMap;
 
 for n = 1:length(files)

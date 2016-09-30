@@ -109,14 +109,28 @@ end
 delete(handles.figure1)
 
 
+% --------------------------------------------------------------------
 % --- Executes on selection change in popupmenuFiles.
 function popupmenuFiles_Callback(hObject, eventdata, handles)
 % hObject    handle to popupmenuFiles (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = get(hObject,'String') returns popupmenuFiles contents as cell array
+% Hints: contents = get(hObject,'String') returns popupmenuFiles contents 
+%                                         as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenuFiles
+
+contents = cellstr(get(hObject, 'String'));
+filename = contents{get(hObject, 'Value')};
+moments = handles.stuff.get(filename);
+set(handles.listboxMoments, 'String', moments);
+
+axes(handles.axes1);
+reset(gca);
+[record, fs, nbits] = wavread(filename);
+step = 0:(1/fs):(length(record)/fs);
+hold on;
+plot(step(2:length(step)), record);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -138,8 +152,11 @@ function listboxMoments_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = get(hObject,'String') returns listboxMoments contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from listboxMoments
+contents = cellstr(get(handles.popupmenuFiles, 'String'));
+filename = contents{get(handles.popupmenuFiles, 'Value')};
+moments = handles.stuff.get(filename);
+maxlist = numel(moments);
+set(handles.listboxMoments, 'Max', maxlist);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -150,7 +167,8 @@ function listboxMoments_CreateFcn(hObject, eventdata, handles)
 
 % Hint: listbox controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 

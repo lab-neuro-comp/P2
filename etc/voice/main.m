@@ -1,4 +1,4 @@
-function [timevector] = main(filename)
+function [lastanalysis] = main(filename)
 % Callback to run button
 % TODO Improve `isvoice` and/or `ignore_voice` functions
 
@@ -7,21 +7,21 @@ function [timevector] = main(filename)
 analysis = [];
 n = 1;
 windowsize = 128;
-recordtime = length(record)/fs;
+%recordtime = length(record)/fs;
 
 [b, a] = butter(4, [80, 260]/(fs/2));
 record = filter(b, a, record);
 
-figure;
-step = 0:(1/fs):(length(record)/fs);
-plot(step(2:length(step)), record);
+%figure;
+%step = 0:(1/fs):(length(record)/fs);
+%plot(step(2:length(step)), record);
 
 analysis = calculate_power(record, windowsize);
-newscale = length(analysis);
+%newscale = length(analysis);
 
-figure;
-hold on;
-plot(analysis, 'b');
+%figure;
+%hold on;
+%plot(analysis, 'b');
 
 % TODO Find a good mathematical way to get a good threshold
 ignorenoise = [];
@@ -32,16 +32,7 @@ ignorenoise = ignore_noise(analysis, threshold);
 analysis = isvoice(ignorenoise, threshold);
 
 lastanalysis = mean_window(length(analysis), ignorenoise, analysis);
-plot(lastanalysis, 'r');
-hold off;
+%plot(lastanalysis, 'r');
+%hold off;
 
-timevector = [];
-m = 1;
 
-% Timevector is an array that contains the times marked during the analysis
-for n = 1:length(lastanalysis)
-	if lastanalysis(n) == 1
-		timevector(m) = (recordtime*n)/newscale;
-		m = m + 1;
-	end
-end
