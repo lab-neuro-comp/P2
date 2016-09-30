@@ -22,7 +22,7 @@ function varargout = plot_stuff(varargin)
 
 % Edit the above text to modify the response to help plot_stuff
 
-% Last Modified by GUIDE v2.5 30-Sep-2016 11:17:48
+% Last Modified by GUIDE v2.5 30-Sep-2016 11:41:06
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -195,10 +195,10 @@ moments = cellstr(get(handles.listboxMoments, 'String'));
 list = get(handles.listboxMoments, 'Value');
 
 for n = 1:numel(list)
-	selected(n) = moments(list(n))
+	selected(n) = moments(list(n));
 end
 
-% TODO Check how to undo the plotting on new items are selected
+% TODO Check how to undo the plotting when new items are selected
 hold(handles.axes1, 'on');
 for n = 1:numel(list)
 	xposition = str2double(selected(n));
@@ -207,3 +207,17 @@ for n = 1:numel(list)
 end
 hold off;
 
+
+% --- Executes on button press in pushbuttonSave.
+function pushbuttonSave_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbuttonSave (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+contents = cellstr(get(handles.popupmenuFiles, 'String'));
+filename = contents{get(handles.popupmenuFiles, 'Value')};
+moments = cellstr(get(handles.listboxMoments, 'String'));
+list = get(handles.listboxMoments, 'Value');
+
+handles.stuff.put(filename, list);
+test = handles.stuff.get(filename)
