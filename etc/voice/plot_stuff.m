@@ -22,7 +22,7 @@ function varargout = plot_stuff(varargin)
 
 % Edit the above text to modify the response to help plot_stuff
 
-% Last Modified by GUIDE v2.5 30-Sep-2016 10:43:51
+% Last Modified by GUIDE v2.5 30-Sep-2016 11:17:48
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -198,10 +198,12 @@ for n = 1:numel(list)
 	selected(n) = moments(list(n))
 end
 
+% TODO Check how to undo the plotting on new items are selected
 hold(handles.axes1, 'on');
 for n = 1:numel(list)
-	xposition = str2num(selected(n));
-	plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
-		 'MarkerFaceColor', 'r', 'MarkerSize', 10);
+	xposition = str2double(selected(n));
+	plot(xposition, -1:0.01:1, 'g', 'LineWidth', 2,...
+		 'MarkerFaceColor', 'g', 'MarkerSize', 10);
 end
 hold off;
+
