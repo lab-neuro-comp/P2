@@ -22,7 +22,7 @@ function varargout = plot_stuff(varargin)
 
 % Edit the above text to modify the response to help plot_stuff
 
-% Last Modified by GUIDE v2.5 28-Sep-2016 10:48:23
+% Last Modified by GUIDE v2.5 30-Sep-2016 10:43:51
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -125,7 +125,6 @@ filename = contents{get(hObject, 'Value')};
 [record, fs, nbits] = wavread(filename);
 moments = handles.stuff.get(filename);
 timemoments = turn_to_time(moments, length(record)/fs);
-maxlist = numel(timemoments);
 set(handles.listboxMoments, 'String', timemoments);
 
 axes(handles.axes1);
@@ -136,7 +135,7 @@ hold on;
 plot(step(2:length(step)), record, 'b');
 
 % TODO Keep looking for a better way to plot it
-for n = 1:maxlist
+for n = 1:numel(timemoments)
 	xposition = timemoments(n);
 	plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
 		 'MarkerFaceColor', 'r', 'MarkerSize', 10);
@@ -184,3 +183,25 @@ if ispc && isequal(get(hObject,'BackgroundColor'), ...
 end
 
 
+% --- Executes on button press in pushbuttonView.
+function pushbuttonView_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbuttonView (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+contents = cellstr(get(handles.popupmenuFiles, 'String'));
+filename = contents{get(handles.popupmenuFiles, 'Value')};
+moments = cellstr(get(handles.listboxMoments, 'String'));
+list = get(handles.listboxMoments, 'Value');
+
+for n = 1:numel(list)
+	selected(n) = moments(list(n))
+end
+
+hold(handles.axes1, 'on');
+for n = 1:numel(list)
+	xposition = str2num(selected(n));
+	plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
+		 'MarkerFaceColor', 'r', 'MarkerSize', 10);
+end
+hold off;
