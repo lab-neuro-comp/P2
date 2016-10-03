@@ -4,7 +4,7 @@ gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
                    'gui_OpeningFcn', @separar_EMG_RGP_OpeningFcn, ...
                    'gui_OutputFcn',  @separar_EMG_RGP_OutputFcn, ...
-                   'gui_LayoutFcn',  [] , ...
+                   'gui_LayoutFcn',  [], ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
@@ -30,6 +30,21 @@ function editFiles_CreateFcn(hObject, eventdata, handles)
 
 
 function pushbuttonSearch_Callback(hObject, eventdata, handles)
+[filename, pathname] = uigetfile('MultiSelect', 'on');
+outlet = '';
 
+if iscell(filename)
+    for n = 1:length(filename)7
+        filename{n} = strcat(pathname, filename{n});
+    end
+    outlet = filename{1};
+    for n = 2:length(filename)
+        outlet = strcat(outlet, ';', filename{n});
+    end
+elseif ischar(filename)
+    outlet = strcat(pathname, filename);
+end
+
+set(handles.editFiles, 'String', outlet);
 
 function pushbuttonRun_Callback(hObject, eventdata, handles)
