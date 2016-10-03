@@ -33,7 +33,7 @@ function editFiles_CreateFcn(hObject, eventdata, handles)
 
 function pushbuttonSearch_Callback(hObject, eventdata, handles)
 % Callback when clicking "buscar" pushbutton
-[filename, pathname] = uigetfile('MultiSelect', 'on');
+[filename, pathname] = uigetfile('*.edf', 'MultiSelect', 'on');
 outlet = '';
 
 if iscell(filename)
@@ -60,18 +60,23 @@ while not(isempty(inlet))
     [testcases{end+1}, inlet] = strtok(inlet, ';');
 end
 
-% Translating EDF to ASCII and TXT
-% TODO Translate EDF to ASCII and TXT using specified converter
-% use this `system` function:
-% >> [status,result] = system('dir')
-% TODO Discover signal number
-% TODO Generate info_output_file and data_output_file
-% TODO Iterate over every test case
-info_output_file = 'info.txt';
-data_output_file = 'data.ascii';
-command = sprintf('EDFtoASCII.exe %s 19 %s %s /SPACE /BATCH', ...
-                  testcases{1}, info_output_file, data_output_file);
-system(command);
-
 % Applying algorithm
+info_stuff = { };
+data_stuff = { };
+for n = 1:length(testcases)
+    % Getting raw file
+    testcase = testcases{n};
+    limit = length(testcase);
+    while ~isequal(testcase(limit), '.')
+        limit = limit-1;
+    end
+    raw = testcase(1:limit);
+    % Translating EDF to ASCII and TXT
+    info_stuff{n} = strcat(raw, 'txt');
+    data_stuff{n} = strcat(raw, 'ascii');
+    command = sprintf('EDFtoASCII.exe %s 22 %s %s /SPACE /BATCH', ...
+                      testcases{n}, info_stuff{n}, data_stuff{n});
+    system(command);
+end
+
 % TODO apply separating function
