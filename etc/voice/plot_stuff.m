@@ -74,7 +74,7 @@ function varargout = plot_stuff_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-varargout{2} = handles.stuff; % TODO Check when these objects are returned
+%varargout{2} = handles.stuff; % TODO Check when these objects are returned
 
 % --------------------------------------------------------------------
 function FileMenu_Callback(hObject, eventdata, handles)
@@ -219,6 +219,8 @@ function pushbuttonSave_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+global abcxyz;
+
 contents = cellstr(get(handles.popupmenuFiles, 'String'));
 filename = contents{get(handles.popupmenuFiles, 'Value')};
 moments = cellstr(get(handles.listboxMoments, 'String'));
@@ -236,6 +238,7 @@ for n = 1:numel(list)
 	list(n) = n;
 end
 set(handles.listboxMoments, 'Value', list);
-plot(0);
+time = handles.stuff.get(filename)
 
-guidata(hObject, handles);
+abcxyz = handles.stuff
+return;

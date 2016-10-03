@@ -1,5 +1,7 @@
-function [stuff] = callPlot(files, stuff)
+function [abcxyz] = callPlot(files, stuff)
 % Calls another window for processing voice moments
 % files  the list of processed files 
-% 
-plot_stuff(files, stuff);
+%
+global abcxyz;
+disp('Calling Plot...');
+plot_stuff(files, stuff)

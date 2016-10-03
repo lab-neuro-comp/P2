@@ -188,3 +188,10 @@ function buttonSave_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonSave (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+global abcxyz;
+
+handles.stuff = abcxyz;
+file = handles.files
+time = handles.stuff.get(file)
+guidata(hObject, handles);
