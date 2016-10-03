@@ -121,14 +121,15 @@ function popupmenuFiles_Callback(hObject, eventdata, handles)
 
 contents = cellstr(get(hObject, 'String'));
 filename = contents{get(hObject, 'Value')};
+moments = handles.stuff.get(filename);
 
 [record, fs, nbits] = wavread(filename);
-moments = handles.stuff.get(filename);
 timemoments = turn_to_time(moments, length(record)/fs);
+list = get(handles.listboxMoments, 'Value');
 set(handles.listboxMoments, 'String', timemoments);
 
 axes(handles.axes1);
-reset(gca);
+reset(handles.axes1);
 step = 0:(1/fs):(length(record)/fs);
 
 hold on;
@@ -141,6 +142,10 @@ for n = 1:numel(timemoments)
 		 'MarkerFaceColor', 'r', 'MarkerSize', 10);
 end
 hold off;
+
+handles.record = record;
+handles.fs = fs;
+guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -219,5 +224,18 @@ filename = contents{get(handles.popupmenuFiles, 'Value')};
 moments = cellstr(get(handles.listboxMoments, 'String'));
 list = get(handles.listboxMoments, 'Value');
 
-handles.stuff.put(filename, list);
-test = handles.stuff.get(filename)
+for n = 1:numel(list)
+	list(n) = str2double(moments(list(n)));
+end
+
+recordtime = length(handles.record)/handles.fs;
+moments = turn_to_moment(handles.stuff.get(filename), list, recordtime);
+
+handles.stuff.put(filename, moments);
+for n = 1:numel(list)
+	list(n) = n;
+end
+set(handles.listboxMoments, 'Value', list);
+plot(0);
+
+guidata(hObject, handles);
