@@ -30,11 +30,12 @@ function editFiles_CreateFcn(hObject, eventdata, handles)
 
 
 function pushbuttonSearch_Callback(hObject, eventdata, handles)
+% Callback when clicking "buscar" pushbutton
 [filename, pathname] = uigetfile('MultiSelect', 'on');
 outlet = '';
 
 if iscell(filename)
-    for n = 1:length(filename)7
+    for n = 1:length(filename)
         filename{n} = strcat(pathname, filename{n});
     end
     outlet = filename{1};
@@ -48,3 +49,18 @@ end
 set(handles.editFiles, 'String', outlet);
 
 function pushbuttonRun_Callback(hObject, eventdata, handles)
+% Callback when clicking "processar" pushbutton
+inlet = get(handles.editFiles, 'String');
+
+% Separating inlet into many strings
+testcases = {};
+while not(isempty(inlet))
+    [testcases{end+1}, inlet] = strtok(inlet, ';');
+end
+testcases
+
+% Translating EDF to ASCII and TXT
+% TODO Translate EDF to ASCII and TXT using specified converter
+
+% Applying algorithm
+% TODO apply separating function
