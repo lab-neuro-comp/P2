@@ -1,4 +1,5 @@
 *.lnk
 *.db
 *.class
+*.exe
 b/*
