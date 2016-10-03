@@ -24,14 +24,16 @@ function varargout = separar_EMG_RGP_OutputFcn(hObject, eventdata, handles)
 
 
 function editFiles_Callback(hObject, eventdata, handles)
+% There is no need to exist a function like this
 
 
 function editFiles_CreateFcn(hObject, eventdata, handles)
+% Nor a function here
 
 
 function pushbuttonSearch_Callback(hObject, eventdata, handles)
 % Callback when clicking "buscar" pushbutton
-[filename, pathname] = uigetfile('MultiSelect', 'on');
+[filename, pathname] = uigetfile('*.edf', 'MultiSelect', 'on');
 outlet = '';
 
 if iscell(filename)
@@ -57,10 +59,28 @@ testcases = {};
 while not(isempty(inlet))
     [testcases{end+1}, inlet] = strtok(inlet, ';');
 end
-testcases
-
-% Translating EDF to ASCII and TXT
-% TODO Translate EDF to ASCII and TXT using specified converter
 
 % Applying algorithm
+info_stuff = { };
+data_stuff = { };
+for n = 1:length(testcases)
+    % Getting raw file
+    testcase = testcases{n};
+    limit = length(testcase);
+    while ~isequal(testcase(limit), '.')
+        limit = limit-1;
+    end
+    raw = testcase(1:limit);
+    % Translating EDF to ASCII and TXT
+    info_stuff{n} = strcat(raw, 'txt');
+    data_stuff{n} = strcat(raw, 'ascii');
+    command = sprintf('EDFtoASCII.exe %s 22 %s %s /SPACE /BATCH', ...
+                      testcases{n}, info_stuff{n}, data_stuff{n});
+    system(command);
+end
+
 % TODO apply separating function
+for n = 1:length(testcases)
+    % TODO Discover how these files are related to the `separateGSR` script
+    separateGSR(info_stuff{n}, data_stuff{n})
+end
