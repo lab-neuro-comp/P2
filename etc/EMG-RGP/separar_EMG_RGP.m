@@ -80,3 +80,7 @@ for n = 1:length(testcases)
 end
 
 % TODO apply separating function
+for n = 1:length(testcases)
+    % TODO Discover how these files are related to the `separateGSR` script
+    separateGSR(info_stuff{n}, data_stuff{n})
+end
