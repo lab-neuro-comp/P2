@@ -24,9 +24,11 @@ function varargout = separar_EMG_RGP_OutputFcn(hObject, eventdata, handles)
 
 
 function editFiles_Callback(hObject, eventdata, handles)
+% There is no need to exist a function like this
 
 
 function editFiles_CreateFcn(hObject, eventdata, handles)
+% Nor a function here
 
 
 function pushbuttonSearch_Callback(hObject, eventdata, handles)
@@ -57,10 +59,19 @@ testcases = {};
 while not(isempty(inlet))
     [testcases{end+1}, inlet] = strtok(inlet, ';');
 end
-testcases
 
 % Translating EDF to ASCII and TXT
 % TODO Translate EDF to ASCII and TXT using specified converter
+% use this `system` function:
+% >> [status,result] = system('dir')
+% TODO Discover signal number
+% TODO Generate info_output_file and data_output_file
+% TODO Iterate over every test case
+info_output_file = 'info.txt';
+data_output_file = 'data.ascii';
+command = sprintf('EDFtoASCII.exe %s 19 %s %s /SPACE /BATCH', ...
+                  testcases{1}, info_output_file, data_output_file);
+system(command);
 
 % Applying algorithm
 % TODO apply separating function
