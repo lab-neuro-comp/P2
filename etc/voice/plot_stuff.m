@@ -238,7 +238,7 @@ for n = 1:numel(list)
 	list(n) = n;
 end
 set(handles.listboxMoments, 'Value', list);
-time = handles.stuff.get(filename)
+time = handles.stuff.get(filename);
 
-abcxyz = handles.stuff
+abcxyz = handles.stuff;
 return;

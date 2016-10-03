@@ -4,4 +4,4 @@ function [abcxyz] = callPlot(files, stuff)
 %
 global abcxyz;
 disp('Calling Plot...');
-plot_stuff(files, stuff)
+plot_stuff(files, stuff);
