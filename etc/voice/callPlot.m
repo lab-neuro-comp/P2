@@ -3,5 +3,4 @@ function [abcxyz] = callPlot(files, stuff)
 % files  the list of processed files 
 %
 global abcxyz;
-disp('Calling Plot...');
 plot_stuff(files, stuff);
