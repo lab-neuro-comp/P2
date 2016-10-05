@@ -129,7 +129,7 @@ list = get(handles.listboxMoments, 'Value');
 set(handles.listboxMoments, 'String', timemoments);
 
 axes(handles.axes1);
-reset(handles.axes1);
+plot(0);
 step = 0:(1/fs):(length(record)/fs);
 
 hold on;
