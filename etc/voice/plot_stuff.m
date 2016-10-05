@@ -206,7 +206,7 @@ end
 % TODO Find a better way to "replot"
 hold(handles.axes1, 'on');
 m = 1;
-disp(numel(moments));
+
 for n = 1:numel(moments)
   if m <= numel(selected)
     if strcmp(moments(n), selected(m)), 

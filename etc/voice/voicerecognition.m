@@ -27,19 +27,19 @@ function varargout = voicerecognition(varargin)
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
-                   'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @voicerecognition_OpeningFcn, ...
-                   'gui_OutputFcn',  @voicerecognition_OutputFcn, ...
-                   'gui_LayoutFcn',  [] , ...
-                   'gui_Callback',   []);
+				   'gui_Singleton',  gui_Singleton, ...
+				   'gui_OpeningFcn', @voicerecognition_OpeningFcn, ...
+				   'gui_OutputFcn',  @voicerecognition_OutputFcn, ...
+				   'gui_LayoutFcn',  [] , ...
+				   'gui_Callback',   []);
 if nargin && ischar(varargin{1})
-    gui_State.gui_Callback = str2func(varargin{1});
+	gui_State.gui_Callback = str2func(varargin{1});
 end
 
 if nargout
-    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+	[varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
 else
-    gui_mainfcn(gui_State, varargin{:});
+	gui_mainfcn(gui_State, varargin{:});
 end
 % End initialization code - DO NOT EDIT
 
@@ -89,7 +89,7 @@ function OpenMenuItem_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 file = uigetfile('*.fig');
 if ~isequal(file, 0)
-    open(file);
+	open(file);
 end
 
 % --------------------------------------------------------------------
@@ -98,10 +98,10 @@ function CloseMenuItem_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 selection = questdlg(['Close ' get(handles.figure1,'Name') '?'],...
-                     ['Close ' get(handles.figure1,'Name') '...'],...
-                     'Yes','No','Yes');
+					 ['Close ' get(handles.figure1,'Name') '...'],...
+					 'Yes','No','Yes');
 if strcmp(selection,'No')
-    return;
+	return;
 end
 
 delete(handles.figure1)
@@ -125,7 +125,7 @@ function editSearch_CreateFcn(hObject, eventdata, handles)
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+	set(hObject,'BackgroundColor','white');
 end
 
 
@@ -136,15 +136,15 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 [filename, pathname, filterindex]  = uigetfile('*.wav', 'Select files', ...
-                                               'MultiSelect', 'on');
+											   'MultiSelect', 'on');
 handles.cases = {};
 if ischar(filename)
-    handles.cases = { strcat(pathname, filename) };
+	handles.cases = { strcat(pathname, filename) };
 elseif iscell(filename)
-    handles.cases = {};
-    for n = 1:length(filename)
-        handles.cases{n} = strcat(pathname, filename{n});
-    end
+	handles.cases = {};
+	for n = 1:length(filename)
+		handles.cases{n} = strcat(pathname, filename{n});
+	end
 end
 
 outlet = join_string(handles.cases);
@@ -160,7 +160,7 @@ outlet = get(handles.editSearch, 'String');
 files = split_string(outlet, ';');
 stuff = java.util.HashMap;
 for n = 1:length(files)
-    stuff.put(files{n}, main(files{n}));
+	stuff.put(files{n}, main(files{n}));
 end
 
 set(handles.buttonPlot, 'Enable', 'on');
@@ -202,7 +202,10 @@ moments = {};
 for n = 1:length(file)
 	[record, fs, nbits] = wavread(file{n});
 	moments{n} = handles.stuff.get(file{n});
-	time{n} = turn_to_time(moments{n}, length(record)/fs);  
+	time{n} = turn_to_time(moments{n}, length(record)/fs);
+	for m = 1:length(time{n})
+		strcat(file{n}, ';', num2str(time{n}(m)), '/n');
+	end
 end
 
 % TODO Save as .csv
