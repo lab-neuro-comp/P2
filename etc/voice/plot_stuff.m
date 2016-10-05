@@ -137,9 +137,9 @@ plot(step(2:length(step)), record, 'b');
 
 % TODO Keep looking for a better way to plot it
 for n = 1:numel(timemoments)
-	xposition = timemoments(n);
-	plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
-		 'MarkerFaceColor', 'r', 'MarkerSize', 10);
+    xposition = timemoments(n);
+    plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
+         'MarkerFaceColor', 'r', 'MarkerSize', 10);
 end
 hold off;
 
@@ -200,15 +200,30 @@ moments = cellstr(get(handles.listboxMoments, 'String'));
 list = get(handles.listboxMoments, 'Value');
 
 for n = 1:numel(list)
-	selected(n) = moments(list(n));
+    selected(n) = moments(list(n));
 end
 
-% TODO Check how to undo the plotting when new items are selected
+% TODO Find a better way to "replot"
 hold(handles.axes1, 'on');
-for n = 1:numel(list)
-	xposition = str2double(selected(n));
-	plot(xposition, -1:0.01:1, 'g', 'LineWidth', 2,...
-		 'MarkerFaceColor', 'g', 'MarkerSize', 10);
+m = 1;
+disp(numel(moments));
+for n = 1:numel(moments)
+  if m <= numel(selected)
+    if strcmp(moments(n), selected(m)), 
+        xposition = str2double(selected(m));
+        plot(xposition, -1:0.01:1, 'g', 'LineWidth', 2,...
+             'MarkerFaceColor', 'g', 'MarkerSize', 10);
+      m = m + 1;
+    else
+      xposition = str2double(moments(n));
+      plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
+           'MarkerFaceColor', 'g', 'MarkerSize', 10);
+    end
+  else
+    xposition = str2double(moments(n));
+    plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
+         'MarkerFaceColor', 'g', 'MarkerSize', 10);
+  end
 end
 hold off;
 
@@ -227,7 +242,7 @@ moments = cellstr(get(handles.listboxMoments, 'String'));
 list = get(handles.listboxMoments, 'Value');
 
 for n = 1:numel(list)
-	list(n) = str2double(moments(list(n)));
+    list(n) = str2double(moments(list(n)));
 end
 
 recordtime = length(handles.record)/handles.fs;
@@ -235,10 +250,12 @@ moments = turn_to_moment(handles.stuff.get(filename), list, recordtime);
 
 handles.stuff.put(filename, moments);
 for n = 1:numel(list)
-	list(n) = n;
+    list(n) = n;
 end
 set(handles.listboxMoments, 'Value', list);
 time = handles.stuff.get(filename);
 
 abcxyz = handles.stuff;
-return;
+
+delete(handles.figure1); % After storing the result of plot_stuff
+                         % in abcxyz, closes the window

@@ -179,6 +179,7 @@ function buttonPlot_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonPlot (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 global abczyx;
 
 abcxyz = callPlot(handles.files, handles.stuff);
@@ -201,8 +202,7 @@ moments = {};
 for n = 1:length(file)
 	[record, fs, nbits] = wavread(file{n});
 	moments{n} = handles.stuff.get(file{n});
-	time{n} = turn_to_time(moments{n}, length(record)/fs)
-  disp(time{n});
+	time{n} = turn_to_time(moments{n}, length(record)/fs);  
 end
 
 % TODO Save as .csv
