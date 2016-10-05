@@ -149,6 +149,8 @@ end
 
 outlet = join_string(handles.cases);
 set(handles.editSearch, 'String', outlet);
+handles.pathname = pathname;
+guidata(hObject, handles);
 
 % --- Executes on button press in buttonRun.
 function buttonRun_Callback(hObject, eventdata, handles)
@@ -204,8 +206,13 @@ for n = 1:length(file)
 	moments{n} = handles.stuff.get(file{n});
 	time{n} = turn_to_time(moments{n}, length(record)/fs);
 	for m = 1:length(time{n})
-		strcat(file{n}, ';', num2str(time{n}(m)), '/n');
+		%h{m} = { file{n} num2str(time{n}(m)) }
+		h = strcat(file{n}, ';', num2str(time{n}(m)), '\n');
 	end
+	fileID = fopen(strcat(handles.pathname, 'filetable.txt'), 'w');
+	fprintf(fileID,'%6s %12s\n', 'Filename', 'Moments');
+	fprintf(fileID,'%6.2s %12.8s\n', h);
+	fclose(fileID);
 end
 
 % TODO Save as .csv
