@@ -241,6 +241,13 @@ filename = contents{get(handles.popupmenuFiles, 'Value')};
 moments = cellstr(get(handles.listboxMoments, 'String'));
 list = get(handles.listboxMoments, 'Value');
 
+selection = questdlg(['Salvar ' filename ' apaga todos os momentos nao selecionados. Continuar?'],...
+                     ['Salvar ' filename '?'],...
+                     'Sim','Nao','Sim');
+if strcmp(selection,'Nao')
+    return;
+end
+
 for n = 1:numel(list)
     list(n) = str2double(moments(list(n)));
 end
@@ -249,13 +256,15 @@ recordtime = length(handles.record)/handles.fs;
 moments = turn_to_moment(handles.stuff.get(filename), list, recordtime);
 
 handles.stuff.put(filename, moments);
-for n = 1:numel(list)
-    list(n) = n;
-end
-set(handles.listboxMoments, 'Value', list);
-time = handles.stuff.get(filename);
+set(handles.listboxMoments, 'Value', 1);
 
 abcxyz = handles.stuff;
 
+selection = questdlg(['Deseja continuar modificando outros arquivos?'],...
+                     ['Continuar modificando?'],...
+                     'Sim','Nao','Sim');
+if strcmp(selection,'Sim')
+    return;
+end
 delete(handles.figure1); % After storing the result of plot_stuff
                          % in abcxyz, closes the window
