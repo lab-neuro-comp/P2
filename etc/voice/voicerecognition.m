@@ -206,11 +206,12 @@ for n = 1:length(file)
 	[record, fs, nbits] = wavread(file{n});
 	moments{n} = handles.stuff.get(file{n});
 	time{n} = turn_to_time(moments{n}, length(record)/fs);
-	fileID = fopen(strcat(handles.pathname, 'filetable.csv'), 'w');
+	
+	tablename = strcat('filetable', num2str(n), '.csv')
+	fileID = fopen(strcat(handles.pathname, tablename), 'w');
 	fprintf(fileID, '%6s;%6s\n', 'Filename', 'Moments');
 	
 	for m = 1:length(time{n})
-		%h{m} = { file{n} num2str(time{n}(m)) }
 		h = strcat(file{n}, '; ', num2str(time{n}(m)));
 		fprintf(fileID, '%6s;%6s\n', file{n}, num2str(time{n}(m)));
 	end
