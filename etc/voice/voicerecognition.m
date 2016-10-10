@@ -151,6 +151,7 @@ outlet = join_string(handles.cases);
 set(handles.editSearch, 'String', outlet);
 set(handles.buttonRun, 'Enable', 'on');
 handles.pathname = pathname;
+handles.filename = filename;
 guidata(hObject, handles);
 
 % --- Executes on button press in buttonRun.
@@ -158,6 +159,8 @@ function buttonRun_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonRun (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+global abcxyz;
 
 outlet = get(handles.editSearch, 'String');
 files = split_string(outlet, ';');
@@ -171,6 +174,7 @@ set(handles.buttonSave, 'Enable', 'on');
 
 handles.files = files;
 handles.stuff = stuff;
+abcxyz = handles.stuff;
 guidata(hObject, handles);
 
 % TODO Cause the appropiate side effects
@@ -199,16 +203,18 @@ function buttonSave_Callback(hObject, eventdata, handles)
 global abcxyz;
 
 handles.stuff = abcxyz;
-file = handles.files;
+file = handles.files
 moments = {};
+name = handles.filename;
+name = split_string(name, '.')
 
 for n = 1:length(file)
 	[record, fs, nbits] = wavread(file{n});
 	moments{n} = handles.stuff.get(file{n});
 	time{n} = turn_to_time(moments{n}, length(record)/fs);
 	
-	tablename = strcat('filetable', num2str(n), '.csv')
-	fileID = fopen(strcat(handles.pathname, tablename), 'w');
+	tablename = char(strcat(name{n}, '.csv'));
+    fileID = fopen(strcat(handles.pathname, tablename), 'w');
 	fprintf(fileID, '%6s;%6s\n', 'Filename', 'Moments');
 	
 	for m = 1:length(time{n})
@@ -219,4 +225,5 @@ for n = 1:length(file)
 	fclose(fileID);
 end
 
+guidata(hObject, handles);
 % TODO Save as .csv
