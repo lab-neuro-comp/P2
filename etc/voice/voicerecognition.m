@@ -212,8 +212,9 @@ for n = 1:length(file)
 	fprintf(fileID, '%6s;%6s\n', 'Filename', 'Moments');
 	
 	for m = 1:length(time{n})
-		h = strcat(file{n}, '; ', num2str(time{n}(m)));
-		fprintf(fileID, '%6s;%6s\n', file{n}, num2str(time{n}(m)));
+		timestring = replace_dot(time{n}(m));
+		h = strcat(file{n}, '; ', timestring);
+		fprintf(fileID, '%6s;%6s\n', file{n}, timestring);
 	end
 	fclose(fileID);
 end
