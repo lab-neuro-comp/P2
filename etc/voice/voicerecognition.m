@@ -203,24 +203,30 @@ function buttonSave_Callback(hObject, eventdata, handles)
 global abcxyz;
 
 handles.stuff = abcxyz;
-file = handles.files
+file = handles.files;
 moments = {};
 name = handles.filename;
-name = split_string(name, '.')
 
 for n = 1:length(file)
 	[record, fs, nbits] = wavread(file{n});
 	moments{n} = handles.stuff.get(file{n});
 	time{n} = turn_to_time(moments{n}, length(record)/fs);
+    
+    if ischar(name)
+        name = split_string(name, '.');
+        tablename = char(strcat(name(1), '.csv'));
+    elseif iscell(name)
+        name{n} = split_string(name{n}, '.');
+        tablename = char(strcat(name{n}(1), '.csv'));
+    end
 	
-	tablename = char(strcat(name{n}, '.csv'));
-    fileID = fopen(strcat(handles.pathname, tablename), 'w');
-	fprintf(fileID, '%6s;%6s\n', 'Filename', 'Moments');
+	fileID = fopen(strcat(handles.pathname, tablename), 'w');
+	fprintf(fileID, '%s;%s\n', 'Filename', 'Moments');
 	
 	for m = 1:length(time{n})
 		timestring = replace_dot(time{n}(m));
 		h = strcat(file{n}, '; ', timestring);
-		fprintf(fileID, '%6s;%6s\n', file{n}, timestring);
+		fprintf(fileID, '%s;%s\n', file{n}, timestring);
 	end
 	fclose(fileID);
 end
