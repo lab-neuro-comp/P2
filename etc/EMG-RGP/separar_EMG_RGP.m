@@ -74,9 +74,15 @@ for n = 1:length(testcases)
     % Translating EDF to ASCII and TXT
     info_stuff{n} = strcat(raw, 'txt');
     data_stuff{n} = strcat(raw, 'ascii');
-    command = sprintf('EDFtoASCII.exe %s 22 %s %s /SPACE /BATCH', ...
-                      testcases{n}, info_stuff{n}, data_stuff{n});
-    system(command);
+
+    % works when the .exe is in the same folder,
+    % but it doesn't save
+    % TODO Store the conversion result in data_stuff
+    command = sprintf('edf2ascii.exe %s 22 %s %s /SPACE /BATCH', ...
+                      testcases{n}, info_stuff{n}, data_stuff{n})
+%    command = sprintf('"edf2ascii.exe" testcases{n}')
+    [status, result] = system(command);
+    %[status, result] = system(['C:\Users\LAB\Documents\MATLAB\P2\etc\edf2ascii\src\convert_edf2ascii\edf2ascii.exe', testcases{n}])
 end
 
 % TODO apply separating function
