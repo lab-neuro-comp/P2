@@ -63,6 +63,7 @@ end
 % Applying algorithm
 info_stuff = { };
 data_stuff = { };
+tic;
 for n = 1:length(testcases)
     % Getting raw file
     testcase = testcases{n};
@@ -80,11 +81,14 @@ for n = 1:length(testcases)
     % TODO Store the conversion result in data_stuff
     command = sprintf('edf2ascii.exe %s 22 %s %s /SPACE /BATCH', ...
                       testcases{n}, info_stuff{n}, data_stuff{n})
-%    command = sprintf('"edf2ascii.exe" testcases{n}')
     [status, result] = system(command);
-    %[status, result] = system(['C:\Users\LAB\Documents\MATLAB\P2\etc\edf2ascii\src\convert_edf2ascii\edf2ascii.exe', testcases{n}])
+    dlmwrite(data_stuff{n}, result, 'delimiter', '');
+    fileID = fopen(info_stuff{n}, 'w');
+    fprintf(fileID, testcases{n});
+    fclose(fileID);
 end
-
+toc
+pause;
 % TODO apply separating function
 for n = 1:length(testcases)
     % TODO Discover how these files are related to the `separateGSR` script
