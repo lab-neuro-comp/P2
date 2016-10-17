@@ -1,7 +1,7 @@
 %% separateGSR: Separates GSR signal from EMG
+%% @author joaopauloc.souza@outlook.com
 function [EMG, GSR] = separateGSR(txtfile, asciifile)
 % Separates GSR signal from EMG
-% @author joaopauloc.souza@outlook.com
 
 %=======================================================
 %=================================================
