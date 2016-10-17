@@ -61,36 +61,13 @@ while not(isempty(inlet))
 end
 
 % Applying algorithm
-info_stuff = { };
-data_stuff = { };
 tic;
 for n = 1:length(testcases)
-    % Getting raw file
-    testcase = testcases{n};
-    limit = length(testcase);
-    while ~isequal(testcase(limit), '.')
-        limit = limit-1;
-    end
-    raw = testcase(1:limit);
-    % Translating EDF to ASCII and TXT
-    info_stuff{n} = strcat(raw, 'txt');
-    data_stuff{n} = strcat(raw, 'ascii');
-
-    % works when the .exe is in the same folder,
-    % but it doesn't save
-    % TODO Store the conversion result in data_stuff
-    command = sprintf('edf2ascii.exe %s 22 %s %s /SPACE /BATCH', ...
-                      testcases{n}, info_stuff{n}, data_stuff{n})
-    [status, result] = system(command);
-    dlmwrite(data_stuff{n}, result, 'delimiter', '');
-    fileID = fopen(info_stuff{n}, 'w');
-    fprintf(fileID, testcases{n});
-    fclose(fileID);
+    [EMG, GSR] = separateGSR(testcases{n});
+    figure;
+    hold on;
+    plot(GSR, 'r');
+    plot(EMG, 'b');
+    hold off;
 end
-toc
-pause;
-% TODO apply separating function
-for n = 1:length(testcases)
-    % TODO Discover how these files are related to the `separateGSR` script
-    separateGSR(info_stuff{n}, data_stuff{n})
-end
+toc;
