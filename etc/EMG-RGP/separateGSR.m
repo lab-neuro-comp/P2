@@ -7,4 +7,5 @@ function [EMG, GSR] = separateGSR(edffile)
 
 % Trying to use the EDF file
 raw = load(asciifile);
+figure;
 plot(raw); % TODO Why is the signal all fucked up?
