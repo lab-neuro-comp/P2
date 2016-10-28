@@ -13,17 +13,24 @@ labels = edfinfo.getLabels();
 % Trying to use the EDF file
 raw = load(asciifile);
 figure;
-%hold on;
+hold on;
 plot(raw, 'r'); % TODO Why is the signal all fucked up?
 
 % TODO Keep working with the smooth function
-Y = smooth(raw, 255, 'sgolay', 2); 
-figure;
+%Y = smooth(raw, 'sgolay', 2); 
+%X = smooth(raw, 1023, 'sgolay', 2); 
+X = smooth(raw, 4095, 'sgolay', 2); 
+%plot(Y, 'b');
+Y = X - 65000; % Just shifted down so it'd be easier to see
 plot(Y, 'b');
 
+MEMG = raw - X;
+plot(MEMG, 'g');
+
 % TODO Find out the sampling frequency
-%fs = edfinfo.getSamplingRate;
-%[b, a] = butter(4, [1, 5]/(fs/2));
-%record = filter(b, a, raw);
-%plot(record, 'b');
-%hold off;
+fs = edfinfo.getSamplingRate;
+[b, a] = butter(2, 5/(fs/2), 'high');
+record = filter(b, a, X);
+%plot(record, 'm');
+
+hold off;
