@@ -64,10 +64,16 @@ end
 tic;
 for n = 1:length(testcases)
     [EMG, GSR] = separateGSR(testcases{n});
-    figure;
-    hold on;
-    plot(GSR, 'r');
-    plot(EMG, 'b');
-    hold off;
+
+    if EMG == 0
+      h = msgbox(['The file ', testcases{n},...
+                 ' has no EMG-RGP channel'], 'Error', 'error');
+    else
+      figure;
+      hold on;
+      plot(GSR, 'r');
+      plot(EMG, 'b');
+      hold off;
+    end
 end
 toc;
