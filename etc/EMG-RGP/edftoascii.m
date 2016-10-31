@@ -21,4 +21,3 @@ for n = 1:length(labels)
 end
 
 h = msgbox('The file has no EMG-RGP channel', 'Error', 'error');
-
