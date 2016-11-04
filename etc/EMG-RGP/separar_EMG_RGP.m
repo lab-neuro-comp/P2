@@ -1,19 +1,19 @@
 function varargout = separar_EMG_RGP(varargin)
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
-                   'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @separar_EMG_RGP_OpeningFcn, ...
-                   'gui_OutputFcn',  @separar_EMG_RGP_OutputFcn, ...
-                   'gui_LayoutFcn',  [], ...
-                   'gui_Callback',   []);
+				   'gui_Singleton',  gui_Singleton, ...
+				   'gui_OpeningFcn', @separar_EMG_RGP_OpeningFcn, ...
+				   'gui_OutputFcn',  @separar_EMG_RGP_OutputFcn, ...
+				   'gui_LayoutFcn',  [], ...
+				   'gui_Callback',   []);
 if nargin && ischar(varargin{1})
-    gui_State.gui_Callback = str2func(varargin{1});
+	gui_State.gui_Callback = str2func(varargin{1});
 end
 
 if nargout
-    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+	[varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
 else
-    gui_mainfcn(gui_State, varargin{:});
+	gui_mainfcn(gui_State, varargin{:});
 end
 
 function separar_EMG_RGP_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -37,15 +37,15 @@ function pushbuttonSearch_Callback(hObject, eventdata, handles)
 outlet = '';
 
 if iscell(filename)
-    for n = 1:length(filename)
-        filename{n} = strcat(pathname, filename{n});
-    end
-    outlet = filename{1};
-    for n = 2:length(filename)
-        outlet = strcat(outlet, ';', filename{n});
-    end
+	for n = 1:length(filename)
+		filename{n} = strcat(pathname, filename{n});
+	end
+	outlet = filename{1};
+	for n = 2:length(filename)
+		outlet = strcat(outlet, ';', filename{n});
+	end
 elseif ischar(filename)
-    outlet = strcat(pathname, filename);
+	outlet = strcat(pathname, filename);
 end
 
 set(handles.editFiles, 'String', outlet);
@@ -57,23 +57,23 @@ inlet = get(handles.editFiles, 'String');
 % Separating inlet into many strings
 testcases = {};
 while not(isempty(inlet))
-    [testcases{end+1}, inlet] = strtok(inlet, ';');
+	[testcases{end+1}, inlet] = strtok(inlet, ';');
 end
 
 % Applying algorithm
 tic;
 for n = 1:length(testcases)
-    [EMG, GSR] = separateGSR(testcases{n});
+	[EMG, GSR] = separateGSR(testcases{n});
 
-    if EMG == 0
-      h = msgbox(['The file ', testcases{n},...
-                 ' has no EMG-RGP channel'], 'Error', 'error');
-    else
-      figure;
-      hold on;
-      plot(GSR, 'r');
-      plot(EMG, 'b');
-      hold off;
-    end
+	if GSR == 0
+		h = msgbox(['The file ', testcases{n},...
+				   ' has no EMG-RGP channel'], 'Error', 'error');
+	else
+		figure;
+		hold on;
+		plot(GSR, 'r');
+		plot(EMG, 'b');
+		hold off;
+	end
 end
 toc;
