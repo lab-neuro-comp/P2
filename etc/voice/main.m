@@ -10,6 +10,7 @@ windowsize = 128;
 
 [b, a] = butter(4, [80, 260]/(fs/2));
 record = filter(b, a, record);
+disp(length(record)/windowsize);
 
 analysis = calculate_power(record, windowsize);
 

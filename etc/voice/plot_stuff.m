@@ -22,7 +22,7 @@ function varargout = plot_stuff(varargin)
 
 % Edit the above text to modify the response to help plot_stuff
 
-% Last Modified by GUIDE v2.5 30-Sep-2016 11:41:06
+% Last Modified by GUIDE v2.5 07-Nov-2016 09:36:23
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -58,7 +58,13 @@ handles.files = varargin{1};
 handles.stuff = varargin{2};
 
 % Update handles structure
-set(handles.popupmenuFiles, 'String', handles.files);
+n = 1;
+handles.n = n;
+
+if n == length(handles.files)
+  set(handles.pushbuttonSave, 'String', 'Salvar');
+end
+refresh_signal(hObject, handles, handles.files, handles.stuff, handles.n);
 guidata(hObject, handles);
 
 % UIWAIT makes plot_stuff wait for user response (see UIRESUME)
@@ -109,6 +115,13 @@ delete(handles.figure1)
 
 
 % --------------------------------------------------------------------
+% --- Executes during object creation, after setting all properties.
+function textFilename_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to textFilename (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+
 % --- Executes on selection change in popupmenuFiles.
 function popupmenuFiles_Callback(hObject, eventdata, handles)
 % hObject    handle to popupmenuFiles (see GCBO)
@@ -118,34 +131,6 @@ function popupmenuFiles_Callback(hObject, eventdata, handles)
 % Hints: contents = get(hObject,'String') returns popupmenuFiles contents 
 %                                         as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenuFiles
-
-contents = cellstr(get(hObject, 'String'));
-filename = contents{get(hObject, 'Value')};
-moments = handles.stuff.get(filename);
-
-[record, fs, nbits] = wavread(filename);
-timemoments = turn_to_time(moments, length(record)/fs);
-list = get(handles.listboxMoments, 'Value');
-set(handles.listboxMoments, 'String', timemoments);
-
-axes(handles.axes1);
-plot(0);
-step = 0:(1/fs):(length(record)/fs);
-
-hold on;
-plot(step(2:length(step)), record, 'b');
-
-% TODO Keep looking for a better way to plot it
-for n = 1:numel(timemoments)
-    xposition = timemoments(n);
-    plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
-         'MarkerFaceColor', 'r', 'MarkerSize', 10);
-end
-hold off;
-
-handles.record = record;
-handles.fs = fs;
-guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -161,14 +146,14 @@ if ispc && isequal(get(hObject,'BackgroundColor'), ...
     set(hObject,'BackgroundColor','white');
 end
 
+
 % --- Executes on selection change in listboxMoments.
 function listboxMoments_Callback(hObject, eventdata, handles)
 % hObject    handle to listboxMoments (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-contents = cellstr(get(handles.popupmenuFiles, 'String'));
-filename = contents{get(handles.popupmenuFiles, 'Value')};
+filename = get(handles.textFilename, 'String');
 moments = handles.stuff.get(filename);
 maxlist = numel(moments);
 set(handles.listboxMoments, 'Max', maxlist);
@@ -194,8 +179,7 @@ function pushbuttonView_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-contents = cellstr(get(handles.popupmenuFiles, 'String'));
-filename = contents{get(handles.popupmenuFiles, 'Value')};
+filename = get(handles.textFilename, 'String');
 moments = cellstr(get(handles.listboxMoments, 'String'));
 list = get(handles.listboxMoments, 'Value');
 
@@ -236,8 +220,7 @@ function pushbuttonSave_Callback(hObject, eventdata, handles)
 
 global abcxyz;
 
-contents = cellstr(get(handles.popupmenuFiles, 'String'));
-filename = contents{get(handles.popupmenuFiles, 'Value')};
+filename = get(handles.textFilename, 'String');
 moments = cellstr(get(handles.listboxMoments, 'String'));
 list = get(handles.listboxMoments, 'Value');
 
@@ -268,3 +251,5 @@ if strcmp(selection,'Sim')
 end
 delete(handles.figure1); % After storing the result of plot_stuff
                          % in abcxyz, closes the window
+
+
