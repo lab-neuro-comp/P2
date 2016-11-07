@@ -27,19 +27,19 @@ function varargout = plot_stuff(varargin)
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
-                   'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @plot_stuff_OpeningFcn, ...
-                   'gui_OutputFcn',  @plot_stuff_OutputFcn, ...
-                   'gui_LayoutFcn',  [] , ...
-                   'gui_Callback',   []);
+					 'gui_Singleton',  gui_Singleton, ...
+					 'gui_OpeningFcn', @plot_stuff_OpeningFcn, ...
+					 'gui_OutputFcn',  @plot_stuff_OutputFcn, ...
+					 'gui_LayoutFcn',  [] , ...
+					 'gui_Callback',   []);
 if nargin && ischar(varargin{1})
-    gui_State.gui_Callback = str2func(varargin{1});
+	gui_State.gui_Callback = str2func(varargin{1});
 end
 
 if nargout
-    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+	[varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
 else
-    gui_mainfcn(gui_State, varargin{:});
+	gui_mainfcn(gui_State, varargin{:});
 end
 % End initialization code - DO NOT EDIT
 % ME OBRIGUE
@@ -58,13 +58,14 @@ handles.files = varargin{1};
 handles.stuff = varargin{2};
 
 % Update handles structure
-n = 1;
-handles.n = n;
+repeated = 1;
+handles.repeated = repeated;
 
-if n == length(handles.files)
-  set(handles.pushbuttonSave, 'String', 'Salvar');
+if repeated == length(handles.files)
+	set(handles.pushbuttonSave, 'String', 'Salvar');
 end
-refresh_signal(hObject, handles, handles.files, handles.stuff, handles.n);
+[handles.record, handles.fs] = refresh_signal(hObject, handles,...
+							   handles.files, handles.stuff, handles.repeated);
 guidata(hObject, handles);
 
 % UIWAIT makes plot_stuff wait for user response (see UIRESUME)
@@ -96,7 +97,7 @@ function OpenMenuItem_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 file = uigetfile('*.fig');
 if ~isequal(file, 0)
-    open(file);
+	open(file);
 end
 
 % --------------------------------------------------------------------
@@ -105,10 +106,10 @@ function CloseMenuItem_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 selection = questdlg(['Close ' get(handles.figure1,'Name') '?'],...
-                     ['Close ' get(handles.figure1,'Name') '...'],...
-                     'Yes','No','Yes');
+					 ['Close ' get(handles.figure1,'Name') '...'],...
+					 'Yes','No','Yes');
 if strcmp(selection,'No')
-    return;
+	return;
 end
 
 delete(handles.figure1)
@@ -142,8 +143,8 @@ function popupmenuFiles_CreateFcn(hObject, eventdata, handles)
 % Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), ...
-                   get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+		   get(0,'defaultUicontrolBackgroundColor'))
+	set(hObject,'BackgroundColor','white');
 end
 
 
@@ -168,8 +169,8 @@ function listboxMoments_CreateFcn(hObject, eventdata, handles)
 % Hint: listbox controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), ...
-                   get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+		   get(0,'defaultUicontrolBackgroundColor'))
+	set(hObject,'BackgroundColor','white');
 end
 
 
@@ -184,7 +185,7 @@ moments = cellstr(get(handles.listboxMoments, 'String'));
 list = get(handles.listboxMoments, 'Value');
 
 for n = 1:numel(list)
-    selected(n) = moments(list(n));
+	selected(n) = moments(list(n));
 end
 
 % TODO Find a better way to "replot"
@@ -192,22 +193,22 @@ hold(handles.axes1, 'on');
 m = 1;
 
 for n = 1:numel(moments)
-  if m <= numel(selected)
-    if strcmp(moments(n), selected(m)), 
-        xposition = str2double(selected(m));
-        plot(xposition, -1:0.01:1, 'g', 'LineWidth', 2,...
-             'MarkerFaceColor', 'g', 'MarkerSize', 10);
-      m = m + 1;
-    else
-      xposition = str2double(moments(n));
-      plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
-           'MarkerFaceColor', 'g', 'MarkerSize', 10);
-    end
-  else
-    xposition = str2double(moments(n));
-    plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
-         'MarkerFaceColor', 'g', 'MarkerSize', 10);
-  end
+	if m <= numel(selected)
+	if strcmp(moments(n), selected(m)), 
+		xposition = str2double(selected(m));
+		plot(xposition, -1:0.01:1, 'g', 'LineWidth', 2,...
+			 'MarkerFaceColor', 'g', 'MarkerSize', 10);
+		m = m + 1;
+	else
+		xposition = str2double(moments(n));
+		plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
+			 'MarkerFaceColor', 'g', 'MarkerSize', 10);
+	end
+	else
+	xposition = str2double(moments(n));
+	plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
+		 'MarkerFaceColor', 'g', 'MarkerSize', 10);
+	end
 end
 hold off;
 
@@ -219,20 +220,21 @@ function pushbuttonSave_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global abcxyz;
+repeated = handles.repeated;
 
 filename = get(handles.textFilename, 'String');
 moments = cellstr(get(handles.listboxMoments, 'String'));
 list = get(handles.listboxMoments, 'Value');
 
-selection = questdlg(['Salvar ' filename ' apaga todos os momentos nao selecionados. Continuar?'],...
-                     ['Salvar ' filename '?'],...
-                     'Sim','Nao','Sim');
+selection = questdlg(['Avancar salva apenas os momentos selecionados. Continuar?'],...
+					 ['Salvar ' filename '?'],...
+					 'Sim','Nao','Sim');
 if strcmp(selection,'Nao')
-    return;
+	return;
 end
 
 for n = 1:numel(list)
-    list(n) = str2double(moments(list(n)));
+	list(n) = str2double(moments(list(n)));
 end
 
 recordtime = length(handles.record)/handles.fs;
@@ -241,15 +243,18 @@ moments = turn_to_moment(handles.stuff.get(filename), list, recordtime);
 handles.stuff.put(filename, moments);
 set(handles.listboxMoments, 'Value', 1);
 
-abcxyz = handles.stuff;
+repeated = repeated + 1;
+handles.repeated = repeated;
 
-selection = questdlg(['Deseja continuar modificando outros arquivos?'],...
-                     ['Continuar modificando?'],...
-                     'Sim','Nao','Sim');
-if strcmp(selection,'Sim')
-    return;
+if repeated <= length(handles.files)
+	if repeated == length(handles.files)
+		set(handles.pushbuttonSave, 'String', 'Salvar');
+	end
+	[handles.record, handles.fs] = refresh_signal(hObject, handles,...
+							       handles.files, handles.stuff, handles.repeated);
+else
+	abcxyz = handles.stuff;
+	delete(handles.figure1); % After storing the result of plot_stuff
+						 	 % in abcxyz, closes the window
 end
-delete(handles.figure1); % After storing the result of plot_stuff
-                         % in abcxyz, closes the window
-
 

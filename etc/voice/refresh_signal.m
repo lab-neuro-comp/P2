@@ -1,4 +1,4 @@
-function refresh_signal(hObject, handles, files, stuff, n)
+function [record, fs] = refresh_signal(hObject, handles, files, stuff, n)
 
 filename = files{n};
 disp(length(files));
@@ -25,8 +25,5 @@ for n = 1:numel(timemoments)
          'MarkerFaceColor', 'r', 'MarkerSize', 10);
 end
 hold off;
-
-handles.record = record;
-handles.fs = fs;
 
 guidata(hObject, handles);
