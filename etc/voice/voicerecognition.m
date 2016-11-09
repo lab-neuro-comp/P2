@@ -211,7 +211,7 @@ for n = 1:length(file)
 	[record, fs, nbits] = wavread(file{n});
 	moments{n} = handles.stuff.get(file{n});
 	time{n} = turn_to_time(moments{n}, length(record)/fs);
-    
+	
     if ischar(name)
         name = split_string(name, '.');
         tablename = char(strcat(name(1), '.csv'));

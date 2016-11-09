@@ -226,10 +226,10 @@ filename = get(handles.textFilename, 'String');
 moments = cellstr(get(handles.listboxMoments, 'String'));
 list = get(handles.listboxMoments, 'Value');
 
-selection = questdlg(['Avancar salva apenas os momentos selecionados. Continuar?'],...
+selection = questdlg(['Avancar salva apenas os momentos selecionados.', 'Deseja continuar?'],...
 					 ['Salvar ' filename '?'],...
-					 'Sim','Nao','Sim');
-if strcmp(selection,'Nao')
+					 'Ok','Cancelar','Ok');
+if strcmp(selection,'Cancelar')
 	return;
 end
 
@@ -252,6 +252,7 @@ if repeated <= length(handles.files)
 	end
 	[handles.record, handles.fs] = refresh_signal(hObject, handles,...
 							       handles.files, handles.stuff, handles.repeated);
+	guidata(hObject, handles);
 else
 	abcxyz = handles.stuff;
 	delete(handles.figure1); % After storing the result of plot_stuff

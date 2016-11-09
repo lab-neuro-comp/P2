@@ -1,8 +1,6 @@
 function [record, fs] = refresh_signal(hObject, handles, files, stuff, n)
 
 filename = files{n};
-disp(length(files));
-disp(n);
 moments = get(stuff, filename);
 
 set(handles.textFilename, 'String', filename);
