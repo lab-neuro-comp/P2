@@ -3,6 +3,8 @@ function [lastanalysis] = main(filename)
 % TODO Improve `isvoice` and/or `ignore_voice` functions
 
 % Loading voice signal
+disp('Analysis in progress...');
+
 [record, fs, nbits] = wavread(filename);
 analysis = [];
 n = 1;
@@ -22,3 +24,5 @@ ignorenoise = ignore_noise(analysis, threshold);
 analysis = isvoice(ignorenoise, threshold);
 
 lastanalysis = mean_window(length(analysis), ignorenoise, analysis);
+
+disp('Analysis Complete!');

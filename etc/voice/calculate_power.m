@@ -4,7 +4,6 @@ function [analysis] = calculate_power(record, windowsize)
 n = 1;
 power = 0;
 
-disp('Analysis in progress...');
 tic;
 while length(queue) > 0
 	% TODO Analyse window
