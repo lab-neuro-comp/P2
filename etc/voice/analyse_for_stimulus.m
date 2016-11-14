@@ -16,26 +16,28 @@ for n = 1:R
 end
 
 % TODO Turn to second
-stimulusTime(1) = 0;
+initialTime = find_beginning('data/audio_AnaPaulaRiveiro_Edward2_19.10_16h49.43.csv');
 for n = 1:R
 	timeArray{n}{5} = (str2num(timeArray{n}{1})*3600 +...	% Hours
 					   str2num(timeArray{n}{2})*60 +...		% Minutes
 					   str2num(timeArray{n}{3}) +...		% Seconds
 					   str2num(timeArray{n}{4})/1000);		% Miliseconds
-
+	
 	% Calculates the gap of time between stimuli
 	% and creates a timeline
 	if (n > 1)
 		stimulusTime(n) = (timeArray{n}{5} - timeArray{n-1}{5}) + stimulusTime(n-1);
+	elseif (n == 1)
+		stimulusTime(1) = timeArray{n}{5} - initialTime;
 	end
 end
 
 % Gets the times from the .csv file generated from the audio analysis
-fileID = fopen('data/audio_AnaPaulaRiveiro_Edward2_19.csv');
+fileID = fopen('data/audio_AnaPaulaRiveiro_Edward2_19.10_16h49.43.csv');
 timecontent = textscan(fileID, '%s');
 fclose(fileID);
 
-[R, C] = size(timecontent{1})
+[R, C] = size(timecontent{1});
 
 for n = 1:R
 	timecontent{1}{n} = split_string(timecontent{1}{n}, ';');
@@ -46,8 +48,6 @@ for n = 1:R
 		audioTime(n-1) = str2num(char(strcat(temp(1), '.', temp(2))));
 	end
 end
-
-audioTime = audioTime - audioTime(1);
 
 % Time that takes for one to respond to a stimulus
 responseTime = audioTime - stimulusTime;

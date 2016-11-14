@@ -213,11 +213,9 @@ for n = 1:length(file)
 	time{n} = turn_to_time(moments{n}, length(record)/fs);
 	
     if ischar(name)
-        name = split_string(name, '.');
-        tablename = char(strcat(name(1), '.csv'));
+		tablename = strrep(name, '.wav', '.csv');
     elseif iscell(name)
-        name{n} = split_string(name{n}, '.');
-        tablename = char(strcat(name{n}(1), '.csv'));
+        tablename = strrep(name{n}{1}, '.wav', '.csv');
     end
 	
 	fileID = fopen(strcat(handles.pathname, tablename), 'w');
