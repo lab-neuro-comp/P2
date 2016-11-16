@@ -164,9 +164,12 @@ function buttonAnalyse_Callback(hObject, eventdata, handles)
 
 contents = cellstr(get(handles.popupAudio, 'String'));
 filename = contents{get(handles.popupAudio, 'Value')};
+handles.filename = filename;
 
 responseTime = analyse_for_stimulus(filename, get(handles.editTest, 'String'));
 set(handles.listAnalysis, 'String', responseTime);
+
+guidata(hObject, handles);
 
 
 % --- Executes on button press in buttonSave.

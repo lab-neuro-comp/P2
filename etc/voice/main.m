@@ -6,7 +6,7 @@ function [lastanalysis] = main(filename)
 [record, fs, nbits] = wavread(filename);
 analysis = [];
 n = 1;
-windowsize = 128;
+windowsize = 1024;
 
 [b, a] = butter(4, [80, 260]/(fs/2));
 record = filter(b, a, record);
