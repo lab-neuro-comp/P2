@@ -189,7 +189,7 @@ function buttonPlot_Callback(hObject, eventdata, handles)
 
 global abczyx;
 
-abcxyz = callPlot(handles.files, handles.stuff);
+abcxyz = plot_stuff(handles.files, handles.stuff);
 handles.stuff = abcxyz;
 guidata(hObject, handles);
 

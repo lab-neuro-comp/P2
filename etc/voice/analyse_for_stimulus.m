@@ -1,9 +1,9 @@
-function [responseTime] = analyse_for_stimulus(filename)
+function [responseTime] = analyse_for_stimulus(audioName, testName)
 % Analyses the file generated during a test with Stroop
 % and gets the time were the stimuli were produced turning them
 % into a timeline in seconds
 
-fileID = fopen(filename, 'r');
+fileID = fopen(testName, 'r');
 content = textscan(fileID, '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s');
 fclose(fileID);
 k = 1;
@@ -11,13 +11,12 @@ timeArray = content{4};
 
 [R, C] = size(timeArray);
 
+% TODO Turn to second
+audioName = strrep(audioName, '.wav', '.csv');
+initialTime = find_beginning(audioName);
+
 for n = 1:R
 	timeArray{n,1} = split_string(timeArray{n,1}, ':');
-end
-
-% TODO Turn to second
-initialTime = find_beginning('data/audio_AnaPaulaRiveiro_Edward2_19.10_16h49.43.csv');
-for n = 1:R
 	timeArray{n}{5} = (str2num(timeArray{n}{1})*3600 +...	% Hours
 					   str2num(timeArray{n}{2})*60 +...		% Minutes
 					   str2num(timeArray{n}{3}) +...		% Seconds
@@ -33,20 +32,17 @@ for n = 1:R
 end
 
 % Gets the times from the .csv file generated from the audio analysis
-fileID = fopen('data/audio_AnaPaulaRiveiro_Edward2_19.10_16h49.43.csv');
+fileID = fopen(audioName);
 timecontent = textscan(fileID, '%s');
 fclose(fileID);
 
 [R, C] = size(timecontent{1});
 
-for n = 1:R
+for n = 2:R
 	timecontent{1}{n} = split_string(timecontent{1}{n}, ';');
-	
-	if n > 1
-		temp = timecontent{1}{n}{2};
-		temp = split_string(temp, ',');
-		audioTime(n-1) = str2num(char(strcat(temp(1), '.', temp(2))));
-	end
+	temp = timecontent{1}{n}{2};
+	temp = split_string(temp, ',');
+	audioTime(n-1) = str2num(char(strcat(temp(1), '.', temp(2))));
 end
 
 % Time that takes for one to respond to a stimulus

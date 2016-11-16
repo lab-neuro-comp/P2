@@ -22,7 +22,7 @@ function varargout = stimuli_analysis(varargin)
 
 % Edit the above text to modify the response to help stimuli_analysis
 
-% Last Modified by GUIDE v2.5 16-Nov-2016 08:49:54
+% Last Modified by GUIDE v2.5 16-Nov-2016 10:49:30
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -128,7 +128,7 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-[filename, pathname, filterindex]  = uigetfile('*.csv', 'Select files');
+[filename, pathname, filterindex]  = uigetfile('*.txt', 'Select files');
 set(handles.editTest, 'String', strcat(pathname, filename));
 set(handles.buttonAnalyse, 'Enable', 'on');
 
@@ -161,5 +161,19 @@ function buttonAnalyse_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonAnalyse (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+contents = cellstr(get(handles.popupAudio, 'String'));
+filename = contents{get(handles.popupAudio, 'Value')};
+
+responseTime = analyse_for_stimulus(filename, get(handles.editTest, 'String'));
+set(handles.listAnalysis, 'String', responseTime);
+
+
+% --- Executes on button press in buttonSave.
+function buttonSave_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonSave (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
 
 
