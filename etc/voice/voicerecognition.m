@@ -215,7 +215,7 @@ for n = 1:length(file)
     if ischar(name)
 		tablename = strrep(name, '.wav', '.csv');
     elseif iscell(name)
-        tablename = strrep(name{n}{1}, '.wav', '.csv');
+        tablename = strrep(name{n}, '.wav', '.csv');
     end
 	
 	fileID = fopen(strcat(handles.pathname, tablename), 'w');
@@ -227,6 +227,16 @@ for n = 1:length(file)
 		fprintf(fileID, '%s;%s\n', file{n}, timestring);
 	end
 	fclose(fileID);
+end
+
+selection = questdlg({'Deseja avancar para a analise de comparacao'...
+					 'dos dados do arquivo de audio e de teste?'},...
+					 ['Avancar para analise?'],...
+					 'Ok','Cancelar','Ok');
+if strcmp(selection,'Cancelar')
+	return;
+else
+	stimuli_analysis(file);
 end
 
 guidata(hObject, handles);
