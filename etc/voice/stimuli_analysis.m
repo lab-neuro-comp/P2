@@ -186,7 +186,7 @@ function buttonSave_Callback(hObject, eventdata, handles)
 
 filename = handles.filename;
 filename = strrep(filename, '.wav', '.csv');
-fileID = fopen(filename, 'r+');
+fileID = fopen(filename, 'r');
 content = textscan(fileID, '%s');
 
 semicollon = findstr(content{1}{1}, ';');
@@ -203,7 +203,13 @@ if length(semicollon) == 1
 		fprintf(fileID, '%s\n', content{1}{n});
 	end
 end
+fclose(fileID);
+type(filename)
 
+fileID = fopen(filename, 'w');
+for n = 1:length(content{1})
+	fprintf(fileID, '%s\n', content{1}{n});
+end
 fclose(fileID);
 type(filename)
 
