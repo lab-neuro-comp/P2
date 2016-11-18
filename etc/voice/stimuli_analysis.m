@@ -194,24 +194,31 @@ semicollon = findstr(content{1}{1}, ';');
 responseTime = handles.responseTime;
 
 if length(semicollon) == 1
-	content{1}{1} = strcat(content{1}{1}, ';Delays');
-	fprintf(fileID, '%s\n', content{1}{1});
-
+	content{1}{1} = strcat(content{1}{1}, ';Demora');
+	
 	for n = 2:length(content{1})
 		responseFile = replace_dot(responseTime(n-1));
 		content{1}{n} = strcat(content{1}{n}, ';', responseFile);
-		fprintf(fileID, '%s\n', content{1}{n});
+	end
+else
+	content{1}{1} = content{1}{1}(1:semicollon(2));
+	content{1}{1} = strcat(content{1}{1}, 'Demora');
+
+	for n = 2:length(content{1})
+		semicollon = findstr(content{1}{n}, ';')
+		content{1}{n} = content{1}{n}(1:semicollon(2))
+		responseFile = replace_dot(responseTime(n-1));
+		content{1}{n} = strcat(content{1}{n}, responseFile);
+		disp(content{1}{n});
 	end
 end
 fclose(fileID);
-type(filename)
 
 fileID = fopen(filename, 'w');
 for n = 1:length(content{1})
 	fprintf(fileID, '%s\n', content{1}{n});
 end
 fclose(fileID);
-type(filename)
 
 set(handles.buttonSave, 'Enable', 'off');
 
