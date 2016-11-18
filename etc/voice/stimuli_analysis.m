@@ -27,19 +27,19 @@ function varargout = stimuli_analysis(varargin)
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
-                   'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @stimuli_analysis_OpeningFcn, ...
-                   'gui_OutputFcn',  @stimuli_analysis_OutputFcn, ...
-                   'gui_LayoutFcn',  [] , ...
-                   'gui_Callback',   []);
+									 'gui_Singleton',  gui_Singleton, ...
+									 'gui_OpeningFcn', @stimuli_analysis_OpeningFcn, ...
+									 'gui_OutputFcn',  @stimuli_analysis_OutputFcn, ...
+									 'gui_LayoutFcn',  [] , ...
+									 'gui_Callback',   []);
 if nargin && ischar(varargin{1})
-    gui_State.gui_Callback = str2func(varargin{1});
+		gui_State.gui_Callback = str2func(varargin{1});
 end
 
 if nargout
-    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+		[varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
 else
-    gui_mainfcn(gui_State, varargin{:});
+		gui_mainfcn(gui_State, varargin{:});
 end
 % End initialization code - DO NOT EDIT
 
@@ -84,6 +84,7 @@ function popupAudio_Callback(hObject, eventdata, handles)
 
 % Hints: contents = get(hObject,'String') returns popupAudio contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupAudio
+set(handles.buttonSave, 'Enable', 'off');
 
 
 % --- Executes during object creation, after setting all properties.
@@ -95,7 +96,7 @@ function popupAudio_CreateFcn(hObject, eventdata, handles)
 % Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+		set(hObject,'BackgroundColor','white');
 end
 
 
@@ -107,6 +108,7 @@ function editTest_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of editTest as text
 %        str2double(get(hObject,'String')) returns contents of editTest as a double
+set(handles.buttonSave, 'Enable', 'off');
 
 
 % --- Executes during object creation, after setting all properties.
@@ -118,7 +120,7 @@ function editTest_CreateFcn(hObject, eventdata, handles)
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+		set(hObject,'BackgroundColor','white');
 end
 
 
@@ -131,6 +133,7 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 [filename, pathname, filterindex]  = uigetfile('*.txt', 'Select files');
 set(handles.editTest, 'String', strcat(pathname, filename));
 set(handles.buttonAnalyse, 'Enable', 'on');
+set(handles.buttonSave, 'Enable', 'off');
 
 
 % --- Executes on selection change in listAnalysis.
@@ -152,7 +155,7 @@ function listAnalysis_CreateFcn(hObject, eventdata, handles)
 % Hint: listbox controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+		set(hObject,'BackgroundColor','white');
 end
 
 
@@ -168,6 +171,9 @@ handles.filename = filename;
 
 responseTime = analyse_for_stimulus(filename, get(handles.editTest, 'String'));
 set(handles.listAnalysis, 'String', responseTime);
+set(handles.buttonSave, 'Enable', 'on');
+
+handles.responseTime = responseTime;
 
 guidata(hObject, handles);
 
@@ -178,5 +184,29 @@ function buttonSave_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+filename = handles.filename;
+filename = strrep(filename, '.wav', '.csv');
+fileID = fopen(filename, 'r+');
+content = textscan(fileID, '%s');
 
+semicollon = findstr(content{1}{1}, ';');
 
+responseTime = handles.responseTime;
+
+if length(semicollon) == 1
+	content{1}{1} = strcat(content{1}{1}, ';Delays');
+	fprintf(fileID, '%s\n', content{1}{1});
+
+	for n = 2:length(content{1})
+		responseFile = replace_dot(responseTime(n-1));
+		content{1}{n} = strcat(content{1}{n}, ';', responseFile);
+		fprintf(fileID, '%s\n', content{1}{n});
+	end
+end
+
+fclose(fileID);
+type(filename)
+
+set(handles.buttonSave, 'Enable', 'off');
+
+guidata(hObject, handles);

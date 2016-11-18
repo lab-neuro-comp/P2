@@ -3,7 +3,6 @@ function [timevector] = mean_window(limit, signal, timevector)
 % that happen at the end of the word
 
 queue = [];
-disp(limit);
 
 for n = 1:limit
 	if timevector(n) == true
