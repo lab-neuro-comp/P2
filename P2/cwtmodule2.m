@@ -1,24 +1,13 @@
 function varargout = cwtmodule2(varargin)
-% CWTMODULE2 M-file for cwtmodule2.fig
-%      CWTMODULE2, by itself, creates a new CWTMODULE2 or raises the existing
-%      singleton*.
+% This module calculates the complex wavelet transform of a signal chosen
+% by the user. Upon calling cwtmodule2 the user can choose a signal to be
+% analysed. The user can also choose among different type/subtypes of
+% wavelets and the scale used to make the analysis. After the module
+% calculates the cwt of the given signal, the user can graph its
+% coefficients either on time or scales. The calculation of the complex
+% wavelet transform is made using the matlab function cwt that is available
+% for MATLAB2008a.
 %
-%      H = CWTMODULE2 returns the handle to a new CWTMODULE2 or the handle to
-%      the existing singleton*.
-%
-%      CWTMODULE2('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in CWTMODULE2.M with the given input arguments.
-%
-%      CWTMODULE2('Property','Value',...) creates a new CWTMODULE2 or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before cwtmodule2_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to cwtmodule2_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
 
 % Edit the above text to modify the response to help cwtmodule2
 
@@ -55,12 +44,12 @@ function cwtmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to cwtmodule2 (see VARARGIN)
 
-% Choose default command line output for cwtmodule2
 handles.output = hObject;
 handles.constants = load_constants();
 handles.wavelets = load_wavelets();
 
 % Update handles structure
+set(handles.figure1, 'Name', 'CWT Module');
 guidata(hObject, handles);
 
 % UIWAIT makes cwtmodule2 wait for user response (see UIRESUME)
@@ -133,7 +122,7 @@ if ~isequal(signalname, 0)
     axis tight;
     ylabel('Amplitude [uV]');
 else
-    
+
     return;
 end
 

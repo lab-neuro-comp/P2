@@ -8,9 +8,6 @@ ylabel('Amplitude [uV]');
 axes(handles.PlotAnalysis);
 cla reset;
 grid on;
-%grid(handles.PlotAnalysis, 'on');
-%signaltime = 0:1/fs:(length(handles.signal)-1)/fs;
-%RegisteredTime = num2str(max(signaltime));
 xlabel('Tempo [s]');
 ylabel('Scale');
 
