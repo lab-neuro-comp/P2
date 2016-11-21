@@ -111,7 +111,7 @@ function stftbut_Callback(hObject, eventdata, handles)
 % hObject    handle to stftbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-sfft2; % under construction
+stft2; % under construction
 
 % --- Executes on button press in cwtbut.
 function cwtbut_Callback(hObject, eventdata, handles)
