@@ -1,26 +1,7 @@
 function varargout = editionmodule2(varargin)
-% EDITIONMODULE2 M-file for editionmodule2.fig
-%      EDITIONMODULE2, by itself, creates a new EDITIONMODULE2 or raises the existing
-%      singleton*.
+% This module focuses on implementing simple signal processing tools, like
+% filtering and chopping.
 %
-%      H = EDITIONMODULE2 returns the handle to a new EDITIONMODULE2 or the handle to
-%      the existing singleton*.
-%
-%      EDITIONMODULE2('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in EDITIONMODULE2.M with the given input arguments.
-%
-%      EDITIONMODULE2('Property','Value',...) creates a new EDITIONMODULE2 or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before editionmodule2_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to editionmodule2_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
-
-% Edit the above text to modify the response to help editionmodule2
 
 % Last Modified by GUIDE v2.5 11-Apr-2016 08:32:10
 
@@ -30,7 +11,7 @@ gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
                    'gui_OpeningFcn', @editionmodule2_OpeningFcn, ...
                    'gui_OutputFcn',  @editionmodule2_OutputFcn, ...
-                   'gui_LayoutFcn',  [] , ...
+                   'gui_LayoutFcn',  [], ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
@@ -41,7 +22,6 @@ if nargout
 else
     gui_mainfcn(gui_State, varargin{:});
 end
-
 % End initialization code - DO NOT EDIT
 
 % --- Executes just before editionmodule2 is made visible.
@@ -169,7 +149,8 @@ function tinitial_edit_Callback(hObject, eventdata, handles)
 
 % --- Executes during object creation, after setting all properties.
 function tinitial_edit_CreateFcn(hObject, eventdata, handles)
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
