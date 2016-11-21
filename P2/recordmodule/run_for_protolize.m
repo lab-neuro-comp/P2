@@ -4,7 +4,7 @@ function [errors] = run_for_protolize(handles)
 javaaddpath(strcat(pwd, '/edf.jar'));
 set(handles.buttonRun, 'String', 'Running...');
 stuff = split_string(get(handles.editInput, 'String'), ';');
-errors = false;
+errors = false; % this variable is useless right now
 for i = 1:length(stuff)
     multiple = get(handles.checkMultiple, 'Value');
     errors = errors || ConvertEDF2ASCII(stuff{i}, multiple);
@@ -17,6 +17,17 @@ errors = false;
 edf = br.unb.biologiaanimal.edf.EDF(file);
 if multiple
     % TODO Turn this into multiple files
+    n = length(outlet);
+    while ~isequal(outlet(n), '.')
+        n = n - 1;
+    end
+    root = file(1:n);
+    labels = edf.getLabels();
+    for n = 1:length(labels)
+        label = char(labels(n));
+        outlet = strcat(root, label, '.ascii');
+        edf.toSingleChannelAscii(outlet, label);
+    end
 else
     outlet = file;
     n = length(outlet);
