@@ -1,24 +1,13 @@
 function varargout = dwtmodule2(varargin)
-% DWTMODULE2 M-file for dwtmodule2.fig
-%      DWTMODULE2, by itself, creates a new DWTMODULE2 or raises the existing
-%      singleton*.
+% This module aims to implement a workflow for the DWT transform, in order to
+% facilitate the use of this tool on signal processing. This module must allow
+% the use of many wavelets; decomposition of a signal up to 10 levels of
+% iterations; replacing of limiting desired decompositions; and reconstruction
+% of a signal after changes on its decompositions.
 %
-%      H = DWTMODULE2 returns the handle to a new DWTMODULE2 or the handle to
-%      the existing singleton*.
+% This module makes use of the PROTOLIZE! DWT library to perform its
+% calculations.
 %
-%      DWTMODULE2('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in DWTMODULE2.M with the given input arguments.
-%
-%      DWTMODULE2('Property','Value',...) creates a new DWTMODULE2 or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before dwtmodule2_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to dwtmodule2_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
 
 % Edit the above text to modify the response to help dwtmodule2
 
@@ -106,14 +95,13 @@ fc = str2num(handles.constants.get('fc'));
 [signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
 
 if ~isequal(signalname, 0)
-	signal = (load(strcat(signalpath, signalname)) + fa)*fb - fc;
-	signalname = signalname(1:length(signalname)-6);
-
-	handles.signalname = signalname;
-	handles.signal = signal;
+    signal = (load(strcat(signalpath, signalname)) + fa)*fb - fc;
+    signalname = signalname(1:length(signalname)-6);
+    handles.signalname = signalname;
+    handles.signal = signal;
     handles.approximations = { };
     handles.details = { };
-	set(handles.textSignalName, 'String', signalname);
+    set(handles.textSignalName, 'String', signalname);
     plot_decomposition(handles);
 end
 
@@ -150,7 +138,7 @@ function popupmenu1_CreateFcn(hObject, eventdata, handles)
 % Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), ...
-	               get(0,'defaultUicontrolBackgroundColor'))
+                   get(0,'defaultUicontrolBackgroundColor'))
      set(hObject,'BackgroundColor','white');
 end
 
@@ -178,22 +166,22 @@ wavelet = contents{get(hObject, 'Value')};
 
 switch wavelet
 case 'Daubechies'
-	set(handles.PopupWaveletVar, 'String', ...
-	   {'db1' 'db2' 'db3' 'db4' 'db5' 'db6' 'db7' 'db8' 'db9' 'db10'});
+  set(handles.PopupWaveletVar, 'String', ...
+     {'db1' 'db2' 'db3' 'db4' 'db5' 'db6' 'db7' 'db8' 'db9' 'db10'});
 case 'Symlets'
-	set(handles.PopupWaveletVar, 'String', ...
-	   {'2' '3' '4' '5' '6' '7' '8'});
+  set(handles.PopupWaveletVar, 'String', ...
+     {'2' '3' '4' '5' '6' '7' '8'});
 case 'Coiflets'
-	set(handles.PopupWaveletVar, 'String', ...
-	   {'1' '2' '3' '4' '5'});
+  set(handles.PopupWaveletVar, 'String', ...
+     {'1' '2' '3' '4' '5'});
 case 'Biorthogonal'
-	set(handles.PopupWaveletVar, 'String', ...
-	   {'1.1' '1.3' '1.5' '2.2' '2.4' '2.6' '2.8' ...
-		'3.1' '3.3' '3.5' '3.7' '3.9' '4.4' '5.5' '6.8'});
+  set(handles.PopupWaveletVar, 'String', ...
+     {'1.1' '1.3' '1.5' '2.2' '2.4' '2.6' '2.8' ...
+  '3.1' '3.3' '3.5' '3.7' '3.9' '4.4' '5.5' '6.8'});
 case 'R Biorthogonal'
-	set(handles.PopupWaveletVar, 'String', ...
-	   {'1.1' '1.3' '1.5' '2.2' '2.4' '2.6' '2.8' ...
-		'3.1' '3.3' '3.5' '3.7' '3.9' '4.4' '5.5' '6.8'});
+  set(handles.PopupWaveletVar, 'String', ...
+     {'1.1' '1.3' '1.5' '2.2' '2.4' '2.6' '2.8' ...
+  '3.1' '3.3' '3.5' '3.7' '3.9' '4.4' '5.5' '6.8'});
 otherwise
     set(handles.PopupWaveletVar, 'String', {'Std'});
 end
@@ -203,7 +191,7 @@ guidata(hObject, handles);
 % --- Executes during object creation, after setting all properties.
 function PopupWaveletKind_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), ...
-	               get(0,'defaultUicontrolBackgroundColor'))
+                   get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
@@ -220,7 +208,7 @@ function PopupWaveletVar_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function PopupWaveletVar_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), ...
-	                 get(0,'defaultUicontrolBackgroundColor'))
+                   get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
@@ -238,7 +226,7 @@ function PopupWaveletLevel_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function PopupWaveletLevel_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), ...
-	               get(0,'defaultUicontrolBackgroundColor'))
+                   get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
@@ -254,7 +242,7 @@ populate_popup(plot_decomposition(handles));
 handles.lastwavelet = {wavelet level};
 guidata(hObject, handles);
 
-% --------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 function VisualizeMenu_Callback(hObject, eventdata, handles)
 % hObject    handle to VisualizeMenu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -301,7 +289,7 @@ end
 
 set(handles.PopupCurrentSignal, 'String', box);
 
-% --------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 function EditMinTime_Callback(hObject, eventdata, handles)
 % hObject    handle to EditMinTime (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
