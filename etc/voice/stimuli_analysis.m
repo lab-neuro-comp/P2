@@ -205,8 +205,8 @@ else
 	content{1}{1} = strcat(content{1}{1}, 'Demora');
 
 	for n = 2:length(content{1})
-		semicollon = findstr(content{1}{n}, ';')
-		content{1}{n} = content{1}{n}(1:semicollon(2))
+		semicollon = findstr(content{1}{n}, ';');
+		content{1}{n} = content{1}{n}(1:semicollon(2));
 		responseFile = replace_dot(responseTime(n-1));
 		content{1}{n} = strcat(content{1}{n}, responseFile);
 		disp(content{1}{n});
