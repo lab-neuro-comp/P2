@@ -2,7 +2,6 @@
 function [EMG, GSR] = separateGSR(edffile)
 % Separates GSR signal from EMG
 
-javaaddpath('edf.jar');
 import br.unb.biologiaanimal.edf.*;
 edfinfo = EDF(edffile);
 labels = edfinfo.getLabels();
@@ -20,5 +19,5 @@ end
 raw = load(asciifile);
 
 % TODO Optimize parameters of the function
-GSR = smooth(raw, 255, 'sgolay', 2); 
+GSR = smooth(raw, 255, 'sgolay', 2);
 EMG = raw - GSR;
