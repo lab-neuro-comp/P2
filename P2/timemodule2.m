@@ -82,7 +82,8 @@ ylabel('Amplitude [s]');
 cla;
 
 if length(handles.signals) > 0
-	context_plot(handles.signals{get(handles.ListboxSignal, 'Value')});
+	context_plot(handles.signals{get(handles.ListboxSignal, 'Value')},...
+                 str2num(handles.constants.get('fs')));
 end
 
 % --------------------------------------------------------------------
@@ -128,7 +129,8 @@ delete(handles.figure1)
 
 % --- Executes on selection change in ListboxSignal.
 function ListboxSignal_Callback(hObject, eventdata, handles)
-context_plot(handles.signals{get(hObject, 'Value')});
+context_plot(handles.signals{get(hObject, 'Value')},...
+             str2num(handles.constants.get('fs')));
 
 % --- Executes during object creation, after setting all properties.
 function ListboxSignal_CreateFcn(hObject, eventdata, handles)
@@ -254,7 +256,7 @@ ending = round(str2num(get(handles.editMax, 'String')) * fs);
 index = get(handles.ListboxSignal, 'Value');
 signal = handles.signals{index};
 signal = signal(beginning:ending);
-context_plot(signal);
+context_plot(signal, fs);
 handles.signals{index} = signal;
 guidata(hObject, handles);
 
