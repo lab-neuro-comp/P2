@@ -66,8 +66,8 @@ for n = 1:length(testcases)
 	[EMG, GSR] = separateGSR(testcases{n});
 
 	if GSR == 0
-		h = msgbox(['The file ', testcases{n},...
-				   ' has no EMG-RGP channel'], 'Error', 'error');
+		h = msgbox({[testcases{n}];...
+				   ['has no EMG-RGP channel']}, 'Error', 'error');
 	else
 		figure;
 		hold on;

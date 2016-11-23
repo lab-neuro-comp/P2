@@ -43,6 +43,9 @@ else
 end
 % End initialization code - DO NOT EDIT
 
+addpath([cd '\math']);
+addpath([cd '\util']);
+
 % --- Executes just before voicerecognition is made visible.
 function voicerecognition_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
@@ -147,7 +150,7 @@ elseif iscell(filename)
 	end
 end
 
-outlet = join_string(handles.cases);
+outlet = join_strings(handles.cases, ';');
 set(handles.editSearch, 'String', outlet);
 set(handles.buttonRun, 'Enable', 'on');
 handles.pathname = pathname;
