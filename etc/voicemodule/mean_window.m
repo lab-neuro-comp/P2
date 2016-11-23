@@ -1,6 +1,7 @@
 function [timevector] = mean_window(limit, signal, timevector)
-% Trying to work out a way to eliminate the ok's 
-% that happen at the end of the word
+% Corrects the signal to minimize the problems that happen at the
+% end of a word when the voice amplitude varies to much creating
+% the impression of false ends and false starts
 
 queue = [];
 

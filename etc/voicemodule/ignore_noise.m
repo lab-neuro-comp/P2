@@ -10,7 +10,6 @@ if length(signal) == 0
 else
 	while length(signal) > 0
 		if signal(1) >= threshold
-			% corrected(n) = signal(1);
 			corrected(n) = 1;
 		end
 		n = n + 1;

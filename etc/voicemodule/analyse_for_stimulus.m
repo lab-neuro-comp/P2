@@ -1,7 +1,7 @@
 function [responseTime] = analyse_for_stimulus(audioName, testName)
-% Analyses the file generated during a test with Stroop
-% and gets the time were the stimuli were produced turning them
-% into a timeline in seconds
+% Analyses the file generated during a test with Stroop and gets
+% the time were the stimuli were produced turning them into a
+% timeline in seconds
 
 fileID = fopen(testName, 'r');
 content = textscan(fileID, '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s');
@@ -11,7 +11,11 @@ timeArray = content{4};
 
 [R, C] = size(timeArray);
 
-% TODO Turn to second
+% The times that are stored in testName.txt record the exact time of the day
+% the stimuli where presented to the user. This time is turned into a time 
+% in seconds and, comparing its value with the that is presented as the
+% beginning of the test, the timeline of the test can be created for later
+% comparison with the audio timeline.
 audioName = strrep(audioName, '.wav', '.csv');
 initialTime = find_beginning(audioName);
 
@@ -31,7 +35,7 @@ for n = 1:R
 	end
 end
 
-% Gets the times from the .csv file generated from the audio analysis
+% Gets the timeline from the .csv file generated from the audio analysis
 fileID = fopen(audioName);
 timecontent = textscan(fileID, '%s');
 fclose(fileID);

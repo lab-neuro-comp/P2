@@ -1,5 +1,8 @@
 function [initialTime] = find_beginning(filename)
-% TODO Find a better way to get this result
+% The variable filename should be structured like the following example:
+% audio_participanName_testName_date_time.wav
+% If so, the function manages to get the time the audio file was created,
+% thus turning its value into seconds for later comparison.
 
 underline = findstr(filename, '_');
 remain = filename;
