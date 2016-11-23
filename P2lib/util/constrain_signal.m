@@ -1,4 +1,5 @@
 function [newsig] = constrain_signal(oldsig, upperbound, lowerbound)
+% Limits the value of a signal to an upper and an lower bounds.
 newsig = [];
 
 for val = oldsig

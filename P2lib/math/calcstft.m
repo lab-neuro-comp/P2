@@ -1,5 +1,10 @@
 function [spectrum] = calcstft(signal, window, winsize)
 % Calculates the short time Fourier transform
+%
+%     [spectrum] = calcstft(signal, window, winsize)
+%
+% Returns a matrix where each line is the windowed Fourier transform of the
+% `signal` on which the `window` is centered on the line index.
 limit = length(signal);
 padding = floor(winsize/2); % half window
 signal = signal_with_padding(signal, padding);
