@@ -16,6 +16,10 @@ else
 	gui_mainfcn(gui_State, varargin{:});
 end
 
+if isequal(exist('edf.jar'), 0)
+	  javaaddpath('edf.jar');
+end
+
 function separar_EMG_RGP_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 guidata(hObject, handles);
@@ -69,6 +73,7 @@ for n = 1:length(testcases)
 		h = msgbox({[testcases{n}];...
 				   ['has no EMG-RGP channel']}, 'Error', 'error');
 	else
+		% TODO Add legends to plots
 		figure;
 		hold on;
 		plot(GSR, 'r');

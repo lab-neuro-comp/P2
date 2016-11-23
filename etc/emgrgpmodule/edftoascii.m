@@ -2,6 +2,8 @@
 function [asciifile] = edftoascii(edffile, edfinfo, labels)
 % function to call the EDFtoASCII app
 
+asciifile = 'null';
+
 for n = 1:length(labels)
 	if strcmp(labels(n), 'EMG-RGP');
 
@@ -18,5 +20,3 @@ for n = 1:length(labels)
 		return;
 	end
 end
-
-asciifile = 'null';

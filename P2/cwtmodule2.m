@@ -1,5 +1,5 @@
 function varargout = cwtmodule2(varargin)
-% This module calculates the complex wavelet transform of a signal chosen
+% This module calculates the continuous wavelet transform of a signal chosen
 % by the user. Upon calling cwtmodule2 the user can choose a signal to be
 % analysed. The user can also choose among different type/subtypes of
 % wavelets and the scale used to make the analysis. After the module
@@ -248,7 +248,7 @@ switch wavetype
         wavename = wavesubtype;
     otherwise
         wavetype = handles.wavelets.get(wavetype);
-        wavename = strcat(wavetype, wavesubtype);        
+        wavename = strcat(wavetype, wavesubtype);
 end
 
 set(handles.TextWavelet, 'String', wavename);
