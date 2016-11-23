@@ -42,7 +42,6 @@ if strcmp(get(hObject,'Visible'),'off')
 end
 
 % Adding path
-addpath(strcat(cd, '/util'));
 addpath(strcat(cd, '/edition'));
 
 % % Setup context variables

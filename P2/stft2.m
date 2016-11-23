@@ -42,8 +42,6 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 
-addpath('./util');
-addpath('./math');
 addpath('./stft');
 % End initialization code - DO NOT EDIT
 
