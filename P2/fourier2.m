@@ -51,8 +51,6 @@ function fourier2_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to fourier2 (see VARARGIN)
 
-addpath(strcat(cd, '/util'));
-addpath(strcat(cd, '/math'));
 addpath(strcat(cd, '/fourier'));
 
 handles.spectra = {};
