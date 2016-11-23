@@ -53,7 +53,6 @@ global deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 betaf1 betaf2 gammaf1 gam
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to protolize2 (see VARARGIN)
 
-addpath(strcat(cd, '/util'));
 % Choose default command line output for protolize2
 handles.output = hObject;
 
@@ -173,6 +172,7 @@ function mainexit_Callback(hObject, eventdata, handles)
 close;
 clear;
 clc;
+cd ..
 
 
 % --------------------------------------------------------------------

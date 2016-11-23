@@ -31,8 +31,6 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 
-addpath([cd '/util']);
-addpath([cd '/math']);
 addpath([cd '/dwtmodule']);
 % End initialization code - DO NOT EDIT
 

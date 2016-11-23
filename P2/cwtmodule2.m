@@ -32,8 +32,6 @@ else
 end
 
 addpath ([cd '/cwtmodule']);
-addpath ([cd '/util']);
-addpath ([cd '/math']);
 % End initialization code - DO NOT EDIT
 
 % --- Executes just before cwtmodule2 is made visible.
