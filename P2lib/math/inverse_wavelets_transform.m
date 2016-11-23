@@ -1,4 +1,12 @@
 function [signal] = inverse_wavelets_transform(approximations, details, transform)
+% Assesses the inverse wavelets transform of the given approximations and
+% details.
+%
+%     [signal] = inverse_wavelets_transform(apps, dtls, transform)
+%
+% Returns the original signal generated after applying the wavelets transform
+% using the `transform` wavelet. `apps` and `dtls` must be cell arrays of the
+% same size.
 limit = length(approximations);
 signal = anti_trans(idwt(approximations{limit}, details{limit}, transform), ...
                     approximations, details, limit-1, transform);

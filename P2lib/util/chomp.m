@@ -1,5 +1,6 @@
 %% chomp: Removes trailing whitespace on strings
 function [outlet] = chomp(inlet)
+% Removes trailing whitespace on strings
 outlet = chomp_upper(chomp_lower(inlet));
 
 function [outlet] = chomp_lower(inlet)
