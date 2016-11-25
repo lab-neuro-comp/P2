@@ -1,24 +1,9 @@
 function varargout = plot_stuff(varargin)
-% PLOT_STUFF M-file for plot_stuff.fig
-%      PLOT_STUFF, by itself, creates a new PLOT_STUFF or raises the existing
-%      singleton*.
+% This modele provides the way for the user to clear the data
+% obtained from the analysis made for the beginning of a word.
+% If there's more data being recorded as a speech, the user can
+% leave it unmarked to be erased when the file is saved.
 %
-%      H = PLOT_STUFF returns the handle to a new PLOT_STUFF or the handle to
-%      the existing singleton*.
-%
-%      PLOT_STUFF('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in PLOT_STUFF.M with the given input arguments.
-%
-%      PLOT_STUFF('Property','Value',...) creates a new PLOT_STUFF or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before plot_stuff_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to plot_stuff_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
 
 % Edit the above text to modify the response to help plot_stuff
 
@@ -42,7 +27,9 @@ else
 	gui_mainfcn(gui_State, varargin{:});
 end
 % End initialization code - DO NOT EDIT
-% ME OBRIGUE
+
+addpath([cd '\util']);
+addpath([cd '\math']);
 
 % --- Executes just before plot_stuff is made visible.
 function plot_stuff_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -58,6 +45,7 @@ handles.files = varargin{1};
 handles.stuff = varargin{2};
 
 % Update handles structure
+set(handles.figure1, 'Name', 'Verificacao dos Momentos');
 repeated = 1;
 handles.repeated = repeated;
 

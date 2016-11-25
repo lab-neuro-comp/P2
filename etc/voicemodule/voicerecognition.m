@@ -1,24 +1,9 @@
 function varargout = voicerecognition(varargin)
-% VOICERECOGNITION M-file for voicerecognition.fig
-%      VOICERECOGNITION, by itself, creates a new VOICERECOGNITION or raises the existing
-%      singleton*.
+% This module analyses an audio file, searching for an event, in
+% this case, when someone says something. Based on the typical
+% frequency range of the human voice, the beginning of a word must
+% be recognized and the time of its occurence, stored.
 %
-%      H = VOICERECOGNITION returns the handle to a new VOICERECOGNITION or the handle to
-%      the existing singleton*.
-%
-%      VOICERECOGNITION('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in VOICERECOGNITION.M with the given input arguments.
-%
-%      VOICERECOGNITION('Property','Value',...) creates a new VOICERECOGNITION or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before voicerecognition_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to voicerecognition_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
 
 % Edit the above text to modify the response to help voicerecognition
 
@@ -61,6 +46,7 @@ handles.files = {};
 handles.stuff = {};
 
 % Update handles structure
+set(handles.figure1, 'Name', 'Reconhecimento de Voz');
 guidata(hObject, handles);
 
 % UIWAIT makes voicerecognition wait for user response (see UIRESUME)

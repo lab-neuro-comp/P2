@@ -11,7 +11,7 @@ windowsize = 1024;
 [b, a] = butter(4, [80, 260]/(fs/2));
 record = filter(b, a, record);
 
-analysis = calculate_power(record, windowsize);
+analysis = calc_power_voice(record, windowsize);
 
 % TODO Find a good mathematical way to get a good threshold
 ignorenoise = [];

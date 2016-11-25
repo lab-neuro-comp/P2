@@ -1,24 +1,12 @@
 function varargout = stimuli_analysis(varargin)
-% STIMULI_ANALYSIS M-file for stimuli_analysis.fig
-%      STIMULI_ANALYSIS, by itself, creates a new STIMULI_ANALYSIS or raises the existing
-%      singleton*.
+% This module analyses the time of events of a response that where
+% recorded on audio with the time when the stimulus was given to the
+% participant. Upon reaching  the interface, one must be able to
+% choose amongst the audio files that were previously analysed and
+% search for its correspondent .txt files containing the informations
+%on the test. After its analysis, the data is stored in a .csv file
+% with the data that was generated before after the audio analysis.
 %
-%      H = STIMULI_ANALYSIS returns the handle to a new STIMULI_ANALYSIS or the handle to
-%      the existing singleton*.
-%
-%      STIMULI_ANALYSIS('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in STIMULI_ANALYSIS.M with the given input arguments.
-%
-%      STIMULI_ANALYSIS('Property','Value',...) creates a new STIMULI_ANALYSIS or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before stimuli_analysis_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to stimuli_analysis_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
 
 % Edit the above text to modify the response to help stimuli_analysis
 
@@ -43,6 +31,8 @@ else
 end
 % End initialization code - DO NOT EDIT
 
+addpath([cd '\util']);
+addpath([cd '\math']);
 
 % --- Executes just before stimuli_analysis is made visible.
 function stimuli_analysis_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -59,6 +49,7 @@ handles.files = varargin{1};
 set(handles.popupAudio, 'String', handles.files);
 
 % Update handles structure
+set(handles.figure1, 'Name', 'Tempo de Resposta');
 guidata(hObject, handles);
 
 % UIWAIT makes stimuli_analysis wait for user response (see UIRESUME)
@@ -194,7 +185,7 @@ semicollon = findstr(content{1}{1}, ';');
 responseTime = handles.responseTime;
 
 if length(semicollon) == 1
-	content{1}{1} = strcat(content{1}{1}, ';Demora');
+	content{1}{1} = strcat(content{1}{1}, ';Delay');
 	
 	for n = 2:length(content{1})
 		responseFile = replace_dot(responseTime(n-1));
@@ -202,7 +193,7 @@ if length(semicollon) == 1
 	end
 else
 	content{1}{1} = content{1}{1}(1:semicollon(2));
-	content{1}{1} = strcat(content{1}{1}, 'Demora');
+	content{1}{1} = strcat(content{1}{1}, 'Delay');
 
 	for n = 2:length(content{1})
 		semicollon = findstr(content{1}{n}, ';');

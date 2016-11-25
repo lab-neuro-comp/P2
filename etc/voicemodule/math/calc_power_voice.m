@@ -1,4 +1,4 @@
-function [analysis] = calculate_power(record, windowsize)
+function [analysis] = calc_power_voice(record, windowsize)
 
 [record, queue] = update_queue(record, windowsize);
 n = 1;
