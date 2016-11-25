@@ -28,8 +28,6 @@ else
 end
 % End initialization code - DO NOT EDIT
 
-addpath([cd '\util']);
-addpath([cd '\math']);
 
 % --- Executes just before plot_stuff is made visible.
 function plot_stuff_OpeningFcn(hObject, eventdata, handles, varargin)

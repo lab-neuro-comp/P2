@@ -5,7 +5,7 @@ n = 1;
 power = 0;
 fullbar = ceil(length(record)/length(queue));
 
-h = waitbar(0,'Analise em andamento...');
+h = waitbar(0, 'Analise em andamento...');
 tic;
 while length(queue) > 0
 	% TODO Analyse window

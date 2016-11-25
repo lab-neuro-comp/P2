@@ -1,20 +1,20 @@
-function varargout = voicerecognition(varargin)
+function varargout = voicemodule(varargin)
 % This module analyses an audio file, searching for an event, in
 % this case, when someone says something. Based on the typical
 % frequency range of the human voice, the beginning of a word must
 % be recognized and the time of its occurence, stored.
 %
 
-% Edit the above text to modify the response to help voicerecognition
+% Edit the above text to modify the response to help voicemodule2
 
-% Last Modified by GUIDE v2.5 26-Sep-2016 10:19:18
+% Last Modified by GUIDE v2.5 25-Nov-2016 11:17:12
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
 				   'gui_Singleton',  gui_Singleton, ...
-				   'gui_OpeningFcn', @voicerecognition_OpeningFcn, ...
-				   'gui_OutputFcn',  @voicerecognition_OutputFcn, ...
+				   'gui_OpeningFcn', @voicemodule2_OpeningFcn, ...
+				   'gui_OutputFcn',  @voicemodule2_OutputFcn, ...
 				   'gui_LayoutFcn',  [] , ...
 				   'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -28,18 +28,17 @@ else
 end
 % End initialization code - DO NOT EDIT
 
-addpath([cd '\math']);
-addpath([cd '\util']);
+addpath([cd '/voicemodule']);
 
-% --- Executes just before voicerecognition is made visible.
-function voicerecognition_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before voicemodule2 is made visible.
+function voicemodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to voicerecognition (see VARARGIN)
+% varargin   command line arguments to voicemodule2 (see VARARGIN)
 
-% Choose default command line output for voicerecognition
+% Choose default command line output for voicemodule2
 handles.output = hObject;
 handles.cases = {};
 handles.files = {};
@@ -49,12 +48,12 @@ handles.stuff = {};
 set(handles.figure1, 'Name', 'Reconhecimento de Voz');
 guidata(hObject, handles);
 
-% UIWAIT makes voicerecognition wait for user response (see UIRESUME)
+% UIWAIT makes voicemodule2 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = voicerecognition_OutputFcn(hObject, eventdata, handles)
+function varargout = voicemodule2_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB

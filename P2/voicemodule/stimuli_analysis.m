@@ -31,8 +31,6 @@ else
 end
 % End initialization code - DO NOT EDIT
 
-addpath([cd '\util']);
-addpath([cd '\math']);
 
 % --- Executes just before stimuli_analysis is made visible.
 function stimuli_analysis_OpeningFcn(hObject, eventdata, handles, varargin)
