@@ -22,7 +22,7 @@ function varargout = protolize2(varargin)
 
 % Edit the above text to modify the response to help protolize2
 
-% Last Modified by GUIDE v2.5 25-Nov-2016 11:27:45
+% Last Modified by GUIDE v2.5 25-Nov-2016 11:50:54
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -157,12 +157,6 @@ function reflexbut_Callback(hObject, eventdata, handles)
 % global fs fa fb fc
 % fprintf('%f %f %f %f\n', fs, fa, fb, fc);
 
-% --- Executes on button press in voicebut.
-function voicebut_Callback(hObject, eventdata, handles)
-% hObject    handle to voicebut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-voicemodule2;
 
 % --------------------------------------------------------------------
 function mainfnc_Callback(hObject, eventdata, handles)
@@ -238,5 +232,10 @@ function studies_main_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 recordmodule;
 
-
+% --------------------------------------------------------------------
+function voice_main_Callback(hObject, eventdata, handles)
+% hObject    handle to voice_main (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+voicemodule2;
 
