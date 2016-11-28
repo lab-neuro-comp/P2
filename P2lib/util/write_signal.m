@@ -1,3 +1,4 @@
+%% Saves the signal to a data file identified by `filename`.
 function [ok] = write_signal(signal, filename)
 ok = true;
 fp = fopen(filename, 'w');

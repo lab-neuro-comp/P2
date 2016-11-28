@@ -1,4 +1,4 @@
-% --- creates a subarray ---
+%% Creates a subarray
 function [outlet] = subarray(inlet, beginning, ending)
 outlet = [];
 for where = beginning:ending
