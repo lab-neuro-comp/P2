@@ -1,9 +1,9 @@
-%% separateGSR: Separates GSR signal from EMG
 function [EMG, GSR] = separateGSR(edffile)
 % Separates GSR signal from EMG
 
-import br.unb.biologiaanimal.edf.*;
-edfinfo = EDF(edffile);
+%import *;
+javaclasspath
+edfinfo = br.unb.biologiaanimal.edf.EDF(edffile);
 labels = edfinfo.getLabels();
 
 % Converting EDF file to something we can use
