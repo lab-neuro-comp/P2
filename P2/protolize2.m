@@ -22,7 +22,7 @@ function varargout = protolize2(varargin)
 
 % Edit the above text to modify the response to help protolize2
 
-% Last Modified by GUIDE v2.5 25-Nov-2016 11:50:54
+% Last Modified by GUIDE v2.5 28-Nov-2016 08:19:07
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -238,4 +238,11 @@ function voice_main_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 voicemodule2;
+
+% --------------------------------------------------------------------
+function emgrgp_main_Callback(hObject, eventdata, handles)
+% hObject    handle to emgrgp_main (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+emgrgpmodule2;
 

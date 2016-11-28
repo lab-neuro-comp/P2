@@ -1,9 +1,9 @@
-function varargout = separar_EMG_RGP(varargin)
+function varargout = emgrgpmodule2(varargin)
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
 				   'gui_Singleton',  gui_Singleton, ...
-				   'gui_OpeningFcn', @separar_EMG_RGP_OpeningFcn, ...
-				   'gui_OutputFcn',  @separar_EMG_RGP_OutputFcn, ...
+				   'gui_OpeningFcn', @emgrgpmodule2_OpeningFcn, ...
+				   'gui_OutputFcn',  @emgrgpmodule2_OutputFcn, ...
 				   'gui_LayoutFcn',  [], ...
 				   'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -16,15 +16,17 @@ else
 	gui_mainfcn(gui_State, varargin{:});
 end
 
+addpath([cd '/emgrgpmodule']);
 if isequal(exist('edf.jar'), 0)
 	  javaaddpath('edf.jar');
 end
 
-function separar_EMG_RGP_OpeningFcn(hObject, eventdata, handles, varargin)
+function emgrgpmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
+set(handles.pushbuttonRun, 'Enable', 'off');
 guidata(hObject, handles);
 
-function varargout = separar_EMG_RGP_OutputFcn(hObject, eventdata, handles)
+function varargout = emgrgpmodule2_OutputFcn(hObject, eventdata, handles)
 
 
 function editFiles_Callback(hObject, eventdata, handles)
@@ -48,8 +50,13 @@ if iscell(filename)
 	for n = 2:length(filename)
 		outlet = strcat(outlet, ';', filename{n});
 	end
+	set(handles.pushbuttonRun, 'Enable', 'on');
 elseif ischar(filename)
 	outlet = strcat(pathname, filename);
+	set(handles.pushbuttonRun, 'Enable', 'on');
+elseif isempty(filename)
+	return;
+	set(handles.pushbuttonRun, 'Enable', 'off');
 end
 
 set(handles.editFiles, 'String', outlet);
