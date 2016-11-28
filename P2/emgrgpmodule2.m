@@ -22,7 +22,8 @@ else
 end
 
 addpath([cd '/emgrgpmodule']);
-if isequal(exist('edf.jar'), 0)
+javaaddpath('edf.jar');
+if ~is_in_javapath('edf.jar')
 	  javaaddpath('edf.jar');
 end
 

@@ -2,7 +2,6 @@ function [EMG, GSR] = separateGSR(edffile)
 % Separates GSR signal from EMG
 
 %import *;
-javaclasspath
 edfinfo = br.unb.biologiaanimal.edf.EDF(edffile);
 labels = edfinfo.getLabels();
 
