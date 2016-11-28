@@ -1,4 +1,9 @@
 function varargout = emgrgpmodule2(varargin)
+% This module is used to separate the low frequency SGR signal from the
+% high frequency EMG signal when they can't be measured in different
+% channels and one signal overlaps the other.
+%
+
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
 				   'gui_Singleton',  gui_Singleton, ...
