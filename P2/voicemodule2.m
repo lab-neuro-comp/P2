@@ -126,20 +126,24 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 [filename, pathname, filterindex]  = uigetfile('*.wav', 'Select files', ...
 											   'MultiSelect', 'on');
 handles.cases = {};
-if ischar(filename)
-	handles.cases = { strcat(pathname, filename) };
-elseif iscell(filename)
-	handles.cases = {};
-	for n = 1:length(filename)
-		handles.cases{n} = strcat(pathname, filename{n});
+if ~isequal(filename, 0)
+	if ischar(filename)
+		handles.cases = { strcat(pathname, filename) };
+	elseif iscell(filename)
+		handles.cases = {};
+		for n = 1:length(filename)
+			handles.cases{n} = strcat(pathname, filename{n});
+		end
 	end
+	outlet = join_strings(handles.cases, ';');
+	set(handles.editSearch, 'String', outlet);
+	set(handles.buttonRun, 'Enable', 'on');
+	handles.pathname = pathname;
+	handles.filename = filename;
+else
+	return;
 end
 
-outlet = join_strings(handles.cases, ';');
-set(handles.editSearch, 'String', outlet);
-set(handles.buttonRun, 'Enable', 'on');
-handles.pathname = pathname;
-handles.filename = filename;
 guidata(hObject, handles);
 
 % --- Executes on button press in buttonRun.

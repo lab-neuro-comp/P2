@@ -47,24 +47,26 @@ function pushbuttonSearch_Callback(hObject, eventdata, handles)
 [filename, pathname] = uigetfile('*.edf', 'MultiSelect', 'on');
 outlet = '';
 
-if iscell(filename)
-	for n = 1:length(filename)
-		filename{n} = strcat(pathname, filename{n});
+if ~isequal(filename, 0)
+	if iscell(filename)
+		for n = 1:length(filename)
+			filename{n} = strcat(pathname, filename{n});
+		end
+		outlet = filename{1};
+		for n = 2:length(filename)
+			outlet = strcat(outlet, ';', filename{n});
+		end
+		set(handles.pushbuttonRun, 'Enable', 'on');
+	elseif ischar(filename)
+		outlet = strcat(pathname, filename);
+		set(handles.pushbuttonRun, 'Enable', 'on');
 	end
-	outlet = filename{1};
-	for n = 2:length(filename)
-		outlet = strcat(outlet, ';', filename{n});
-	end
-	set(handles.pushbuttonRun, 'Enable', 'on');
-elseif ischar(filename)
-	outlet = strcat(pathname, filename);
-	set(handles.pushbuttonRun, 'Enable', 'on');
-elseif isempty(filename)
+	set(handles.editFiles, 'String', outlet);
+else
 	return;
 	set(handles.pushbuttonRun, 'Enable', 'off');
 end
 
-set(handles.editFiles, 'String', outlet);
 
 function pushbuttonRun_Callback(hObject, eventdata, handles)
 % Callback when clicking "processar" pushbutton
