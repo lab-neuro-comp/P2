@@ -309,11 +309,15 @@ function PopupChooseSignal_Callback(hObject, eventdata, handles)
 % --- Executes on button press in ButtonExport.
 function ButtonExport_Callback(hObject, eventdata, handles)
 signalname = get(handles.PopupChooseSignal, 'Value');
-signal = handles.signals{signalname};
+if (handles.newsignals{get(handles.ListboxSignal, 'Value')} == 0)
+    signal = handles.signals{get(handles.ListboxSignal, 'Value')};
+else
+    signal = handles.newsignals{get(handles.ListboxSignal, 'Value')};
+end
 output = generate_statistics(signal, signalname, str2num(handles.constants.get('fs')));
 
 [filename pathname] = uiputfile('*.txt', 'Save statistics');
-if ~isequal(filename, false) and ~isequal(pathname, false)
+if and(~isequal(filename, false), ~isequal(pathname, false))
     outlet = fopen([pathname filename], 'w');
     for line = 1:length(output)
     	fprintf(outlet, '%s\r\n', output{line});
@@ -324,9 +328,13 @@ end
 % --- Executes on button press in ButtonSave.
 function ButtonSave_Callback(hObject, eventdata, handles)
 figure
-signal = handles.signals{get(handles.PopupChooseSignal, 'Value')};
+if (handles.newsignals{get(handles.ListboxSignal, 'Value')} == 0)
+    signal = handles.signals{get(handles.ListboxSignal, 'Value')};
+else
+    signal = handles.newsignals{get(handles.ListboxSignal, 'Value')};
+end
 handle = plot(get_step(signal, str2num(handles.constants.get('fs'))), signal);
 [filename pathname] = uiputfile('*.png', 'Save statistics');
-if ~isequal(filename, false) and ~isequal(pathname, false)
+if and(~isequal(filename, false), ~isequal(pathname, false))
     saveas(handle, [pathname filename]);
 end
