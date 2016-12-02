@@ -112,6 +112,9 @@ if ~isequal(signalname, 0)
 	set(handles.PopupChooseSignal, 'String', handles.signalnames);
 	if isequal(length(handles.signals), 1)
 		context_plot(signal, fs);
+        index = get(handles.ListboxSignal, 'Value');
+        newsignal = 0;
+        handles.newsignals{index} = newsignal;
 	end
 end
 
@@ -133,6 +136,11 @@ context_plot(handles.signals{get(hObject, 'Value')},...
              str2num(handles.constants.get('fs')));
 set(handles.CheckFine, 'Value', 0);
 set([handles.editMin, handles.editMax, handles.ButtonAdjust], 'Enable', 'off');
+index = get(handles.ListboxSignal, 'Value');
+newsignal = 0;
+handles.newsignals{index} = newsignal;
+
+guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function ListboxSignal_CreateFcn(hObject, eventdata, handles)
@@ -175,7 +183,11 @@ text = {...
 
 function ButtonStatistics_Callback(hObject, eventdata, handles)
 set(handles.textStatistics, 'Enable', 'on');
-signal = handles.signals{get(handles.ListboxSignal, 'Value')};
+if (handles.newsignals{get(handles.ListboxSignal, 'Value')} == 0)
+    signal = handles.signals{get(handles.ListboxSignal, 'Value')};
+else
+    signal = handles.newsignals{get(handles.ListboxSignal, 'Value')};
+end
 signalname = handles.signalnames{get(handles.ListboxSignal, 'Value')};
 set(handles.textStatistics, ...
     'String', ...
@@ -256,7 +268,12 @@ fs = str2num(handles.constants.get('fs'));
 beginning = round(str2num(get(handles.editMin, 'String')) * fs);
 ending = round(str2num(get(handles.editMax, 'String')) * fs);
 index = get(handles.ListboxSignal, 'Value');
-newsignal = handles.signals{index};
+if (handles.newsignals{index} == 0)
+    newsignal = handles.signals{index};
+else
+    newsignal = handles.newsignals{index};
+end
+
 newsignal = newsignal(beginning:ending);
 context_plot(newsignal, fs);
 handles.newsignals{index} = newsignal;
