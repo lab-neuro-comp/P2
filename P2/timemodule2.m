@@ -131,6 +131,8 @@ delete(handles.figure1)
 function ListboxSignal_Callback(hObject, eventdata, handles)
 context_plot(handles.signals{get(hObject, 'Value')},...
              str2num(handles.constants.get('fs')));
+set(handles.CheckFine, 'Value', 0);
+set([handles.editMin, handles.editMax, handles.ButtonAdjust], 'Enable', 'off');
 
 % --- Executes during object creation, after setting all properties.
 function ListboxSignal_CreateFcn(hObject, eventdata, handles)
@@ -254,10 +256,10 @@ fs = str2num(handles.constants.get('fs'));
 beginning = round(str2num(get(handles.editMin, 'String')) * fs);
 ending = round(str2num(get(handles.editMax, 'String')) * fs);
 index = get(handles.ListboxSignal, 'Value');
-signal = handles.signals{index};
-signal = signal(beginning:ending);
-context_plot(signal, fs);
-handles.signals{index} = signal;
+newsignal = handles.signals{index};
+newsignal = newsignal(beginning:ending);
+context_plot(newsignal, fs);
+handles.newsignals{index} = newsignal;
 guidata(hObject, handles);
 
 function editMax_Callback(hObject, eventdata, handles)
@@ -291,7 +293,7 @@ function PopupChooseSignal_Callback(hObject, eventdata, handles)
 function ButtonExport_Callback(hObject, eventdata, handles)
 signalname = get(handles.PopupChooseSignal, 'Value');
 signal = handles.signals{signalname};
-output = generate_statistics(signal, signalname);
+output = generate_statistics(signal, signalname, str2num(handles.constants.get('fs')));
 
 [filename pathname] = uiputfile('*.txt', 'Save statistics');
 if ~isequal(filename, false) and ~isequal(pathname, false)
