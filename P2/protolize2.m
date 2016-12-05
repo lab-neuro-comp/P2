@@ -1,26 +1,11 @@
 function varargout = protolize2(varargin)
 % PROTOLIZE2 M-file for protolize2.fig
-%      PROTOLIZE2, by itself, creates a new PROTOLIZE2 or raises the existing
-%      singleton*.
 %
-%      H = PROTOLIZE2 returns the handle to a new PROTOLIZE2 or the handle to
-%      the existing singleton*.
+% Protolize! is an educational biological signal processing suite for MATLAB,
+% developed at the Laboratory of Neuroscience and Behaviour from the University
+% of Brasilia. This function will call the main window, enabling the user to
+% access its modules and tools at a glance.
 %
-%      PROTOLIZE2('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in PROTOLIZE2.M with the given input arguments.
-%
-%      PROTOLIZE2('Property','Value',...) creates a new PROTOLIZE2 or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before protolize2_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to protolize2_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
-
-% Edit the above text to modify the response to help protolize2
 
 % Last Modified by GUIDE v2.5 05-Dec-2016 09:08:16
 
@@ -30,7 +15,7 @@ gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
                    'gui_OpeningFcn', @protolize2_OpeningFcn, ...
                    'gui_OutputFcn',  @protolize2_OutputFcn, ...
-                   'gui_LayoutFcn',  [] , ...
+                   'gui_LayoutFcn',  [], ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
