@@ -11,6 +11,16 @@ function [ints_table] = ler_arq_ints(filepath)
 % 5. int1, the lower bound for interval cut
 % 6. int2, the upper bound for interval cut
 %
-ints_table = [];
 [numeric, txt, raw] = xlsread(filepath);
-ints_table = raw;
+ints_table = { };
+[y x] = size(raw);
+y = 1;
+for m = 2:length(raw)
+	if ~isequal(class(raw{m, 1}), class(NaN))
+		% Include stuff to ints_table
+		for n = 1:x
+			ints_table{y, n} = raw{m, n};
+		end
+		y = y+1;
+	end
+end

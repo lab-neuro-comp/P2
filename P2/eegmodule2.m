@@ -248,13 +248,12 @@ function buttonRun_Callback(hObject, eventdata, handles)
 % Abrir o arquivo
 xlsfile = get(handles.editTable, 'String');
 % [A, T] = xlsread(get(handles.editTable, 'String'));
-ints_table = ler_arq_ints(xlsfile);
+ints_table = ler_arq_ints(xlsfile)
 
 % Open eeglab:
 [ALLEEG EEG CURRENTSET ALLCOM] = eeglab; 
 
 %Iniciar varredura para corte de intervalos
-ints_table
 for i=1:size(ints_table)
 
     % sujeito=T(i+1,1);
