@@ -42,7 +42,6 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 
-javaaddpath('edf.jar');
 if ~is_in_javapath('edf.jar')
     javaaddpath('edf.jar');
 end
@@ -107,8 +106,7 @@ function pushbuttonSearch_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbuttonSearch (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-[filename, pathname] = uigetfile('*', 'MultiSelect', 'on');
+[filename, pathname] = uigetfile('*.edf', 'MultiSelect', 'on');
 
 if isnumeric(filename)
     return
@@ -146,4 +144,10 @@ for n = 1:length(stuff)
     item = stuff{n};
     % TODO Convert given EDF file
     fprintf('%s\n', item);
+    inlet = item;
+    edf = br.unb.biologiaanimal.edf.EDF(item);
+    outlet = change_extension(inlet, '.ascii');
+    edf.toAscii(outlet);
 end
+
+msgbox('DONE!');
