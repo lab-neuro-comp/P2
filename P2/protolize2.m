@@ -22,7 +22,7 @@ function varargout = protolize2(varargin)
 
 % Edit the above text to modify the response to help protolize2
 
-% Last Modified by GUIDE v2.5 28-Nov-2016 08:19:07
+% Last Modified by GUIDE v2.5 05-Dec-2016 09:08:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -230,7 +230,8 @@ function studies_main_Callback(hObject, eventdata, handles)
 % hObject    handle to studies_main (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-recordmodule;
+
+% TODO Add EEG module here!
 
 % --------------------------------------------------------------------
 function voice_main_Callback(hObject, eventdata, handles)
@@ -246,3 +247,11 @@ function emgrgp_main_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 emgrgpmodule2;
 
+
+
+% --------------------------------------------------------------------
+function edfconverter_menu_Callback(hObject, eventdata, handles)
+% hObject    handle to edfconverter_menu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+edfconverter;
