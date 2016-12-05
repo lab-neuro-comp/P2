@@ -140,10 +140,33 @@ function pushbuttonRun_Callback(hObject, eventdata, handles)
 raw = get(handles.editSearch, 'String');
 stuff = split_string(raw, ';');
 
+if isequal(get(handles.checkboxMultiple, 'Value'), true)
+    for n = 1:length(stuff)
+        inlet = stuff{n};
+        edf = br.unb.biologiaanimal.edf.EDF(inlet);
+
+        % Find root file
+        root_index = length(inlet);
+        while ~isequal(inlet(root_index), '.')
+            root_index = root_index - 1;
+        end
+        root = inlet(1:root_index);
+
+        % To each file, loop through their labels
+        labels = edf.getLabels();
+        for m = 1:length(labels)
+            label = char(labels(m));
+            outlet = strcat(root, label, '.ascii');
+            fprintf('%s\n', outlet);
+            edf.toSingleChannelAscii(outlet, label);
+        end
+    end
+    msgbox('DONE!');
+    return
+end
+
 for n = 1:length(stuff)
     item = stuff{n};
-    % TODO Convert given EDF file
-    fprintf('%s\n', item);
     inlet = item;
     edf = br.unb.biologiaanimal.edf.EDF(item);
     outlet = change_extension(inlet, '.ascii');
