@@ -22,7 +22,7 @@ function varargout = eegmodule2(varargin)
 
 % Edit the above text to modify the response to help eegmodule2
 
-% Last Modified by GUIDE v2.5 05-Dec-2016 08:45:40
+% Last Modified by GUIDE v2.5 05-Dec-2016 08:48:56
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -58,6 +58,7 @@ function eegmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 
 % Update handles structure
+set(handles.figure1, 'Name', 'EEG Module');
 guidata(hObject, handles);
 
 % UIWAIT makes eegmodule2 wait for user response (see UIRESUME)
@@ -75,7 +76,14 @@ function varargout = eegmodule2_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
+% --- Executes on button press in buttonParameters.
+function buttonParameters_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonParameters (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
+
+%-----------------------------------------------------------------
 function editTable_Callback(hObject, eventdata, handles)
 % hObject    handle to editTable (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -83,6 +91,12 @@ function editTable_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of editTable as text
 %        str2double(get(hObject,'String')) returns contents of editTable as a double
+
+if isempty(get(handles.editTable, 'String'))
+	set([handles.buttonRun, handles.checkLoad, handles.checkLocate,...
+		handles.checkInfo, handles.checkICA, handles.checkSteps],...
+		'Enable', 'off');
+end
 
 
 % --- Executes during object creation, after setting all properties.
@@ -104,21 +118,23 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+[filename, pathname] = uigetfile('*.xls');
 
-% --- Executes on button press in buttonRun.
-function buttonRun_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonRun (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+if ~isequal(filename, 0)
+	outlet = strcat(pathname, filename);
+	set([handles.buttonRun, handles.checkLoad, handles.checkLocate,...
+		handles.checkInfo, handles.checkICA, handles.checkSteps],...
+		'Enable', 'on');
+	set(handles.editTable, 'String', outlet);
+else
+	return;
+	set([handles.buttonRun, handles.checkLoad, handles.checkLocate,...
+		handles.checkInfo, handles.checkICA, handles.checkSteps],...
+		'Enable', 'off');
+end
 
 
-% --- Executes on button press in buttonParameters.
-function buttonParameters_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonParameters (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
+%-----------------------------------------------------------------
 % --- Executes on button press in checkLoad.
 function checkLoad_Callback(hObject, eventdata, handles)
 % hObject    handle to checkLoad (see GCBO)
@@ -128,13 +144,13 @@ function checkLoad_Callback(hObject, eventdata, handles)
 % Hint: get(hObject,'Value') returns toggle state of checkLoad
 
 
-% --- Executes on button press in checkbox15.
-function checkbox15_Callback(hObject, eventdata, handles)
-% hObject    handle to checkbox15 (see GCBO)
+% --- Executes on button press in checkLocate.
+function checkLocate_Callback(hObject, eventdata, handles)
+% hObject    handle to checkLocate (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hint: get(hObject,'Value') returns toggle state of checkbox15
+% Hint: get(hObject,'Value') returns toggle state of checkLocate
 
 
 % --- Executes on button press in checkInfo.
@@ -162,5 +178,12 @@ function checkSteps_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of checkSteps
+
+
+% --- Executes on button press in buttonRun.
+function buttonRun_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonRun (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
 
