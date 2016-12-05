@@ -1,5 +1,5 @@
 function [ints_table] = ler_arq_ints(filepath)
-% Reads the XLS file given in filepath and turns it into a matrix, relating
+% Reads the XLS file given in filepath and turns it into a cell array, relating
 % each line to one analysis.
 %
 % It is expected each column represent one data to be used:

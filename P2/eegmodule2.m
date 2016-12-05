@@ -248,14 +248,25 @@ function buttonRun_Callback(hObject, eventdata, handles)
 % Abrir o arquivo
 xlsfile = get(handles.editTable, 'String');
 % [A, T] = xlsread(get(handles.editTable, 'String'));
-ints_table = ler_arq_ints(xlsfile)
+ints_table = ler_arq_ints(xlsfile);
 
 % Open eeglab:
 [ALLEEG EEG CURRENTSET ALLCOM] = eeglab; 
 
 %Iniciar varredura para corte de intervalos
-for i=1:size(ints_table)
+for n=1:size(ints_table)
+    % Variables
+    arqedf = ints_table{n, 1};
+    int1 = ints_table{n, 5};
+    int2 = ints_table{n, 6};
+    cut = [int1/1000 int2/1000]; 
 
+    % Loading EDF
+    EEG = pop_biosig(arqedf, 'blockrange', cut, 'rmeventchan', 'off');
+    %     ^^^^^^^^^^
+    % TODO Install Biosig extension to use this function
+
+    % Cemetery
     % sujeito=T(i+1,1);
     % teste= T(i+1,2); 
     % arqset = T(i+1,3);
@@ -268,7 +279,6 @@ for i=1:size(ints_table)
     % arqedf = strcat(localorigem, char(arqedf),'.edf');
 
     % %corte = [int1/1000 int2/1000]; 
-    % corte = [int1/1000 int2/1000]; 
 
     % disp(corte);
     % %disp(getfiletype(char(arqedf)));
