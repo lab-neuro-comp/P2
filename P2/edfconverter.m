@@ -41,6 +41,11 @@ if nargout
 else
     gui_mainfcn(gui_State, varargin{:});
 end
+
+javaaddpath('edf.jar');
+if ~is_in_javapath('edf.jar')
+    javaaddpath('edf.jar');
+end
 % End initialization code - DO NOT EDIT
 
 
@@ -63,7 +68,7 @@ guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = edfconverter_OutputFcn(hObject, eventdata, handles) 
+function varargout = edfconverter_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -91,7 +96,8 @@ function editSearch_CreateFcn(hObject, eventdata, handles)
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0, 'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
@@ -102,6 +108,22 @@ function pushbuttonSearch_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+[filename, pathname] = uigetfile('*', 'MultiSelect', 'on');
+
+if isnumeric(filename)
+    return
+elseif iscell(filename)
+    set(handles.editSearch, ...
+        'String', ...
+        join_strings(append_on_each_one(filename, ...
+                                        pathname), ...
+                     ';'));
+else
+    set(handles.editSearch, ...
+        'String', ...
+        strcat(pathname, ...
+               filename));
+end
 
 % --- Executes on button press in checkboxMultiple.
 function checkboxMultiple_Callback(hObject, eventdata, handles)
@@ -117,5 +139,11 @@ function pushbuttonRun_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbuttonRun (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+raw = get(handles.editSearch, 'String');
+stuff = split_string(raw, ';');
 
-
+for n = 1:length(stuff)
+    item = stuff{n};
+    % TODO Convert given EDF file
+    fprintf('%s\n', item);
+end
