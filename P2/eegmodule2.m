@@ -91,7 +91,9 @@ switch get(handles.buttonParameters, 'Value')
 		set([handles.editEEGLab handles.editLocations], 'Enable', 'on');
 	otherwise
 		set([handles.editEEGLab handles.editLocations], 'Enable', 'off');
-		
+		handles.constants.put('EEGLAB_PATH', get(handles.editEEGLab, 'String'));
+		handles.constants.put('LOCATIONS_PATH', get(handles.editLocations, 'String'));
+		save_constants(handles.constants);
 end
 
 
