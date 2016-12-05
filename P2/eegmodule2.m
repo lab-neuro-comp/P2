@@ -22,7 +22,7 @@ function varargout = eegmodule2(varargin)
 
 % Edit the above text to modify the response to help eegmodule2
 
-% Last Modified by GUIDE v2.5 05-Dec-2016 08:48:56
+% Last Modified by GUIDE v2.5 05-Dec-2016 09:43:37
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -56,8 +56,11 @@ function eegmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for eegmodule2
 handles.output = hObject;
+handles.constants = load_constants();
 
 % Update handles structure
+set(handles.editEEGLab, 'String', handles.constants.get('EEGLAB_PATH'));
+set(handles.editLocations, 'String', handles.constants.get('LOCATIONS_PATH'));
 set(handles.figure1, 'Name', 'EEG Module');
 guidata(hObject, handles);
 
@@ -76,11 +79,64 @@ function varargout = eegmodule2_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
+%-----------------------------------------------------------------
 % --- Executes on button press in buttonParameters.
 function buttonParameters_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonParameters (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+switch get(handles.buttonParameters, 'Value')
+	case 1
+		set([handles.editEEGLab handles.editLocations], 'Enable', 'on');
+	otherwise
+		set([handles.editEEGLab handles.editLocations], 'Enable', 'off');
+		
+end
+
+
+function editEEGLab_Callback(hObject, eventdata, handles)
+% hObject    handle to editEEGLab (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editEEGLab as text
+%        str2double(get(hObject,'String')) returns contents of editEEGLab as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editEEGLab_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editEEGLab (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function editLocations_Callback(hObject, eventdata, handles)
+% hObject    handle to editLocations (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editLocations as text
+%        str2double(get(hObject,'String')) returns contents of editLocations as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editLocations_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editLocations (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
 
 
 %-----------------------------------------------------------------
@@ -93,7 +149,7 @@ function editTable_Callback(hObject, eventdata, handles)
 %        str2double(get(hObject,'String')) returns contents of editTable as a double
 
 if isempty(get(handles.editTable, 'String'))
-	set([handles.buttonRun, handles.checkLoad, handles.checkLocate,...
+	set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
 		handles.checkInfo, handles.checkICA, handles.checkSteps],...
 		'Enable', 'off');
 end
@@ -122,26 +178,26 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 
 if ~isequal(filename, 0)
 	outlet = strcat(pathname, filename);
-	set([handles.buttonRun, handles.checkLoad, handles.checkLocate,...
+	set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
 		handles.checkInfo, handles.checkICA, handles.checkSteps],...
 		'Enable', 'on');
 	set(handles.editTable, 'String', outlet);
 else
 	return;
-	set([handles.buttonRun, handles.checkLoad, handles.checkLocate,...
+	set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
 		handles.checkInfo, handles.checkICA, handles.checkSteps],...
 		'Enable', 'off');
 end
 
 
 %-----------------------------------------------------------------
-% --- Executes on button press in checkLoad.
-function checkLoad_Callback(hObject, eventdata, handles)
-% hObject    handle to checkLoad (see GCBO)
+% --- Executes on button press in checkRerefer.
+function checkRerefer_Callback(hObject, eventdata, handles)
+% hObject    handle to checkRerefer (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hint: get(hObject,'Value') returns toggle state of checkLoad
+% Hint: get(hObject,'Value') returns toggle state of checkRerefer
 
 
 % --- Executes on button press in checkLocate.
