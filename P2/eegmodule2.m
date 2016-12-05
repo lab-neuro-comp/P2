@@ -41,9 +41,9 @@ if nargout
 else
     gui_mainfcn(gui_State, varargin{:});
 end
-% End initialization code - DO NOT EDIT
 
 addpath ([cd '/eegmodule']);
+% End initialization code - DO NOT EDIT
 
 
 % --- Executes just before eegmodule2 is made visible.
@@ -57,6 +57,7 @@ function eegmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for eegmodule2
 handles.output = hObject;
 handles.constants = load_constants();
+add_eeglab_path(get(handles.constants, 'EEGLAB_PATH'));
 
 % Update handles structure
 set(handles.editEEGLab, 'String', handles.constants.get('EEGLAB_PATH'));
@@ -87,13 +88,13 @@ function buttonParameters_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 switch get(handles.buttonParameters, 'Value')
-	case 1
-		set([handles.editEEGLab handles.editLocations], 'Enable', 'on');
-	otherwise
-		set([handles.editEEGLab handles.editLocations], 'Enable', 'off');
-		handles.constants.put('EEGLAB_PATH', get(handles.editEEGLab, 'String'));
-		handles.constants.put('LOCATIONS_PATH', get(handles.editLocations, 'String'));
-		save_constants(handles.constants);
+    case 1
+        set([handles.editEEGLab handles.editLocations], 'Enable', 'on');
+    otherwise
+        set([handles.editEEGLab handles.editLocations], 'Enable', 'off');
+        handles.constants.put('EEGLAB_PATH', get(handles.editEEGLab, 'String'));
+        handles.constants.put('LOCATIONS_PATH', get(handles.editLocations, 'String'));
+        save_constants(handles.constants);
 end
 
 
@@ -151,9 +152,9 @@ function editTable_Callback(hObject, eventdata, handles)
 %        str2double(get(hObject,'String')) returns contents of editTable as a double
 
 if isempty(get(handles.editTable, 'String'))
-	set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
-		handles.checkInfo, handles.checkICA, handles.checkSteps],...
-		'Enable', 'off');
+    set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
+        handles.checkInfo, handles.checkICA, handles.checkSteps],...
+        'Enable', 'off');
 end
 
 
@@ -179,16 +180,16 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 [filename, pathname] = uigetfile('*.xls');
 
 if ~isequal(filename, 0)
-	outlet = strcat(pathname, filename);
-	set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
-		handles.checkInfo, handles.checkICA, handles.checkSteps],...
-		'Enable', 'on');
-	set(handles.editTable, 'String', outlet);
+    outlet = strcat(pathname, filename);
+    set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
+        handles.checkInfo, handles.checkICA, handles.checkSteps],...
+        'Enable', 'on');
+    set(handles.editTable, 'String', outlet);
 else
-	return;
-	set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
-		handles.checkInfo, handles.checkICA, handles.checkSteps],...
-		'Enable', 'off');
+    return;
+    set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
+        handles.checkInfo, handles.checkICA, handles.checkSteps],...
+        'Enable', 'off');
 end
 
 
@@ -244,4 +245,32 @@ function buttonRun_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+% Abrir o arquivo
+xlsfile = get(handles.editTable, 'String');
+% [A, T] = xlsread(get(handles.editTable, 'String'));
+ints_table = ler_arq_ints(xlsfile);
 
+% Open eeglab:
+[ALLEEG EEG CURRENTSET ALLCOM] = eeglab; 
+
+%Iniciar varredura para corte de intervalos
+ints_table
+for i=1:size(ints_table)
+
+    % sujeito=T(i+1,1);
+    % teste= T(i+1,2); 
+    % arqset = T(i+1,3);
+    % int1 = A(i,1);
+    % int2 = A(i,2);
+    % arqedf = T(i+1, 4)
+
+    % arqset = strcat(localdestino, char(sujeito), char(teste), '.set');
+
+    % arqedf = strcat(localorigem, char(arqedf),'.edf');
+
+    % %corte = [int1/1000 int2/1000]; 
+    % corte = [int1/1000 int2/1000]; 
+
+    % disp(corte);
+    % %disp(getfiletype(char(arqedf)));
+end
