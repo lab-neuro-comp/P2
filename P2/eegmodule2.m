@@ -272,7 +272,6 @@ for n=1:size(ints_table)
 	
 	% Rerefering EDF
 	arqset = change_extension(arqedf, 'set');
-	%labels = edfinfo.getLabels()
 	if isequal(get(handles.checkRerefer, 'Value'), 1)
 		[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,...
 											 'setname', char(arqset),...
@@ -294,15 +293,16 @@ for n=1:size(ints_table)
 											 'savenew', char(arqset));
 	end
 
+	% Locating electrodes
+	if isequal(get(handles.checkLocate, 'Value'), 1)
+		EEG = pop_chanedit(EEG,'load', get(handles.editLocations, 'String'));
+		%EEG.chanlocs = readlocs( filename, 'key', 'val', ... );
+		%EEG.chanlocs = readlocs( arqloc,'filetype','chanedit');
+
+		EEG = pop_saveset( EEG, 'savemode','resave');
+	end
+	 
+
 	% Cemetery
-	%[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1, 'setname', char(arqset),'overwrite', 'on');
- 
-	%pop_select(INEEG, 'key1', value1, 'key2', value2 ...);
-	%EEG = pop_select (EEG, 'nochannel', [27]); 
 	
-	%[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1, 'setname', char(arqset),'overwrite', 'on');
-	
-	%pop_reref( EEG, ref, 'key', 'val' ...);
-	%EEG = pop_reref( EEG, 26);
- 
 end
