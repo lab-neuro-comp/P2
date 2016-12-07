@@ -27,25 +27,25 @@ function varargout = eegmodule2(varargin)
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
-                   'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @eegmodule2_OpeningFcn, ...
-                   'gui_OutputFcn',  @eegmodule2_OutputFcn, ...
-                   'gui_LayoutFcn',  [] , ...
-                   'gui_Callback',   []);
+				   'gui_Singleton',  gui_Singleton, ...
+				   'gui_OpeningFcn', @eegmodule2_OpeningFcn, ...
+				   'gui_OutputFcn',  @eegmodule2_OutputFcn, ...
+				   'gui_LayoutFcn',  [] , ...
+				   'gui_Callback',   []);
 if nargin && ischar(varargin{1})
-    gui_State.gui_Callback = str2func(varargin{1});
+	gui_State.gui_Callback = str2func(varargin{1});
 end
 
 if nargout
-    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+	[varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
 else
-    gui_mainfcn(gui_State, varargin{:});
+	gui_mainfcn(gui_State, varargin{:});
 end
 
 addpath ([cd '/eegmodule']);
 javaaddpath('edf.jar');
 if ~is_in_javapath('edf.jar')
-      javaaddpath('edf.jar');
+	  javaaddpath('edf.jar');
 end
 % End initialization code - DO NOT EDIT
 
@@ -92,13 +92,13 @@ function buttonParameters_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 switch get(handles.buttonParameters, 'Value')
-    case 1
-        set([handles.editEEGLab handles.editLocations], 'Enable', 'on');
-    otherwise
-        set([handles.editEEGLab handles.editLocations], 'Enable', 'off');
-        handles.constants.put('EEGLAB_PATH', get(handles.editEEGLab, 'String'));
-        handles.constants.put('LOCATIONS_PATH', get(handles.editLocations, 'String'));
-        save_constants(handles.constants);
+	case 1
+		set([handles.editEEGLab handles.editLocations], 'Enable', 'on');
+	otherwise
+		set([handles.editEEGLab handles.editLocations], 'Enable', 'off');
+		handles.constants.put('EEGLAB_PATH', get(handles.editEEGLab, 'String'));
+		handles.constants.put('LOCATIONS_PATH', get(handles.editLocations, 'String'));
+		save_constants(handles.constants);
 end
 
 
@@ -120,7 +120,7 @@ function editEEGLab_CreateFcn(hObject, eventdata, handles)
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+	set(hObject,'BackgroundColor','white');
 end
 
 
@@ -142,7 +142,7 @@ function editLocations_CreateFcn(hObject, eventdata, handles)
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+	set(hObject,'BackgroundColor','white');
 end
 
 
@@ -156,9 +156,9 @@ function editTable_Callback(hObject, eventdata, handles)
 %        str2double(get(hObject,'String')) returns contents of editTable as a double
 
 if isempty(get(handles.editTable, 'String'))
-    set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
-        handles.checkInfo, handles.checkICA, handles.checkSteps],...
-        'Enable', 'off');
+	set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
+		handles.checkInfo, handles.checkICA, handles.checkSteps],...
+		'Enable', 'off');
 end
 
 
@@ -171,7 +171,7 @@ function editTable_CreateFcn(hObject, eventdata, handles)
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+	set(hObject,'BackgroundColor','white');
 end
 
 
@@ -184,16 +184,16 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 [filename, pathname] = uigetfile('*.xls');
 
 if ~isequal(filename, 0)
-    outlet = strcat(pathname, filename);
-    set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
-        handles.checkInfo, handles.checkICA, handles.checkSteps],...
-        'Enable', 'on');
-    set(handles.editTable, 'String', outlet);
+	outlet = strcat(pathname, filename);
+	set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
+		handles.checkInfo, handles.checkICA, handles.checkSteps],...
+		'Enable', 'on');
+	set(handles.editTable, 'String', outlet);
 else
-    return;
-    set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
-        handles.checkInfo, handles.checkICA, handles.checkSteps],...
-        'Enable', 'off');
+	return;
+	set([handles.buttonRun, handles.checkRerefer, handles.checkLocate,...
+		handles.checkInfo, handles.checkICA, handles.checkSteps],...
+		'Enable', 'off');
 end
 
 
@@ -259,31 +259,50 @@ ints_table = ler_arq_ints(xlsfile);
 
 %Iniciar varredura para corte de intervalos
 for n=1:size(ints_table)
-    % Variables
-    arqedf = ints_table{n, 1};
-    int1 = ints_table{n, 5};
-    int2 = ints_table{n, 6};
-    edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
-    samplingRate = edfinfo.getSamplingRate();
-    cut = [int1/samplingRate int2/samplingRate]; 
+	% Variables
+	arqedf = ints_table{n, 1};
+	int1 = ints_table{n, 5};
+	int2 = ints_table{n, 6};
+	edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
+	samplingRate = edfinfo.getSamplingRate();
+	cut = [int1/samplingRate int2/samplingRate]; 
 
-    % Loading EDF
-    EEG = pop_biosig(arqedf, 'blockrange', cut, 'rmeventchan', 'off');
-    
-    % Cemetery
-    % sujeito=T(i+1,1);
-    % teste= T(i+1,2); 
-    % arqset = T(i+1,3);
-    % int1 = A(i,1);
-    % int2 = A(i,2);
-    % arqedf = T(i+1, 4)
+	% Loading EDF
+	EEG = pop_biosig(arqedf, 'blockrange', cut, 'rmeventchan', 'off');
+	
+	% Rerefering EDF
+	arqset = change_extension(arqedf, 'set');
+	%labels = edfinfo.getLabels()
+	if isequal(get(handles.checkRerefer, 'Value'), 1)
+		[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,...
+											 'setname', char(arqset),...
+											 'overwrite', 'on');
 
-    % arqset = strcat(localdestino, char(sujeito), char(teste), '.set');
+		% TODO Check why pop_select is not working to exclude a channel
+		%pop_select(INEEG, 'key1', value1, 'key2', value2 ...);
+		%EEG = pop_select (EEG, 'nochannel', [25]); 
 
-    % arqedf = strcat(localorigem, char(arqedf),'.edf');
+		%[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,...
+		%									 'setname', char(arqset),...
+		%									 'overwrite', 'on');
 
-    % %corte = [int1/1000 int2/1000]; 
+		%pop_reref( EEG, ref, 'key', 'val' ...);
+		EEG = pop_reref( EEG, 24);
 
-    % disp(corte);
-    % %disp(getfiletype(char(arqedf)));
+		[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,...
+											 'overwrite', 'off',...
+											 'savenew', char(arqset));
+	end
+
+	% Cemetery
+	%[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1, 'setname', char(arqset),'overwrite', 'on');
+ 
+	%pop_select(INEEG, 'key1', value1, 'key2', value2 ...);
+	%EEG = pop_select (EEG, 'nochannel', [27]); 
+	
+	%[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1, 'setname', char(arqset),'overwrite', 'on');
+	
+	%pop_reref( EEG, ref, 'key', 'val' ...);
+	%EEG = pop_reref( EEG, 26);
+ 
 end
