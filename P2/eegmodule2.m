@@ -258,6 +258,7 @@ ints_table = ler_arq_ints(xlsfile);
 [ALLEEG EEG CURRENTSET ALLCOM] = eeglab; 
 
 %Iniciar varredura para corte de intervalos
+checkShow = get(handles.checkSteps, 'Value');
 for n=1:size(ints_table)
 	% Variables
 	arqedf = ints_table{n, 1};
@@ -269,6 +270,7 @@ for n=1:size(ints_table)
 
 	% Loading EDF
 	EEG = pop_biosig(arqedf, 'blockrange', cut, 'rmeventchan', 'off');
+	confirm_window(checkShow, 'EDF Loaded');
 	
 	% Rerefering EDF
 	arqset = change_extension(arqedf, 'set');
@@ -291,8 +293,9 @@ for n=1:size(ints_table)
 		[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,...
 											 'overwrite', 'off',...
 											 'savenew', char(arqset));
+		confirm_window(checkShow, 'EDF Rerefered');
 	end
-
+	
 	% Locating electrodes
 	if isequal(get(handles.checkLocate, 'Value'), 1)
 		EEG = pop_chanedit(EEG,'load', get(handles.editLocations, 'String'));
@@ -300,8 +303,9 @@ for n=1:size(ints_table)
 		%EEG.chanlocs = readlocs( arqloc,'filetype','chanedit');
 
 		EEG = pop_saveset( EEG, 'savemode','resave');
+		confirm_window(checkShow, 'Electrodes Mapped');
 	end
-
+	
 	% Saving suject info
 	if isequal(get(handles.checkInfo, 'Value'), 1)
 		[ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
@@ -310,9 +314,11 @@ for n=1:size(ints_table)
 
 		%EEG = pop_resample( EEG, freq);
 		%[ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
+		confirm_window(checkShow, 'Subject Info Saved');
 	end
+
 	 
 
 	% Cemetery
-	disp('Dekita! o/')
 end
+fprintf('\t\tDEKITA~! o/');
