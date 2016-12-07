@@ -43,6 +43,10 @@ else
 end
 
 addpath ([cd '/eegmodule']);
+javaaddpath('edf.jar');
+if ~is_in_javapath('edf.jar')
+      javaaddpath('edf.jar');
+end
 % End initialization code - DO NOT EDIT
 
 
@@ -259,13 +263,13 @@ for n=1:size(ints_table)
     arqedf = ints_table{n, 1};
     int1 = ints_table{n, 5};
     int2 = ints_table{n, 6};
-    cut = [int1/1000 int2/1000]; 
+    edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
+    samplingRate = edfinfo.getSamplingRate();
+    cut = [int1/samplingRate int2/samplingRate]; 
 
     % Loading EDF
     EEG = pop_biosig(arqedf, 'blockrange', cut, 'rmeventchan', 'off');
-    %     ^^^^^^^^^^
-    % TODO Install Biosig extension to use this function
-
+    
     % Cemetery
     % sujeito=T(i+1,1);
     % teste= T(i+1,2); 
