@@ -301,8 +301,18 @@ for n=1:size(ints_table)
 
 		EEG = pop_saveset( EEG, 'savemode','resave');
 	end
+
+	% Saving suject info
+	if isequal(get(handles.checkInfo, 'Value'), 1)
+		[ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
+
+		EEG = eeg_checkset( EEG );
+
+		%EEG = pop_resample( EEG, freq);
+		%[ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
+	end
 	 
 
 	% Cemetery
-	
+	disp('Dekita! o/')
 end
