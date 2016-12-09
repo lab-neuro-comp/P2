@@ -266,7 +266,7 @@ for n=1:size(ints_table)
 	int2 = ints_table{n, 6};
 	edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
 	samplingRate = edfinfo.getSamplingRate();
-	cut = [int1/samplingRate int2/samplingRate]; 
+	cut = floor([int1/samplingRate int2/samplingRate]); 
 
 	% Loading EDF
 	EEG = pop_biosig(arqedf, 'blockrange', cut, 'rmeventchan', 'off');
@@ -275,10 +275,13 @@ for n=1:size(ints_table)
 	% Rerefering EDF
 	arqset = change_extension(arqedf, 'set');
 	if isequal(get(handles.checkRerefer, 'Value'), 1)
+		% TODO 	Create set before making any change
+		%		also one needs to test whether just
+		%		enabling the overwrite will work
 		[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,...
 											 'setname', char(arqset),...
 											 'overwrite', 'on');
-
+		
 		% TODO Check why pop_select is not working to exclude a channel
 		%pop_select(INEEG, 'key1', value1, 'key2', value2 ...);
 		%EEG = pop_select (EEG, 'nochannel', [25]); 
@@ -291,7 +294,7 @@ for n=1:size(ints_table)
 		EEG = pop_reref( EEG, 24);
 
 		[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,...
-											 'overwrite', 'off',...
+											 'overwrite', 'on',...
 											 'savenew', char(arqset));
 		confirm_window(checkShow, 'EDF Rerefered');
 	end
@@ -308,6 +311,7 @@ for n=1:size(ints_table)
 	
 	% Saving suject info
 	if isequal(get(handles.checkInfo, 'Value'), 1)
+		EEG = pop_editset( EEG, 'subject', ints_table{n, 2});
 		[ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
 
 		EEG = eeg_checkset( EEG );
@@ -316,9 +320,25 @@ for n=1:size(ints_table)
 		%[ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
 		confirm_window(checkShow, 'Subject Info Saved');
 	end
+	
+	%Running ICA
+	if isequal(get(handles.checkICA, 'Value'), 1)
+		disp(CURRENTSET);
+		EEG = eeg_checkset( EEG );
 
-	 
+		%EEG = pop_runica( EEG, 'key', 'val' );
+		EEG = pop_runica(ALLEEG, 'icatype', 'runica',...
+						 'dataset', CURRENTSET ,...
+						 'options', {'extended' 1},...
+						 'chanind', [1:21] ,...
+						 'concatcond', 'off');         
+		[ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, CURRENTSET);
 
-	% Cemetery
+	%	EEG = pop_saveset( EEG, 'savemode','resave');
+	%	confirm_window(checkShow, 'ICA Completed')
+	end
+
 end
-fprintf('\t\tDEKITA~! o/');
+
+
+fprintf('\t\tDEKITA~! o/\n');
