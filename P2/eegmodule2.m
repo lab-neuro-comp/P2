@@ -94,12 +94,14 @@ function buttonParameters_Callback(hObject, eventdata, handles)
 switch get(handles.buttonParameters, 'Value')
 	case 1
 		set([handles.editEEGLab handles.editLocations], 'Enable', 'on');
+		set(handles.buttonParameters, 'String', 'Save Parameters');
 	otherwise
 		set([handles.editEEGLab handles.editLocations], 'Enable', 'off');
 		handles.constants.put('EEGLAB_PATH', get(handles.editEEGLab, 'String'));
 		handles.constants.put('LOCATIONS_PATH', get(handles.editLocations, 'String'));
 		save_constants(handles.constants);
 		add_eeglab_path(get(handles.constants, 'EEGLAB_PATH'));
+		set(handles.buttonParameters, 'String', 'Edit Parameters');
 end
 
 
