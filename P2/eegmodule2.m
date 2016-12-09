@@ -275,13 +275,10 @@ for n=1:size(ints_table)
 	% Rerefering EDF
 	arqset = change_extension(arqedf, 'set');
 	if isequal(get(handles.checkRerefer, 'Value'), 1)
-		% TODO 	Create set before making any change
-		%		also one needs to test whether just
-		%		enabling the overwrite will work
-		[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,...
+		[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
 											 'setname', char(arqset),...
 											 'overwrite', 'on');
-		
+		disp(CURRENTSET);
 		% TODO Check why pop_select is not working to exclude a channel
 		%pop_select(INEEG, 'key1', value1, 'key2', value2 ...);
 		%EEG = pop_select (EEG, 'nochannel', [25]); 
@@ -293,9 +290,10 @@ for n=1:size(ints_table)
 		%pop_reref( EEG, ref, 'key', 'val' ...);
 		EEG = pop_reref( EEG, 24);
 
-		[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,...
+		[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
 											 'overwrite', 'on',...
 											 'savenew', char(arqset));
+		disp(CURRENTSET);
 		confirm_window(checkShow, 'EDF Rerefered');
 	end
 	
@@ -323,7 +321,7 @@ for n=1:size(ints_table)
 	
 	%Running ICA
 	if isequal(get(handles.checkICA, 'Value'), 1)
-		disp(CURRENTSET);
+		disp(CURRENTSET); pause;
 		EEG = eeg_checkset( EEG );
 
 		%EEG = pop_runica( EEG, 'key', 'val' );
@@ -332,7 +330,7 @@ for n=1:size(ints_table)
 						 'options', {'extended' 1},...
 						 'chanind', [1:21] ,...
 						 'concatcond', 'off');         
-		[ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, CURRENTSET);
+		%[ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, CURRENTSET);
 
 	%	EEG = pop_saveset( EEG, 'savemode','resave');
 	%	confirm_window(checkShow, 'ICA Completed')
