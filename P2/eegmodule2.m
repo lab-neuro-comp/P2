@@ -43,10 +43,6 @@ else
 end
 
 addpath ([cd '/eegmodule']);
-javaaddpath('edf.jar');
-if ~is_in_javapath('edf.jar')
-	  javaaddpath('edf.jar');
-end
 % End initialization code - DO NOT EDIT
 
 
@@ -74,7 +70,7 @@ guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = eegmodule2_OutputFcn(hObject, eventdata, handles) 
+function varargout = eegmodule2_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -94,11 +90,14 @@ function buttonParameters_Callback(hObject, eventdata, handles)
 switch get(handles.buttonParameters, 'Value')
 	case 1
 		set([handles.editEEGLab handles.editLocations], 'Enable', 'on');
+		set(handles.buttonParameters, 'String', 'Save Parameters');
 	otherwise
 		set([handles.editEEGLab handles.editLocations], 'Enable', 'off');
 		handles.constants.put('EEGLAB_PATH', get(handles.editEEGLab, 'String'));
 		handles.constants.put('LOCATIONS_PATH', get(handles.editLocations, 'String'));
 		save_constants(handles.constants);
+		add_eeglab_path(get(handles.constants, 'EEGLAB_PATH'));
+		set(handles.buttonParameters, 'String', 'Edit Parameters');
 end
 
 
@@ -255,7 +254,7 @@ xlsfile = get(handles.editTable, 'String');
 ints_table = ler_arq_ints(xlsfile);
 
 % Open eeglab:
-[ALLEEG EEG CURRENTSET ALLCOM] = eeglab; 
+[ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
 
 %Iniciar varredura para corte de intervalos
 checkShow = get(handles.checkSteps, 'Value');
@@ -266,12 +265,12 @@ for n=1:size(ints_table)
 	int2 = ints_table{n, 6};
 	edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
 	samplingRate = edfinfo.getSamplingRate();
-	cut = floor([int1/samplingRate int2/samplingRate]); 
+	cut = floor([int1/samplingRate int2/samplingRate]);
 
 	% Loading EDF
 	EEG = pop_biosig(arqedf, 'blockrange', cut, 'rmeventchan', 'off');
 	confirm_window(checkShow, 'EDF Loaded');
-	
+
 	% Rerefering EDF
 	arqset = change_extension(arqedf, 'set');
 	if isequal(get(handles.checkRerefer, 'Value'), 1)
@@ -281,7 +280,7 @@ for n=1:size(ints_table)
 		disp(CURRENTSET);
 		% TODO Check why pop_select is not working to exclude a channel
 		%pop_select(INEEG, 'key1', value1, 'key2', value2 ...);
-		%EEG = pop_select (EEG, 'nochannel', [25]); 
+		%EEG = pop_select (EEG, 'nochannel', [25]);
 
 		%[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,...
 		%									 'setname', char(arqset),...
@@ -296,7 +295,7 @@ for n=1:size(ints_table)
 		disp(CURRENTSET);
 		confirm_window(checkShow, 'EDF Rerefered');
 	end
-	
+
 	% Locating electrodes
 	if isequal(get(handles.checkLocate, 'Value'), 1)
 		EEG = pop_chanedit(EEG,'load', get(handles.editLocations, 'String'));
@@ -306,7 +305,7 @@ for n=1:size(ints_table)
 		EEG = pop_saveset( EEG, 'savemode','resave');
 		confirm_window(checkShow, 'Electrodes Mapped');
 	end
-	
+
 	% Saving suject info
 	if isequal(get(handles.checkInfo, 'Value'), 1)
 		EEG = pop_editset( EEG, 'subject', ints_table{n, 2});
@@ -318,7 +317,7 @@ for n=1:size(ints_table)
 		%[ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
 		confirm_window(checkShow, 'Subject Info Saved');
 	end
-	
+
 	%Running ICA
 	if isequal(get(handles.checkICA, 'Value'), 1)
 		disp(CURRENTSET); pause;
@@ -331,9 +330,8 @@ for n=1:size(ints_table)
 						 'chanind', [1:21] ,...
 						 'concatcond', 'off');         
 		%[ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, CURRENTSET);
-
-	%	EEG = pop_saveset( EEG, 'savemode','resave');
-	%	confirm_window(checkShow, 'ICA Completed')
+		%	EEG = pop_saveset( EEG, 'savemode','resave');
+		%	confirm_window(checkShow, 'ICA Completed')
 	end
 
 end
