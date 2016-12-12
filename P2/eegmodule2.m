@@ -301,69 +301,66 @@ for n = 1:size(ints_table)
     int2 = ints_table{n, 6};
     edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
     samplingRate = edfinfo.getSamplingRate();
-    blockrange = floor([int1/1000 int2/1000]);
+    blockrange = floor([int1/samplingRate int2/samplingRate]);
 
     % Loading EDF
     EEG = pop_biosig(arqedf, 'blockrange', blockrange, 'rmeventchan', 'off');
     confirm_window(checkShow, 'EDF Loaded');
 
-    % Rerefering EDF
     arqset = change_extension(arqedf, 'set');
     [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
-                                         'setname', char(arqset),...
+                                         'setname', arqset,...
                                          'overwrite', 'on');
+
+    % Rerefering EDF
     if isequal(get(handles.checkRerefer, 'Value'), 1)
         % TODO Check why pop_select is not working to exclude a channel
         %pop_select(INEEG, 'key1', value1, 'key2', value2 ...);
         %EEG = pop_select (EEG, 'nochannel', [25]);
 
         EEG = pop_reref(EEG, 24);
-        [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
-                                             'overwrite', 'on',...
-                                             'savenew', char(arqset));
+        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
         confirm_window(checkShow, 'EDF Rerefered');
     end
 
     % Locating electrodes
     if isequal(get(handles.checkLocate, 'Value'), 1)
+        % TODO Check if this loading is correct
         EEG = pop_chanedit(EEG, 'load', get(handles.editLocations, 'String'));
         %EEG.chanlocs = readlocs( filename, 'key', 'val', ... );
         %EEG.chanlocs = readlocs( arqloc,'filetype','chanedit');
 
-        EEG = pop_saveset(EEG, 'savemode', 'resave');
+        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
         confirm_window(checkShow, 'Electrodes Mapped');
     end
 
     % Saving suject info
     if isequal(get(handles.checkInfo, 'Value'), 1)
-        EEG = pop_editset( EEG, 'subject', ints_table{n, 2});
-        [ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
-
         EEG = eeg_checkset(EEG);
+        EEG = pop_editset(EEG, 'subject', ints_table{n, 2});
+        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
 
         %EEG = pop_resample( EEG, freq);
         %[ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
         confirm_window(checkShow, 'Subject Info Saved');
     end
 
-    %Running ICA
+    % Running ICA
     if isequal(get(handles.checkICA, 'Value'), 1)
-        EEG = eeg_checkset( EEG );
+        EEG = eeg_checkset(EEG);
 
-        %EEG = pop_runica( EEG, 'key', 'val' );
-        EEG = pop_runica(ALLEEG, 'icatype', 'runica',...
-                         'dataset', CURRENTSET ,...
-                         'options', {'extended' 1},...
-                         'chanind', [1:21] ,...
-                         'concatcond', 'off');
-        disp(CURRENTSET);
-        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG);
-        disp(CURRENTSET);
-        % pause;
-        %	EEG = pop_saveset( EEG, 'savemode','resave');
-        %	confirm_window(checkShow, 'ICA Completed')
+        EEG = pop_runica(EEG, 'icatype', 'runica',...
+                              'options', {'extended' 1},...
+                              'chanind', [ 1:21 ]);
+        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+        confirm_window(checkShow, 'ICA Completed')
     end
 
+    % Storing data
+    [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+    [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
+    EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
+                           'filepath', strcat(arqsetpath, filesep));
 end
 
 
