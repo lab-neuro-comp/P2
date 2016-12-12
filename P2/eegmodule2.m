@@ -314,10 +314,8 @@ for n = 1:size(ints_table)
 
     % Rerefering EDF
     if isequal(get(handles.checkRerefer, 'Value'), 1)
-        % TODO Check why pop_select is not working to exclude a channel
-        %pop_select(INEEG, 'key1', value1, 'key2', value2 ...);
-        %EEG = pop_select (EEG, 'nochannel', [25]);
-
+        % TODO Enable the user to change these numbers
+        EEG = pop_select(EEG, 'nochannel', [25]);
         EEG = pop_reref(EEG, 24);
         [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
         confirm_window(checkShow, 'EDF Rerefered');
@@ -339,9 +337,6 @@ for n = 1:size(ints_table)
         EEG = eeg_checkset(EEG);
         EEG = pop_editset(EEG, 'subject', ints_table{n, 2});
         [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-
-        %EEG = pop_resample( EEG, freq);
-        %[ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
         confirm_window(checkShow, 'Subject Info Saved');
     end
 
@@ -349,6 +344,9 @@ for n = 1:size(ints_table)
     if isequal(get(handles.checkICA, 'Value'), 1)
         EEG = eeg_checkset(EEG);
 
+        % TODO Resample the dataset to make ICA faster
+        %EEG = pop_resample( EEG, freq);
+        %[ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
         EEG = pop_runica(EEG, 'icatype', 'runica',...
                               'options', {'extended' 1},...
                               'chanind', [ 1:21 ]);
