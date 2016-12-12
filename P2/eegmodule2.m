@@ -22,7 +22,7 @@ function varargout = eegmodule2(varargin)
 
 % Edit the above text to modify the response to help eegmodule2
 
-% Last Modified by GUIDE v2.5 05-Dec-2016 09:43:37
+% Last Modified by GUIDE v2.5 12-Dec-2016 08:29:39
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -89,10 +89,14 @@ function buttonParameters_Callback(hObject, eventdata, handles)
 
 switch get(handles.buttonParameters, 'Value')
 	case 1
-		set([handles.editEEGLab handles.editLocations], 'Enable', 'on');
+		set([handles.editEEGLab handles.editLocations,...
+			 handles.buttonSearchEEG handles.buttonSearchLoc],...
+			 'Enable', 'on');
 		set(handles.buttonParameters, 'String', 'Save Parameters');
 	otherwise
-		set([handles.editEEGLab handles.editLocations], 'Enable', 'off');
+		set([handles.editEEGLab handles.editLocations,...
+			 handles.buttonSearchEEG handles.buttonSearchLoc],...
+			 'Enable', 'off');
 		handles.constants.put('EEGLAB_PATH', get(handles.editEEGLab, 'String'));
 		handles.constants.put('LOCATIONS_PATH', get(handles.editLocations, 'String'));
 		save_constants(handles.constants);
@@ -123,6 +127,14 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
+% --- Executes on button press in buttonSearchEEG.
+function buttonSearchEEG_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonSearchEEG (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+EEGPath = uigetdir(cd, 'Select the EEGLab folder');
+set(handles.editEEGLab, 'String', EEGPath);
+
 function editLocations_Callback(hObject, eventdata, handles)
 % hObject    handle to editLocations (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -144,6 +156,14 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 	set(hObject,'BackgroundColor','white');
 end
 
+
+% --- Executes on button press in buttonSearchLoc.
+function buttonSearchLoc_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonSearchLoc (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[LocName LocPath FileInd] = uigetfile('.ced', 'Select the locations file');
+set(handles.editLocations, 'String', strcat(LocPath, LocName));
 
 %-----------------------------------------------------------------
 function editTable_Callback(hObject, eventdata, handles)
@@ -277,7 +297,7 @@ for n=1:size(ints_table)
 		[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
 											 'setname', char(arqset),...
 											 'overwrite', 'on');
-		disp(CURRENTSET);
+		%disp(CURRENTSET);
 		% TODO Check why pop_select is not working to exclude a channel
 		%pop_select(INEEG, 'key1', value1, 'key2', value2 ...);
 		%EEG = pop_select (EEG, 'nochannel', [25]);
@@ -292,7 +312,7 @@ for n=1:size(ints_table)
 		[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
 											 'overwrite', 'on',...
 											 'savenew', char(arqset));
-		disp(CURRENTSET);
+		%disp(CURRENTSET);
 		confirm_window(checkShow, 'EDF Rerefered');
 	end
 
@@ -320,7 +340,7 @@ for n=1:size(ints_table)
 
 	%Running ICA
 	if isequal(get(handles.checkICA, 'Value'), 1)
-		disp(CURRENTSET); pause;
+		%disp(CURRENTSET); pause;
 		EEG = eeg_checkset( EEG );
 
 		%EEG = pop_runica( EEG, 'key', 'val' );
@@ -338,3 +358,5 @@ end
 
 
 fprintf('\t\tDEKITA~! o/\n');
+
+
