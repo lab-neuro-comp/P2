@@ -338,9 +338,12 @@ for n = 1:size(ints_table)
     % Rerefering EDF
     if isequal(get(handles.checkRerefer, 'Value'), 1)
         % TODO Enable the user to change these numbers
-        EEG = pop_reref(EEG, 24);
-        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-        confirm_window(checkShow, 'EDF Rerefered');
+        toBeRerefered = rerefermodule(edfinfo);
+        if toBeRerefered > 0
+            EEG = pop_reref(EEG, 24);
+            [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+            confirm_window(checkShow, 'EDF Rerefered');
+        end
     end
 
     % Locating electrodes

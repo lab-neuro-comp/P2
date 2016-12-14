@@ -1,24 +1,9 @@
 function varargout = eegcutmodule(varargin)
-% EEGCUTMODULE M-file for eegcutmodule.fig
-%      EEGCUTMODULE, by itself, creates a new EEGCUTMODULE or raises the existing
-%      singleton*.
+% This module allows the user to choose which channels  will be cut.
+% The user can select (Ctrl+click or Shift+click for multiselection)
+% which channels they wish to exclude once the confirmation button
+% is pressed.
 %
-%      H = EEGCUTMODULE returns the handle to a new EEGCUTMODULE or the handle to
-%      the existing singleton*.
-%
-%      EEGCUTMODULE('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in EEGCUTMODULE.M with the given input arguments.
-%
-%      EEGCUTMODULE('Property','Value',...) creates a new EEGCUTMODULE or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before eegcutmodule_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to eegcutmodule_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
 
 % Edit the above text to modify the response to help eegcutmodule
 
