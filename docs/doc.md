@@ -10,17 +10,19 @@ O Protolize! está sendo escrito em MATLAB 2010 com auxílio do editor de textos
 Pré-requisitos
 --------------
 
-Protolize! requer MATLAB 2010 rodando em um computador rodando Microsoft Windows 7 ou posterior com no mínimo 1GB RAM.
+Protolize! requer MATLAB R2008a rodando em um computador rodando Microsoft Windows Vista ou posterior com no mínimo 1GB RAM.
 
 Instalação
 ----------
 
-Para fazer o download do Protolize!, baixe o arquivo `P2.zip` e extraia seu conteudo em um pasta específica. Inicie o MATLAB e vá à pasta onde você extraiu a sua versão do Protolize!. Dentro desta pasta, entre o comando <span style="background-color: #BDC3CE">`protolize2`</span>. Se não houver nenhum problema, o menu principal do Protolize! aparecerá, indicando que ele está pronto para uso.
+Para fazer o download do Protolize!, baixe o arquivo `protolize.zip` disponível no [repositório do GitHub](https://github.com/lab-neuro-comp/P2) e extraia seu conteúdo em um pasta específica. Inicie o MATLAB e vá à pasta onde você extraiu a sua versão do Protolize!. Dentro desta pasta, entre o comando <span style="background-color: #BDC3CE">`protolize`</span>. Se não houver nenhum problema, o menu principal do Protolize! aparecerá, indicando que ele está pronto para uso.]
+
+Esta documentação se refere à versão v0.2b do Protolize!
 
 Outras informações relevantes
 -----------------------------
 
-Os sinais a serem processados deverão estar no formato `*.ASCII`.
+Os sinais a serem processados deverão estar no formato `*.ASCII`. Para converter arquivos EDF em ASCII, há um ferramenta dentro do próprio Protolize! para isso. Certifique-se que há somente um sinal por arquivo ASCII para que o programa aceite a entrada.
 
 Menu principal
 ==============
@@ -48,7 +50,12 @@ Em `Settings`, pode-se alterar diversos valores usados na análise de sinais, em
 
 Também pode-se ajustar o caminho em disco para o EEGLAB, caso disponível no computador do usuário, para que ambos possam atuar no processamento de sinais. Estes valores podem ser ajustados de acordo com a necessidade do usuário, e todos os parâmetros disponíveis para ajuste ficam guardados em memória para uso futuro.
 
-Em `Studies`, pode-se acessar o [módulo de estudos](#studies); que permite processar arquivos em lote.
+Em `Tools`, pode-se acessar:
+
++ O [módulo de estudos](#studies), que permite processar arquivos em lote usando o EEGLAB;
++ A ferramenta de análise de voz;
++ O separador de EMG e RGP;
++ O conversor de EDF para ASCII.
 
 Em `Help`, tem-se acesso a este arquivo de ajuda que você está lendo.
 
@@ -125,30 +132,38 @@ Continuous Wavelet Transform (CWT)
 
 <span style="background-color: #BDC3CE">`O módulo ainda está em construção`</span>
 
+Ferramentas adicionais
+======================
+
+O Protolize! contém algumas ferramentas consigo para auxiliar no processamento de alguns sinais no mundo real.
+
 <a name="studies"></a>
 
-Módulo de Estudos
-=================
+Processamento de EEG
+--------------------
 
-O Protolize! contém um módulo para análise de vários arquivos em lote, chamado de _Studies module_. A entrada deste módulo é um arquivo CSV, sobre o qual eu tenho que escrever ainda.
+O Protolize! contém uma ferramenta para realizar processamentos em lote utilizando o EEGLab. Esta ferramenta busca mostrar um passo-a-passo automatizado de um processamento usual de vários sinais de EEG em conjunto.
 
-Para rodar este módulo em separado, use o comando `recordmodule`.
+A entrada deste módulo é uma planilha Excel contendo, respectivamente, uma coluna para:
 
-Modo Protolize!
----------------
++ Arquivo EDF
++ Identificação do sujeito
++ Condição
++ Classe
++ Momento inferior de corte
++ Momento superior de corte
 
-O modo Protolize! permite converter arquivos no formato EDF+ para o formato ASCII, separando o canal de anotações para um texto em separado.
+Análise de Voz
+--------------
 
-![Studies module on Protolize! mode](assets/rec-p.png "'Studies Module")
+Esta ferramenta extrai os momentos iniciais de cada palavra em um sinal de voz em um arquivo WAV aplicando um _threshold_ no espectro de potência da gravação em questão. Permite remoção de falsos-positivos.
 
-Modo EEGLAB
------------
+Separação de EMG-RGP
+--------------------
 
-O modo EEGLAB usa funções do próprio EEGLAB no Protolize para realizar ações comums no processamento digital de sinais. Nele, o usuário pode escolher quais ações tomar naquele processamento, sendo elas:
+Uma limpeza comum de se realizar neste laboratório é a separação dos sinais de EMG (registro eletromiográfico) e RGP (resposta galvânica da pele). Eles comumente aparecem no mesmo canal e é necessário separá-los.
 
-+ Cortar o sinal em um intervalo definido no arquivo de entrada;
-+ Rerreferenciar os canais;
-+ Reamostrar os sinais para uma taxa fornecida pelo usuário;
-+ Rodar detecção de ICA em cada sinal.
+Conversor de EDFs
+-----------------
 
-![Studies module on EEGLAB mode](assets/rec-eeglab.png "'Studies Module")
+Esta á uma ferramenta criada para converter arquivos EDF em arquivos ASCII para serem usados no Protolize!, que requer, como entrada nos seus módulos, um sinal no formato ASCII por vez. Esta ferramenta também permite a conversão do EDF em questão para um único arquivo ASCII contendo todos os canais.
