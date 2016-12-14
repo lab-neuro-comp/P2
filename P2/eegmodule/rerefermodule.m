@@ -1,24 +1,5 @@
 function varargout = rerefermodule(varargin)
-% REREFERMODULE M-file for rerefermodule.fig
-%      REREFERMODULE, by itself, creates a new REREFERMODULE or raises the existing
-%      singleton*.
-%
-%      H = REREFERMODULE returns the handle to a new REREFERMODULE or the handle to
-%      the existing singleton*.
-%
-%      REREFERMODULE('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in REREFERMODULE.M with the given input arguments.
-%
-%      REREFERMODULE('Property','Value',...) creates a new REREFERMODULE or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before rerefermodule_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to rerefermodule_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
+% 
 
 % Edit the above text to modify the response to help rerefermodule
 
@@ -54,12 +35,16 @@ function rerefermodule_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for rerefermodule
 handles.output = hObject;
+handles.edfinfo = varargin{1};
 
 % Update handles structure
+channels = char(handles.edfinfo.getLabels());
+set(handles.listChannels, 'String', channels);
+handles.channels = channels;
 guidata(hObject, handles);
 
 % UIWAIT makes rerefermodule wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
+uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
@@ -71,7 +56,7 @@ function varargout = rerefermodule_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-
+close(handles.figure1);
 
 % --- Executes on selection change in listChannels.
 function listChannels_Callback(hObject, eventdata, handles)
@@ -102,6 +87,19 @@ function buttonOk_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+selection = questdlg({'The selected channels will be used to rerefering.',...
+					  'Do you wish to continue?'},...
+					 ['Use selected channel to rerefering?'],...
+					 'Ok','Cancel','Ok');
+if strcmp(selection,'Cancel')
+	return;
+end
+
+toBeRerefered = get(handles.listChannels, 'Value');
+handles.output = toBeRerefered;
+guidata(hObject, handles);
+uiresume(handles.figure1);
+
 
 % --- Executes on button press in buttonCancel.
 function buttonCancel_Callback(hObject, eventdata, handles)
@@ -109,4 +107,8 @@ function buttonCancel_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+empty = [];
+handles.output = empty;
+guidata(hObject, handles);
+uiresume(handles.figure1);
 

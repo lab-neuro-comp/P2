@@ -1,20 +1,20 @@
-function varargout = eegcutmodule(varargin)
+function varargout = removemodule(varargin)
 % This module allows the user to choose which channels  will be cut.
 % The user can select (Ctrl+click or Shift+click for multiselection)
 % which channels they wish to exclude once the confirmation button
 % is pressed.
 %
 
-% Edit the above text to modify the response to help eegcutmodule
+% Edit the above text to modify the response to help removemodule
 
-% Last Modified by GUIDE v2.5 14-Dec-2016 10:35:15
+% Last Modified by GUIDE v2.5 14-Dec-2016 11:17:58
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @eegcutmodule_OpeningFcn, ...
-                   'gui_OutputFcn',  @eegcutmodule_OutputFcn, ...
+                   'gui_OpeningFcn', @removemodule_OpeningFcn, ...
+                   'gui_OutputFcn',  @removemodule_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -29,15 +29,15 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before eegcutmodule is made visible.
-function eegcutmodule_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before removemodule is made visible.
+function removemodule_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to eegcutmodule (see VARARGIN)
+% varargin   command line arguments to removemodule (see VARARGIN)
 
-% Choose default command line output for eegcutmodule
+% Choose default command line output for removemodule
 handles.output = hObject;
 handles.edfinfo = varargin{1};
 
@@ -47,12 +47,12 @@ set(handles.listChannels, 'String', channels);
 handles.channels = channels;
 guidata(hObject, handles);
 
-% UIWAIT makes eegcutmodule wait for user response (see UIRESUME)
+% UIWAIT makes removemodule wait for user response (see UIRESUME)
 uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = eegcutmodule_OutputFcn(hObject, eventdata, handles) 
+function varargout = removemodule_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB

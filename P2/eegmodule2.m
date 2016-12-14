@@ -324,25 +324,25 @@ for n = 1:size(ints_table)
                                          'setname', arqset,...
                                          'overwrite', 'on');
 
-    % Cutting EDF channels
-    if isequal(get(handles.checkCut, 'Value'), 1)
-        % TODO Enable the user to change these numbers
-        toBeCut = eegcutmodule(edfinfo);
-        if ~isempty(toBeCut)
-            EEG = pop_select(EEG, 'nochannel', toBeCut);
-            [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-            confirm_window(checkShow, 'EDF Channels Cut');
-        end
-    end
-
     % Rerefering EDF
     if isequal(get(handles.checkRerefer, 'Value'), 1)
         % TODO Enable the user to change these numbers
         toBeRerefered = rerefermodule(edfinfo);
         if toBeRerefered > 0
-            EEG = pop_reref(EEG, 24);
+            EEG = pop_reref(EEG, toBeRerefered);
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
             confirm_window(checkShow, 'EDF Rerefered');
+        end
+    end
+
+    % Remove EDF channels
+    if isequal(get(handles.checkCut, 'Value'), 1)
+        % TODO Enable the user to change these numbers
+        toRemove = removemodule(edfinfo);
+        if ~isempty(toRemove)
+            EEG = pop_select(EEG, 'nochannel', toRemove);
+            [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+            confirm_window(checkShow, 'EDF Channels Cut');
         end
     end
 
