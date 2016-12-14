@@ -22,7 +22,7 @@ function varargout = eegmodule2(varargin)
 
 % Edit the above text to modify the response to help eegmodule2
 
-% Last Modified by GUIDE v2.5 12-Dec-2016 08:29:39
+% Last Modified by GUIDE v2.5 14-Dec-2016 08:25:44
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -179,7 +179,8 @@ function editTable_Callback(hObject, eventdata, handles)
 
 if isempty(get(handles.editTable, 'String'))
     set([ handles.buttonRun, ...
-          handles.checkRerefer, ...
+          handles.handles, ...
+          checkCut.checkRerefer, ...
           handles.checkLocate,...
           handles.checkInfo, ...
           handles.checkICA, ...
@@ -213,6 +214,7 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 if ~isequal(filename, 0)
     outlet = strcat(pathname, filename);
     set([ handles.buttonRun, ...
+          handles.checkCut, ...
           handles.checkRerefer, ...
           handles.checkLocate,...
           handles.checkInfo, ...
@@ -223,6 +225,7 @@ if ~isequal(filename, 0)
 else
     return;
     set([ handles.buttonRun, ...
+          handles.checkCut, ...
           handles.checkRerefer, ...
           handles.checkLocate,...
           handles.checkInfo, ...
@@ -233,6 +236,15 @@ end
 
 
 %-----------------------------------------------------------------
+% --- Executes on button press in checkCut.
+function checkCut_Callback(hObject, eventdata, handles)
+% hObject    handle to checkCut (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkCut
+
+
 % --- Executes on button press in checkRerefer.
 function checkRerefer_Callback(hObject, eventdata, handles)
 % hObject    handle to checkRerefer (see GCBO)
@@ -312,10 +324,18 @@ for n = 1:size(ints_table)
                                          'setname', arqset,...
                                          'overwrite', 'on');
 
+    % Cutting EDF channels
+    if isequal(get(handles.checkCut, 'Value'), 1)
+        % TODO Enable the user to change these numbers
+        toBeCut = eegcutmodule(edfinfo);
+        EEG = pop_select(EEG, 'nochannel', toBeCut);
+        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+        confirm_window(checkShow, 'EDF Channels Cut');
+    end
+
     % Rerefering EDF
     if isequal(get(handles.checkRerefer, 'Value'), 1)
         % TODO Enable the user to change these numbers
-        EEG = pop_select(EEG, 'nochannel', [25]);
         EEG = pop_reref(EEG, 24);
         [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
         confirm_window(checkShow, 'EDF Rerefered');
@@ -363,3 +383,5 @@ end
 
 
 fprintf('\t\tDEKITA~! o/\n');
+
+
