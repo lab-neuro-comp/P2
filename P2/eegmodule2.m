@@ -328,9 +328,11 @@ for n = 1:size(ints_table)
     if isequal(get(handles.checkCut, 'Value'), 1)
         % TODO Enable the user to change these numbers
         toBeCut = eegcutmodule(edfinfo);
-        EEG = pop_select(EEG, 'nochannel', toBeCut);
-        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-        confirm_window(checkShow, 'EDF Channels Cut');
+        if ~isempty(toBeCut)
+            EEG = pop_select(EEG, 'nochannel', toBeCut);
+            [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+            confirm_window(checkShow, 'EDF Channels Cut');
+        end
     end
 
     % Rerefering EDF
