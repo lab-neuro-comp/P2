@@ -152,8 +152,6 @@ function buttonRun_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global abcxyz;
-
 outlet = get(handles.editSearch, 'String');
 files = split_string(outlet, ';');
 stuff = java.util.HashMap;
@@ -166,7 +164,6 @@ set(handles.buttonSave, 'Enable', 'on');
 
 handles.files = files;
 handles.stuff = stuff;
-abcxyz = handles.stuff;
 guidata(hObject, handles);
 
 % TODO Cause the appropiate side effects
@@ -179,10 +176,7 @@ function buttonPlot_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global abczyx;
-
-abcxyz = plot_stuff(handles.files, handles.stuff);
-handles.stuff = abcxyz;
+handles.stuff = plot_stuff(handles.files, handles.stuff);
 guidata(hObject, handles);
 
 
@@ -192,9 +186,6 @@ function buttonSave_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global abcxyz;
-
-handles.stuff = abcxyz;
 file = handles.files;
 moments = {};
 name = handles.filename;

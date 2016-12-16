@@ -43,19 +43,19 @@ handles.files = varargin{1};
 handles.stuff = varargin{2};
 
 % Update handles structure
-set(handles.figure1, 'Name', 'Verificacao dos Momentos');
+set(handles.figure1, 'Name', 'Moments Verification');
 repeated = 1;
 handles.repeated = repeated;
 
 if repeated == length(handles.files)
-	set(handles.pushbuttonSave, 'String', 'Salvar');
+	set(handles.pushbuttonSave, 'String', 'Save');
 end
 [handles.record, handles.fs] = refresh_signal(hObject, handles,...
 							   handles.files, handles.stuff, handles.repeated);
 guidata(hObject, handles);
 
 % UIWAIT makes plot_stuff wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
+uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
@@ -67,7 +67,8 @@ function varargout = plot_stuff_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-%varargout{2} = handles.stuff; % TODO Check when these objects are returned
+close(handles.figure1);
+
 
 % --------------------------------------------------------------------
 function FileMenu_Callback(hObject, eventdata, handles)
@@ -205,17 +206,17 @@ function pushbuttonSave_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global abcxyz;
 repeated = handles.repeated;
 
 filename = get(handles.textFilename, 'String');
 moments = cellstr(get(handles.listboxMoments, 'String'));
 list = get(handles.listboxMoments, 'Value');
 
-selection = questdlg({'Avancar salva apenas os momentos selecionados.' 'Deseja continuar?'},...
-					 ['Salvar ' filename '?'],...
-					 'Ok','Cancelar','Ok');
-if strcmp(selection,'Cancelar')
+selection = questdlg({'You will save only the selected moments.',...
+					 'Do you wish to continue?'},...
+					 ['Save ' filename '?'],...
+					 'Ok','Cancel','Ok');
+if strcmp(selection,'Cancel')
 	return;
 end
 
@@ -234,14 +235,14 @@ handles.repeated = repeated;
 
 if repeated <= length(handles.files)
 	if repeated == length(handles.files)
-		set(handles.pushbuttonSave, 'String', 'Salvar');
+		set(handles.pushbuttonSave, 'String', 'Save');
 	end
 	[handles.record, handles.fs] = refresh_signal(hObject, handles,...
 							       handles.files, handles.stuff, handles.repeated);
 	guidata(hObject, handles);
 else
-	abcxyz = handles.stuff;
-	delete(handles.figure1); % After storing the result of plot_stuff
-						 	 % in abcxyz, closes the window
+	handles.output = handles.stuff;
+	guidata(hObject, handles);
+	uiresume(handles.figure1);
 end
 

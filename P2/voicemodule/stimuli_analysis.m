@@ -47,7 +47,7 @@ handles.files = varargin{1};
 set(handles.popupAudio, 'String', handles.files);
 
 % Update handles structure
-set(handles.figure1, 'Name', 'Tempo de Resposta');
+set(handles.figure1, 'Name', 'Test Response Delay');
 guidata(hObject, handles);
 
 % UIWAIT makes stimuli_analysis wait for user response (see UIRESUME)
