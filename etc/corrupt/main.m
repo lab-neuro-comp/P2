@@ -2,7 +2,8 @@ function main(folder)
 % This is the main procedure for dealing with the apparent corruption of EDF
 % signals that is happenning on SST data collection.
 %
-% Right now it is being called as `main ..\..\b\SST`
+% Right now it is being called as `main ..\..\b\SST` or
+% `main ..\..\..\SST\data\ns\EEG\edf`
 %
 
 % Adding P2Lib
