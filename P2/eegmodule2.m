@@ -394,15 +394,18 @@ for n = 1:size(ints_table)
     if isequal(get(handles.checkArtifacts, 'Value'), 1)
         pop_eegplot(EEG);
         EEG = pop_subcomp(EEG);
-        
-        rmvagain = questdlg('Would you like to remove some other component?', ...
-                            'Remove Component', ...
-                            'Yes', 'No', 'Yes');
-        switch rmvagain
-            case 'Yes'
-                EEG = pop_subcomp(EEG);
-            case 'No'
-                confirm_window(checkShow, 'Components Removed');
+        rmvagain = 'Yes';
+
+        while strcmp(rmvagain, 'Yes')
+            rmvagain = questdlg('Would you like to remove some other component?', ...
+                                'Remove Component', ...
+                                'Yes', 'No', 'Yes');
+            switch rmvagain
+                case 'Yes'
+                    EEG = pop_subcomp(EEG);
+                case 'No'
+                    confirm_window(checkShow, 'Components Removed');
+            end
         end
     end
 
