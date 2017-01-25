@@ -7,7 +7,7 @@ function varargout = protolize2(varargin)
 % access its modules and tools at a glance.
 %
 
-% Last Modified by GUIDE v2.5 05-Dec-2016 09:08:16
+% Last Modified by GUIDE v2.5 25-Jan-2017 11:07:14
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -125,22 +125,33 @@ function dwtbut_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 dwtmodule2;
 
-% --- Executes on button press in tsstbut.
-function tsstbut_Callback(hObject, eventdata, handles)
-% hObject    handle to tsstbut (see GCBO)
+% --- Executes on button press in voicebut.
+function voicebut_Callback(hObject, eventdata, handles)
+% hObject    handle to voicebut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-tsstmodule; % apparently missing
+voicemodule2;
 
-% --- Executes on button press in reflexbut.
-function reflexbut_Callback(hObject, eventdata, handles)
-% hObject    handle to reflexbut (see GCBO)
+% --- Executes on button press in emgrgpbut.
+function emgrgpbut_Callback(hObject, eventdata, handles)
+% hObject    handle to emgrgpbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+emgrgpmodule2;
 
-% % show global variables
-% global fs fa fb fc
-% fprintf('%f %f %f %f\n', fs, fa, fb, fc);
+% --- Executes on button press in eegbut.
+function eegbut_Callback(hObject, eventdata, handles)
+% hObject    handle to eegbut (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+eegmodule2;
+
+% --- Executes on button press in edfconvbut.
+function edfconvbut_Callback(hObject, eventdata, handles)
+% hObject    handle to edfconvbut (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+edfconverter;
 
 
 % --------------------------------------------------------------------
@@ -203,39 +214,4 @@ function docmain_Callback(hObject, eventdata, handles)
 web('file:///', cd, 'doc.html');
 
 
-% --------------------------------------------------------------------
-function mainstudies_Callback(hObject, eventdata, handles)
-% hObject    handle to mainstudies (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-
-% --------------------------------------------------------------------
-function studies_main_Callback(hObject, eventdata, handles)
-% hObject    handle to studies_main (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-eegmodule2;
-
-% --------------------------------------------------------------------
-function voice_main_Callback(hObject, eventdata, handles)
-% hObject    handle to voice_main (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-voicemodule2;
-
-% --------------------------------------------------------------------
-function emgrgp_main_Callback(hObject, eventdata, handles)
-% hObject    handle to emgrgp_main (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-emgrgpmodule2;
-
-
-
-% --------------------------------------------------------------------
-function edfconverter_menu_Callback(hObject, eventdata, handles)
-% hObject    handle to edfconverter_menu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-edfconverter;

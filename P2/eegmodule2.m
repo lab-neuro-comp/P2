@@ -22,7 +22,7 @@ function varargout = eegmodule2(varargin)
 
 % Edit the above text to modify the response to help eegmodule2
 
-% Last Modified by GUIDE v2.5 14-Dec-2016 08:25:44
+% Last Modified by GUIDE v2.5 25-Jan-2017 11:36:57
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -219,7 +219,8 @@ if ~isequal(filename, 0)
           handles.checkLocate,...
           handles.checkInfo, ...
           handles.checkICA, ...
-          handles.checkSteps ],...
+          handles.checkSteps, ...
+          handles.checkArtifacts ],...
         'Enable', 'on');
     set(handles.editTable, 'String', outlet);
 else
@@ -230,7 +231,8 @@ else
           handles.checkLocate,...
           handles.checkInfo, ...
           handles.checkICA, ...
-          handles.checkSteps ],...
+          handles.checkSteps, ...
+          handles.checkArtifacts ],...
         'Enable', 'off');
 end
 
@@ -288,6 +290,15 @@ function checkSteps_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of checkSteps
+
+
+% --- Executes on button press in checkArtifacts.
+function checkArtifacts_Callback(hObject, eventdata, handles)
+% hObject    handle to checkArtifacts (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkArtifacts
 
 
 % --- Executes on button press in buttonRun.
@@ -376,7 +387,26 @@ for n = 1:size(ints_table)
                               'options', {'extended' 1},...
                               'chanind', [ 1:21 ]);
         [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-        confirm_window(checkShow, 'ICA Completed')
+        confirm_window(checkShow, 'ICA Completed');
+    end
+
+    % Removing artifacts
+    if isequal(get(handles.checkArtifacts, 'Value'), 1)
+        pop_eegplot(EEG);
+        EEG = pop_subcomp(EEG);
+        rmvagain = 'Yes';
+
+        while strcmp(rmvagain, 'Yes')
+            rmvagain = questdlg('Would you like to remove some other component?', ...
+                                'Remove Component', ...
+                                'Yes', 'No', 'Yes');
+            switch rmvagain
+                case 'Yes'
+                    EEG = pop_subcomp(EEG);
+                case 'No'
+                    confirm_window(checkShow, 'Components Removed');
+            end
+        end
     end
 
     % Storing data
@@ -384,9 +414,13 @@ for n = 1:size(ints_table)
     [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
     EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
                            'filepath', strcat(arqsetpath, filesep));
+
+   
 end
 
 
 fprintf('\t\tDEKITA~! o/\n');
+
+
 
 
