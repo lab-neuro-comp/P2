@@ -27,15 +27,16 @@ files = selectWithCorrectExtension(files);
 tic
 channels = { };
 rms = { };
-% IDEA Run this for in parallel
-limit = length(files);
-for m = 1:limit
-	file = files{m};
-	fprintf('%s (%d/%d)\n', file, m, limit);
-	fileName = strcat(folder, filesep, file);
+noFiles = length(files);
+for m = 1:noFiles
+	fprintf('%s (%d/%d)\n', files{m}, m, noFiles);
+	fileName = strcat(folder, filesep, files{m});
+
 	edf = br.unb.biologiaanimal.edf.EDF(fileName);
 	labels = edf.getLabels();
-	for n = 1:length(labels)
+	noLabels = length(labels);
+
+	for n = 1:noLabels
 		label = labels(n);
 		k = whereToAdd(channels, label);
 		channels{k} = label;
@@ -44,11 +45,14 @@ for m = 1:limit
 	end
 end
 toc
-% TODO Display this RMS variable as a CSV table
+
+% Saving this RMS variable in a CSV table
 dataFile = strcat(folder, filesep, 'data.csv');
 horizontalTags = fmap(@char, channels);
 verticalTags = fmap(@char, files);
 saveCsv(dataFile, horizontalTags, verticalTags, rms);
+
+% --- AUXILIARY FUNCTIONS -----------------------------------------------------
 
 %% Filtering out files with extensions that are not '*.edf'.
 function [outlet] = selectWithCorrectExtension(inlet)
