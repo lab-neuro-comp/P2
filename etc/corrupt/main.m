@@ -28,29 +28,27 @@ tic
 channels = { };
 rms = { };
 % IDEA Run this for in parallel
-for m = 1:length(files)
+limit = length(files);
+for m = 1:limit
 	file = files{m};
-	disp(file);
+	fprintf('%s (%d/%d)\n', file, m, limit);
 	fileName = strcat(folder, filesep, file);
 	edf = br.unb.biologiaanimal.edf.EDF(fileName);
-	% TODO Delete occurences of localRms variable
-	localRms = [ ];
 	labels = edf.getLabels();
 	for n = 1:length(labels)
 		label = labels(n);
 		k = whereToAdd(channels, label);
 		channels{k} = label;
 		signal = edf.getSignal(label);
-		localRms(n) = calculateRms(signal);
-		rms{k, m} = localRms(n);
+		rms{k, m} = calculateRms(signal);
 	end
 end
 toc
-rms
 % TODO Display this RMS variable as a CSV table
-csv = table2csv(fmap(@char, channels), fmap(@char, files), rms);
-fprintf('%s\n', csv);
-saveToFile(strcat(folder, filesep, 'data.csv'), csv);
+dataFile = strcat(folder, filesep, 'data.csv');
+horizontalTags = fmap(@char, channels);
+verticalTags = fmap(@char, files);
+saveCsv(dataFile, horizontalTags, verticalTags, rms);
 
 %% Filtering out files with extensions that are not '*.edf'.
 function [outlet] = selectWithCorrectExtension(inlet)
