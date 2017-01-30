@@ -22,7 +22,7 @@ function varargout = edfconverter(varargin)
 
 % Edit the above text to modify the response to help edfconverter
 
-% Last Modified by GUIDE v2.5 05-Dec-2016 08:24:57
+% Last Modified by GUIDE v2.5 30-Jan-2017 10:03:39
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -75,8 +75,6 @@ function varargout = edfconverter_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-
-
 
 function editSearch_Callback(hObject, eventdata, handles)
 % hObject    handle to editSearch (see GCBO)
@@ -140,6 +138,7 @@ function pushbuttonRun_Callback(hObject, eventdata, handles)
 raw = get(handles.editSearch, 'String');
 stuff = split_string(raw, ';');
 
+% IDEA Try to run this on parallel
 if isequal(get(handles.checkboxMultiple, 'Value'), true)
     for n = 1:length(stuff)
         inlet = stuff{n};
@@ -161,16 +160,28 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
             edf.toSingleChannelAscii(outlet, label);
         end
     end
-    msgbox('DONE!');
-    return
+else
+    for n = 1:length(stuff)
+        item = stuff{n};
+        inlet = item;
+        edf = br.unb.biologiaanimal.edf.EDF(item);
+        outlet = change_extension(inlet, '.ascii');
+        edf.toAscii(outlet);
+    end
 end
-
-for n = 1:length(stuff)
-    item = stuff{n};
-    inlet = item;
-    edf = br.unb.biologiaanimal.edf.EDF(item);
-    outlet = change_extension(inlet, '.ascii');
-    edf.toAscii(outlet);
-end
-
 msgbox('DONE!');
+
+
+% --------------------------------------------------------------------
+function menuFile_Callback(hObject, eventdata, handles)
+
+function menuEdit_Callback(hObject, eventdata, handles)
+
+function menuAdvanced_Callback(hObject, eventdata, handles)
+% This is going to be fun!
+% TODO Implement advanced mode
+function menuAdd_Callback(hObject, eventdata, handles)
+pushbuttonSearch_Callback(hObject, eventdata, handles);
+
+function menuQuit_Callback(hObject, eventdata, handles)
+close();
