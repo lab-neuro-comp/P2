@@ -307,6 +307,8 @@ function buttonRun_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+% TODO Add a button to cancel the process
+
 % Abrir o arquivo
 xlsfile = get(handles.editTable, 'String');
 % [A, T] = xlsread(get(handles.editTable, 'String'));
@@ -414,8 +416,6 @@ for n = 1:size(ints_table)
     [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
     EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
                            'filepath', strcat(arqsetpath, filesep));
-
-   
 end
 
 
