@@ -42,6 +42,7 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 
+addpath([cd '/edfconverter']);
 if ~is_in_javapath('edf.jar')
     javaaddpath('edf.jar');
 end
@@ -154,6 +155,10 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
 
         % To each file, loop through their labels
         labels = edf.getLabels();
+        if isequal(get(handles.checkboxChoose, 'Value'), true)
+            % TODO Implement this window
+            labels = pickChannels(labels);
+        end
         for m = 1:length(labels)
             label = char(labels(m));
             outlet = strcat(root, label, '.ascii');
@@ -163,6 +168,7 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
     end
 else
     for n = 1:length(stuff)
+        % TODO Add effect of picking channels here
         item = stuff{n};
         inlet = item;
         edf = br.unb.biologiaanimal.edf.EDF(item);
