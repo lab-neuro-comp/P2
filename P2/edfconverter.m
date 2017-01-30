@@ -22,7 +22,7 @@ function varargout = edfconverter(varargin)
 
 % Edit the above text to modify the response to help edfconverter
 
-% Last Modified by GUIDE v2.5 30-Jan-2017 10:03:39
+% Last Modified by GUIDE v2.5 30-Jan-2017 12:34:05
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -138,6 +138,7 @@ function pushbuttonRun_Callback(hObject, eventdata, handles)
 raw = get(handles.editSearch, 'String');
 stuff = split_string(raw, ';');
 
+% TODO Add effect of picking channels
 % IDEA Try to run this on parallel
 if isequal(get(handles.checkboxMultiple, 'Value'), true)
     for n = 1:length(stuff)
@@ -171,17 +172,11 @@ else
 end
 msgbox('DONE!');
 
+% --- Executes on button press in checkboxChoose.
+function checkboxChoose_Callback(hObject, eventdata, handles)
+% hObject    handle to checkboxChoose (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
-% --------------------------------------------------------------------
-function menuFile_Callback(hObject, eventdata, handles)
-
-function menuEdit_Callback(hObject, eventdata, handles)
-
-function menuAdvanced_Callback(hObject, eventdata, handles)
-% This is going to be fun!
-% TODO Implement advanced mode
-function menuAdd_Callback(hObject, eventdata, handles)
-pushbuttonSearch_Callback(hObject, eventdata, handles);
-
-function menuQuit_Callback(hObject, eventdata, handles)
-close();
+% Hint: get(hObject,'Value') returns toggle state of checkboxChoose
+% TODO Implement callback
