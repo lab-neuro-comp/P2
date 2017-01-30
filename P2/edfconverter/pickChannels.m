@@ -58,6 +58,8 @@ handles.labels = varargin{1};
 
 % Setup UI
 set(handles.listboxLabels, 'String', cell(handles.labels));
+set(handles.listboxLabels, 'Max', length(handles.labels));
+set(handles.listboxLabels, 'Min', 0);
 
 % Update handles structure
 guidata(hObject, handles);
@@ -86,8 +88,6 @@ function listboxLabels_Callback(hObject, eventdata, handles)
 % Hints: contents = get(hObject,'String') returns listboxLabels contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from listboxLabels
 
-% TODO Implement selection of many items
-
 % --- Executes during object creation, after setting all properties.
 function listboxLabels_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to listboxLabels (see GCBO)
@@ -107,12 +107,23 @@ function pushbuttonOk_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 %TODO Implement Ok button
+contents = get(handles.listboxLabels, 'String');
+indexes = get(handles.listboxLabels, 'Value');
+labels = { };
+
+for index = indexes
+    labels{end+1} = contents{index};
+end
+
+handles.output = labels;
+guidata(hObject, handles);
+uiresume(handles.figure1);
 
 % --- Executes on button press in pushbuttonCancel.
 function pushbuttonCancel_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbuttonCancel (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.output = [];
+handles.output = { };
 guidata(hObject, handles);
 uiresume(handles.figure1);

@@ -155,6 +155,7 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
 
         % To each file, loop through their labels
         labels = edf.getLabels();
+        labels = cell(labels);
         if isequal(get(handles.checkboxChoose, 'Value'), true)
             % TODO Implement this window
             labels = pickChannels(labels);
@@ -163,7 +164,7 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
             end
         end
         for m = 1:length(labels)
-            label = char(labels(m));
+            label = labels{m};
             outlet = strcat(root, label, '.ascii');
             fprintf('%s\n', outlet);
             edf.toSingleChannelAscii(outlet, label);
