@@ -158,6 +158,9 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
         if isequal(get(handles.checkboxChoose, 'Value'), true)
             % TODO Implement this window
             labels = pickChannels(labels);
+            if length(labels) == 0
+                return
+            end
         end
         for m = 1:length(labels)
             label = char(labels(m));

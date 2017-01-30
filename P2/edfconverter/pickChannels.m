@@ -22,7 +22,7 @@ function varargout = pickChannels(varargin)
 
 % Edit the above text to modify the response to help pickChannels
 
-% Last Modified by GUIDE v2.5 30-Jan-2017 12:49:31
+% Last Modified by GUIDE v2.5 30-Jan-2017 13:45:54
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -56,6 +56,9 @@ function pickChannels_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 handles.labels = varargin{1};
 
+% Setup UI
+set(handles.listboxLabels, 'String', cell(handles.labels));
+
 % Update handles structure
 guidata(hObject, handles);
 
@@ -73,3 +76,43 @@ function varargout = pickChannels_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 close(handles.figure1);
+
+% --- Executes on selection change in listboxLabels.
+function listboxLabels_Callback(hObject, eventdata, handles)
+% hObject    handle to listboxLabels (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = get(hObject,'String') returns listboxLabels contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from listboxLabels
+
+% TODO Implement selection of many items
+
+% --- Executes during object creation, after setting all properties.
+function listboxLabels_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to listboxLabels (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject, 'BackgroundColor'), ...
+                   get(0, 'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+% --- Executes on button press in pushbuttonOk.
+function pushbuttonOk_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbuttonOk (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%TODO Implement Ok button
+
+% --- Executes on button press in pushbuttonCancel.
+function pushbuttonCancel_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbuttonCancel (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.output = [];
+guidata(hObject, handles);
+uiresume(handles.figure1);
