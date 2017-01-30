@@ -45,7 +45,7 @@ handles.files = {};
 handles.stuff = {};
 
 % Update handles structure
-set(handles.figure1, 'Name', 'Reconhecimento de Voz');
+set(handles.figure1, 'Name', 'Voice Recognition');
 guidata(hObject, handles);
 
 % UIWAIT makes voicemodule2 wait for user response (see UIRESUME)
