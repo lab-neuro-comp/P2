@@ -17,5 +17,12 @@ cd etc
 cd corrupt
 
 % Running procedure
-generateChopsOnly(folder);
-calculateStftOnly(folder);
+if isequal(exist('parfor', 'builtin'), 5)
+	disp('Running on parallel');
+	generateChopsOnParallel(folder);
+	calculateStftOnParallel(folder);
+else
+	disp('Not running on parallel');
+	generateChopsOnly(folder);
+	calculateStftOnly(folder);
+end

@@ -1,4 +1,4 @@
-function calculateStftPnly(folder)
+function calculateSTFTOnParallel(folder)
 % Calculates the STFT for each recording in the `ids.txt` file contained in
 % this folder.
 %
