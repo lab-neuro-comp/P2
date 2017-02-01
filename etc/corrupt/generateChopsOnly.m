@@ -1,20 +1,8 @@
 function generateChopsOnly(folder)
-% This is the main procedure for dealing with the apparent corruption of EDF
-% signals that is happenning on SST data collection.
+% Extracts the samples of the files and saves which files it has generated
+% on a file called `ids.txt`. Before running this procedure, be sure that this
+% output file does not exist.
 %
-% Right now it is being called as `main ..\..\b\SST` or
-% `main ..\..\..\SST\data\ns\EEG\edf`
-%
-% The current idea of this procedure is to extract a sample of the signal and
-% calculate its STFT, resulting in a plot that will be analyzed later.
-%
-
-% Adding P2Lib
-cd ..
-cd ..
-addP2Lib
-cd etc
-cd corrupt
 
 % Looking for fitting files
 dirData = dir(folder);

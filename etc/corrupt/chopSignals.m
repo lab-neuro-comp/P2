@@ -22,7 +22,7 @@ parfor n = 1:length(labels)
 	label = labels(n)
 	recording = edf.getSignal(label);
 	% Extracting sample
-	recording = subSignal(recording, 0.4, 0.6);
+	recording = subSignal(recording, 0.45, 0.55);
 	% Storing data
 	outputFileName = [ outputDir filesep char(label) '.mat' ];
 	saveData(outputFileName, recording);

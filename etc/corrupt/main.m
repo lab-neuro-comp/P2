@@ -28,20 +28,6 @@ channels = { };
 noFiles = length(files);
 parfor m = 1:noFiles
 	fprintf('%s (%d/%d)\n', files{m}, m, noFiles);
-	% TODO Implement this function
 	runSTFT(folder, files{m});
 end
 toc
-
-% --- AUXILIARY FUNCTIONS -----------------------------------------------------
-
-%% Filtering out files with extensions that are not '*.edf'.
-function [outlet] = selectWithCorrectExtension(inlet)
-outlet = { };
-for n = 1:length(inlet)
-	it = inlet{n};
-	ext = it(length(it)-3:length(it));
-	if isequal('.edf', ext)
-		outlet{end+1} = it;
-	end
-end

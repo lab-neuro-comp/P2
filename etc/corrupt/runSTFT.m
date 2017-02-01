@@ -16,6 +16,10 @@ edf = br.unb.biologiaanimal.edf.EDF(fullName);
 samplingRate = edf.getSamplingRate();
 labels = edf.getLabels();
 
+% Setting parameters for STFT
+winsize = 256;
+window = blackman(winsize);
+
 % Calculating Fourier Transform
 parfor n = 1:length(labels)
 	label = labels(n)
@@ -23,6 +27,8 @@ parfor n = 1:length(labels)
 	% Extracting sample
 	recording = subSignal(recording, 0.4, 0.6);
 	% TODO Run STFT
+	% BUG This call is consuming the whole memory
+	recording = calcstft(recording, window, winsize);
 	% Storing data
 	outputFileName = [ outputDir filesep char(label) '.mat' ];
 	saveData(outputFileName, recording);
