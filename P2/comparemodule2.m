@@ -1,4 +1,4 @@
-function varargout = stimuli_analysis(varargin)
+function varargout = comparemodule2(varargin)
 % This module analyses the time of events of a response that where
 % recorded on audio with the time when the stimulus was given to the
 % participant. Upon reaching  the interface, one must be able to
@@ -8,16 +8,16 @@ function varargout = stimuli_analysis(varargin)
 % with the data that was generated before after the audio analysis.
 %
 
-% Edit the above text to modify the response to help stimuli_analysis
+% Edit the above text to modify the response to help comparemodule2
 
-% Last Modified by GUIDE v2.5 16-Nov-2016 10:49:30
+% Last Modified by GUIDE v2.5 01-Feb-2017 08:14:08
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
 									 'gui_Singleton',  gui_Singleton, ...
-									 'gui_OpeningFcn', @stimuli_analysis_OpeningFcn, ...
-									 'gui_OutputFcn',  @stimuli_analysis_OutputFcn, ...
+									 'gui_OpeningFcn', @comparemodule2_OpeningFcn, ...
+									 'gui_OutputFcn',  @comparemodule2_OutputFcn, ...
 									 'gui_LayoutFcn',  [] , ...
 									 'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -32,15 +32,15 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before stimuli_analysis is made visible.
-function stimuli_analysis_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before comparemodule2 is made visible.
+function comparemodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to stimuli_analysis (see VARARGIN)
+% varargin   command line arguments to comparemodule2 (see VARARGIN)
 
-% Choose default command line output for stimuli_analysis
+% Choose default command line output for comparemodule2
 handles.output = hObject;
 handles.files = varargin{1};
 
@@ -50,12 +50,12 @@ set(handles.popupAudio, 'String', handles.files);
 set(handles.figure1, 'Name', 'Test Response Delay');
 guidata(hObject, handles);
 
-% UIWAIT makes stimuli_analysis wait for user response (see UIRESUME)
+% UIWAIT makes comparemodule2 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = stimuli_analysis_OutputFcn(hObject, eventdata, handles) 
+function varargout = comparemodule2_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -65,29 +65,46 @@ function varargout = stimuli_analysis_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on selection change in popupAudio.
-function popupAudio_Callback(hObject, eventdata, handles)
-% hObject    handle to popupAudio (see GCBO)
+% --- Executes on button press in buttonFolder.
+function buttonFolder_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonFolder (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = get(hObject,'String') returns popupAudio contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupAudio
-set(handles.buttonSave, 'Enable', 'off');
+
+% --- Executes on selection change in listFiles.
+function listFiles_Callback(hObject, eventdata, handles)
+% hObject    handle to listFiles (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = get(hObject,'String') returns listFiles contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from listFiles
 
 
 % --- Executes during object creation, after setting all properties.
-function popupAudio_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popupAudio (see GCBO)
+function listFiles_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to listFiles (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
-% Hint: popupmenu controls usually have a white background on Windows.
+% Hint: listbox controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-		set(hObject,'BackgroundColor','white');
+    set(hObject,'BackgroundColor','white');
 end
 
+
+% --- Executes on button press in buttonSearch.
+function buttonSearch_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonSearch (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+[filename, pathname, filterindex]  = uigetfile('*.txt', 'Select files');
+set(handles.editTest, 'String', strcat(pathname, filename));
+set(handles.buttonAnalyse, 'Enable', 'on');
+set(handles.buttonSave, 'Enable', 'off');
 
 
 function editTest_Callback(hObject, eventdata, handles)
@@ -113,16 +130,23 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in buttonSearch.
-function buttonSearch_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonSearch (see GCBO)
+% --- Executes on button press in buttonAnalyse.
+function buttonAnalyse_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonAnalyse (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-[filename, pathname, filterindex]  = uigetfile('*.txt', 'Select files');
-set(handles.editTest, 'String', strcat(pathname, filename));
-set(handles.buttonAnalyse, 'Enable', 'on');
-set(handles.buttonSave, 'Enable', 'off');
+contents = cellstr(get(handles.popupAudio, 'String'));
+filename = contents{get(handles.popupAudio, 'Value')};
+handles.filename = filename;
+
+responseTime = analyse_for_stimulus(filename, get(handles.editTest, 'String'));
+set(handles.listAnalysis, 'String', responseTime);
+set(handles.buttonSave, 'Enable', 'on');
+
+handles.responseTime = responseTime;
+
+guidata(hObject, handles);
 
 
 % --- Executes on selection change in listAnalysis.
@@ -146,25 +170,6 @@ function listAnalysis_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
 		set(hObject,'BackgroundColor','white');
 end
-
-
-% --- Executes on button press in buttonAnalyse.
-function buttonAnalyse_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonAnalyse (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-contents = cellstr(get(handles.popupAudio, 'String'));
-filename = contents{get(handles.popupAudio, 'Value')};
-handles.filename = filename;
-
-responseTime = analyse_for_stimulus(filename, get(handles.editTest, 'String'));
-set(handles.listAnalysis, 'String', responseTime);
-set(handles.buttonSave, 'Enable', 'on');
-
-handles.responseTime = responseTime;
-
-guidata(hObject, handles);
 
 
 % --- Executes on button press in buttonSave.
@@ -212,3 +217,5 @@ fclose(fileID);
 set(handles.buttonSave, 'Enable', 'off');
 
 guidata(hObject, handles);
+
+

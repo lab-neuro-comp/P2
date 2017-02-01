@@ -144,7 +144,7 @@ function voicecompbut_Callback(hObject, eventdata, handles)
 % hObject    handle to voicecompbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% TODO Transfer voice comparison module to this callback
+comparemodule2; 
 
 % --- Executes on button press in emgrgpbut.
 function emgrgpbut_Callback(hObject, eventdata, handles)
