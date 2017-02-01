@@ -35,6 +35,10 @@ checkInfo = options(5);
 checkICA = options(6);
 checkArtifacts = options(7);
 
+% Preparing channel selection for reuse
+rereferReuse = java.util.HashMap;
+cutReuse = java.util.HashMap;
+
 %Iniciar varredura para corte de intervalos
 for n = 1:size(ints_table)
     % Variables
@@ -56,8 +60,15 @@ for n = 1:size(ints_table)
 
     % Rerefering EDF
     if isequal(checkRerefer, 1)
-        % TODO Enable the user to change these numbers
-        toBeRerefered = rerefermodule(edfinfo);
+        channelsCode = getChannelsCode(edfinfo);
+        if rereferReuse.containsKey(channelsCode)
+            fprintf('Reusing previous selection');
+            toBeRerefered = rereferReuse.get(channelsCode);
+        else
+            toBeRerefered = rerefermodule(edfinfo);
+            % TODO Check if the selection is valid before saving
+            rereferReuse.put(channelsCode, toBeRerefered);
+        end
         if toBeRerefered > 0
             EEG = pop_reref(EEG, toBeRerefered);
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
@@ -67,7 +78,7 @@ for n = 1:size(ints_table)
 
     % Remove EDF channels
     if isequal(checkCut, 1)
-        % TODO Enable the user to change these numbers
+        % TODO Enable reuse of channels for remotion
         toRemove = removemodule(edfinfo);
         if ~isempty(toRemove)
             EEG = pop_select(EEG, 'nochannel', toRemove);
