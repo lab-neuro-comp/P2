@@ -213,14 +213,6 @@ for n = 1:length(file)
 	fclose(fileID);
 end
 
-%selection = questdlg({'Deseja avancar para a analise de comparacao'...
-%					 'dos dados do arquivo de audio e de teste?'},...
-%					 ['Avancar para analise?'],...
-%					 'Ok','Cancelar','Ok');
-%if strcmp(selection,'Cancelar')
-%	return;
-%else
-%	stimuli_analysis(file);
-%end
-
 guidata(hObject, handles);
+
+h = msgbox('File successfully saved!');

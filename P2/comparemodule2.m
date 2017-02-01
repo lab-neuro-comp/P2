@@ -31,6 +31,7 @@ else
 end
 % End initialization code - DO NOT EDIT
 
+addpath([cd '/comparemodule']);
 
 % --- Executes just before comparemodule2 is made visible.
 function comparemodule2_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -42,9 +43,6 @@ function comparemodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for comparemodule2
 handles.output = hObject;
-handles.files = varargin{1};
-
-set(handles.popupAudio, 'String', handles.files);
 
 % Update handles structure
 set(handles.figure1, 'Name', 'Test Response Delay');
@@ -71,6 +69,19 @@ function buttonFolder_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+CSVPath = uigetdir(cd, 'Select the folder containing the analysed audio');
+handles.CSVPath = CSVPath;
+programPath = cd(CSVPath);
+
+extension = '*.csv';
+listCSV = ls(extension);
+handles.CSVFiles = listCSV;
+CSVPath = cd(programPath);
+
+listCSV = handles.CSVFiles;
+set(handles.listFiles, 'String', listCSV);
+guidata(hObject, handles);
+
 
 % --- Executes on selection change in listFiles.
 function listFiles_Callback(hObject, eventdata, handles)
@@ -80,6 +91,7 @@ function listFiles_Callback(hObject, eventdata, handles)
 
 % Hints: contents = get(hObject,'String') returns listFiles contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from listFiles
+set(handles.buttonSave, 'Enable', 'off');
 
 
 % --- Executes during object creation, after setting all properties.
@@ -136,8 +148,10 @@ function buttonAnalyse_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-contents = cellstr(get(handles.popupAudio, 'String'));
-filename = contents{get(handles.popupAudio, 'Value')};
+contents = cellstr(get(handles.listFiles, 'String'));
+filename = contents{get(handles.listFiles, 'Value')};
+CSVPath = handles.CSVPath;
+filename = strcat(CSVPath, '\', filename);
 handles.filename = filename;
 
 responseTime = analyse_for_stimulus(filename, get(handles.editTest, 'String'));
@@ -218,4 +232,5 @@ set(handles.buttonSave, 'Enable', 'off');
 
 guidata(hObject, handles);
 
+h = msgbox('File successfully saved!');
 
