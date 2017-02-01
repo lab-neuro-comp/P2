@@ -9,7 +9,7 @@ for n = 1:length(horizontalTags)
 	tag = horizontalTags{n};
 	line = strcat(line, sprintf(';\t%s', tag));
 end
-csv = strcat(csv, sprintf('%s\r\n', line));
+csv = strcat(csv, sprintf('%s\n', line));
 
 % Building following lines
 limit = length(horizontalTags);
@@ -19,5 +19,5 @@ for n = 1:length(verticalTags)
 		value = sprintf(';\t%.3f', data{m, n});
 		line = strcat(line, value);
 	end
-	csv = strcat(csv, sprintf('%s\r\n', line));
+	csv = strcat(csv, sprintf('%s\n', line));
 end
