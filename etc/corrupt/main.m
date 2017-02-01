@@ -16,18 +16,12 @@ addP2Lib
 cd etc
 cd corrupt
 
-% Looking for fitting files
-dirData = dir(folder);
-dirIndex = [ dirData.isdir ];
-files = { dirData(~dirIndex).name };
-files = selectWithCorrectExtension(files);
-
-% Calculating STFT for each file
-tic
-channels = { };
-noFiles = length(files);
-parfor m = 1:noFiles
-	fprintf('%s (%d/%d)\n', files{m}, m, noFiles);
-	runSTFT(folder, files{m});
+% Deleting ids file
+idsFile = strcat(folder, filesep, 'ids.txt');
+if isequal(exist(idsFile, 'file'), 2)
+	delete(idsFile);
 end
-toc
+
+% Running procedure
+generateChopsOnly(folder);
+calculateStftOnly(folder);
