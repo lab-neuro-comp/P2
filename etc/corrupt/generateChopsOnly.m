@@ -20,7 +20,7 @@ files = selectWithCorrectExtension(files);
 tic
 channels = { };
 noFiles = length(files);
-parfor m = 1:noFiles
+for m = 1:noFiles
 	fprintf('%s (%d/%d)\n', files{m}, m, noFiles);
 	channels{m} = chopSignals(folder, files{m});
 end
