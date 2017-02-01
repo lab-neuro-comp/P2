@@ -16,8 +16,8 @@ function processEEG(inputfile, eeglab_path, eegloc_path, output_folder, options)
 %   + Run ICA?
 %   + Remove artifacts?
 %
-% TODO Add example call
 
+% TODO Add example call
 % TODO Add a button to cancel the process
 
 % [A, T] = xlsread(get(handles.editTable, 'String'));
@@ -60,6 +60,7 @@ for n = 1:size(ints_table)
 
     % Rerefering EDF
     if isequal(checkRerefer, 1)
+        % Checking if previous selections can be reused
         channelsCode = getChannelsCode(edfinfo);
         if rereferReuse.containsKey(channelsCode)
             fprintf('Reusing previous selection');
@@ -70,6 +71,7 @@ for n = 1:size(ints_table)
                 rereferReuse.put(channelsCode, toBeRerefered);
             end
         end
+        % Rerefering all channels according to new reference
         if toBeRerefered > 0
             EEG = pop_reref(EEG, toBeRerefered);
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
@@ -79,6 +81,7 @@ for n = 1:size(ints_table)
 
     % Remove EDF channels
     if isequal(checkCut, 1)
+        % Checking if previous selections can be reused
         channelsCode = getChannelsCode(edfinfo);
         if cutReuse.containsKey(channelsCode)
             fprintf('Reusing previous selection');
@@ -89,6 +92,7 @@ for n = 1:size(ints_table)
                 cutReuse.put(channelsCode, toRemove);
             end
         end
+        % Removing channels
         if ~isempty(toRemove)
             EEG = pop_select(EEG, 'nochannel', toRemove);
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
@@ -100,9 +104,6 @@ for n = 1:size(ints_table)
     if isequal(checkLocate, 1)
         % TODO Check if this loading is correct
         EEG = pop_chanedit(EEG, 'load', eegloc_path);
-        %EEG.chanlocs = readlocs( filename, 'key', 'val', ... );
-        %EEG.chanlocs = readlocs( arqloc,'filetype','chanedit');
-
         [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
         confirm_window(checkShow, 'Electrodes Mapped');
     end
