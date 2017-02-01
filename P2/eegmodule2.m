@@ -22,7 +22,7 @@ function varargout = eegmodule2(varargin)
 
 % Edit the above text to modify the response to help eegmodule2
 
-% Last Modified by GUIDE v2.5 25-Jan-2017 11:36:57
+% Last Modified by GUIDE v2.5 01-Feb-2017 08:43:00
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -62,6 +62,7 @@ add_eeglab_path(get(handles.constants, 'EEGLAB_PATH'));
 % Update handles structure
 set(handles.editEEGLab, 'String', handles.constants.get('EEGLAB_PATH'));
 set(handles.editLocations, 'String', handles.constants.get('LOCATIONS_PATH'));
+set(handles.editOutput, 'String', strcat(pwd, filesep, 'output'));
 set(handles.figure1, 'Name', 'EEG Module');
 guidata(hObject, handles);
 
@@ -236,6 +237,38 @@ else
         'Enable', 'off');
 end
 
+% --- OUTPUT FOLDER STUFF ------------------------------------------------------
+function editOutput_Callback(hObject, eventdata, handles)
+% hObject    handle to editOutput (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editOutput as text
+%        str2double(get(hObject,'String')) returns contents of editOutput as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editOutput_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editOutput (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in buttonSearchOut.
+function buttonSearchOut_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonSearchOut (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+directoryName = uigetdir(pwd, 'Select output folder');
+set(handles.editOutput, 'String', directoryName);
+
 
 %-----------------------------------------------------------------
 % --- Executes on button press in checkCut.
@@ -308,6 +341,16 @@ function buttonRun_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % TODO Add a button to cancel the process
+
+% Set the output folder
+outputFolder = checkForOutputFolder(get(handles.editOutput, 'String'));
+if outputFolder == 0
+    % TODO Change this to a dialog box
+    fprintf('INVALID OUTPUT FOLDER\n')
+    return
+else
+    outputFolder = strcat(outputFolder, filesep);
+end
 
 % Abrir o arquivo
 xlsfile = get(handles.editTable, 'String');
@@ -415,12 +458,9 @@ for n = 1:size(ints_table)
     [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
     [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
     EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
-                           'filepath', strcat(arqsetpath, filesep));
+                           'filepath', outputFolder);
 end
 
 
+% TODO Replace this mesage with a dialog box
 fprintf('\t\tDEKITA~! o/\n');
-
-
-
-
