@@ -105,23 +105,27 @@ for n = 1:length(testcases)
 		for k = 1:size
 			[str, remain] = strtok(remain, '\');
 		end
-		tablenameEMG = strrep(remain, '.edf', '_EMG.ascii');
-		tablenameGSR = strrep(remain, '.edf', '_GSR.ascii');
+		tablenameEMG = strrep(remain, '.edf', '_EMG');
+		tablenameGSR = strrep(remain, '.edf', '_GSR');
 
 		% Opening a new file and writing the new content
 
 		% EMG File
-		fileID = fopen(strcat(newPath, '\SeparatedChannels\', tablenameEMG), 'w');
-		fprintf(fileID, ';%s=%d\n', 'Sampling Rate', SamplingRate);
+		fileID = fopen(strcat(newPath, '\SeparatedChannels\', tablenameEMG, '.ascii'), 'w');
 		fprintf(fileID, '%f\n', EMG);
+		fclose(fileID);
+		fileID = fopen(strcat(newPath, '\SeparatedChannels\', tablenameEMG, 'Freq.txt'), 'w');
+		fprintf(fileID, '%s=%d', 'Sampling Rate', SamplingRate);
 		fclose(fileID);
 
 		% GSR File
-		fileID = fopen(strcat(newPath, '\SeparatedChannels\', tablenameGSR), 'w');
-		fprintf(fileID, ';%s=%d\n', 'Sampling Rate', SamplingRate);
+		fileID = fopen(strcat(newPath, '\SeparatedChannels\', tablenameGSR, '.ascii'), 'w');
 		fprintf(fileID, '%f\n', GSR);
+		fclose(fileID);		
+		fileID = fopen(strcat(newPath, '\SeparatedChannels\', tablenameGSR, 'Freq.txt'), 'w');
+		fprintf(fileID, '%s=%d', 'Sampling Rate', SamplingRate);
 		fclose(fileID);
-		
+
 		% Gaoing back to the program's folder
 		newPath = cd(programPath);
 		delete(h);
