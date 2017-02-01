@@ -45,7 +45,7 @@ handles.files = {};
 handles.stuff = {};
 
 % Update handles structure
-set(handles.figure1, 'Name', 'Reconhecimento de Voz');
+set(handles.figure1, 'Name', 'Voice Recognition');
 guidata(hObject, handles);
 
 % UIWAIT makes voicemodule2 wait for user response (see UIRESUME)
@@ -189,6 +189,7 @@ function buttonSave_Callback(hObject, eventdata, handles)
 file = handles.files;
 moments = {};
 name = handles.filename;
+mkdir(handles.pathname, 'CSVFiles');
 
 for n = 1:length(file)
 	[record, fs, nbits] = wavread(file{n});
@@ -201,7 +202,7 @@ for n = 1:length(file)
         tablename = strrep(name{n}, '.wav', '.csv');
     end
 	
-	fileID = fopen(strcat(handles.pathname, tablename), 'w');
+	fileID = fopen(strcat(handles.pathname, 'CSVFiles/', tablename), 'w');
 	fprintf(fileID, '%s;%s\n', 'Filename', 'Moments');
 	
 	for m = 1:length(time{n})
@@ -212,15 +213,6 @@ for n = 1:length(file)
 	fclose(fileID);
 end
 
-selection = questdlg({'Deseja avancar para a analise de comparacao'...
-					 'dos dados do arquivo de audio e de teste?'},...
-					 ['Avancar para analise?'],...
-					 'Ok','Cancelar','Ok');
-if strcmp(selection,'Cancelar')
-	return;
-else
-	stimuli_analysis(file);
-end
-
 guidata(hObject, handles);
-% TODO Save as .csv
+
+h = msgbox('File successfully saved!');

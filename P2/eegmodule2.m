@@ -22,7 +22,7 @@ function varargout = eegmodule2(varargin)
 
 % Edit the above text to modify the response to help eegmodule2
 
-% Last Modified by GUIDE v2.5 25-Jan-2017 11:36:57
+% Last Modified by GUIDE v2.5 01-Feb-2017 08:43:00
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -62,6 +62,7 @@ add_eeglab_path(get(handles.constants, 'EEGLAB_PATH'));
 % Update handles structure
 set(handles.editEEGLab, 'String', handles.constants.get('EEGLAB_PATH'));
 set(handles.editLocations, 'String', handles.constants.get('LOCATIONS_PATH'));
+set(handles.editOutput, 'String', strcat(pwd, filesep, 'output'));
 set(handles.figure1, 'Name', 'EEG Module');
 guidata(hObject, handles);
 
@@ -209,7 +210,7 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-[filename, pathname] = uigetfile('*.xls');
+[filename, pathname] = uigetfile('*.xls', 'Select the parameters file');
 
 if ~isequal(filename, 0)
     outlet = strcat(pathname, filename);
@@ -235,6 +236,38 @@ else
           handles.checkArtifacts ],...
         'Enable', 'off');
 end
+
+% --- OUTPUT FOLDER STUFF ------------------------------------------------------
+function editOutput_Callback(hObject, eventdata, handles)
+% hObject    handle to editOutput (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editOutput as text
+%        str2double(get(hObject,'String')) returns contents of editOutput as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editOutput_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editOutput (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in buttonSearchOut.
+function buttonSearchOut_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonSearchOut (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+directoryName = uigetdir(pwd, 'Select output folder');
+set(handles.editOutput, 'String', directoryName);
 
 
 %-----------------------------------------------------------------
@@ -307,120 +340,32 @@ function buttonRun_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Abrir o arquivo
-xlsfile = get(handles.editTable, 'String');
-% [A, T] = xlsread(get(handles.editTable, 'String'));
-ints_table = ler_arq_ints(xlsfile);
-
-% Open eeglab:
-[ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
-
-%Iniciar varredura para corte de intervalos
-checkShow = get(handles.checkSteps, 'Value');
-for n = 1:size(ints_table)
-    % Variables
-    arqedf = ints_table{n, 1};
-    int1 = ints_table{n, 5};
-    int2 = ints_table{n, 6};
-    edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
-    samplingRate = edfinfo.getSamplingRate();
-    blockrange = floor([int1/samplingRate int2/samplingRate]);
-
-    % Loading EDF
-    EEG = pop_biosig(arqedf, 'blockrange', blockrange, 'rmeventchan', 'off');
-    confirm_window(checkShow, 'EDF Loaded');
-
-    arqset = change_extension(arqedf, 'set');
-    [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
-                                         'setname', arqset,...
-                                         'overwrite', 'on');
-
-    % Rerefering EDF
-    if isequal(get(handles.checkRerefer, 'Value'), 1)
-        % TODO Enable the user to change these numbers
-        toBeRerefered = rerefermodule(edfinfo);
-        if toBeRerefered > 0
-            EEG = pop_reref(EEG, toBeRerefered);
-            [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-            confirm_window(checkShow, 'EDF Rerefered');
-        end
-    end
-
-    % Remove EDF channels
-    if isequal(get(handles.checkCut, 'Value'), 1)
-        % TODO Enable the user to change these numbers
-        toRemove = removemodule(edfinfo);
-        if ~isempty(toRemove)
-            EEG = pop_select(EEG, 'nochannel', toRemove);
-            [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-            confirm_window(checkShow, 'EDF Channels Cut');
-        end
-    end
-
-    % Locating electrodes
-    if isequal(get(handles.checkLocate, 'Value'), 1)
-        % TODO Check if this loading is correct
-        EEG = pop_chanedit(EEG, 'load', get(handles.editLocations, 'String'));
-        %EEG.chanlocs = readlocs( filename, 'key', 'val', ... );
-        %EEG.chanlocs = readlocs( arqloc,'filetype','chanedit');
-
-        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-        confirm_window(checkShow, 'Electrodes Mapped');
-    end
-
-    % Saving suject info
-    if isequal(get(handles.checkInfo, 'Value'), 1)
-        EEG = eeg_checkset(EEG);
-        EEG = pop_editset(EEG, 'subject', ints_table{n, 2});
-        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-        confirm_window(checkShow, 'Subject Info Saved');
-    end
-
-    % Running ICA
-    if isequal(get(handles.checkICA, 'Value'), 1)
-        EEG = eeg_checkset(EEG);
-
-        % TODO Resample the dataset to make ICA faster
-        %EEG = pop_resample( EEG, freq);
-        %[ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
-        EEG = pop_runica(EEG, 'icatype', 'runica',...
-                              'options', {'extended' 1},...
-                              'chanind', [ 1:21 ]);
-        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-        confirm_window(checkShow, 'ICA Completed');
-    end
-
-    % Removing artifacts
-    if isequal(get(handles.checkArtifacts, 'Value'), 1)
-        pop_eegplot(EEG);
-        EEG = pop_subcomp(EEG);
-        rmvagain = 'Yes';
-
-        while strcmp(rmvagain, 'Yes')
-            rmvagain = questdlg('Would you like to remove some other component?', ...
-                                'Remove Component', ...
-                                'Yes', 'No', 'Yes');
-            switch rmvagain
-                case 'Yes'
-                    EEG = pop_subcomp(EEG);
-                case 'No'
-                    confirm_window(checkShow, 'Components Removed');
-            end
-        end
-    end
-
-    % Storing data
-    [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-    [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
-    EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
-                           'filepath', strcat(arqsetpath, filesep));
-
-   
+% Set the output folder
+outputFolder = checkForOutputFolder(get(handles.editOutput, 'String'));
+if outputFolder == 0
+    % TODO Change this to a dialog box
+    fprintf('INVALID OUTPUT FOLDER\n')
+    return
+else
+    outputFolder = strcat(outputFolder, filesep);
 end
 
+% Getting EEGLAB parameters
+eeglabPath = get(handles.editEEGLab, 'String');
+eeglocPath = get(handles.editLocations, 'String');
 
-fprintf('\t\tDEKITA~! o/\n');
+% Setting options
+options = [ get(handles.checkSteps,     'Value') ...
+            get(handles.checkRerefer,   'Value') ...
+            get(handles.checkCut,       'Value') ...
+            get(handles.checkLocate,    'Value') ...
+            get(handles.checkInfo,      'Value') ...
+            get(handles.checkICA,       'Value') ...
+            get(handles.checkArtifacts, 'Value') ] ...
+        == 1;
 
+% Abrir o arquivo
+xlsfile = get(handles.editTable, 'String');
 
-
-
+% Let's process it!
+processEEG(xlsfile, eeglabPath, eeglocPath, outputFolder, options);

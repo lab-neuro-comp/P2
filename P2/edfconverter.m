@@ -1,28 +1,13 @@
 function varargout = edfconverter(varargin)
-% EDFCONVERTER M-file for edfconverter.fig
-%      EDFCONVERTER, by itself, creates a new EDFCONVERTER or raises the existing
-%      singleton*.
+% Enables the user to convert EDF files to the ASCII format. It can write to
+% multiple files, each one with a signal. If the 'Pick channels' option is
+% selected, the user will be prompted to determine which channels they want to
+% convert. Otherwise, it will write all channels to a single file.
 %
-%      H = EDFCONVERTER returns the handle to a new EDFCONVERTER or the handle to
-%      the existing singleton*.
-%
-%      EDFCONVERTER('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in EDFCONVERTER.M with the given input arguments.
-%
-%      EDFCONVERTER('Property','Value',...) creates a new EDFCONVERTER or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before edfconverter_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to edfconverter_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
 
 % Edit the above text to modify the response to help edfconverter
 
-% Last Modified by GUIDE v2.5 05-Dec-2016 08:24:57
+% Last Modified by GUIDE v2.5 30-Jan-2017 12:34:05
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -42,6 +27,7 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 
+addpath([cd '/edfconverter']);
 if ~is_in_javapath('edf.jar')
     javaaddpath('edf.jar');
 end
@@ -75,8 +61,6 @@ function varargout = edfconverter_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-
-
 
 function editSearch_Callback(hObject, eventdata, handles)
 % hObject    handle to editSearch (see GCBO)
@@ -140,6 +124,7 @@ function pushbuttonRun_Callback(hObject, eventdata, handles)
 raw = get(handles.editSearch, 'String');
 stuff = split_string(raw, ';');
 
+% IDEA Try to run this on parallel
 if isequal(get(handles.checkboxMultiple, 'Value'), true)
     for n = 1:length(stuff)
         inlet = stuff{n};
@@ -153,24 +138,36 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
         root = inlet(1:root_index);
 
         % To each file, loop through their labels
-        labels = edf.getLabels();
+        labels = cell(edf.getLabels());
+        if isequal(get(handles.checkboxChoose, 'Value'), true)
+            labels = pickChannels(inlet, labels);
+            % TODO Reuse selection if labels in thiese channels already appeared
+            if length(labels) == 0; return; end;
+        end
         for m = 1:length(labels)
-            label = char(labels(m));
+            label = labels{m};
             outlet = strcat(root, label, '.ascii');
             fprintf('%s\n', outlet);
             edf.toSingleChannelAscii(outlet, label);
         end
     end
-    msgbox('DONE!');
-    return
+else
+    for n = 1:length(stuff)
+        % TODO Add effect of picking channels here
+        item = stuff{n};
+        inlet = item;
+        edf = br.unb.biologiaanimal.edf.EDF(item);
+        outlet = change_extension(inlet, '.ascii');
+        edf.toAscii(outlet);
+    end
 end
-
-for n = 1:length(stuff)
-    item = stuff{n};
-    inlet = item;
-    edf = br.unb.biologiaanimal.edf.EDF(item);
-    outlet = change_extension(inlet, '.ascii');
-    edf.toAscii(outlet);
-end
-
 msgbox('DONE!');
+
+% --- Executes on button press in checkboxChoose.
+function checkboxChoose_Callback(hObject, eventdata, handles)
+% hObject    handle to checkboxChoose (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkboxChoose
+% TODO Implement callback
