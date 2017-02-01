@@ -16,12 +16,13 @@ addP2Lib
 cd etc
 cd corrupt
 
-% Deleting ids file
-idsFile = strcat(folder, filesep, 'ids.txt');
-if isequal(exist(idsFile, 'file'), 2)
-	delete(idsFile);
-end
-
 % Running procedure
-generateChopsOnly(folder);
-calculateStftOnly(folder);
+if isequal(exist('parfor', 'builtin'), 5)
+	disp('Running on parallel');
+	generateChopsOnParallel(folder);
+	calculateStftOnParallel(folder);
+else
+	disp('Not running on parallel');
+	generateChopsOnly(folder);
+	calculateStftOnly(folder);
+end

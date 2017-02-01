@@ -1,4 +1,4 @@
-function calculateStftPnly(folder)
+function calculateStftOnParallel(folder)
 % Calculates the STFT for each recording in the `ids.txt` file contained in
 % this folder.
 %
@@ -26,7 +26,7 @@ fclose(fp);
 
 % Running STFT
 limit = length(lines);
-for m = 1:limit
+parfor m = 1:limit
 	fprintf('%s (%d/%d)\n', lines{m}, m, limit);
 	recording = loadData(lines{m});
 	% BUG This call is consuming the whole memory

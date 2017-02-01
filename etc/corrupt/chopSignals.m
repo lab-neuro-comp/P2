@@ -18,8 +18,8 @@ labels = edf.getLabels();
 signalsIDs = { };
 
 % Chopping signals
-parfor n = 1:length(labels)
-	label = labels(n)
+for n = 1:length(labels)
+	label = labels(n);
 	recording = edf.getSignal(label);
 	% Extracting sample
 	recording = subSignal(recording, 0.45, 0.55);
