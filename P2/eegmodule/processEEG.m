@@ -66,8 +66,9 @@ for n = 1:size(ints_table)
             toBeRerefered = rereferReuse.get(channelsCode);
         else
             toBeRerefered = rerefermodule(edfinfo);
-            % TODO Check if the selection is valid before saving
-            rereferReuse.put(channelsCode, toBeRerefered);
+            if toBeRerefered > 0
+                rereferReuse.put(channelsCode, toBeRerefered);
+            end
         end
         if toBeRerefered > 0
             EEG = pop_reref(EEG, toBeRerefered);
@@ -78,8 +79,16 @@ for n = 1:size(ints_table)
 
     % Remove EDF channels
     if isequal(checkCut, 1)
-        % TODO Enable reuse of channels for remotion
-        toRemove = removemodule(edfinfo);
+        channelsCode = getChannelsCode(edfinfo);
+        if cutReuse.containsKey(channelsCode)
+            fprintf('Reusing previous selection');
+            toRemove = cutReuse.get(channelsCode);
+        else
+            toRemove = rerefermodule(edfinfo);
+            if ~isempty(toRemove)
+                cutReuse.put(channelsCode, toRemove);
+            end
+        end
         if ~isempty(toRemove)
             EEG = pop_select(EEG, 'nochannel', toRemove);
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
