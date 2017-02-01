@@ -16,12 +16,6 @@ addP2Lib
 cd etc
 cd corrupt
 
-% Deleting ids file
-idsFile = strcat(folder, filesep, 'ids.txt');
-if isequal(exist(idsFile, 'file'), 2)
-	delete(idsFile);
-end
-
 % Running procedure
 generateChopsOnly(folder);
 calculateStftOnly(folder);

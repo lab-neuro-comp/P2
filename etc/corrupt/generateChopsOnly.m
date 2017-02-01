@@ -4,6 +4,12 @@ function generateChopsOnly(folder)
 % output file does not exist.
 %
 
+% Deleting ids file
+idsFile = strcat(folder, filesep, 'ids.txt');
+if isequal(exist(idsFile, 'file'), 2)
+	delete(idsFile);
+end
+
 % Looking for fitting files
 dirData = dir(folder);
 dirIndex = [ dirData.isdir ];
