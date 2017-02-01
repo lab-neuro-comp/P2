@@ -92,7 +92,6 @@ for n = 1:length(testcases)
 	if GSR == 0
 		h = msgbox({[testcases{n}];...
 				   ['has no EMG-GSR channel']}, 'Error', 'error');
-		uiwait(h);
 	else
 		h = msgbox('Saving files...');
 
