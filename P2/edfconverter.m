@@ -1,24 +1,9 @@
 function varargout = edfconverter(varargin)
-% EDFCONVERTER M-file for edfconverter.fig
-%      EDFCONVERTER, by itself, creates a new EDFCONVERTER or raises the existing
-%      singleton*.
+% Enables the user to convert EDF files to the ASCII format. It can write to
+% multiple files, each one with a signal. If the 'Pick channels' option is
+% selected, the user will be prompted to determine which channels they want to
+% convert. Otherwise, it will write all channels to a single file.
 %
-%      H = EDFCONVERTER returns the handle to a new EDFCONVERTER or the handle to
-%      the existing singleton*.
-%
-%      EDFCONVERTER('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in EDFCONVERTER.M with the given input arguments.
-%
-%      EDFCONVERTER('Property','Value',...) creates a new EDFCONVERTER or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before edfconverter_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to edfconverter_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
 
 % Edit the above text to modify the response to help edfconverter
 
@@ -42,6 +27,7 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 
+addpath([cd '/edfconverter']);
 if ~is_in_javapath('edf.jar')
     javaaddpath('edf.jar');
 end
@@ -138,7 +124,6 @@ function pushbuttonRun_Callback(hObject, eventdata, handles)
 raw = get(handles.editSearch, 'String');
 stuff = split_string(raw, ';');
 
-% TODO Add effect of picking channels
 % IDEA Try to run this on parallel
 if isequal(get(handles.checkboxMultiple, 'Value'), true)
     for n = 1:length(stuff)
@@ -153,9 +138,14 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
         root = inlet(1:root_index);
 
         % To each file, loop through their labels
-        labels = edf.getLabels();
+        labels = cell(edf.getLabels());
+        if isequal(get(handles.checkboxChoose, 'Value'), true)
+            labels = pickChannels(inlet, labels);
+            % TODO Reuse selection if labels in thiese channels already appeared
+            if length(labels) == 0; return; end;
+        end
         for m = 1:length(labels)
-            label = char(labels(m));
+            label = labels{m};
             outlet = strcat(root, label, '.ascii');
             fprintf('%s\n', outlet);
             edf.toSingleChannelAscii(outlet, label);
@@ -163,6 +153,7 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
     end
 else
     for n = 1:length(stuff)
+        % TODO Add effect of picking channels here
         item = stuff{n};
         inlet = item;
         edf = br.unb.biologiaanimal.edf.EDF(item);
