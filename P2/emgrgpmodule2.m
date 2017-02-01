@@ -30,6 +30,7 @@ end
 function emgrgpmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 set(handles.pushbuttonRun, 'Enable', 'off');
+set(handles.figure1, 'Name', 'EMG-GSR Separation Module');
 guidata(hObject, handles);
 
 function varargout = emgrgpmodule2_OutputFcn(hObject, eventdata, handles)
@@ -72,6 +73,8 @@ end
 function pushbuttonRun_Callback(hObject, eventdata, handles)
 % Callback when clicking "processar" pushbutton
 inlet = get(handles.editFiles, 'String');
+set(handles.pushbuttonRun, 'String', 'Processing...', ...
+						   'Enable', 'off');
 
 % Separating inlet into many strings
 testcases = {};
@@ -79,21 +82,53 @@ while not(isempty(inlet))
 	[testcases{end+1}, inlet] = strtok(inlet, ';');
 end
 
+% Defining th epath to a folder to save the new files
+newPath = uigetdir(cd, 'Select the folder for new files');
+
 % Applying algorithm
-tic;
 for n = 1:length(testcases)
-	[EMG, GSR] = separateGSR(testcases{n});
+	[EMG, GSR, SamplingRate] = separateGSR(testcases{n});
 
 	if GSR == 0
 		h = msgbox({[testcases{n}];...
-				   ['has no EMG-RGP channel']}, 'Error', 'error');
+				   ['has no EMG-GSR channel']}, 'Error', 'error');
+		uiwait(h);
 	else
-		% TODO Add legends to plots
-		figure;
-		hold on;
-		plot(GSR, 'r');
-		plot(EMG, 'b');
-		hold off;
+		h = msgbox('Saving files...');
+
+		% Creating a new folder to store the files
+		programPath = cd(newPath);
+		mkdir(newPath, 'SeparatedChannels');
+
+		% Naming the new file acoordingly
+		size = length(strfind(testcases{n}, '\'));
+		remain = testcases{n};
+		for k = 1:size
+			[str, remain] = strtok(remain, '\');
+		end
+		tablenameEMG = strrep(remain, '.edf', '_EMG.ascii');
+		tablenameGSR = strrep(remain, '.edf', '_GSR.ascii');
+
+		% Opening a new file and writing the new content
+
+		% EMG File
+		fileID = fopen(strcat(newPath, '\SeparatedChannels\', tablenameEMG), 'w');
+		fprintf(fileID, ';%s=%d\n', 'Sampling Rate', SamplingRate);
+		fprintf(fileID, '%f\n', EMG);
+		fclose(fileID);
+
+		% GSR File
+		fileID = fopen(strcat(newPath, '\SeparatedChannels\', tablenameGSR), 'w');
+		fprintf(fileID, ';%s=%d\n', 'Sampling Rate', SamplingRate);
+		fprintf(fileID, '%f\n', GSR);
+		fclose(fileID);
+		
+		% Gaoing back to the program's folder
+		newPath = cd(programPath);
+		delete(h);
 	end
 end
-toc;
+
+h = msgbox('Separation complete!');
+set(handles.pushbuttonRun, 'String', 'Process', ...
+						   'Enable', 'on');
