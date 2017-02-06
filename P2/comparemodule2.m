@@ -115,8 +115,10 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 
 [filename, pathname, filterindex]  = uigetfile('*.txt', 'Select files');
 set(handles.editTest, 'String', strcat(pathname, filename));
-set(handles.buttonAnalyse, 'Enable', 'on');
 set(handles.buttonSave, 'Enable', 'off');
+if ~isempty(get(handles.editTest, 'String'))
+	set(handles.buttonAnalyse, 'Enable', 'on');
+end
 
 
 function editTest_Callback(hObject, eventdata, handles)
@@ -127,7 +129,11 @@ function editTest_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of editTest as text
 %        str2double(get(hObject,'String')) returns contents of editTest as a double
 set(handles.buttonSave, 'Enable', 'off');
-
+if ~isempty(get(handles.editTest, 'String'))
+	set(handles.buttonAnalyse, 'Enable', 'on');
+else
+	set(handles.buttonAnalyse, 'Enable', 'off');
+end
 
 % --- Executes during object creation, after setting all properties.
 function editTest_CreateFcn(hObject, eventdata, handles)

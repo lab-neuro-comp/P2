@@ -215,4 +215,4 @@ end
 
 guidata(hObject, handles);
 
-h = msgbox('File successfully saved!');
+h = msgbox('Files successfully saved!');
