@@ -87,7 +87,7 @@ for n = 1:size(ints_table)
             fprintf('Reusing previous selection');
             toRemove = cutReuse.get(channelsCode);
         else
-            toRemove = rerefermodule(edfinfo);
+            toRemove = removemodule(edfinfo);
             if ~isempty(toRemove)
                 cutReuse.put(channelsCode, toRemove);
             end
