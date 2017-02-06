@@ -7,7 +7,7 @@ function varargout = protolize2(varargin)
 % access its modules and tools at a glance.
 %
 
-% Last Modified by GUIDE v2.5 30-Jan-2017 10:02:52
+% Last Modified by GUIDE v2.5 06-Feb-2017 13:04:13
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -132,6 +132,13 @@ function eegprocessbut_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 eegmodule2;
 
+% --- Executes on button press in singleprocessbut.
+function singleprocessbut_Callback(hObject, eventdata, handles)
+% hObject    handle to singleprocessbut (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+emgmodule2;
+
 % --- Executes on button press in voicerecogbut.
 function voicerecogbut_Callback(hObject, eventdata, handles)
 % hObject    handle to voicerecogbut (see GCBO)
@@ -219,5 +226,7 @@ function docmain_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 web('file:///', cd, 'doc.html');
+
+
 
 

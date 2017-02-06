@@ -169,6 +169,38 @@ function buttonSearchLoc_Callback(hObject, eventdata, handles)
 [LocName LocPath FileInd] = uigetfile('*.ced', 'Select the locations file');
 set(handles.editLocations, 'String', strcat(LocPath, LocName));
 
+function editOutput_Callback(hObject, eventdata, handles)
+% hObject    handle to editOutput (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editOutput as text
+%        str2double(get(hObject,'String')) returns contents of editOutput as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editOutput_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editOutput (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in buttonSearchOut.
+function buttonSearchOut_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonSearchOut (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+directoryName = uigetdir(pwd, 'Select output folder');
+set(handles.editOutput, 'String', directoryName);
+
+
 %-----------------------------------------------------------------
 function editTable_Callback(hObject, eventdata, handles)
 % hObject    handle to editTable (see GCBO)
@@ -237,58 +269,7 @@ else
         'Enable', 'off');
 end
 
-% --- OUTPUT FOLDER STUFF ------------------------------------------------------
-function editOutput_Callback(hObject, eventdata, handles)
-% hObject    handle to editOutput (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of editOutput as text
-%        str2double(get(hObject,'String')) returns contents of editOutput as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function editOutput_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to editOutput (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), ...
-                   get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in buttonSearchOut.
-function buttonSearchOut_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonSearchOut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-directoryName = uigetdir(pwd, 'Select output folder');
-set(handles.editOutput, 'String', directoryName);
-
-
 %-----------------------------------------------------------------
-% --- Executes on button press in checkCut.
-function checkCut_Callback(hObject, eventdata, handles)
-% hObject    handle to checkCut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of checkCut
-
-
-% --- Executes on button press in checkRerefer.
-function checkRerefer_Callback(hObject, eventdata, handles)
-% hObject    handle to checkRerefer (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of checkRerefer
-
-
 % --- Executes on button press in checkLocate.
 function checkLocate_Callback(hObject, eventdata, handles)
 % hObject    handle to checkLocate (see GCBO)
@@ -296,15 +277,6 @@ function checkLocate_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of checkLocate
-
-
-% --- Executes on button press in checkInfo.
-function checkInfo_Callback(hObject, eventdata, handles)
-% hObject    handle to checkInfo (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of checkInfo
 
 
 % --- Executes on button press in checkICA.
@@ -323,15 +295,6 @@ function checkSteps_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of checkSteps
-
-
-% --- Executes on button press in checkArtifacts.
-function checkArtifacts_Callback(hObject, eventdata, handles)
-% hObject    handle to checkArtifacts (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of checkArtifacts
 
 
 % --- Executes on button press in buttonRun.
