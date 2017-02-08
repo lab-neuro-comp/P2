@@ -65,6 +65,10 @@
 
 <p>O Protolize! contém uma ferramenta para realizar processamentos em lote utilizando o EEGLab. Esta ferramenta busca mostrar um passo-a-passo automatizado de um processamento usual de vários sinais de EEG em conjunto.</p>
 
+<p><img src="assets/eegprocess.png" alt="eeg module" title="'EEG Processing' Module" /></p>
+
+<p>Do lado esquedo da janela do módulo, há três campos de parâmetros necessários para que o módulo funcione corretamente. O primeiro informa a pasta onde o programa EEGLab se encontra; o segundo, o caminho para o arquivo de localicações; e, por último, o caminho onde os arquivos gerados durante o programa deverão ser salvos. Para editar essas informações, clique no botão <code>Edit Parameters</code>. Após editar aquilo que for necessário, salve os novos parâmetros clicando no botão <code>Save Parameters</code>.</p>
+
 <p>A entrada deste módulo é uma planilha Excel contendo, exatamente nesta ordem, uma coluna para cada uma das informações abaixo:</p>
 
 <ul>
@@ -75,6 +79,8 @@
     <li>Momento inferior de corte</li>
     <li>Momento superior de corte</li>
 </ul>
+
+<p>Para escolher a planilha, clique no botão <code>Search</code> e abra o arquivo desejado. Em seguida, marque ou desmarque as opções desejadas.</p>
 
 <h2>Análise de Voz</h2>
 
@@ -122,7 +128,7 @@
 
 <p>Para utilizar este módulo, comece clicando em <code>Search</code>. escolha os arquivo EDF que deseja converter (para a seleção múltipla, utilize <em>Ctrl/Shift</em>) e abra-os. Logo abaixo do campo para os nomes dos arquivos há duas opções. Marque a primeira, <code>Translate to multiple files?</code>, caso deseje que cada um dos canais do arquivo seja convertido para um arquivo ASCII separado. Caso deseje que o arquivo seja convertido para apenas um arquvi ASCII contendo todos os canais, desmarque esta opção. Quanto à segunda opção, <code>Pick channels?</code>, marque-a caso deseje escolher quais canais deseja converter para ASCII.</p>
 
-<p>Após ter marcado as opções desejadas, clique no botão <code>Run</code> para iniciar a conversão. Os arquivos obtidos da conversão serão salvos numa nova pasta denominada <em>output</em> na pasta <em>P2</em> do programa Protolize!</p>
+<p>Após ter marcado as opções desejadas, clique no botão <code>Run</code> para iniciar a conversão. Os arquivos obtidos da conversão serão salvos na mesma pasta que o arquivo EDF original.</p>
 
 <p><a name="edition"/></p>
 
