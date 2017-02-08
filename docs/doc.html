@@ -82,7 +82,7 @@
 
 <p><img src="assets/voice.png" alt="voice analysis" title="'Voice Analysis' Module" /></p>
 
-<p>Para carregar os arquivos de áudio para análise utiliza-se o botão <code>Search</code>. É possível escolher múltiplos arquivos utilizando <em>Ctrl/Shift</em>. Após escolher os arquivos desejados, o programa começa a análise assim que o botão <code>Run</code> for pressionado. Uma barra de carregamento aparecerá na tela indicando o progresso da análise para cada um dos arquivos. Assim que a análise de todos os arquivos for concluída é possível salvar o trabalho em arquivos <em>*.csv</em> com o botão <code>Save</code>. Entretanto, é recomendado fazer uma checagem manual daquilo que o programa analisou. Para tanto, escolha o botão <code>Plot</code>.</p>
+<p>Para carregar os arquivos de áudio para análise utiliza-se o botão <code>Search</code>. É possível escolher múltiplos arquivos utilizando <em>Ctrl/Shift</em>. Após escolher os arquivos desejados, o programa começa a análise assim que o botão <code>Run</code> for pressionado. Uma barra de carregamento aparecerá na tela indicando o progresso da análise para cada um dos arquivos. Assim que a análise de todos os arquivos for concluída é possível salvar o trabalho em arquivos CSV com o botão <code>Save</code>. Entretanto, é recomendado fazer uma checagem manual daquilo que o programa analisou. Para tanto, escolha o botão <code>Plot</code>.</p>
 
 <p>Esse botão abrirá uma nova janela onde será possível fazer a checagem de cada um dos arquivos.</p>
 
@@ -96,13 +96,13 @@
 
 <h2>Comparação Voz-Teste</h2>
 
-<p>Esta ferramenta permite a comparação entre os tempos em que os estímulos de um teste foram apresentados ao sujeito e os tempos de resposta armazenados em arquivos <em>*.csv</em>.</p>
+<p>Esta ferramenta permite a comparação entre os tempos em que os estímulos de um teste foram apresentados ao sujeito e os tempos de resposta armazenados em arquivos CSV.</p>
 
 <p><img src="assets/voicedelay.png" alt="test response delay" title="'Test Response Delay' Module" /></p>
 
-<p>O primeiro passo é procurar o caminho da pasta que contém os arquivos <em>*.csv</em> que foram gerados após as análises dos arquivos de áudio. Para isso, clique no botão <code>Search Folder</code>. Após escolher a pasta, uma lista com todos os arquivos existentes na pasta aparece e é preciso selecionar aquele que se deseja comparar. Com o arquivo escolhido, clique no botão <code>Search File</code> para procurar pelo arquivo <em>*.txt</em> que contém os dados do teste correspondente àquele que foi selecionado na lista de arquivos <em>*.csv</em>.</p>
+<p>O primeiro passo é procurar o caminho da pasta que contém os arquivos CSV que foram gerados após as análises dos arquivos de áudio. Para isso, clique no botão <code>Search Folder</code>. Após escolher a pasta, uma lista com todos os arquivos existentes na pasta aparece e é preciso selecionar aquele que se deseja comparar. Com o arquivo escolhido, clique no botão <code>Search File</code> para procurar pelo arquivo TXT que contém os dados do teste correspondente àquele que foi selecionado na lista de arquivos CSV.</p>
 
-<p>Com os dois arquivos em mãos, clique no botão <code>Analyse</code> para calcular os atrasos da resposta do áudio em relação ao tempo em que os estímulos do teste foram apresentados. Os resultados dessa análise aparecerão em forma de lista do lado direito da janela do módulo. Para salvar os resultados em uma nova coluna no arquivo <em>*.csv</em>, clique em <code>Save Results</code>.</p>
+<p>Com os dois arquivos em mãos, clique no botão <code>Analyse</code> para calcular os atrasos da resposta do áudio em relação ao tempo em que os estímulos do teste foram apresentados. Os resultados dessa análise aparecerão em forma de lista do lado direito da janela do módulo. Para salvar os resultados em uma nova coluna no arquivo CSV, clique em <code>Save Results</code>.</p>
 
 <h2>Separação de EMG-RGP</h2>
 
@@ -110,15 +110,19 @@
 
 <p><img src="assets/emggsr.png" alt="emg gsr module" title="'EMG-GSR Separation' Module" /></p>
 
-<p>Para utilizar o módulo de separação de EMG-RGP, basta clicar no botão <code>Search</code>. Em seguida, selecione os arquivos desejados para a separação (use <em>Ctrl/Shift</em> ára a seleção de múltiplos arquivos) e abra-os. Para realizar a separação do canal EMG-GSR, clique no botão <code>Run</code>. Uma nova janela vai surgir na tela pedindo que o usuário identifique a pasta onde os arquivos resultantes da separação deverão ser salvos. Após a escolha, a separação começará a ser feita e pop-ups aparecerão na tela indicando o estado em que a separação de cada arquivo se encontra e, caso o canal EMG-GSR não seja encontrado em um dos arquivos, o programa avisará o usuário através de uma caixa de diálogo.</p>
+<p>Para utilizar o módulo de separação de EMG-RGP, basta clicar no botão <code>Search</code>. Em seguida, selecione os arquivos desejados para a separação (para a seleção múltipla, utilize <em>Ctrl/Shift</em>) e abra-os. Para realizar a separação do canal EMG-GSR, clique no botão <code>Run</code>. Uma nova janela vai surgir na tela pedindo que o usuário identifique a pasta onde os arquivos resultantes da separação deverão ser salvos. Após a escolha, a separação começará a ser feita e pop-ups aparecerão na tela indicando o estado em que a separação de cada arquivo se encontra e, caso o canal EMG-GSR não seja encontrado em um dos arquivos, o programa avisará o usuário através de uma caixa de diálogo.</p>
 
-<p>Para cada arquivo que é separado com sucesso o programa gera quatro arquivos: dois arquivos <em>*.txt</em> que contêm a informação da frequência de amostragem e dois arquivos <em>*.ascii</em> onde as ondas estão salvas separadamente.</p>
+<p>Para cada arquivo que é separado com sucesso o programa gera quatro arquivos: dois arquivos TXT que contêm a informação da frequência de amostragem e dois arquivos ASCII onde as ondas estão salvas separadamente.</p>
 
 <h2>Conversor de EDFs</h2>
 
 <p>Esta á uma ferramenta criada para converter arquivos EDF em arquivos ASCII para serem usados no Protolize!, que requer, como entrada nos seus módulos, um sinal no formato ASCII por vez. Esta ferramenta também permite a conversão do EDF em questão para um único arquivo ASCII contendo todos os canais.</p>
 
 <p><img src="assets/edf2ascii.png" alt="edf converter module" title="'EDF to ASCII Converter' Module" /></p>
+
+<p>Para utilizar este módulo, comece clicando em <code>Search</code>. escolha os arquivo EDF que deseja converter (para a seleção múltipla, utilize <em>Ctrl/Shift</em>) e abra-os. Logo abaixo do campo para os nomes dos arquivos há duas opções. Marque a primeira, <code>Translate to multiple files?</code>, caso deseje que cada um dos canais do arquivo seja convertido para um arquivo ASCII separado. Caso deseje que o arquivo seja convertido para apenas um arquvi ASCII contendo todos os canais, desmarque esta opção. Quanto à segunda opção, <code>Pick channels?</code>, marque-a caso deseje escolher quais canais deseja converter para ASCII.</p>
+
+<p>Após ter marcado as opções desejadas, clique no botão <code>Run</code> para iniciar a conversão. Os arquivos obtidos da conversão serão salvos numa nova pasta denominada <em>output</em> na pasta <em>P2</em> do programa Protolize!</p>
 
 <p><a name="edition"/></p>
 
@@ -199,4 +203,4 @@
 
 <p>Assim que a análise do sinal é concluída, é possível graficar os coeficientes em função da escala ou em função do tempo separadamente. Para isso, escolhe-se entre as opções <code>Scale</code> e <code>Time [s]</code> que estão do lado direito da janela do módulo. Em seguida, digita-se o valor desejado dentro do campo e, ao clicar no botão <code>View</code>, uma nova janela contendo o gráfico dos coeficientes aparecerá na tela.</p>
 
-<p>Além disso, também é possível aumentar e diminuir o zoom dos gráficos ao clicar no botão <code>Zoom</code>. Uma vez clicado, este botão fica ativo até que o usuário clique nele novamente. Para adicionar ou retirar uma <em>colorbar</em>, o usuário deve clicar no botão <code>Colorbar</code> e, por fim, para resetar o módulo, clica-se no botão <code>Reset</code>.</p>
+<p>Além disso, também é possível aumentar e diminuir o zoom dos gráficos ao clicar no botão <code>Zoom</code>. Uma vez clicado, este botão fica ativo até que o usuário clique nele novamente. Para adicionar ou retirar uma barra de cores abaixo do gráfico do sinal processado, o usuário deve clicar no botão <code>Colorbar</code> e, por fim, para resetar o módulo, clica-se no botão <code>Reset</code>.</p>
