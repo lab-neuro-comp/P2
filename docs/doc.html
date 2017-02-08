@@ -31,7 +31,7 @@
 
 <h1>Menu principal</h1>
 
-<p>O menu principal contém 3 divisões: <a href="#protocols"><code>Protocols</code></a>, <a href="#edition"><code>Edition</code></a> e <a href="#analysis"><code>Analysis</code></a>. A partir delas, podemos acessar as diversas funcionalidades do Protolize! como descritas em suas respectivas sessões.</p>
+<p>O menu principal contém 3 divisões: <a href="#tools"><code>Tools</code></a>, <a href="#edition"><code>Edition</code></a> e <a href="#analysis"><code>Analysis</code></a>. A partir delas, podemos acessar as diversas funcionalidades do Protolize! como descritas em suas respectivas sessões.</p>
 
 <p>Além disso, há uma <a href="#toolbar">barra de ferramentas</a> para acesso rápido de diversos ajustes do programa, do módulo de estudos e do arquivo de ajuda.</p>
 
@@ -55,22 +55,62 @@
 
 <p>Também pode-se ajustar o caminho em disco para o EEGLAB, caso disponível no computador do usuário, para que ambos possam atuar no processamento de sinais. Estes valores podem ser ajustados de acordo com a necessidade do usuário, e todos os parâmetros disponíveis para ajuste ficam guardados em memória para uso futuro.</p>
 
-<p>Em <code>Tools</code>, pode-se acessar:</p>
-
-<ul>
-    <li>O <a href="#studies">módulo de estudos</a>, que permite processar arquivos em lote usando o EEGLAB;</li>
-    <li>A ferramenta de análise de voz;</li>
-    <li>O separador de EMG e RGP;</li>
-    <li>O conversor de EDF para ASCII.</li>
-</ul>
-
 <p>Em <code>Help</code>, tem-se acesso a este arquivo de ajuda que você está lendo.</p>
 
-<p><a name="protocols"></a></p>
+<p><a name="tools"></a></p>
 
-<h1>Protocolos</h1>
+<h1>Tools</h1>
 
-<p>Por enquanto, temos 2 protocolos disponíveis: o TSST e o REFLEX.</p>
+<h2>Processamento de EEG</h2>
+
+<p>O Protolize! contém uma ferramenta para realizar processamentos em lote utilizando o EEGLab. Esta ferramenta busca mostrar um passo-a-passo automatizado de um processamento usual de vários sinais de EEG em conjunto.</p>
+
+<p>A entrada deste módulo é uma planilha Excel contendo, respectivamente, uma coluna para:</p>
+
+<ul>
+    <li>Arquivo EDF</li>
+    <li>Identificação do sujeito</li>
+    <li>Condição</li>
+    <li>Classe</li>
+    <li>Momento inferior de corte</li>
+    <li>Momento superior de corte</li>
+</ul>
+
+<h2>Análise de Voz</h2>
+
+<p>Esta ferramenta extrai os momentos iniciais de cada palavra em um sinal de voz em um arquivo WAV aplicando um <em>threshold</em> no espectro de potência da gravação em questão. Permite remoção de falsos-positivos em um submódulo após a análise computacional do arquivo de áudio.</p>
+
+<p><img src="assets/voice.png" alt="voice analysis" title="'Voice Analysis' Module" /></p>
+
+<p>Para carregar os arquivos de áudio para análise utiliza-se o botão <code>Search</code>. É possível escolher múltiplos arquivos utilizando <em>Ctrl/Shift</em>. Após escolher os arquivos desejados, o programa começa a análise assim que o botão <code>Run</code> for pressionado. Uma barra de carregamento aparecerá na tela indicando o progresso da análise para cada um dos arquivos. Assim que a análise de todos os arquivos for concluída é possível salvar o trabalho em um arquivos <em>*.csv</em> com o botão <code>Save</code>. Entretanto, é recomendado fazer uma checagem manual daquilo que o programa analisou. Para tanto, escolha o botão <code>Plot</code>.</p>
+
+<p>Esse botão abrirá uma nova janela onde será possível fazer a checagem de cada um dos arquivos.</p>
+
+<p><img src="assets/subvoice.png" alt="moments verification" title="'Moments Verification' Module"></p>
+
+<p>O nome do arquivo que está sendo analisado é mostrado no topo de uma lista contendo todos os valores obtidos após a análise computacional do arquivo. Estes valores <b>devem</b> ser selecionados (para seleção múltipla, utilize <em>Ctrl/Shift</em>) para serem salvos ao final da verificação. Caso o usuário deseje checar o que foi selecionado, é possível fazê-lo com o botão <code>View Selection</code>. Este botão atualiza o gráfico contendo as marcações dos tempos, colorindo de verde aquilo que foi selecionado pelo usuário.</p>
+
+<p>Uma vez que o usuário esteja satisfeito com o resultado, clica-se no botão <code>Next</code> (ou <code>Save</code>, se não houver mais arquivos para analisar) para atualizar a lista de valores de momentos do arquivo e continuar a análise com o próximo arquivo.</p>
+
+<p>Logo que todas as análises tenham sido feitas, o programa retorna para o módulo de análise de voz e o usuário pode salvar todo o trabalho com o botão <code>Save</code>.</p>
+
+<h2>Comparação Voz-Teste</h2>
+
+<p>Esta ferramenta permite a comparação entre os tempos em que os estímulos de um teste foram apresentados ao sujeito e os tempos de resposta armazenados em arquivos <em>*.csv</em>.</p>
+
+<p><img src="assets/voicedelay.png" alt="test response delay" title="'Test Response Delay' Module"/></p>
+
+<p>O primeiro passo é procurar o caminho da pasta que contém os arquivos <em>*.csv</em> que foram gerados após as análises dos arquivos de áudio. Para isso, clique no botão <code>Search Folder</code>. Após escolher a pasta, uma lista com todos os arquivos existentes na pasta aparece e é preciso selecionar aquele que se deseja comparar. Com o arquivo escolhido, clique o botão <code>Search File</code> para procurar pelo arquivo <em>*.txt</em> que contém os dados do teste correspondente àquele que foi selecionado na lista de arquivos <em>*.csv</em>.</p>
+
+<p>Com os dois arquivos em mãos, clique no botão <code>Analyse</code> para calcular os atrasos da resposta do áudio em relação ao tempo em que os estímulos do teste foram apresentados. Os resultados dessa análise aparecerão em forma de lista do lado direito da janela do módulo. Para salvar os resultados em uma nova coluna no arquivo <em>*.csv</em>, clique em <code>Save Results</code>.</p>
+
+<h2>Separação de EMG-RGP</h2>
+
+<p>Uma limpeza comum de se realizar neste laboratório é a separação dos sinais de EMG (registro eletromiográfico) e RGP (resposta galvânica da pele). Eles comumente aparecem no mesmo canal e é necessário separá-los.</p>
+
+<h2>Conversor de EDFs</h2>
+
+<p>Esta á uma ferramenta criada para converter arquivos EDF em arquivos ASCII para serem usados no Protolize!, que requer, como entrada nos seus módulos, um sinal no formato ASCII por vez. Esta ferramenta também permite a conversão do EDF em questão para um único arquivo ASCII contendo todos os canais.</p>
 
 <p><a name="edition"/></p>
 
@@ -133,34 +173,5 @@
 <h1>Ferramentas adicionais</h1>
 
 <p>O Protolize! contém algumas ferramentas consigo para auxiliar no processamento de alguns sinais no mundo real.</p>
-
-<p><a name="studies"></a></p>
-
-<h2>Processamento de EEG</h2>
-
-<p>O Protolize! contém uma ferramenta para realizar processamentos em lote utilizando o EEGLab. Esta ferramenta busca mostrar um passo-a-passo automatizado de um processamento usual de vários sinais de EEG em conjunto.</p>
-
-<p>A entrada deste módulo é uma planilha Excel contendo, respectivamente, uma coluna para:</p>
-
-<ul>
-    <li>Arquivo EDF</li>
-    <li>Identificação do sujeito</li>
-    <li>Condição</li>
-    <li>Classe</li>
-    <li>Momento inferior de corte</li>
-    <li>Momento superior de corte</li>
-</ul>
-
-<h2>Análise de Voz</h2>
-
-<p>Esta ferramenta extrai os momentos iniciais de cada palavra em um sinal de voz em um arquivo WAV aplicando um <em>threshold</em> no espectro de potência da gravação em questão. Permite remoção de falsos-positivos.</p>
-
-<h2>Separação de EMG-RGP</h2>
-
-<p>Uma limpeza comum de se realizar neste laboratório é a separação dos sinais de EMG (registro eletromiográfico) e RGP (resposta galvânica da pele). Eles comumente aparecem no mesmo canal e é necessário separá-los.</p>
-
-<h2>Conversor de EDFs</h2>
-
-<p>Esta á uma ferramenta criada para converter arquivos EDF em arquivos ASCII para serem usados no Protolize!, que requer, como entrada nos seus módulos, um sinal no formato ASCII por vez. Esta ferramenta também permite a conversão do EDF em questão para um único arquivo ASCII contendo todos os canais.</p>
 
 </body></html>
