@@ -19,9 +19,9 @@ switch get(handles.RadioScaleGraph, 'Value')
     	plot(signaltime, analysis(ScaleInd, :));
         axis tight
         grid on
-        xlabel('Tempo [s]')
-        ylabel('Coeficientes')
-        title(strcat('Coeficientes na escala ', sprintf('\t %5.2f', ScaleValue)))
+        xlabel('Time [s]')
+        ylabel('Coeficients')
+        title(strcat('Coeficients at scale ', sprintf('\t %5.2f', ScaleValue)))
     case 0
     	f=figure('numbertitle', 'off', 'name', 'Time Coeficients',...
     	  'color','white', 'menubar', 'none');
@@ -30,7 +30,7 @@ switch get(handles.RadioScaleGraph, 'Value')
     	plot(MinValue:IntValue:MaxValue, analysis(:,TimeInd));
         axis tight
         grid on
-        xlabel('Escalas')
+        xlabel('Scales')
         ylabel('Coeficientes')
-        title(strcat('Coeficientes no tempo: ', num2str(TimeValue)))
+        title(strcat('Coeficients at time: ', num2str(TimeValue)))
 end

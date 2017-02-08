@@ -8,7 +8,7 @@ ylabel('Amplitude [uV]');
 axes(handles.PlotAnalysis);
 cla reset;
 grid on;
-xlabel('Tempo [s]');
+xlabel('Time [s]');
 ylabel('Scale');
 
 set(handles.TextFilename, 'String', ' ');
