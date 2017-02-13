@@ -90,18 +90,22 @@ function buttonParameters_Callback(hObject, eventdata, handles)
 
 switch get(handles.buttonParameters, 'Value')
     case 1
-        set([ handles.editEEGLab handles.editLocations,...
-              handles.buttonSearchEEG handles.buttonSearchLoc ],...
+        set([ handles.editEEGLab handles.buttonSearchEEG,...
+              handles.editLocations handles.buttonSearchLoc,...
+              handles.editOutput handles.buttonSearchOut ],...
             'Enable', 'on');
         set(handles.buttonParameters, 'String', 'Save Parameters');
     otherwise
-        set([ handles.editEEGLab handles.editLocations,...
-              handles.buttonSearchEEG handles.buttonSearchLoc],...
+        set([ handles.editEEGLab handles.buttonSearchEEG,...
+              handles.editLocations handles.buttonSearchLoc,...
+              handles.editOutput handles.buttonSearchOut ],...
             'Enable', 'off');
         handles.constants.put('EEGLAB_PATH', ...
                               get(handles.editEEGLab, 'String'));
         handles.constants.put('LOCATIONS_PATH', ...
                               get(handles.editLocations, 'String'));
+        handles.constants.put('OUTPUT_PATH', ...
+                              get(handles.editOutput, 'String'));
         save_constants(handles.constants);
         add_eeglab_path(get(handles.constants, 'EEGLAB_PATH'));
         set(handles.buttonParameters, 'String', 'Edit Parameters');
@@ -168,6 +172,40 @@ function buttonSearchLoc_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 [LocName LocPath FileInd] = uigetfile('*.ced', 'Select the locations file');
 set(handles.editLocations, 'String', strcat(LocPath, LocName));
+
+
+% --- OUTPUT FOLDER STUFF ------------------------------------------------------
+function editOutput_Callback(hObject, eventdata, handles)
+% hObject    handle to editOutput (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editOutput as text
+%        str2double(get(hObject,'String')) returns contents of editOutput as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editOutput_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editOutput (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in buttonSearchOut.
+function buttonSearchOut_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonSearchOut (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+directoryName = uigetdir(pwd, 'Select output folder');
+set(handles.editOutput, 'String', directoryName);
+
 
 %-----------------------------------------------------------------
 function editTable_Callback(hObject, eventdata, handles)
@@ -236,39 +274,6 @@ else
           handles.checkArtifacts ],...
         'Enable', 'off');
 end
-
-% --- OUTPUT FOLDER STUFF ------------------------------------------------------
-function editOutput_Callback(hObject, eventdata, handles)
-% hObject    handle to editOutput (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of editOutput as text
-%        str2double(get(hObject,'String')) returns contents of editOutput as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function editOutput_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to editOutput (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), ...
-                   get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in buttonSearchOut.
-function buttonSearchOut_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonSearchOut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-directoryName = uigetdir(pwd, 'Select output folder');
-set(handles.editOutput, 'String', directoryName);
-
 
 %-----------------------------------------------------------------
 % --- Executes on button press in checkCut.
