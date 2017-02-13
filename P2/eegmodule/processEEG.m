@@ -42,7 +42,7 @@ cutReuse = java.util.HashMap;
 %Iniciar varredura para corte de intervalos
 for n = 1:size(ints_table)
     % Variables
-    arqedf = ints_table{n, 1};
+    arqedf = ints_table{n, 9};
     int1 = ints_table{n, 5};
     int2 = ints_table{n, 6};
     edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
