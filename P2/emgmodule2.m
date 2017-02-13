@@ -22,7 +22,7 @@ function varargout = emgmodule2(varargin)
 
 % Edit the above text to modify the response to help emgmodule2
 
-% Last Modified by GUIDE v2.5 01-Feb-2017 13:52:09
+% Last Modified by GUIDE v2.5 13-Feb-2017 11:15:57
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -61,7 +61,6 @@ add_eeglab_path(get(handles.constants, 'EEGLAB_PATH'));
 
 % Update handles structure
 set(handles.editEEGLab, 'String', handles.constants.get('EEGLAB_PATH'));
-set(handles.editLocations, 'String', handles.constants.get('LOCATIONS_PATH'));
 set(handles.editOutput, 'String', strcat(pwd, filesep, 'output'));
 set(handles.figure1, 'Name', 'Single Channel Module');
 guidata(hObject, handles);
@@ -139,35 +138,6 @@ function buttonSearchEEG_Callback(hObject, eventdata, handles)
 EEGPath = uigetdir(cd, 'Select the EEGLab folder');
 set(handles.editEEGLab, 'String', EEGPath);
 
-function editLocations_Callback(hObject, eventdata, handles)
-% hObject    handle to editLocations (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of editLocations as text
-%        str2double(get(hObject,'String')) returns contents of editLocations as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function editLocations_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to editLocations (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in buttonSearchLoc.
-function buttonSearchLoc_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonSearchLoc (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-[LocName LocPath FileInd] = uigetfile('*.ced', 'Select the locations file');
-set(handles.editLocations, 'String', strcat(LocPath, LocName));
 
 function editOutput_Callback(hObject, eventdata, handles)
 % hObject    handle to editOutput (see GCBO)
@@ -211,14 +181,7 @@ function editTable_Callback(hObject, eventdata, handles)
 %        str2double(get(hObject,'String')) returns contents of editTable as a double
 
 if isempty(get(handles.editTable, 'String'))
-    set([ handles.buttonRun, ...
-          handles.handles, ...
-          checkCut.checkRerefer, ...
-          handles.checkLocate,...
-          handles.checkInfo, ...
-          handles.checkICA, ...
-          handles.checkSteps ],...
-        'Enable', 'off');
+    set(handles.buttonRun, 'Enable', 'off');
 end
 
 
@@ -246,47 +209,33 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 
 if ~isequal(filename, 0)
     outlet = strcat(pathname, filename);
-    set([ handles.buttonRun, ...
-          handles.checkLocate,...
-          handles.checkICA, ...
-          handles.checkSteps ],...
-        'Enable', 'on');
+    set(handles.buttonRun, 'Enable', 'on');
     set(handles.editTable, 'String', outlet);
 else
     return;
-    set([ handles.buttonRun, ...
-          handles.checkLocate,...
-          handles.checkICA, ...
-          handles.checkSteps ],...
-        'Enable', 'off');
+    set(handles.buttonRun, 'Enable', 'off');
 end
 
+
 %-----------------------------------------------------------------
-% --- Executes on button press in checkLocate.
-function checkLocate_Callback(hObject, eventdata, handles)
-% hObject    handle to checkLocate (see GCBO)
+% --- Executes on button press in radioEDF.
+function radioEDF_Callback(hObject, eventdata, handles)
+% hObject    handle to radioEDF (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hint: get(hObject,'Value') returns toggle state of checkLocate
+set(handles.radioASCII, 'Value', 0);
+guidata(hObject, handles);
 
 
-% --- Executes on button press in checkICA.
-function checkICA_Callback(hObject, eventdata, handles)
-% hObject    handle to checkICA (see GCBO)
+% --- Executes on button press in radioASCII.
+function radioASCII_Callback(hObject, eventdata, handles)
+% hObject    handle to radioASCII (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hint: get(hObject,'Value') returns toggle state of checkICA
-
-
-% --- Executes on button press in checkSteps.
-function checkSteps_Callback(hObject, eventdata, handles)
-% hObject    handle to checkSteps (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of checkSteps
+set(handles.radioEDF, 'Value', 0);
+guidata(hObject, handles);
 
 
 % --- Executes on button press in buttonRun.
@@ -305,16 +254,37 @@ else
     outputFolder = strcat(outputFolder, filesep);
 end
 
-% Getting EEGLAB parameters
-eeglabPath = get(handles.editEEGLab, 'String');
-eeglocPath = get(handles.editLocations, 'String');
+% Reading parameters file
+ints_table = ler_arq_ints(inputfile);
 
-% Abrir o arquivo
-% TODO Create a file pattern
-xlsfile = get(handles.editTable, 'String');
-ints_table = ler_arq_ints(xlsfile);
+% Different approaches for each file extension
+if (get(handles.radioASCII, 'Value'))
+    % The input should be the same as the eegmodule input,
+    % but the filename in the last column must be replaced
+    % by the name of the ascii file
+    disp('this will deal with ascii files');
+else
+    for n = 1:size(ints_table)
+    % Variables
+    arqedf = ints_table{n, 9};
+    int1 = ints_table{n, 5};
+    int2 = ints_table{n, 6};
+    edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
+    samplingRate = edfinfo.getSamplingRate();
+    blockrange = floor([int1/samplingRate int2/samplingRate]);
 
-% Open eeglab:
-[ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
+    % Loading EDF
+    h = msgbox('Loading EDF...');
+    EEG = pop_biosig(arqedf, 'blockrange', blockrange, 'rmeventchan', 'off');
+    close(h);
 
-% TODO Find out which parameters to inform
+    arqset = change_extension(arqedf, 'set');
+    [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
+                                         'setname', arqset,...
+                                         'overwrite', 'on');
+
+    % Selecting data to keep
+    % TODO check EEGLab function pop_select()
+end
+    
+

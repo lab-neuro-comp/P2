@@ -7,7 +7,7 @@ function varargout = protolize2(varargin)
 % access its modules and tools at a glance.
 %
 
-% Last Modified by GUIDE v2.5 06-Feb-2017 13:04:13
+% Last Modified by GUIDE v2.5 13-Feb-2017 10:01:46
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -132,12 +132,26 @@ function eegprocessbut_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 eegmodule2;
 
-% --- Executes on button press in singleprocessbut.
-function singleprocessbut_Callback(hObject, eventdata, handles)
-% hObject    handle to singleprocessbut (see GCBO)
+% --- Executes on button press in emgrgpbut.
+function emgrgpbut_Callback(hObject, eventdata, handles)
+% hObject    handle to emgrgpbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-emgmodule2;
+emgrgpmodule2;
+
+% --- Executes on button press in emgprocessbut.
+function emgprocessbut_Callback(hObject, eventdata, handles)
+% hObject    handle to emgprocessbut (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+emgmodule2; % TODO Adapt the existing GUI
+
+% --- Executes on button press in edaprocessbut.
+function edaprocessbut_Callback(hObject, eventdata, handles)
+% hObject    handle to edaprocessbut (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+edamodule2; % TODO Make the GUI
 
 % --- Executes on button press in voicerecogbut.
 function voicerecogbut_Callback(hObject, eventdata, handles)
@@ -152,13 +166,6 @@ function voicecompbut_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 comparemodule2; 
-
-% --- Executes on button press in emgrgpbut.
-function emgrgpbut_Callback(hObject, eventdata, handles)
-% hObject    handle to emgrgpbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-emgrgpmodule2;
 
 % --- Executes on button press in edfconvbut.
 function edfconvbut_Callback(hObject, eventdata, handles)
@@ -226,7 +233,5 @@ function docmain_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 web('file:///', cd, 'doc.html');
-
-
 
 
