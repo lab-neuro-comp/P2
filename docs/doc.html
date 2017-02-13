@@ -72,23 +72,45 @@
 <p>A entrada deste módulo é uma planilha Excel contendo, exatamente nesta ordem, uma coluna para cada uma das informações abaixo:</p>
 
 <ul>
-    <li>Arquivo EDF</li>
-    <li>Identificação do sujeito</li>
-    <li>Condição</li>
-    <li>Classe</li>
+    <li>Sujeito</li>
+    <li>Teste</li>
+    <li>Fragmento</li>
+    <li>Iniciais do sujeito</li>
     <li>Momento inferior de corte</li>
     <li>Momento superior de corte</li>
+    <li>Taxa de amostragem</li>
+    <li>Sessão</li>
+    <li>Nome do arquivo EDF</li>
 </ul>
 
 <p>Para escolher a planilha, clique no botão <code>Search</code> e abra o arquivo desejado. Em seguida, marque ou desmarque as opções desejadas:</p>
 <ul>
     <li><b>Rerefer</b>: Esta opção abre uma nova janela contendo uma lista dos canais contidos no arquivo EDF. Para utilizar um canal para rereferenciamento basta selecioná-lo na lista e clicar em <code>OK</code>. A opção escolhida é reutilizada em todos os arquivos que possuem a mesma estrutura que a do primeiro arquivo rereferenciado. Caso um arquivo possua uma estrutura diferente, outra janela será aberta para que a escolha seja feita para o novo tipo de arquivo. Esta ação não apaga a configuração do arquivo anterior, e sim adiciona a nova opção para os arquivos de estruturas diferentes.</li>
     <li><b>Remove</b>: Esta opção abre uma nova janela contendo uma lista dos canais contidos no arquivo EDF. Para remover um canal do arquivo basta selecioná-lo na lista e clicar em <code>OK</code>. A opção escolhida é reutilizada em todos os arquivos que possuem a mesma estrutura que a do primeiro arquivo rereferenciado. Caso um arquivo possua uma estrutura diferente, outra janela será aberta para que a escolha seja feita para o novo tipo de arquivo. Esta ação não apaga a configuração do arquivo anterior, e sim adiciona a nova opção para os arquivos de estruturas diferentes.</li>
-    <li><b>Locate electrodes</b>: Esta opção permite que o programa localize os eletrodos baseado no arquivo informado no arquivo de localizações informado nos parâmetros do programa.</li>
+    <li><b>Locate electrodes</b>: Esta opção permite que o programa localize os eletrodos baseado no arquivo de localizações informado nos parâmetros do programa.</li>
     <li><b>Save subject's info</b>: Esta opção permite que o programa salve os arquivos do sujeito do teste correspondente ao arquivo que está sendo analisado.</li>
     <li><b>Run ICA</b>: Esta opção permite que o programa rode o algoritmo do ICA no arquivo que esta sendo analisado.</li>
-    <li><b>Remove artifacts after processing</b>: </li>
+    <li><b>Remove artifacts after processing</b>: Esta opção abre uma janela que permite que o usuário possa remover os artefatos manualmente.</li>
+    <li><b>Show processing steps</b>: Esta opção ativa (quando selecionada) as mensagens indicando o andamento do processamento de cada arquivo.</li>
 </ul>
+
+<h2>Separação de EMG-RGP</h2>
+
+<p>Uma limpeza comum de se realizar neste laboratório é a separação dos sinais de EMG (registro eletromiográfico) e RGP (resposta galvânica da pele). Eles comumente aparecem no mesmo canal e é necessário separá-los.</p>
+
+<p><img src="assets/emggsr.png" alt="emg gsr module" title="'EMG-GSR Separation' Module" /></p>
+
+<p>Para utilizar o módulo de separação de EMG-RGP, basta clicar no botão <code>Search</code>. Em seguida, selecione os arquivos desejados para a separação (para a seleção múltipla, utilize <em>Ctrl/Shift</em>) e abra-os. Para realizar a separação do canal EMG-GSR, clique no botão <code>Run</code>. Uma nova janela vai surgir na tela pedindo que o usuário identifique a pasta onde os arquivos resultantes da separação deverão ser salvos. Após a escolha, a separação começará a ser feita e pop-ups aparecerão na tela indicando o estado em que a separação de cada arquivo se encontra e, caso o canal EMG-GSR não seja encontrado em um dos arquivos, o programa avisará o usuário através de uma caixa de diálogo.</p>
+
+<p>Para cada arquivo que é separado com sucesso o programa gera quatro arquivos: dois arquivos TXT que contêm a informação da frequência de amostragem e dois arquivos ASCII onde as ondas estão salvas separadamente.</p>
+
+<h2>Processamento de EMG</h2>
+
+<p><span style="background-color: #BDC3CE"><code>TODO: ESCREVER DOCUMENTAÇÃO</code></span></p>
+
+<h2>Processamento de RGP</h2>
+
+<p><span style="background-color: #BDC3CE"><code>TODO: ESCREVER DOCUMENTAÇÃO</code></span></p>
 
 <h2>Análise de Voz</h2>
 
@@ -117,16 +139,6 @@
 <p>O primeiro passo é procurar o caminho da pasta que contém os arquivos CSV que foram gerados após as análises dos arquivos de áudio. Para isso, clique no botão <code>Search Folder</code>. Após escolher a pasta, uma lista com todos os arquivos existentes na pasta aparece e é preciso selecionar aquele que se deseja comparar. Com o arquivo escolhido, clique no botão <code>Search File</code> para procurar pelo arquivo TXT que contém os dados do teste correspondente àquele que foi selecionado na lista de arquivos CSV.</p>
 
 <p>Com os dois arquivos em mãos, clique no botão <code>Analyse</code> para calcular os atrasos da resposta do áudio em relação ao tempo em que os estímulos do teste foram apresentados. Os resultados dessa análise aparecerão em forma de lista do lado direito da janela do módulo. Para salvar os resultados em uma nova coluna no arquivo CSV, clique em <code>Save Results</code>.</p>
-
-<h2>Separação de EMG-RGP</h2>
-
-<p>Uma limpeza comum de se realizar neste laboratório é a separação dos sinais de EMG (registro eletromiográfico) e RGP (resposta galvânica da pele). Eles comumente aparecem no mesmo canal e é necessário separá-los.</p>
-
-<p><img src="assets/emggsr.png" alt="emg gsr module" title="'EMG-GSR Separation' Module" /></p>
-
-<p>Para utilizar o módulo de separação de EMG-RGP, basta clicar no botão <code>Search</code>. Em seguida, selecione os arquivos desejados para a separação (para a seleção múltipla, utilize <em>Ctrl/Shift</em>) e abra-os. Para realizar a separação do canal EMG-GSR, clique no botão <code>Run</code>. Uma nova janela vai surgir na tela pedindo que o usuário identifique a pasta onde os arquivos resultantes da separação deverão ser salvos. Após a escolha, a separação começará a ser feita e pop-ups aparecerão na tela indicando o estado em que a separação de cada arquivo se encontra e, caso o canal EMG-GSR não seja encontrado em um dos arquivos, o programa avisará o usuário através de uma caixa de diálogo.</p>
-
-<p>Para cada arquivo que é separado com sucesso o programa gera quatro arquivos: dois arquivos TXT que contêm a informação da frequência de amostragem e dois arquivos ASCII onde as ondas estão salvas separadamente.</p>
 
 <h2>Conversor de EDFs</h2>
 
