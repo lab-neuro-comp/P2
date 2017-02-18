@@ -17,9 +17,9 @@ function [ints_table] = ler_arq_ints(filepath)
 
 [numeric, txt, raw] = xlsread(filepath);
 ints_table = { };
-[y x] = size(raw);
+[height x] = size(raw);
 y = 1;
-for m = 2:length(raw)
+for m = 2:height
 	if ~isequal(class(raw{m, 1}), class(NaN))
 		% Include stuff to ints_table
 		for n = 1:x
