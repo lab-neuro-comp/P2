@@ -255,7 +255,10 @@ else
 end
 
 % Reading parameters file
-ints_table = ler_arq_ints(inputfile);
+ints_table = ler_arq_ints(get(handles.editTable, 'String'));
+
+% Open eeglab:
+[ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
 
 % Different approaches for each file extension
 if (get(handles.radioASCII, 'Value'))
@@ -285,6 +288,20 @@ else
 
     % Selecting data to keep
     % TODO check EEGLab function pop_select()
+    h = msgbox('Cutting dataset...');
+    EEG = eeg_checkset(EEG);
+    EEG = pop_select(EEG, 'time', [int1 int2]);
+    [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+    close(h);
+
+    % Storing data
+    h = msgbox('Saving dataset...');
+    [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+    [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
+    EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
+                           'filepath', outputFolder);
+    close(h);
+    end
 end
     
-
+disp('DEKITA~! o/')
