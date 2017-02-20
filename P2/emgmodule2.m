@@ -22,7 +22,7 @@ function varargout = emgmodule2(varargin)
 
 % Edit the above text to modify the response to help emgmodule2
 
-% Last Modified by GUIDE v2.5 13-Feb-2017 11:15:57
+% Last Modified by GUIDE v2.5 20-Feb-2017 09:42:14
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -89,18 +89,18 @@ function buttonParameters_Callback(hObject, eventdata, handles)
 
 switch get(handles.buttonParameters, 'Value')
     case 1
-        set([ handles.editEEGLab handles.editLocations,...
-              handles.buttonSearchEEG handles.buttonSearchLoc ],...
+        set([ handles.editEEGLab handles.editOutput,...
+              handles.buttonSearchEEG handles.buttonSearchOut ],...
             'Enable', 'on');
         set(handles.buttonParameters, 'String', 'Save Parameters');
     otherwise
-        set([ handles.editEEGLab handles.editLocations,...
-              handles.buttonSearchEEG handles.buttonSearchLoc],...
+        set([ handles.editEEGLab handles.editOutput,...
+              handles.buttonSearchEEG handles.buttonSearchOut ],...
             'Enable', 'off');
         handles.constants.put('EEGLAB_PATH', ...
                               get(handles.editEEGLab, 'String'));
-        handles.constants.put('LOCATIONS_PATH', ...
-                              get(handles.editLocations, 'String'));
+        handles.constants.put('OUTPUT_PATH', ...
+                              get(handles.editOutput, 'String'));
         save_constants(handles.constants);
         add_eeglab_path(get(handles.constants, 'EEGLAB_PATH'));
         set(handles.buttonParameters, 'String', 'Edit Parameters');
@@ -182,7 +182,10 @@ function editTable_Callback(hObject, eventdata, handles)
 
 if isempty(get(handles.editTable, 'String'))
     set(handles.buttonRun, 'Enable', 'off');
+else
+    set(handles.buttonRun, 'Enable', 'on');
 end
+guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -209,12 +212,13 @@ function buttonSearch_Callback(hObject, eventdata, handles)
 
 if ~isequal(filename, 0)
     outlet = strcat(pathname, filename);
-    set(handles.buttonRun, 'Enable', 'on');
     set(handles.editTable, 'String', outlet);
+    set(handles.buttonRun, 'Enable', 'on');
 else
     return;
     set(handles.buttonRun, 'Enable', 'off');
 end
+guidata(hObject, handles);
 
 
 %-----------------------------------------------------------------
@@ -265,43 +269,83 @@ if (get(handles.radioASCII, 'Value'))
     % The input should be the same as the eegmodule input,
     % but the filename in the last column must be replaced
     % by the name of the ascii file
-    disp('this will deal with ascii files');
+    for n = 1:size(ints_table)
+        % Variables
+        arqascii = ints_table{n, 9};
+        int1 = ints_table{n, 5};
+        int2 = ints_table{n, 6};
+        samplingRate = ints_table{n, 7};
+        blockrange = floor([int1/samplingRate int2/samplingRate]);
+
+        h = msgbox('Loading ASCII...');
+        arqset = strcat(ints_table{n, 1}, '-',...
+                        ints_table{n, 3}, '-EMG-',...
+                        ints_table{n, 2}, '.set');
+        [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
+                                             'setname', arqset,...
+                                             'overwrite', 'on');
+        EEG = pop_importdata('data', arqascii,...
+                             'dataformat', 'ascii',...
+                             'srate', samplingRate);
+        close(h);
+
+        % Selecting data to keep
+        % TODO check EEGLab function pop_select()
+        h = msgbox('Cutting dataset...');
+        EEG = eeg_checkset(EEG);
+        EEG = pop_select(EEG, 'time', blockrange);
+        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+        close(h);
+
+        % Storing data
+        h = msgbox('Saving dataset...');
+        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+        [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
+        EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
+                               'filepath', outputFolder);
+        close(h);
+    end
 else
     for n = 1:size(ints_table)
-    % Variables
-    arqedf = ints_table{n, 9};
-    int1 = ints_table{n, 5};
-    int2 = ints_table{n, 6};
-    edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
-    samplingRate = edfinfo.getSamplingRate();
-    blockrange = floor([int1/samplingRate int2/samplingRate]);
+        % Variables
+        arqedf = ints_table{n, 9};
+        int1 = ints_table{n, 5};
+        int2 = ints_table{n, 6};
+        edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
+        samplingRate = edfinfo.getSamplingRate();
+        blockrange = floor([int1/samplingRate int2/samplingRate]);
 
-    % Loading EDF
-    h = msgbox('Loading EDF...');
-    EEG = pop_biosig(arqedf, 'blockrange', blockrange, 'rmeventchan', 'off');
-    close(h);
+        % Loading EDF
+        h = msgbox('Loading EDF...');
+        EEG = pop_biosig(arqedf, 'rmeventchan', 'off');
+        close(h);
 
-    arqset = change_extension(arqedf, 'set');
-    [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
-                                         'setname', arqset,...
-                                         'overwrite', 'on');
+        arqset = strcat(ints_table{n, 1}, '-',...
+                        ints_table{n, 3}, '-EMG-',...
+                        ints_table{n, 2}, '.set');
+        [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
+                                             'setname', arqset,...
+                                             'overwrite', 'on');
 
-    % Selecting data to keep
-    % TODO check EEGLab function pop_select()
-    h = msgbox('Cutting dataset...');
-    EEG = eeg_checkset(EEG);
-    EEG = pop_select(EEG, 'time', [int1 int2]);
-    [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-    close(h);
+        % Selecting data to keep
+        % TODO check EEGLab function pop_select()
+        h = msgbox('Cutting dataset...');
+        EEG = eeg_checkset(EEG);
+        EEG = pop_select(EEG, 'time', blockrange);
+        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+        close(h);
 
-    % Storing data
-    h = msgbox('Saving dataset...');
-    [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-    [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
-    EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
-                           'filepath', outputFolder);
-    close(h);
+        % Storing data
+        h = msgbox('Saving dataset...');
+        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+        [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
+        EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
+                               'filepath', outputFolder);
+        close(h);
     end
 end
     
 disp('DEKITA~! o/')
+
+
+
