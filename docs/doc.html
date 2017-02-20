@@ -7,28 +7,76 @@
 </head>
 <body>
 
+<!-- TODO Add Protolize! logo -->
+
+<div class="index">
+    <h1>Índice</h1>
+    <ol>
+        <li><a href="#protolize">Protolize! 2</a></li>
+        <ol>
+            <li><a href="#prereq">Pré-requisitos</a></li>
+            <li><a href="#installation">Instalação</a></li>
+            <li><a href="#inforel">Outras informações relevantes</a></li>
+        </ol>
+        <li><a href="#mainmenu">Menu principal</a></li>
+        <ol>
+            <li><a href="#toolbar">Barra de ferramentas</a></li>
+        </ol>
+        <li><a href="#tools">Tools</a></li>
+        <ol>
+            <li><a href="#eeg">Processamento de EEG</a></li>
+            <li><a href="#emgrgp">Separação de EMG-RGP</a></li>
+            <li><a href="#emg">Processamento de EMG</a></li>
+            <li><a href="#rgp">Processamento de RGP</a></li>
+            <li><a href="#voice">Análise de Voz</a></li>
+            <li><a href="#voicetest">Comparação Voz-Teste</a></li>
+            <li><a href="#edf">Conversor de EDFs</a></li>
+        </ol>
+        <li><a href="#edition">Módulos de edição</a></li>
+        <ol>
+            <li><a href="#timespec">Time / Spectre</a></li>
+            <li><a href="#dwt">Discrete Wavelets Transform (DWT)</a></li>
+        </ol>
+        <li><a href="#analysis">Módulos de análise</a></li>
+        <ol>
+            <li><a href="#timedomain">Time Domain</a></li>
+            <li><a href="#fourier">Fourier</a></li>
+            <li><a href="#stft">Short Time Fourier Transform (STFT)</a></li>
+            <li><a href="#cwt">Continuous Wavelet Transform (CWT)</a></li>
+        </ol>
+    </ol>
+</div>
+
+<a name="protolize"></a>
 <h1>﻿PROTOLIZE! 2</h1>
 
-<p>O PROTOLIZE! é uma ferramenta escrita em MATLAB para processamento de sinais de caráter biológico. Inicialmente <a href="http://repositorio.unb.br/bitstream/10482/4213/1/2009_SergioAndresCondeOcazionez.pdf">feito</a> pelo professor <a href="http://lattes.cnpq.br/7159531395590165">Sergio Ocazionez</a>, que hoje se encontra no <a href="http://www.neuro.ufrn.br/incerebro/">Instituto do Cérebro da Universidade Federal do Rio Grande do Norte</a>, durante sua tese de mestrado na Universidade de Brasília, ele está sendo trabalhado no Laboratório de Neurociências e Comportamento da Universidade de Brasília.</p>
+<p>O PROTOLIZE! é uma ferramenta escrita em MATLAB para processamento de sinais de caráter biológico. Inicialmente <a href="http://repositorio.unb.br/bitstream/10482/4213/1/2009_SergioAndresCondeOcazionez.pdf">feito</a> pelo professor <a href="http://lattes.cnpq.br/7159531395590165">Sergio Ocazionez</a>, que hoje se encontra no <a href="http://www.neuro.ufrn.br/incerebro/">Instituto do Cérebro da Universidade Federal do Rio Grande do Norte</a>, durante sua tese de mestrado na Universidade de Brasília, o programa está sendo trabalhado no Laboratório de Neurociência e Comportamento da Universidade de Brasília.</p>
 
 <p><img src="assets/p2mainpage.jpg" alt="Protolize 2"/></p>
 
-<p>O Protolize! está sendo escrito em MATLAB 2010 com auxílio do editor de textos <a href="https://atom.io/">Atom</a>. Esta documentação está sendo escrita em <a href="https://daringfireball.net/projects/markdown/">Markdown</a> e sendo traduzido em HTML usando o script <a href="https://github.com/mpeterv/markdown">markdown.lua</a> feito por <a href="https://github.com/mpeterv">@mpeterv</a>.</p>
+<p>O Protolize! está sendo escrito em MATLAB 2010.</p>
 
+<a name="prereq"></a>
 <h2>Pré-requisitos</h2>
 
 <p>Protolize! requer MATLAB R2008a rodando em um computador rodando Microsoft Windows Vista ou posterior com no mínimo 1GB RAM.</p>
 
+<a name="installation"></a>
 <h2>Instalação</h2>
 
 <p>Para fazer o download do Protolize!, baixe o arquivo <code>protolize.zip</code> disponível no <a href="https://github.com/lab-neuro-comp/P2">repositório do GitHub</a> e extraia seu conteúdo em um pasta específica. Inicie o MATLAB e vá à pasta onde você extraiu a sua versão do Protolize!. Dentro desta pasta, entre o comando <span style="background-color: #BDC3CE"><code>protolize</code></span>. Se não houver nenhum problema, o menu principal do Protolize! aparecerá, indicando que ele está pronto para uso.]</p>
 
 <p>Esta documentação se refere à versão v0.2b do Protolize!</p>
 
+<a name="inforel"></a>
 <h2>Outras informações relevantes</h2>
 
 <p>Os sinais a serem processados deverão estar no formato <code>*.ASCII</code>. Para converter arquivos EDF em ASCII, há um ferramenta dentro do próprio Protolize! para isso. Certifique-se que há somente um sinal por arquivo ASCII para que o programa aceite a entrada.</p>
 
+
+
+
+<a name="mainmenu"></a>
 <h1>Menu principal</h1>
 
 <p>O menu principal contém 3 divisões: <a href="#tools"><code>Tools</code></a>, <a href="#edition"><code>Edition</code></a> e <a href="#analysis"><code>Analysis</code></a>. A partir delas, podemos acessar as diversas funcionalidades do Protolize! como descritas em suas respectivas sessões.</p>
@@ -36,7 +84,6 @@
 <p>Além disso, há uma <a href="#toolbar">barra de ferramentas</a> para acesso rápido de diversos ajustes do programa, do módulo de estudos e do arquivo de ajuda.</p>
 
 <p><a name="toolbar"></a></p>
-
 <h2>Barra de ferramentas</h2>
 
 <p>No topo da janela principal, temos uma barra de ferramentas com as opções <code>File</code>, <code>Settings</code> e <code>Help</code>.</p>
@@ -57,10 +104,14 @@
 
 <p>Em <code>Help</code>, tem-se acesso a este arquivo de ajuda que você está lendo.</p>
 
+
+
+
 <p><a name="tools"></a></p>
 
 <h1>Tools</h1>
 
+<a name="eeg"></a>
 <h2>Processamento de EEG</h2>
 
 <p>O Protolize! contém uma ferramenta para realizar processamentos em lote utilizando o EEGLab. Esta ferramenta busca mostrar um passo-a-passo automatizado de um processamento usual de vários sinais de EEG em conjunto.</p>
@@ -94,6 +145,7 @@
     <li><b>Show processing steps</b>: Esta opção ativa (quando selecionada) as mensagens indicando o andamento do processamento de cada arquivo.</li>
 </ul>
 
+<a name="emgrgp"></a>
 <h2>Separação de EMG-RGP</h2>
 
 <p>Uma limpeza comum de se realizar neste laboratório é a separação dos sinais de EMG (registro eletromiográfico) e RGP (resposta galvânica da pele). Eles comumente aparecem no mesmo canal e é necessário separá-los.</p>
@@ -104,14 +156,17 @@
 
 <p>Para cada arquivo que é separado com sucesso o programa gera quatro arquivos: dois arquivos TXT que contêm a informação da frequência de amostragem e dois arquivos ASCII onde as ondas estão salvas separadamente.</p>
 
+<a name="emg"></a>
 <h2>Processamento de EMG</h2>
 
 <p><span style="background-color: #BDC3CE"><code>TODO: ESCREVER DOCUMENTAÇÃO</code></span></p>
 
+<a name="rgp"></a>
 <h2>Processamento de RGP</h2>
 
 <p><span style="background-color: #BDC3CE"><code>TODO: ESCREVER DOCUMENTAÇÃO</code></span></p>
 
+<a name="voice"></a>
 <h2>Análise de Voz</h2>
 
 <p>Esta ferramenta extrai os momentos iniciais de cada palavra em um sinal de voz em um arquivo WAV aplicando um <em>threshold</em> no espectro de potência da gravação em questão. Permite remoção de falsos-positivos em um submódulo após a análise computacional do arquivo de áudio.</p>
@@ -130,6 +185,7 @@
 
 <p>Logo que todas as análises tenham sido feitas, o programa retorna para o módulo de análise de voz e o usuário pode salvar todo o trabalho com o botão <code>Save</code>.</p>
 
+<a name="voicetest"></a>
 <h2>Comparação Voz-Teste</h2>
 
 <p>Esta ferramenta permite a comparação entre os tempos em que os estímulos de um teste foram apresentados ao sujeito e os tempos de resposta armazenados em arquivos CSV.</p>
@@ -140,6 +196,7 @@
 
 <p>Com os dois arquivos em mãos, clique no botão <code>Analyse</code> para calcular os atrasos da resposta do áudio em relação ao tempo em que os estímulos do teste foram apresentados. Os resultados dessa análise aparecerão em forma de lista do lado direito da janela do módulo. Para salvar os resultados em uma nova coluna no arquivo CSV, clique em <code>Save Results</code>.</p>
 
+<a name="edf"></a>
 <h2>Conversor de EDFs</h2>
 
 <p>Esta á uma ferramenta criada para converter arquivos EDF em arquivos ASCII para serem usados no Protolize!, que requer, como entrada nos seus módulos, um sinal no formato ASCII por vez. Esta ferramenta também permite a conversão do EDF em questão para um único arquivo ASCII contendo todos os canais.</p>
@@ -150,12 +207,17 @@
 
 <p>Após ter marcado as opções desejadas, clique no botão <code>Run</code> para iniciar a conversão. Os arquivos obtidos da conversão serão salvos na mesma pasta que o arquivo EDF original.</p>
 
+
+
+
+
 <p><a name="edition"/></p>
 
 <h1>Módulos de edição</h1>
 
 <p>Para podermos visualizar e editar o sinal, há as ferramentas <code>Time/Spec</code> e <code>DWT</code>.</p>
 
+<a name="timespec"></a>
 <h2>Time / Spectre</h2>
 
 <p>Este módulo fornece algumas ferramentas para edição de sinais no domínio do tempo. Em sua interface, pode-se notar que há ferramentas para cortar e para filtrar o sinal.</p>
@@ -166,6 +228,7 @@
 
 <p>Para executar este módulo em separado, execute a função <code>editionmodule2</code>.</p>
 
+<a name="dwt"></a>
 <h2>Discrete Wavelets Transform (DWT)</h2>
 
 <p>O módulo DWT permite descontruir um sinal usando diversas transformadas de wavelets; fazer edições em seus coeficientes (isto é, em suas aproximações e detalhes); e reconstruir o sinal editado.</p>
@@ -180,12 +243,16 @@
 
 <p>Para usar este módulo em separado, use o comando <code>dwtmodule2</code>. As funções relacionadas à transformada discreta de Wavelets estão disponíveis na pasta <code>math</code>; enquanto que as funções de edição dos coeficientes (que, por sinal, podem ser usadas para qualquer sinal) estão na pasta <code>util</code>.</p>
 
-<p><a name="analysis"></a></p>
 
+
+
+
+<p><a name="analysis"></a></p>
 <h1>Módulos de análise</h1>
 
 <p>O Protolize! possui 4 ferramentas de análise de dados: análise no domínio do tempo (<code>Time domain</code>); análise por transformada de Fourier (<code>Fourier</code>); por transforma de Fourier de curta duração (<code>STFT</code>); e por transformada contínua de Wavelets (<code>CWT</code>).</p>
 
+<a name="timedomain"></a>
 <h2>Time Domain</h2>
 
 <p>A análise em domínio do tempo gera uma análise estatística do sinal em um período de tempo determinado. Selecione um sinal usando a opção <code>Open</code> no menu <code>File</code>. Este sinal pode ser cortado em um intervalo menor usando a opção <code>Crop</code>.</p>
@@ -196,14 +263,17 @@
 
 <p>Este módulo pode ser executado em separado usando o script <code>timemodule2</code>.</p>
 
+<a name="fourier"></a>
 <h2>Fourier analysis</h2>
 
 <p><span style="background-color: #BDC3CE"><code>TODO: ESCREVER DOCUMENTAÇÃO</code></span></p>
 
+<a name="stft"></a>
 <h2>Short Time Fourier Transform (STFT)</h2>
 
 <p><span style="background-color: #BDC3CE"><code>TODO: ESCREVER DOCUMENTAÇÃO</code></span></p>
 
+<a name="cwt"></a>
 <h2>Continuous Wavelet Transform (CWT)</h2>
 
 <p><img src="assets/cwt.png" alt="cwt module" title="'CWT' Module" /></span></p>
