@@ -171,6 +171,7 @@ directoryName = uigetdir(pwd, 'Select output folder');
 set(handles.editOutput, 'String', directoryName);
 
 
+
 %-----------------------------------------------------------------
 function editTable_Callback(hObject, eventdata, handles)
 % hObject    handle to editTable (see GCBO)
@@ -219,6 +220,12 @@ else
     set(handles.buttonRun, 'Enable', 'off');
 end
 guidata(hObject, handles);
+
+% temporary for test
+set( [handles.radioFilt handles.radioPlot, ...
+      handles.checkHiFilt handles.editHiFilt, ...
+      handles.checkLoFilt handles.buttonProcess], ...
+    'Enable', 'on');
 
 
 %-----------------------------------------------------------------
@@ -347,11 +354,10 @@ end
     
 disp('DEKITA~! o/')
 
-set( [handles.radioFilt handles.radioPlot, ...
-      handles.checkHiFilt handles.editHiFilt, ...
-      handles.checkLoFilt handles.checkNotch, ...
-      handles.buttonProcess], ...
-    'Enable', 'on');
+%set( [handles.radioFilt handles.radioPlot, ...
+%      handles.checkHiFilt handles.editHiFilt, ...
+%      handles.checkLoFilt handles.buttonProcess], ...
+%    'Enable', 'on');
 
 
 %-----------------------------------------------------------------
@@ -381,8 +387,7 @@ set( [handles.radioFilt handles.checkLoFilt], ...
     'Value', 0);
 set(handles.checkHiFilt, 'Value', 1);
 set( [handles.checkHiFilt handles.editHiFilt, ...
-      handles.checkLoFilt handles.editLoFilt, ...
-      handles.checkNotch], ...
+      handles.checkLoFilt handles.editLoFilt], ...
     'Enable', 'off');
 set(handles.buttonProcess, 'String', 'Plot');
 guidata(hObject, handles);
@@ -395,10 +400,41 @@ function checkHiFilt_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-if get(handles.checkHiFilt, 'Value')
-    set(handles.editHiFilt, 'Enable', 'on');
-else
-    set(handles.editHiFilt, 'Enable', 'off');
+switch get(handles.checkHiFilt, 'Value')
+    case 1
+        set(handles.editHiFilt, 'Enable', 'on');
+        if ~isempty(get(handles.editHiFilt, 'String'))
+            set(handles.buttonProcess, 'Enable', 'on');
+            switch get(handles.checkLoFilt, 'Value')
+                case 0
+                    set(handles.checkNotch, 'Enable', 'off');
+                otherwise
+                    if ~isempty(get(handles.editLoFilt, 'String'))
+                        set(handles.checkNotch, 'Enable', 'on');
+                    else
+                        set(handles.checkNotch, 'Enable', 'off');
+                        set(handles.buttonProcess, 'Enable', 'off');
+                    end
+            end
+        else
+            switch get(handles.checkLoFilt, 'Value')
+                case 0
+                    set(handles.buttonProcess, 'Enable', 'off');
+                otherwise
+                    if ~isempty(get(handles.editLoFilt, 'String'))
+                        set(handles.buttonProcess, 'Enable', 'on');
+                        set(handles.checkNotch, 'Enable', 'on');
+                    else
+                        set(handles.buttonProcess, 'Enable', 'off');
+                        set(handles.checkNotch, 'Enable', 'off');
+                    end
+            end
+        end
+    otherwise
+        set(handles.editHiFilt, 'Enable', 'off');
+        if ~(get(handles.checkLoFilt, 'Value'))
+            set(handles.buttonProcess, 'Enable', 'off');
+        end
 end
 guidata(hObject, handles);
 
@@ -407,6 +443,34 @@ function editHiFilt_Callback(hObject, eventdata, handles)
 % hObject    handle to editHiFilt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+if ~isempty(get(handles.editHiFilt, 'String'))
+    set(handles.buttonProcess, 'Enable', 'on');
+    switch get(handles.checkLoFilt, 'Value')
+        case 0
+            set(handles.checkNotch, 'Enable', 'off');
+        otherwise
+            if ~isempty(get(handles.editLoFilt, 'String'))
+                set(handles.checkNotch, 'Enable', 'on');
+            else
+                set(handles.checkNotch, 'Enable', 'off');
+                set(handles.buttonProcess, 'Enable', 'off');
+            end
+    end
+else
+    switch get(handles.checkLoFilt, 'Value')
+        case 0
+            set(handles.buttonProcess, 'Enable', 'off');
+        otherwise
+            if ~isempty(get(handles.editLoFilt, 'String'))
+                set(handles.buttonProcess, 'Enable', 'on');
+                set(handles.checkNotch, 'Enable', 'on');
+            else
+                set(handles.buttonProcess, 'Enable', 'off');
+                set(handles.checkNotch, 'Enable', 'off');
+            end
+    end
+end
 
 if (str2double(get(handles.editHiFilt, 'String')) < 1)
     set(handles.editHiFilt, 'String', '1')
@@ -434,10 +498,41 @@ function checkLoFilt_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-if get(handles.checkLoFilt, 'Value')
-    set(handles.editLoFilt, 'Enable', 'on');
-else
-    set(handles.editLoFilt, 'Enable', 'off');
+switch get(handles.checkLoFilt, 'Value')
+    case 1
+        set(handles.editLoFilt, 'Enable', 'on');
+        if ~isempty(get(handles.editLoFilt, 'String'))
+            set(handles.buttonProcess, 'Enable', 'on');
+            switch get(handles.checkHiFilt, 'Value')
+                case 0
+                    set(handles.checkNotch, 'Enable', 'off');
+                otherwise
+                    if ~isempty(get(handles.editHiFilt, 'String'))
+                        set(handles.checkNotch, 'Enable', 'on');
+                    else
+                        set(handles.checkNotch, 'Enable', 'off');
+                        set(handles.buttonProcess, 'Enable', 'off');
+                    end
+            end
+        else
+            switch get(handles.checkHiFilt, 'Value')
+                case 0
+                    set(handles.buttonProcess, 'Enable', 'off');
+                otherwise
+                    if ~isempty(get(handles.editLoFilt, 'String'))
+                        set(handles.buttonProcess, 'Enable', 'on');
+                        set(handles.checkNotch, 'Enable', 'on');
+                    else
+                        set(handles.buttonProcess, 'Enable', 'off');
+                        set(handles.checkNotch, 'Enable', 'off');
+                    end
+            end
+        end
+    otherwise
+        set(handles.editLoFilt, 'Enable', 'off');
+        if ~(get(handles.checkHiFilt, 'Value'))
+            set(handles.buttonProcess, 'Enable', 'off');
+        end
 end
 guidata(hObject, handles);
 
@@ -446,6 +541,34 @@ function editLoFilt_Callback(hObject, eventdata, handles)
 % hObject    handle to editLoFilt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+if ~isempty(get(handles.editLoFilt, 'String'))
+    set(handles.buttonProcess, 'Enable', 'on');
+    switch get(handles.checkHiFilt, 'Value')
+        case 0
+            set(handles.checkNotch, 'Enable', 'off');
+        otherwise
+            if ~isempty(get(handles.editHiFilt, 'String'))
+                set(handles.checkNotch, 'Enable', 'on');
+            else
+                set(handles.checkNotch, 'Enable', 'off');
+                set(handles.buttonProcess, 'Enable', 'off');
+            end
+    end
+else
+    switch get(handles.checkHiFilt, 'Value')
+        case 0
+            set(handles.buttonProcess, 'Enable', 'off');
+        otherwise
+            if ~isempty(get(handles.editLoFilt, 'String'))
+                set(handles.buttonProcess, 'Enable', 'on');
+                set(handles.checkNotch, 'Enable', 'on');
+            else
+                set(handles.buttonProcess, 'Enable', 'off');
+                set(handles.checkNotch, 'Enable', 'off');
+            end
+    end
+end
 
 if and(~isempty(get(handles.editLoFilt, 'String')),...
        (str2double(get(handles.editLoFilt, 'String')) < 1))
@@ -473,8 +596,16 @@ function checkNotch_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hint: get(hObject,'Value') returns toggle state of checkNotch
-
+switch get(handles.checkNotch, 'Value')
+    case 1
+        if and(get(handles.checkHiFilt, 'Value'),...
+               get(handles.checkLoFilt, 'Value'))
+            set(handles.buttonProcess, 'Enable', 'on')
+        end
+    otherwise
+        return;
+end
+guidata(hObject, handles);
 
 
 % --- Executes on button press in buttonProcess.
@@ -482,6 +613,10 @@ function buttonProcess_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonProcess (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% Open eeglab:
+[ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
+
 
 
 
@@ -492,8 +627,10 @@ function listFiles_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = get(hObject,'String') returns listFiles contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from listFiles
+filename = get(handles.textFilename, 'String');
+moments = handles.stuff.get(filename);
+maxlist = numel(moments);
+set(handles.listboxMoments, 'Max', maxlist);
 
 
 % --- Executes during object creation, after setting all properties.
