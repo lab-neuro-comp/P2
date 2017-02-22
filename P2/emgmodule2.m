@@ -22,7 +22,7 @@ function varargout = emgmodule2(varargin)
 
 % Edit the above text to modify the response to help emgmodule2
 
-% Last Modified by GUIDE v2.5 20-Feb-2017 09:42:14
+% Last Modified by GUIDE v2.5 22-Feb-2017 09:57:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -281,12 +281,12 @@ if (get(handles.radioASCII, 'Value'))
         arqset = strcat(ints_table{n, 1}, '-',...
                         ints_table{n, 3}, '-EMG-',...
                         ints_table{n, 2}, '.set');
-        [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
-                                             'setname', arqset,...
-                                             'overwrite', 'on');
         EEG = pop_importdata('data', arqascii,...
                              'dataformat', 'ascii',...
                              'srate', samplingRate);
+        [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
+                                             'setname', arqset,...
+                                             'overwrite', 'on');
         close(h);
 
         % Selecting data to keep
@@ -321,7 +321,7 @@ else
         close(h);
 
         arqset = strcat(ints_table{n, 1}, '-',...
-                        ints_table{n, 3}, '-EMG-',...
+                        ints_table{n, 3}, '-',...
                         ints_table{n, 2}, '.set');
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
                                              'setname', arqset,...
@@ -346,6 +346,168 @@ else
 end
     
 disp('DEKITA~! o/')
+
+set( [handles.radioFilt handles.radioPlot, ...
+      handles.checkHiFilt handles.editHiFilt, ...
+      handles.checkLoFilt handles.checkNotch, ...
+      handles.buttonProcess], ...
+    'Enable', 'on');
+
+
+%-----------------------------------------------------------------
+% --- Executes on button press in radioFilt.
+function radioFilt_Callback(hObject, eventdata, handles)
+% hObject    handle to radioFilt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+set( [handles.radioPlot handles.checkLoFilt], ... 
+    'Value', 0);
+set(handles.checkHiFilt, 'Value', 1);
+set( [handles.checkHiFilt handles.editHiFilt, ...
+      handles.checkLoFilt handles.checkNotch], ...
+    'Enable', 'on');
+set(handles.buttonProcess, 'String', 'Filter');
+guidata(hObject, handles);
+
+
+% --- Executes on button press in radioPlot.
+function radioPlot_Callback(hObject, eventdata, handles)
+% hObject    handle to radioPlot (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+set( [handles.radioFilt handles.checkLoFilt], ... 
+    'Value', 0);
+set(handles.checkHiFilt, 'Value', 1);
+set( [handles.checkHiFilt handles.editHiFilt, ...
+      handles.checkLoFilt handles.editLoFilt, ...
+      handles.checkNotch], ...
+    'Enable', 'off');
+set(handles.buttonProcess, 'String', 'Plot');
+guidata(hObject, handles);
+
+
+%-----------------------------------------------------------------
+% --- Executes on button press in checkHiFilt.
+function checkHiFilt_Callback(hObject, eventdata, handles)
+% hObject    handle to checkHiFilt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+if get(handles.checkHiFilt, 'Value')
+    set(handles.editHiFilt, 'Enable', 'on');
+else
+    set(handles.editHiFilt, 'Enable', 'off');
+end
+guidata(hObject, handles);
+
+
+function editHiFilt_Callback(hObject, eventdata, handles)
+% hObject    handle to editHiFilt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+if (str2double(get(handles.editHiFilt, 'String')) < 1)
+    set(handles.editHiFilt, 'String', '1')
+end
+guidata(hObject, handles);
+    
+
+% --- Executes during object creation, after setting all properties.
+function editHiFilt_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editHiFilt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+% --- Executes on button press in checkLoFilt.
+function checkLoFilt_Callback(hObject, eventdata, handles)
+% hObject    handle to checkLoFilt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+if get(handles.checkLoFilt, 'Value')
+    set(handles.editLoFilt, 'Enable', 'on');
+else
+    set(handles.editLoFilt, 'Enable', 'off');
+end
+guidata(hObject, handles);
+
+
+function editLoFilt_Callback(hObject, eventdata, handles)
+% hObject    handle to editLoFilt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+if and(~isempty(get(handles.editLoFilt, 'String')),...
+       (str2double(get(handles.editLoFilt, 'String')) < 1))
+    set(handles.editLoFilt, 'String', '1')
+end
+guidata(hObject, handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function editLoFilt_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editLoFilt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in checkNotch.
+function checkNotch_Callback(hObject, eventdata, handles)
+% hObject    handle to checkNotch (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkNotch
+
+
+
+% --- Executes on button press in buttonProcess.
+function buttonProcess_Callback(hObject, eventdata, handles)
+% hObject    handle to buttonProcess (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+
+%-----------------------------------------------------------------
+% --- Executes on selection change in listFiles.
+function listFiles_Callback(hObject, eventdata, handles)
+% hObject    handle to listFiles (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = get(hObject,'String') returns listFiles contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from listFiles
+
+
+% --- Executes during object creation, after setting all properties.
+function listFiles_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to listFiles (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
 
 
 
