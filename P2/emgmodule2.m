@@ -272,6 +272,7 @@ ints_table = ler_arq_ints(get(handles.editTable, 'String'));
 [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
 
 % Different approaches for each file extension
+listset = {};
 if (get(handles.radioASCII, 'Value'))
     % The input should be the same as the eegmodule input,
     % but the filename in the last column must be replaced
@@ -311,6 +312,10 @@ if (get(handles.radioASCII, 'Value'))
         EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
                                'filepath', outputFolder);
         close(h);
+
+        % Adding file to the processed list
+        listset{n} = arqset;
+        set(handles.listFiles, 'String', listset);
     end
 else
     for n = 1:size(ints_table)
@@ -335,7 +340,6 @@ else
                                              'overwrite', 'on');
 
         % Selecting data to keep
-        % TODO check EEGLab function pop_select()
         h = msgbox('Cutting dataset...');
         EEG = eeg_checkset(EEG);
         EEG = pop_select(EEG, 'time', blockrange);
@@ -349,6 +353,10 @@ else
         EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
                                'filepath', outputFolder);
         close(h);
+
+        % Adding file to the processed list
+        listset{n} = arqset;
+        set(handles.listFiles, 'String', listset);
     end
 end
     
@@ -614,9 +622,24 @@ function buttonProcess_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Open eeglab:
-[ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
+% Storing checkbox info in variables for easy access
+checkNotch = get(handles.checkNotch, 'Value');
+checkHiFilt = get(handles.checkHiFilt, 'Value');
+checkLoFilt = get(handles.checkLoFilt, 'Value');
 
+% Loading the selected dataset
+files = cellstr(get(handles.listFiles, 'String'));
+chosen = get(handles.listFiles, 'Value');
+EEG = pop_loadset('filename', files(chosen),...
+                  'filepath', get(handles.editOutput, 'String'));
+
+% An approach for each action (plot or filter)
+if get(handles.radioPlot, 'Value')
+    pop_eegplot(EEG);
+elseif get(handles.radioFilt, 'Value')
+    % TODO Use filter depending on which checkboxes are marked
+    return;
+end
 
 
 
@@ -626,11 +649,6 @@ function listFiles_Callback(hObject, eventdata, handles)
 % hObject    handle to listFiles (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-filename = get(handles.textFilename, 'String');
-moments = handles.stuff.get(filename);
-maxlist = numel(moments);
-set(handles.listboxMoments, 'Max', maxlist);
 
 
 % --- Executes during object creation, after setting all properties.
