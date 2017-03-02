@@ -159,7 +159,33 @@
 <a name="emg"></a>
 <h2>Processamento de EMG</h2>
 
-<p><span style="background-color: #BDC3CE"><code>TODO: ESCREVER DOCUMENTAÇÃO</code></span></p>
+<p>O módulo para processamento de EMG tem como principal objetivo realizar cortes e fazer filtragens dos arquivos que são passados.</p>
+
+<p><img src="assets/emg.png" alt="emg module" title="'Single Channel' Module" /></p>
+
+<p>A estrutura inicial do módulo de processamento de EMG é similar à de processamento de EEG. No canto superior esquerdo há um espaço para o informe de parâmetros necessários para o funcionamento do programa e que podem ser alterados, caso o usuário deseje, clicando em <code>Edit Parameters</code>. O primeiro campo, <i>EEGLab Path</i>, informa o caminho para o programa EEGLab e o segundo, <i>Output Fiels Path</i>, informa onde os arquivos analisados pelo programa serão salvos. Uma vez editados, esses parâmetros podem ser salvos clicando em <code>SAve Parameters</code>.</p>
+
+<p>No canto superior direito, o usuário informa ao programa um arquivo com estrutura similar ao que havia sido informado durante o processamento de EEG. Este arquivo deve ser uma planilha do Excel contendo, exatamente nesta ordem, uma coluna para cada uma das informações abaixo:</p>
+
+<ul>
+    <li>Sujeito</li>
+    <li>Teste</li>
+    <li>Fragmento</li>
+    <li>Iniciais do sujeito</li>
+    <li>Momento inferior de corte</li>
+    <li>Momento superior de corte</li>
+    <li>Taxa de amostragem</li>
+    <li>Sessão</li>
+    <li>Nome do arquivo EDF ou ASCII</li>
+</ul>
+
+<p>Todos os arquivos informados na última coluna da planilha <b>devem</b> conter a mesma extensão. Caso os arquivos tenham o formato EDF, o usuário deve marcar a opção <code>EDF Files</code> localizada logo abaixo do botão que é utilizado para procurar o arquivo de parâmetros, <code>Search</code>. Caso o formato seja ASCII, a opção <code>ASCII Files</code> deve ser marcada. Após a correta extensão dos arquivos ter sido informada, clique no botão <code>Run</code> para iniciar a análise.</p>
+
+<p>Finalizada a análise, os nomes dos arquivo gerados serão inseridos numa lista na parte inferior direita da janela do módulo. Os novos nomes dos arquivos são gerados com base nas informações presentes na planilha Excel e tem o formato SET. Para plotar o resultado do corte realizado, basta clicar no nome do arquivo desejado, marcar a opção <code>Plot</code> presente no lado inferior esquerdo da janela do módulo e clicar no botão <code>Plot</code>.</p>
+
+<p>Para realizar a filtragem de um dos arquivos é necessário projetar o filtro. Para isso, marque a opção <code>Filter</code> que aparece no canto inferior esquerdo da janela do módulo e as opções de design de filtro serão habilitadas. A primeira delas é <i>Lower Cut Frequency</i>. Marque apenas esta opção para designar o valor de frequência <b>mínimo</b> que o filtro deve permitir a passagem. Qualquer valor acima desta frequência será mantido inalterado e os valores abaixo serão filtrados. A segunda opção é <i>Higher Cut Frequency</i>. Marque apenas esta opção para designar o valor <b>máximo</b> que o filtro deve permitir a passagem. Qualquer valor abaixo desta frequência será mantido e os valores acima serão filtrados. Marque as duas opções para definir uma faixa de valores que deverá ser mantida e os valores fora desta faixa deverão ser filtrados. A última opção é <i>Notch Filter</i>. Esta opção fica disponível quando as opções <i>Lower Cut Frequency</i> e <i>Higher Cut Frequency</i> são marcadas e seus valores de frequência determinados. Marcando esta opção o usuário cria um filtro que filtra os valores <b>dentro</b> da faixa de frequência determinada, mantendo todo o restante.</p>
+
+<p>Assim que o filtro estiver de acordo com o desejado, clique no botão <code>Filter</code>. Após a filtragem ter sido realizada, o programa abre uma janela mostrando o resultado do processo. Uma caixa de diálogo também aparece, pergutando se o usuário deseja salvar o resultado ou não. Caso esteja satisfeito com a filtragem, clique em <code>Yes</code>; caso contrário, clique em <code>No</code>. Caso escolha a opção afirmativa, o programa salva o resultado em um novo arquivo SET que é adicionado à lista de arquivos processados e pode ser manipulado mais uma vez, se desejado.</p>
 
 <a name="rgp"></a>
 <h2>Processamento de RGP</h2>
