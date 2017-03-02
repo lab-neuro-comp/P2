@@ -221,12 +221,6 @@ else
 end
 guidata(hObject, handles);
 
-% temporary for test
-set( [handles.radioFilt handles.radioPlot, ...
-      handles.checkHiFilt handles.editHiFilt, ...
-      handles.checkLoFilt handles.buttonProcess], ...
-    'Enable', 'on');
-
 
 %-----------------------------------------------------------------
 % --- Executes on button press in radioEDF.
@@ -264,6 +258,7 @@ if outputFolder == 0
 else
     outputFolder = strcat(outputFolder, filesep);
 end
+handles.outFolder = outputFolder;
 
 % Reading parameters file
 ints_table = ler_arq_ints(get(handles.editTable, 'String'));
@@ -273,6 +268,7 @@ ints_table = ler_arq_ints(get(handles.editTable, 'String'));
 
 % Different approaches for each file extension
 listset = {};
+handles.listset = listset;
 if (get(handles.radioASCII, 'Value'))
     % The input should be the same as the eegmodule input,
     % but the filename in the last column must be replaced
@@ -362,10 +358,11 @@ end
     
 disp('DEKITA~! o/')
 
-%set( [handles.radioFilt handles.radioPlot, ...
-%      handles.checkHiFilt handles.editHiFilt, ...
-%      handles.checkLoFilt handles.buttonProcess], ...
-%    'Enable', 'on');
+set( [handles.radioFilt handles.radioPlot, ...
+      handles.checkHiFilt handles.editHiFilt, ...
+      handles.checkLoFilt handles.buttonProcess], ...
+    'Enable', 'on');
+guidata(hObject, handles);
 
 
 %-----------------------------------------------------------------
@@ -379,7 +376,7 @@ set( [handles.radioPlot handles.checkLoFilt], ...
     'Value', 0);
 set(handles.checkHiFilt, 'Value', 1);
 set( [handles.checkHiFilt handles.editHiFilt, ...
-      handles.checkLoFilt handles.checkNotch], ...
+      handles.checkLoFilt], ...
     'Enable', 'on');
 set(handles.buttonProcess, 'String', 'Filter');
 guidata(hObject, handles);
@@ -391,11 +388,12 @@ function radioPlot_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-set( [handles.radioFilt handles.checkLoFilt], ... 
+set( [handles.radioFilt handles.checkLoFilt handles.checkNotch], ... 
     'Value', 0);
 set(handles.checkHiFilt, 'Value', 1);
 set( [handles.checkHiFilt handles.editHiFilt, ...
-      handles.checkLoFilt handles.editLoFilt], ...
+      handles.checkLoFilt handles.editLoFilt, ...
+      handles.checkNotch], ...
     'Enable', 'off');
 set(handles.buttonProcess, 'String', 'Plot');
 guidata(hObject, handles);
@@ -415,31 +413,32 @@ switch get(handles.checkHiFilt, 'Value')
             set(handles.buttonProcess, 'Enable', 'on');
             switch get(handles.checkLoFilt, 'Value')
                 case 0
-                    set(handles.checkNotch, 'Enable', 'off');
+                    set(handles.checkNotch, 'Enable', 'off', 'Value', 0);
                 otherwise
                     if ~isempty(get(handles.editLoFilt, 'String'))
                         set(handles.checkNotch, 'Enable', 'on');
                     else
                         set(handles.checkNotch, 'Enable', 'off');
-                        set(handles.buttonProcess, 'Enable', 'off');
+                        set(handles.buttonProcess, 'Enable', 'off', 'Value', 0);
                     end
             end
         else
+            set(handles.checkNotch, 'Enable', 'off', 'Value', 0);
+            set(handles.editHiFilt, 'String', '');
             switch get(handles.checkLoFilt, 'Value')
                 case 0
                     set(handles.buttonProcess, 'Enable', 'off');
                 otherwise
                     if ~isempty(get(handles.editLoFilt, 'String'))
                         set(handles.buttonProcess, 'Enable', 'on');
-                        set(handles.checkNotch, 'Enable', 'on');
                     else
                         set(handles.buttonProcess, 'Enable', 'off');
-                        set(handles.checkNotch, 'Enable', 'off');
                     end
             end
         end
     otherwise
         set(handles.editHiFilt, 'Enable', 'off');
+        set(handles.checkNotch, 'Enable', 'off', 'Value', 0);
         if ~(get(handles.checkLoFilt, 'Value'))
             set(handles.buttonProcess, 'Enable', 'off');
         end
@@ -456,32 +455,36 @@ if ~isempty(get(handles.editHiFilt, 'String'))
     set(handles.buttonProcess, 'Enable', 'on');
     switch get(handles.checkLoFilt, 'Value')
         case 0
-            set(handles.checkNotch, 'Enable', 'off');
+            set(handles.checkNotch, 'Enable', 'off', 'Value', 0);
         otherwise
             if ~isempty(get(handles.editLoFilt, 'String'))
                 set(handles.checkNotch, 'Enable', 'on');
             else
                 set(handles.checkNotch, 'Enable', 'off');
-                set(handles.buttonProcess, 'Enable', 'off');
+                set(handles.buttonProcess, 'Enable', 'off', 'Value', 0);
             end
     end
 else
+    set(handles.checkNotch, 'Enable', 'off', 'Value', 0);
     switch get(handles.checkLoFilt, 'Value')
         case 0
             set(handles.buttonProcess, 'Enable', 'off');
         otherwise
             if ~isempty(get(handles.editLoFilt, 'String'))
                 set(handles.buttonProcess, 'Enable', 'on');
-                set(handles.checkNotch, 'Enable', 'on');
             else
                 set(handles.buttonProcess, 'Enable', 'off');
-                set(handles.checkNotch, 'Enable', 'off');
             end
     end
 end
 
 if (str2double(get(handles.editHiFilt, 'String')) < 1)
-    set(handles.editHiFilt, 'String', '1')
+    set(handles.editHiFilt, 'String', '1');
+end
+
+if isequal(get(handles.editLoFilt, 'String'), get(handles.editHiFilt, 'String'))
+    msgbox('The frequency values must be different.', 'Error', 'error');
+    set(handles.editHiFilt, 'String', '');
 end
 guidata(hObject, handles);
     
@@ -513,31 +516,32 @@ switch get(handles.checkLoFilt, 'Value')
             set(handles.buttonProcess, 'Enable', 'on');
             switch get(handles.checkHiFilt, 'Value')
                 case 0
-                    set(handles.checkNotch, 'Enable', 'off');
+                    set(handles.checkNotch, 'Enable', 'off', 'Value', 0);
                 otherwise
                     if ~isempty(get(handles.editHiFilt, 'String'))
                         set(handles.checkNotch, 'Enable', 'on');
                     else
-                        set(handles.checkNotch, 'Enable', 'off');
+                        set(handles.checkNotch, 'Enable', 'off', 'Value', 0);
                         set(handles.buttonProcess, 'Enable', 'off');
                     end
             end
         else
+            set(handles.checkNotch, 'Enable', 'off', 'Value', 0);
+            set(handles.editLoFilt, 'String', '');
             switch get(handles.checkHiFilt, 'Value')
                 case 0
                     set(handles.buttonProcess, 'Enable', 'off');
                 otherwise
                     if ~isempty(get(handles.editLoFilt, 'String'))
                         set(handles.buttonProcess, 'Enable', 'on');
-                        set(handles.checkNotch, 'Enable', 'on');
                     else
                         set(handles.buttonProcess, 'Enable', 'off');
-                        set(handles.checkNotch, 'Enable', 'off');
                     end
             end
         end
     otherwise
         set(handles.editLoFilt, 'Enable', 'off');
+        set(handles.checkNotch, 'Enable', 'off', 'Value', 0);
         if ~(get(handles.checkHiFilt, 'Value'))
             set(handles.buttonProcess, 'Enable', 'off');
         end
@@ -554,26 +558,25 @@ if ~isempty(get(handles.editLoFilt, 'String'))
     set(handles.buttonProcess, 'Enable', 'on');
     switch get(handles.checkHiFilt, 'Value')
         case 0
-            set(handles.checkNotch, 'Enable', 'off');
+            set(handles.checkNotch, 'Enable', 'off', 'Value', 0);
         otherwise
             if ~isempty(get(handles.editHiFilt, 'String'))
                 set(handles.checkNotch, 'Enable', 'on');
             else
-                set(handles.checkNotch, 'Enable', 'off');
+                set(handles.checkNotch, 'Enable', 'off', 'Value', 0);
                 set(handles.buttonProcess, 'Enable', 'off');
             end
     end
 else
+    set(handles.checkNotch, 'Enable', 'off', 'Value', 0);
     switch get(handles.checkHiFilt, 'Value')
         case 0
             set(handles.buttonProcess, 'Enable', 'off');
         otherwise
             if ~isempty(get(handles.editLoFilt, 'String'))
                 set(handles.buttonProcess, 'Enable', 'on');
-                set(handles.checkNotch, 'Enable', 'on');
             else
                 set(handles.buttonProcess, 'Enable', 'off');
-                set(handles.checkNotch, 'Enable', 'off');
             end
     end
 end
@@ -581,6 +584,11 @@ end
 if and(~isempty(get(handles.editLoFilt, 'String')),...
        (str2double(get(handles.editLoFilt, 'String')) < 1))
     set(handles.editLoFilt, 'String', '1')
+end
+
+if isequal(get(handles.editLoFilt, 'String'), get(handles.editHiFilt, 'String'))
+    msgbox('The frequency values must be different.', 'Error', 'error');
+    set(handles.editLoFilt, 'String', '');
 end
 guidata(hObject, handles);
 
@@ -606,9 +614,10 @@ function checkNotch_Callback(hObject, eventdata, handles)
 
 switch get(handles.checkNotch, 'Value')
     case 1
-        if and(get(handles.checkHiFilt, 'Value'),...
-               get(handles.checkLoFilt, 'Value'))
-            set(handles.buttonProcess, 'Enable', 'on')
+        if (get(handles.checkHiFilt, 'Value') && ~isempty(get(handles.editHiFilt, 'String')) && get(handles.checkLoFilt, 'Value') && ~isempty(get(handles.editLoFilt, 'String')))
+            set(handles.buttonProcess, 'Enable', 'on');
+        else
+            set(handles.buttonProcess, 'Enable', 'off');
         end
     otherwise
         return;
@@ -623,22 +632,46 @@ function buttonProcess_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Storing checkbox info in variables for easy access
-checkNotch = get(handles.checkNotch, 'Value');
-checkHiFilt = get(handles.checkHiFilt, 'Value');
-checkLoFilt = get(handles.checkLoFilt, 'Value');
+checkNo = get(handles.checkNotch, 'Value');
+valueHi = str2double(get(handles.editHiFilt, 'String'));
+valueLo = str2double(get(handles.editLoFilt, 'String'));
 
 % Loading the selected dataset
 files = cellstr(get(handles.listFiles, 'String'));
-chosen = get(handles.listFiles, 'Value');
-EEG = pop_loadset('filename', files(chosen),...
+[m n] = size(files);
+arqset = get(handles.listFiles, 'Value');
+EEG = pop_loadset('filename', files(arqset),...
                   'filepath', get(handles.editOutput, 'String'));
 
 % An approach for each action (plot or filter)
 if get(handles.radioPlot, 'Value')
+    % Plot Option
     pop_eegplot(EEG);
+
 elseif get(handles.radioFilt, 'Value')
-    % TODO Use filter depending on which checkboxes are marked
-    return;
+    % Filter Option
+    h = msgbox('Filtering data...');
+    [filtEEG com b] = pop_eegfiltnew(EEG, valueHi, valueLo, [], checkNo);
+    close(h);
+    pop_eegplot(filtEEG);
+    choice = questdlg('Would you like to save the filtered data?',...
+                      'Save?', 'Yes', 'No', 'No');
+    switch choice
+        case 'Yes'
+            % Storing data
+            h = msgbox('Saving dataset...');
+            filtfile = char(strrep(files(arqset), '.set', '-filt.set'));
+            outputFolder = handles.outFolder;
+            filtEEG = pop_saveset(filtEEG, 'filename', filtfile, ...
+                                  'filepath', outputFolder);
+            close(h);
+
+            % Adding file to the processed list
+            files{m + 1} = filtfile;
+            set(handles.listFiles, 'String', files);
+        case 'No'
+            return;
+    end
 end
 
 
