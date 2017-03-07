@@ -269,10 +269,12 @@ ints_table = ler_arq_ints(get(handles.editTable, 'String'));
 % Different approaches for each file extension
 listset = {};
 handles.listset = listset;
+
 if (get(handles.radioASCII, 'Value'))
     % The input should be the same as the eegmodule input,
     % but the filename in the last column must be replaced
     % by the name of the ascii file
+
     for n = 1:size(ints_table)
         % Variables
         arqascii = ints_table{n, 9};
@@ -313,7 +315,10 @@ if (get(handles.radioASCII, 'Value'))
         listset{n} = arqset;
         set(handles.listFiles, 'String', listset);
     end
-else
+elseif (get(handles.radioEDF, 'Value'))
+    % This runs the version of the button that analyses and
+    % cuts EDF files
+
     for n = 1:size(ints_table)
         % Variables
         arqedf = ints_table{n, 9};
