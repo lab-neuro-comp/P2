@@ -22,7 +22,7 @@ function varargout = emgmodule2(varargin)
 
 % Edit the above text to modify the response to help emgmodule2
 
-% Last Modified by GUIDE v2.5 22-Feb-2017 09:57:32
+% Last Modified by GUIDE v2.5 14-Mar-2017 08:12:45
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -223,6 +223,26 @@ guidata(hObject, handles);
 
 
 %-----------------------------------------------------------------
+% --- Executes on button press in radioEMG.
+function radioEMG_Callback(hObject, eventdata, handles)
+% hObject    handle to radioEMG (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+set(handles.radioEDA, 'Value', 0);
+guidata(hObject, handles);
+
+
+% --- Executes on button press in radioEMG.
+function radioEDA_Callback(hObject, eventdata, handles)
+% hObject    handle to radioEMG (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+set(handles.radioEMG, 'Value', 0);
+guidata(hObject, handles);
+
+
 % --- Executes on button press in radioEDF.
 function radioEDF_Callback(hObject, eventdata, handles)
 % hObject    handle to radioEDF (see GCBO)
@@ -284,9 +304,15 @@ if (get(handles.radioASCII, 'Value'))
         blockrange = floor([int1/samplingRate int2/samplingRate]);
 
         h = msgbox('Loading ASCII...');
-        arqset = strcat(ints_table{n, 1}, '-',...
-                        ints_table{n, 3}, '-EMG-',...
-                        ints_table{n, 2}, '.set');
+        if (get(handle.radioEDA, 'Value'))
+            arqset = strcat(ints_table{n, 1}, '-',...
+                            ints_table{n, 3}, '-EDA-',...
+                            ints_table{n, 2}, '.set')
+        elseif (get(handles.radioEMG, 'Value'))
+            arqset = strcat(ints_table{n, 1}, '-',...
+                            ints_table{n, 3}, '-EMG-',...
+                            ints_table{n, 2}, '.set');
+        end
         EEG = pop_importdata('data', arqascii,...
                              'dataformat', 'ascii',...
                              'srate', samplingRate);
@@ -333,9 +359,15 @@ elseif (get(handles.radioEDF, 'Value'))
         EEG = pop_biosig(arqedf, 'rmeventchan', 'off');
         close(h);
 
-        arqset = strcat(ints_table{n, 1}, '-',...
-                        ints_table{n, 3}, '-',...
-                        ints_table{n, 2}, '.set');
+        if (get(handle.radioEDA, 'Value'))
+            arqset = strcat(ints_table{n, 1}, '-',...
+                            ints_table{n, 3}, '-EDA-',...
+                            ints_table{n, 2}, '.set')
+        elseif (get(handles.radioEMG, 'Value'))
+            arqset = strcat(ints_table{n, 1}, '-',...
+                            ints_table{n, 3}, '-EMG-',...
+                            ints_table{n, 2}, '.set');
+        end
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
                                              'setname', arqset,...
                                              'overwrite', 'on');
@@ -343,7 +375,11 @@ elseif (get(handles.radioEDF, 'Value'))
         % Selecting data to keep
         h = msgbox('Cutting dataset...');
         EEG = eeg_checkset(EEG);
-        EEG = pop_select(EEG, 'time', blockrange);
+        if (get(handles.radioEDA, 'Value'))
+            EEG = pop_select(EEG, 'time', blockrange, 'channel', 'RGP');
+        elseif (get(handles.radioEMG, 'Value'))
+            EEG = pop_select(EEG, 'time', blockrange, 'channel', 'EMG');
+        end
         [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
         close(h);
 
@@ -700,7 +736,5 @@ function listFiles_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
 
 
