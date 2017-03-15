@@ -1,6 +1,8 @@
 function [handles] = processSingleChan(handles)
 % Runs the automatic processing steps of a single channel signal.
 
+% TODO Remove handles dependency on this step
+
 % Open eeglab:
 [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
 
@@ -53,6 +55,8 @@ for n = 1:size(ints_table)
     [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
     close(h);
 
+    % TODO Add mathematics
+
     % Storing data
     h = msgbox('Saving dataset...');
     [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
@@ -65,3 +69,5 @@ for n = 1:size(ints_table)
     listset{n} = arqset;
     set(handles.listFiles, 'String', listset);
 end
+
+disp('DEKITA~! o/')

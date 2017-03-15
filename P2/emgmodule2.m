@@ -286,7 +286,6 @@ end
 handles.outFolder = outputFolder;
 % Process single channel
 handles = processSingleChan(handles);
-disp('DEKITA~! o/')
 
 set([ handles.radioFilt handles.radioPlot, ...
       handles.checkHiFilt handles.editHiFilt, ...
