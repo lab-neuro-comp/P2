@@ -43,6 +43,11 @@ else
 end
 
 addpath ([cd '/eegmodule']);
+javaaddpath('edf.jar');
+if ~is_in_javapath('edf.jar')
+      javaaddpath('edf.jar');
+end
+
 % End initialization code - DO NOT EDIT
 
 
@@ -304,10 +309,10 @@ if (get(handles.radioASCII, 'Value'))
         blockrange = floor([int1/samplingRate int2/samplingRate]);
 
         h = msgbox('Loading ASCII...');
-        if (get(handle.radioEDA, 'Value'))
+        if (get(handles.radioEDA, 'Value'))
             arqset = strcat(ints_table{n, 1}, '-',...
                             ints_table{n, 3}, '-EDA-',...
-                            ints_table{n, 2}, '.set')
+                            ints_table{n, 2}, '.set');
         elseif (get(handles.radioEMG, 'Value'))
             arqset = strcat(ints_table{n, 1}, '-',...
                             ints_table{n, 3}, '-EMG-',...
@@ -359,10 +364,10 @@ elseif (get(handles.radioEDF, 'Value'))
         EEG = pop_biosig(arqedf, 'rmeventchan', 'off');
         close(h);
 
-        if (get(handle.radioEDA, 'Value'))
+        if (get(handles.radioEDA, 'Value'))
             arqset = strcat(ints_table{n, 1}, '-',...
                             ints_table{n, 3}, '-EDA-',...
-                            ints_table{n, 2}, '.set')
+                            ints_table{n, 2}, '.set');
         elseif (get(handles.radioEMG, 'Value'))
             arqset = strcat(ints_table{n, 1}, '-',...
                             ints_table{n, 3}, '-EMG-',...
@@ -375,10 +380,12 @@ elseif (get(handles.radioEDF, 'Value'))
         % Selecting data to keep
         h = msgbox('Cutting dataset...');
         EEG = eeg_checkset(EEG);
+        labels = edfinfo.getLabels();
+        class(labels)
         if (get(handles.radioEDA, 'Value'))
-            EEG = pop_select(EEG, 'time', blockrange, 'channel', 'RGP');
+            EEG = pop_select(EEG, 'time', blockrange, 'channel', {'RGP'});
         elseif (get(handles.radioEMG, 'Value'))
-            EEG = pop_select(EEG, 'time', blockrange, 'channel', 'EMG');
+            EEG = pop_select(EEG, 'time', blockrange, 'channel', {'EMG'});
         end
         [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
         close(h);
