@@ -284,131 +284,13 @@ else
     outputFolder = strcat(outputFolder, filesep);
 end
 handles.outFolder = outputFolder;
-
-% Reading parameters file
-ints_table = ler_arq_ints(get(handles.editTable, 'String'));
-
-% Open eeglab:
-[ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
-
-% Different approaches for each file extension
-listset = {};
-handles.listset = listset;
-
-if (get(handles.radioASCII, 'Value'))
-    % The input should be the same as the eegmodule input,
-    % but the filename in the last column must be replaced
-    % by the name of the ascii file
-
-    for n = 1:size(ints_table)
-        % Variables
-        arqascii = ints_table{n, 9};
-        int1 = ints_table{n, 5};
-        int2 = ints_table{n, 6};
-        samplingRate = ints_table{n, 7};
-        blockrange = floor([int1/samplingRate int2/samplingRate]);
-
-        h = msgbox('Loading ASCII...');
-        if (get(handles.radioEDA, 'Value'))
-            arqset = strcat(ints_table{n, 1}, '-',...
-                            ints_table{n, 3}, '-EDA-',...
-                            ints_table{n, 2}, '.set');
-        elseif (get(handles.radioEMG, 'Value'))
-            arqset = strcat(ints_table{n, 1}, '-',...
-                            ints_table{n, 3}, '-EMG-',...
-                            ints_table{n, 2}, '.set');
-        end
-        EEG = pop_importdata('data', arqascii,...
-                             'dataformat', 'ascii',...
-                             'srate', samplingRate);
-        [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
-                                             'setname', arqset,...
-                                             'overwrite', 'on');
-        close(h);
-
-        % Selecting data to keep
-        % TODO check EEGLab function pop_select()
-        h = msgbox('Cutting dataset...');
-        EEG = eeg_checkset(EEG);
-        EEG = pop_select(EEG, 'time', blockrange);
-        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-        close(h);
-
-        % Storing data
-        h = msgbox('Saving dataset...');
-        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-        [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
-        EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
-                               'filepath', outputFolder);
-        close(h);
-
-        % Adding file to the processed list
-        listset{n} = arqset;
-        set(handles.listFiles, 'String', listset);
-    end
-elseif (get(handles.radioEDF, 'Value'))
-    % This runs the version of the button that analyses and
-    % cuts EDF files
-
-    for n = 1:size(ints_table)
-        % Variables
-        arqedf = ints_table{n, 9};
-        int1 = ints_table{n, 5};
-        int2 = ints_table{n, 6};
-        edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
-        samplingRate = edfinfo.getSamplingRate();
-        blockrange = floor([int1/samplingRate int2/samplingRate]);
-
-        % Loading EDF
-        h = msgbox('Loading EDF...');
-        EEG = pop_biosig(arqedf, 'rmeventchan', 'off');
-        close(h);
-
-        if (get(handles.radioEDA, 'Value'))
-            arqset = strcat(ints_table{n, 1}, '-',...
-                            ints_table{n, 3}, '-EDA-',...
-                            ints_table{n, 2}, '.set');
-        elseif (get(handles.radioEMG, 'Value'))
-            arqset = strcat(ints_table{n, 1}, '-',...
-                            ints_table{n, 3}, '-EMG-',...
-                            ints_table{n, 2}, '.set');
-        end
-        [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
-                                             'setname', arqset,...
-                                             'overwrite', 'on');
-
-        % Selecting data to keep
-        h = msgbox('Cutting dataset...');
-        EEG = eeg_checkset(EEG);
-        labels = edfinfo.getLabels();
-        class(labels)
-        if (get(handles.radioEDA, 'Value'))
-            EEG = pop_select(EEG, 'time', blockrange, 'channel', {'RGP'});
-        elseif (get(handles.radioEMG, 'Value'))
-            EEG = pop_select(EEG, 'time', blockrange, 'channel', {'EMG'});
-        end
-        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-        close(h);
-
-        % Storing data
-        h = msgbox('Saving dataset...');
-        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-        [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
-        EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
-                               'filepath', outputFolder);
-        close(h);
-
-        % Adding file to the processed list
-        listset{n} = arqset;
-        set(handles.listFiles, 'String', listset);
-    end
-end
-    
+% Process single channel
+handles = processSingleChan(handles);
 disp('DEKITA~! o/')
 
-set( [handles.radioFilt handles.radioPlot, ...
+set([ handles.radioFilt handles.radioPlot, ...
       handles.checkHiFilt handles.editHiFilt, ...
-      handles.checkLoFilt handles.buttonProcess], ...
+      handles.checkLoFilt handles.buttonProcess ], ...
     'Enable', 'on');
 guidata(hObject, handles);
 
@@ -420,7 +302,7 @@ function radioFilt_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-set( [handles.radioPlot handles.checkLoFilt], ... 
+set( [handles.radioPlot handles.checkLoFilt], ...
     'Value', 0);
 set(handles.checkHiFilt, 'Value', 1);
 set( [handles.checkHiFilt handles.editHiFilt, ...
@@ -436,7 +318,7 @@ function radioPlot_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-set( [handles.radioFilt handles.checkLoFilt handles.checkNotch], ... 
+set( [handles.radioFilt handles.checkLoFilt handles.checkNotch], ...
     'Value', 0);
 set(handles.checkHiFilt, 'Value', 1);
 set( [handles.checkHiFilt handles.editHiFilt, ...
@@ -535,7 +417,7 @@ if isequal(get(handles.editLoFilt, 'String'), get(handles.editHiFilt, 'String'))
     set(handles.editHiFilt, 'String', '');
 end
 guidata(hObject, handles);
-    
+
 
 % --- Executes during object creation, after setting all properties.
 function editHiFilt_CreateFcn(hObject, eventdata, handles)
@@ -743,5 +625,3 @@ function listFiles_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
