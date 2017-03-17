@@ -47,23 +47,32 @@ for n = 1:size(ints_table)
     % Selecting data to keep
     h = msgbox('Cutting dataset...');
     EEG = eeg_checkset(EEG);
-    if get(handles.radioEDA, 'Value')
-        EEG = pop_select(EEG, 'time', blockrange, 'channel', 'RGP');
-    elseif get(handles.radioEMG, 'Value')
-        EEG = pop_select(EEG, 'time', blockrange, 'channel', 'EMG');
+    if get(handles.radioEDF, 'Value')
+        if get(handles.radioEDA, 'Value')
+            EEG = pop_select(EEG, 'time', blockrange, 'channel', 'RGP');
+        elseif get(handles.radioEMG, 'Value')
+            EEG = pop_select(EEG, 'time', blockrange, 'channel', 'EMG-RGP');
+        end
+    elseif get(handles.radioASCII, 'Value')
+        EEG = pop_select(EEG, 'time', blockrange);
     end
     [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
     close(h);
-
-    % TODO Add mathematics
 
     % Storing data
     h = msgbox('Saving dataset...');
     [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
     [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
     EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
-                           'filepath', outputFolder);
+                           'filepath', get(handles.editOutput, 'String'));
     close(h);
+
+    h = msgbox('Exporting dataset...');
+    exportASCII = strcat(get(handles.editOutput, 'String'), '\', arqsetname, '.ascii')
+    EEG = pop_export(EEG, exportASCII, 'elec', 'off');
+    close(h);
+
+    % TODO Add mathematics
 
     % Adding file to the processed list
     listset{n} = arqset;
