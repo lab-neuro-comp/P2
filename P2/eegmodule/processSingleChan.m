@@ -36,14 +36,6 @@ elseif get(handles.radioEDA, 'Value')
                     'Variance', ...
                     'SCL', ...
                     'SCR');
-elseif get(handles.radioECG, 'Value')
-    ecgParamFile = strcat(get(handles.editOutput, 'String'), filesep, 'ECG_Parameters_', date, '.csv');
-    fileID = fopen(edaParamFile, 'w');
-    fprintf(fileID, '%s;%s;%s;%s\n', ...
-                    'Subject', ...
-                    'Condition', ...
-                    'VHR', ...
-                    'VHRF');
 end
 
 for n = 1:size(ints_table)
@@ -73,10 +65,6 @@ for n = 1:size(ints_table)
         arqset = [ ints_table{n, 1} '-' ...
                    ints_table{n, 3} '-EMG-' ...
                    ints_table{n, 2} '.set' ];
-    elseif get(handles.radioECG, 'Value');
-        arqset = [ ints_table{n, 1} '-' ...
-                   ints_table{n, 3} '-ECG-' ...
-                   ints_table{n, 2} '.set' ];
     end
     [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
                                          'setname', arqset,...
@@ -90,8 +78,6 @@ for n = 1:size(ints_table)
             EEG = pop_select(EEG, 'time', blockrange, 'channel', {'EMG-RGP'});
         elseif get(handles.radioEMG, 'Value')
             EEG = pop_select(EEG, 'time', blockrange, 'channel', {'EMG-RGP'});
-        elseif get(handles.radioECG, 'Value');
-            EEG = pop_select(EEG, 'time', blockrange, 'channel', {'ECG'});
         end
     elseif get(handles.radioASCII, 'Value')
         EEG = pop_select(EEG, 'time', blockrange);
@@ -136,15 +122,6 @@ for n = 1:size(ints_table)
         rgpvar = replace_dot(rgpvar);
         scl = replace_dot(scl);
         scr = replace_dot(scr);
-    elseif get(handles.radioECG, 'Value');
-        % TODO Implement ECG processing
-        disp('ECG analysis not yet implemented');
-        ecgASCII =load(exportASCII);
-        constants = load_constants;
-        fs = get(constants, 'fs');
-        [vhr vhrf] = ecgrfunc(ecgASCII(2,:), fs);
-        vhr = replace_dot(vhr);
-        vhrf = replace_dot(vhrf);
     end
     close(h);
 
