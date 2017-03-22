@@ -1,4 +1,5 @@
 function [timestring] = replace_dot(time)
+% TODO Add documentation
 
 temp = {};
 timestring = [];

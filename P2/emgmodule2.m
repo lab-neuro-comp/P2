@@ -22,7 +22,7 @@ function varargout = emgmodule2(varargin)
 
 % Edit the above text to modify the response to help emgmodule2
 
-% Last Modified by GUIDE v2.5 14-Mar-2017 08:12:45
+% Last Modified by GUIDE v2.5 22-Mar-2017 09:37:26
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -235,6 +235,7 @@ function radioEMG_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 set(handles.radioEDA, 'Value', 0);
+set(handles.radioECG, 'Value', 0);
 guidata(hObject, handles);
 
 
@@ -245,8 +246,19 @@ function radioEDA_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 set(handles.radioEMG, 'Value', 0);
+set(handles.radioECG, 'Value', 0);
 guidata(hObject, handles);
 
+% --- Executes on button press in radioECG.
+function radioECG_Callback(hObject, eventdata, handles)
+% hObject    handle to radioECG (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radioECG
+set(handles.radioEMG, 'Value', 0);
+set(handles.radioEDA, 'Value', 0);
+guidata(hObject, handles);
 
 % --- Executes on button press in radioEDF.
 function radioEDF_Callback(hObject, eventdata, handles)
