@@ -40,7 +40,7 @@ rereferReuse = java.util.HashMap;
 cutReuse = java.util.HashMap;
 
 studyName = strcat(output_folder, 'Study_', date, '.study');
-[STUDY ALLEEG] = pop_study( [], [] );
+[STUDY ALLEEG] = pop_study([ ], [ ]);
 
 %Iniciar varredura para corte de intervalos
 for n = 1:size(ints_table)
@@ -127,7 +127,7 @@ for n = 1:size(ints_table)
         %EEG = pop_resample( EEG, freq);
         %[ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
         EEG = pop_runica(EEG, 'icatype', 'runica',...
-                              'options', {'extended' 1},...
+                              'options', { 'extended' 1 },...
                               'chanind', [ 1:21 ]);
         [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
         confirm_window(checkShow, 'ICA Completed');

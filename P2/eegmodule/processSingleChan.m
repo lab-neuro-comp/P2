@@ -94,7 +94,7 @@ for n = 1:size(ints_table)
     close(h);
 
     h = msgbox('Exporting dataset...');
-    exportASCII = strcat(get(handles.editOutput, 'String'), '\', arqsetname, '.ascii');
+    exportASCII = strcat(get(handles.editOutput, 'String'), filesep, arqsetname, '.ascii');
     EEG = pop_export(EEG, exportASCII, 'elec', 'off');
     close(h);
 
