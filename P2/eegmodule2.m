@@ -22,7 +22,7 @@ function varargout = eegmodule2(varargin)
 
 % Edit the above text to modify the response to help eegmodule2
 
-% Last Modified by GUIDE v2.5 24-Mar-2017 11:15:51
+% Last Modified by GUIDE v2.5 24-Mar-2017 13:36:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -219,7 +219,7 @@ function editTable_Callback(hObject, eventdata, handles)
 if isempty(get(handles.editTable, 'String'))
     set([ handles.buttonRun, ...
           handles.handles, ...
-          checkCut.checkRerefer, ...
+          checkRemove.checkRerefer, ...
           handles.checkLocate,...
           handles.checkInfo, ...
           handles.checkICA, ...
@@ -374,3 +374,14 @@ xlsfile = get(handles.editTable, 'String');
 
 % Let's process it!
 processEEG(xlsfile, eeglabPath, eeglocPath, outputFolder, options);
+
+
+% --- Executes on button press in checkRemove.
+function checkRemove_Callback(hObject, eventdata, handles)
+% hObject    handle to checkRemove (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkRemove
+
+
