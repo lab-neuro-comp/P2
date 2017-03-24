@@ -29,7 +29,7 @@ ints_table = ler_arq_ints(inputfile);
 % Setting options
 checkShow = options(1);
 checkRerefer = options(2);
-checkCut = options(3);
+checkRemove = options(3);
 checkLocate = options(4);
 checkInfo = options(5);
 checkICA = options(6);
@@ -39,15 +39,15 @@ checkArtifacts = options(7);
 rereferReuse = java.util.HashMap;
 cutReuse = java.util.HashMap;
 
-studyName = strcat(output_folder, 'Study_', date, '.study');
-[STUDY ALLEEG] = pop_study([ ], [ ]);
+%studyName = strcat(output_folder, 'Study_', date, '.study');
+%[STUDY ALLEEG] = pop_study([ ], [ ]);
 
 %Iniciar varredura para corte de intervalos
 for n = 1:size(ints_table)
     % Variables
-    arqedf = ints_table{n, 9};
-    int1 = ints_table{n, 5};
-    int2 = ints_table{n, 6};
+    arqedf = ints_table{n, 10};
+    int1 = ints_table{n, 7};
+    int2 = ints_table{n, 8};
     edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
     samplingRate = edfinfo.getSamplingRate();
     blockrange = floor([int1/samplingRate int2/samplingRate]);
@@ -56,9 +56,8 @@ for n = 1:size(ints_table)
     EEG = pop_biosig(arqedf, 'blockrange', blockrange, 'rmeventchan', 'off');
     confirm_window(checkShow, 'EDF Loaded');
 
-    arqset = change_extension(arqedf, 'set');
     [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
-                                         'setname', arqset,...
+                                         'setname', ints_table{n, 11},...
                                          'overwrite', 'on');
 
     % Rerefering EDF
@@ -83,7 +82,7 @@ for n = 1:size(ints_table)
     end
 
     % Remove EDF channels
-    if isequal(checkCut, 1)
+    if isequal(checkRemove, 1)
         % Checking if previous selections can be reused
         channelsCode = getChannelsCode(edfinfo);
         if cutReuse.containsKey(channelsCode)
@@ -105,16 +104,20 @@ for n = 1:size(ints_table)
 
     % Locating electrodes
     if isequal(checkLocate, 1)
-        % TODO Check if this loading is correct
-        EEG = pop_chanedit(EEG, 'load', eegloc_path);
+        % TODO Find a way to choose which channels should be deleted
+        EEG = pop_chanedit(EEG, 'load', eegloc_path, ...
+                                'delete', [23 24 25]);
         [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-        confirm_window(checkShow, 'Electrodes Mapped');
+        confirm_window(checkShow, 'Electrodes Located');
     end
 
     % Saving suject info
     if isequal(checkInfo, 1)
         EEG = eeg_checkset(EEG);
-        EEG = pop_editset(EEG, 'subject', ints_table{n, 2});
+        EEG = pop_editset(EEG, 'subject', ints_table{n, 1}, ...
+                               'condition', ints_table{n, 2}, ...
+                               'session', ints_table{n, 6}, ...
+                               'group', ints_table{n, 4});
         [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
         confirm_window(checkShow, 'Subject Info Saved');
     end
@@ -154,21 +157,20 @@ for n = 1:size(ints_table)
 
     % Storing data
     [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-    [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
-    EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
+    EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
                            'filepath', output_folder);
 
     % Adding to STUDY
-    setFile = strcat(output_folder, arqsetname, arqsetext)
-    [STUDY ALLEEG] = std_editset( STUDY, ALLEEG, ...
-                                'name', studyName, ...
-                                'filename', strcat('/Study_', date), ...
-                                'filepath', output_folder, ...
-                                'commands', ...
-                                {'index', n, ...
-                                'load', setFile, ...
-                                'subject', ints_table{n, 1}, ...
-                                'session', ints_table{n, 8}});
+%    setFile = strcat(output_folder, ints_table{n, 11})
+%    [STUDY ALLEEG] = std_editset( STUDY, ALLEEG, ...
+%                                'name', studyName, ...
+%                                'filename', strcat('/Study_', date), ...
+%                                'filepath', output_folder, ...
+%                                'commands', ...
+%                                {'index', n, ...
+%                                'load', setFile, ...
+%                                'subject', ints_table{n, 1}, ...
+%                                'session', ints_table{n, 5}});
 end
 
 
