@@ -138,6 +138,6 @@ for n = 1:size(ints_table)
     listset{n} = arqset;
     set(handles.listFiles, 'String', listset);
 end
-status = fclose(fileID)
+fclose(fileID);
 
 disp('DEKITA~! o/')
