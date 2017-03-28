@@ -235,7 +235,6 @@ function radioEMG_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 set(handles.radioEDA, 'Value', 0);
-set(handles.radioECG, 'Value', 0);
 guidata(hObject, handles);
 
 
@@ -246,18 +245,6 @@ function radioEDA_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 set(handles.radioEMG, 'Value', 0);
-set(handles.radioECG, 'Value', 0);
-guidata(hObject, handles);
-
-% --- Executes on button press in radioECG.
-function radioECG_Callback(hObject, eventdata, handles)
-% hObject    handle to radioECG (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of radioECG
-set(handles.radioEMG, 'Value', 0);
-set(handles.radioEDA, 'Value', 0);
 guidata(hObject, handles);
 
 % --- Executes on button press in radioEDF.

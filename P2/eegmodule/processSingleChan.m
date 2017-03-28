@@ -40,19 +40,19 @@ end
 
 for n = 1:size(ints_table)
     % Prapring some parameters
-    int1 = ints_table{n, 5};
-    int2 = ints_table{n, 6};
-    samplingRate = ints_table{n, 7};
+    int1 = ints_table{n, 7};
+    int2 = ints_table{n, 8};
+    samplingRate = ints_table{n, 9};
     blockrange = floor([int1/samplingRate int2/samplingRate]);
 
     % Loading data
     if get(handles.radioASCII, 'Value')
-        arqascii = ints_table{n, 9};
+        arqascii = ints_table{n, 10};
         EEG = pop_importdata('data', arqascii,...
                              'dataformat', 'ascii',...
                              'srate', samplingRate);
     elseif get(handles.radioEDF, 'Value')
-        arqedf = ints_table{n, 9};
+        arqedf = ints_table{n, 10};
         EEG = pop_biosig(arqedf, 'rmeventchan', 'off');
     end
 
@@ -107,21 +107,30 @@ for n = 1:size(ints_table)
         emgASCII = emgASCII(2,:);
         [emgm, emgsd, emgvar, emgrms, emgrmsN, powtotal] = emgfunc(emgASCII);
         temp = fmap(@replace_dot, {emgm, emgsd, emgvar, emgrms, emgrmsN, powtotal});
-        emgm = temp{1};
-        emgsd = temp{2};
-        emgvar = temp{3};
-        emgrms = temp{4};
-        emgrmsN = temp{5};
-        powtotal = temp{6};
+        % temp{1, 2, 3, 4, 5, 6} = {emgm, emgsd, emgvar, emgrms, emgrmsN, powtotal}
+        fprintf(fileID, '%s;%s;%s;%s;%s;%s;%s;%s\n', ...
+                        ints_table{n, 1}, ...
+                        ints_table{n, 2}, ...
+                        temp{1}, ...
+                        temp{2}, ...
+                        temp{3}, ...
+                        temp{4}, ...
+                        temp{5}, ...
+                        temp{6});
     elseif get(handles.radioEDA, 'Value')
         edaASCII = load(exportASCII);
         edaASCII = edaASCII(2,:);
         [rgpm, rgpsd, rgpvar, scl, scr] = rgpfunc(edaASCII);
-        rgpm = replace_dot(rgpm);
-        rgpsd = replace_dot(rgpsd);
-        rgpvar = replace_dot(rgpvar);
-        scl = replace_dot(scl);
-        scr = replace_dot(scr);
+        temp = fmap(@replace_dot, {rgpm, rgpsd, rgpvar, scl, scr});
+        % temp{1, 2, 3, 4, 5} = {rgpm, rgpsd, rgpvar, scl, scr}
+        fprintf(fileID, '%s;%s;%s;%s;%s;%s;%s\n', ...
+                        ints_table{n, 1}, ...
+                        ints_table{n, 2}, ...
+                        temp{1}, ...
+                        temp{2}, ...
+                        temp{3}, ...
+                        temp{4}, ...
+                        temp{5});
     end
     close(h);
 
@@ -129,6 +138,6 @@ for n = 1:size(ints_table)
     listset{n} = arqset;
     set(handles.listFiles, 'String', listset);
 end
-fclose(fileID);
+status = fclose(fileID)
 
 disp('DEKITA~! o/')
