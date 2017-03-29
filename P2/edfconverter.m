@@ -92,6 +92,7 @@ function pushbuttonSearch_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 [filename, pathname] = uigetfile('*.edf', 'MultiSelect', 'on');
 
+% TODO Set editNotesOutput string to the output
 if isnumeric(filename)
     return
 elseif iscell(filename)
@@ -178,35 +179,3 @@ function pushbuttonConvertNotes_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbuttonConvertNotes (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-
-
-function editNotesOutput_Callback(hObject, eventdata, handles)
-% hObject    handle to editNotesOutput (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of editNotesOutput as text
-%        str2double(get(hObject,'String')) returns contents of editNotesOutput as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function editNotesOutput_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to editNotesOutput (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in pushbuttonSearchOutput.
-function pushbuttonSearchOutput_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbuttonSearchOutput (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
