@@ -24,8 +24,13 @@ timeRaw = split_string(char(startTime), '.');
 timestamp = sprintf('20%s-%s-%sT%s:%s:%sZ', ...
                     dateRaw{3}, dateRaw{2}, dateRaw{1}, ...
 					timeRaw{1}, timeRaw{2}, timeRaw{3});
-fprintf('notes2csv! %s\n', char(timestamp));
 recordLine = sprintf('%s;record;%s', fileName, timestamp);
+fprintf('notes2csv! %s\n', recordLine);
+% TODO Convert timestamp to unix time integer
 
 % TODO Create samplingrate pseudoannotation
+samplingRate = edf.getSamplingRate();
+samplingRateLine = sprintf('%s;samplingrate;%s', fileName, num2str(samplingRate));
+fprintf('notes2csv! %s\n', samplingRateLine);
+
 % TODO Create a line for each annotation
