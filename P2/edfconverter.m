@@ -147,7 +147,7 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
         end
         for m = 1:length(labels)
             label = labels{m};
-            outlet = strcat(root, label, '.ascii');
+            outlet = [ root label '.ascii' ];
             fprintf('%s\n', outlet);
             edf.toSingleChannelAscii(outlet, label);
         end
@@ -179,3 +179,19 @@ function pushbuttonConvertNotes_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbuttonConvertNotes (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% IDEA Try to implement this procedure to run on parallel
+raw = get(handles.editSearch, 'String');
+stuff = split_string(raw, ';');
+
+fprintf('---\n');
+for n = 1:length(stuff)
+    inlet = stuff{n};
+    fprintf('file: %s\n', inlet);
+    edf = br.unb.biologiaanimal.edf.EDF(inlet);
+    outlet = change_extension(inlet, '.csv');
+    % TODO Write CSV to output file
+    fprintf('annotations:\n');
+    fprintf('%s\n', freduce(@(box, it) sprintf('%s%s\n', box, it), '', cell(edf.getAnnotations())));
+end
+fprintf('...\n');
