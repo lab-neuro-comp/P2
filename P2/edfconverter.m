@@ -189,7 +189,7 @@ for n = 1:length(stuff)
     inlet = stuff{n};
     fprintf('file: %s\n', inlet);
     edf = br.unb.biologiaanimal.edf.EDF(inlet);
-    outlet = change_extension(inlet, '.csv');
+    outlet = change_extension(inlet, 'csv');
     % TODO Write CSV to output file
     fprintf('annotations: ');
     csv = notes2csv(edf);
