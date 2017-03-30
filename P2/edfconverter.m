@@ -191,7 +191,15 @@ for n = 1:length(stuff)
     edf = br.unb.biologiaanimal.edf.EDF(inlet);
     outlet = change_extension(inlet, '.csv');
     % TODO Write CSV to output file
-    fprintf('annotations:\n');
-    fprintf('%s\n', freduce(@(box, it) sprintf('%s%s\n', box, it), '', cell(edf.getAnnotations())));
+    fprintf('annotations: ');
+    csv = notes2csv(edf);
+    if csv
+        fprintf('\n%s\n', csv);
+        fp = fopen(outlet, 'w');
+        fprintf(fp, '%s', csv);
+        fclose(fp);
+    else
+        fprintf('nope\n');
+    end
 end
 fprintf('...\n');
