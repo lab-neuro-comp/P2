@@ -1,12 +1,9 @@
-function [channels] = getChannelsCode(edf)
+function [channels] = getChannelsCode(labels)
 % Turn the labels into'a code for retrieving information later.
 %
 
-rawLabels = edf.getLabels();
-labels = { };
-
-for n = 1:length(rawLabels)
-	labels{n} = char(rawLabels(n));
+for n = 1:length(labels)
+	newLabels{n} = char(labels(n));
 end
 
-channels = join_strings(labels, ';');
+channels = join_strings(newLabels, ';');

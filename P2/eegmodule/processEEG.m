@@ -45,9 +45,11 @@ for n = 1:size(ints_table)
     arqedf = ints_table{n, 10};
     int1 = ints_table{n, 7};
     int2 = ints_table{n, 8};
-    edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
-    samplingRate = edfinfo.getSamplingRate();
-    blockrange = floor([int1/samplingRate int2/samplingRate]);
+    %edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
+    %samplingRate = edfinfo.getSamplingRate();
+    samplingRate = ints_table{n, 9};
+    %blockrange = floor([int1/samplingRate int2/samplingRate]);
+    blockrange = floor([int1 int2])
 
     % Loading EDF
     EEG = pop_biosig(arqedf, 'blockrange', blockrange, 'rmeventchan', 'off');
@@ -60,14 +62,15 @@ for n = 1:size(ints_table)
     % Rerefering EDF
     if isequal(checkRerefer, 1)
         % Checking if previous selections can be reused
-        channelsCode = getChannelsCode(edfinfo);
-        if rereferReuse.containsKey(channelsCode)
+        channelsCodeRerefer = getChannelsCode({EEG.chanlocs.labels});
+        if rereferReuse.containsKey(channelsCodeRerefer)
             fprintf('Reusing previous selection');
-            toBeRerefered = rereferReuse.get(channelsCode);
+            toBeRerefered = rereferReuse.get(channelsCodeRerefer);
         else
-            toBeRerefered = rerefermodule(edfinfo);
+            %toBeRerefered = rerefermodule(edfinfo);
+            toBeRerefered = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
             if toBeRerefered > 0
-                rereferReuse.put(channelsCode, toBeRerefered);
+                rereferReuse.put(channelsCodeRerefer, toBeRerefered);
             end
         end
         % Rerefering all channels according to new reference
@@ -81,14 +84,15 @@ for n = 1:size(ints_table)
     % Remove EDF channels
     if isequal(checkRemove, 1)
         % Checking if previous selections can be reused
-        channelsCode = getChannelsCode(edfinfo);
-        if cutReuse.containsKey(channelsCode)
+        channelsCodeRemove = getChannelsCode({EEG.chanlocs.labels});
+        if cutReuse.containsKey(channelsCodeRemove)
             fprintf('Reusing previous selection');
-            toRemove = cutReuse.get(channelsCode);
+            toRemove = cutReuse.get(channelsCodeRemove);
         else
-            toRemove = removemodule(edfinfo);
+            %toRemove = removemodule(edfinfo);
+            toRemove = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
             if ~isempty(toRemove)
-                cutReuse.put(channelsCode, toRemove);
+                cutReuse.put(channelsCodeRemove, toRemove);
             end
         end
         % Removing channels

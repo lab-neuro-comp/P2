@@ -43,6 +43,10 @@ else
 end
 
 addpath ([cd '/eegmodule']);
+javaaddpath('edf.jar');
+if ~is_in_javapath('edf.jar')
+      javaaddpath('edf.jar');
+end
 % End initialization code - DO NOT EDIT
 
 
