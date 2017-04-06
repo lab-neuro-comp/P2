@@ -27,11 +27,35 @@ timestamp = sprintf('20%s-%s-%s %s:%s:%s', ...
 startDate = datenum(timestamp, 'yyyy-mm-dd HH:MM:SS');
 timestamp = datestr(startDate, 'yyyy-mm-ddTHH:MM:SSZ');
 recordLine = sprintf('%s;record;%s', fileName, timestamp);
-fprintf('notes2csv! %s\n', recordLine);
 
 % TODO Create samplingrate pseudoannotation
 samplingRate = edf.getSamplingRate();
 samplingRateLine = sprintf('%s;samplingrate;%s', fileName, num2str(samplingRate));
-fprintf('notes2csv! %s\n', samplingRateLine);
 
 % TODO Create a line for each annotation
+lines = { recordLine samplingRateLine };
+annotations = cell(annotations);
+for m = 1:length(annotations)
+	annotation = annotations{m};
+
+	% Getting momentTime
+	n = 1;
+	momentString = '';
+	while ~isequal(annotation(n), ' ')
+		momentString = [ momentString annotation(n) ];
+		n = n + 1;
+	end
+	momentTime = str2num(momentString);
+	currentTime = momentTime + startDate;
+	currentTimeString = datestr(currentTime, 'yyyy-mm-ddTHH:MM:SSZ');
+
+	% Getting annotation itself
+	note = annotation(n:end);
+
+	% Building table line
+	currentLine = sprintf('%s;%s;%s', fileName, note, currentTimeString);
+	lines{end+1} = currentLine
+end
+
+% TODO Compile lines to a single string
+csv = freduce(@(box, it) sprintf('%s%s\n', box, it), '', lines);
