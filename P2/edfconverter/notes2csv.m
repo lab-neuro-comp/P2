@@ -4,19 +4,18 @@ function [csv] = notes2csv(edf)
 
 annotations = [ ];
 csv = [ ];
+fileName = char(edf.getFile());
 
 % Checking annotations existence
 try
 	annotations = edf.getAnnotations();
+	annotations = cell(annotations);
 catch exception
 	return
 end
 
-% Temporarily generating annotations format
-csv = freduce(@(box, it) sprintf('%s- %s\n', box, it), '', cell(annotations));
-fileName = char(edf.getFile());
 
-% TODO Create record pseudoannotation
+% Creating record pseudoannotation
 startDate = edf.getHeader().get('startdate');
 startTime = edf.getHeader().get('starttime');
 dateRaw = split_string(char(startDate), '.');
@@ -28,13 +27,12 @@ startDate = datenum(timestamp, 'yyyy-mm-dd HH:MM:SS');
 timestamp = datestr(startDate, 'yyyy-mm-ddTHH:MM:SSZ');
 recordLine = sprintf('%s;record;%s', fileName, timestamp);
 
-% TODO Create samplingrate pseudoannotation
+% Creating samplingrate pseudoannotation
 samplingRate = edf.getSamplingRate();
 samplingRateLine = sprintf('%s;samplingrate;%s', fileName, num2str(samplingRate));
 
-% TODO Create a line for each annotation
+% Creating a line for each annotation
 lines = { recordLine samplingRateLine };
-annotations = cell(annotations);
 for m = 1:length(annotations)
 	annotation = annotations{m};
 
@@ -54,8 +52,8 @@ for m = 1:length(annotations)
 
 	% Building table line
 	currentLine = sprintf('%s;%s;%s', fileName, note, currentTimeString);
-	lines{end+1} = currentLine
+	lines{end+1} = currentLine;
 end
 
-% TODO Compile lines to a single string
+% Compiling lines into a single string
 csv = freduce(@(box, it) sprintf('%s%s\n', box, it), '', lines);
