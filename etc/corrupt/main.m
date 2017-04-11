@@ -17,12 +17,6 @@ cd etc
 cd corrupt
 
 % Running procedure
-if isequal(exist('parfor', 'builtin'), 5)
-	disp('Running on parallel');
-	generateChopsOnParallel(folder);
-	calculateStftOnParallel(folder);
-else
-	disp('Not running on parallel');
-	generateChopsOnly(folder);
-	calculateStftOnly(folder);
-end
+% TODO Load files
+% TODO Filter them using the DWT
+# TODO Save files to memory
