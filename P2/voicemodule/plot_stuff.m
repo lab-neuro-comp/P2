@@ -7,7 +7,7 @@ function varargout = plot_stuff(varargin)
 
 % Edit the above text to modify the response to help plot_stuff
 
-% Last Modified by GUIDE v2.5 07-Nov-2016 09:36:23
+% Last Modified by GUIDE v2.5 11-Apr-2017 15:08:12
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -179,22 +179,29 @@ end
 hold(handles.axes1, 'on');
 m = 1;
 
+record = handles.record;
 for n = 1:numel(moments)
 	if m <= numel(selected)
 	if strcmp(moments(n), selected(m)), 
 		xposition = str2double(selected(m));
-		plot(xposition, -1:0.01:1, 'g', 'LineWidth', 2,...
-			 'MarkerFaceColor', 'g', 'MarkerSize', 10);
+		plot(xposition, -(2*max(record)):(max(record)/5):(2*max(record)), 'g',...
+			 'LineWidth', 2,...
+			 'MarkerFaceColor', 'g',...
+			 'MarkerSize', 10);
 		m = m + 1;
 	else
 		xposition = str2double(moments(n));
-		plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
-			 'MarkerFaceColor', 'g', 'MarkerSize', 10);
+		plot(xposition, -(2*max(record)):(max(record)/50):(2*max(record)), 'r',...
+			 'LineWidth', 2,...
+			 'MarkerFaceColor', 'g',...
+			 'MarkerSize', 10);
 	end
 	else
 	xposition = str2double(moments(n));
-	plot(xposition, -1:0.01:1, 'r', 'LineWidth', 2,...
-		 'MarkerFaceColor', 'g', 'MarkerSize', 10);
+	plot(xposition, -(2*max(record)):(max(record)/50):(2*max(record)), 'r',...
+		 'LineWidth', 2,...
+		 'MarkerFaceColor', 'g',...
+		 'MarkerSize', 10);
 	end
 end
 hold off;
@@ -245,4 +252,13 @@ else
 	guidata(hObject, handles);
 	uiresume(handles.figure1);
 end
+
+
+
+% --------------------------------------------------------------------
+function uitoggletool1_OffCallback(hObject, eventdata, handles)
+% hObject    handle to uitoggletool1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
 

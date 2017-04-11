@@ -49,5 +49,22 @@ for n = 2:R
 	audioTime(n-1) = str2num(char(strcat(temp(1), '.', temp(2))));
 end
 
+figure;
+plot(1:1:length(stimulusTime), stimulusTime, '-or', 'MarkerSize', 3);
+hold on;
+plot(1:1:length(audioTime), audioTime, '--ob', 'MarkerSize', 3);
+
 % Time that takes for one to respond to a stimulus
-responseTime = audioTime - stimulusTime;
+k = 1;
+for n = 2:length(stimulusTime)
+	if stimulusTime(n) >= audioTime(k)
+		responseTime(n-1) = stimulusTime(n-1) - audioTime(k);
+		k = k + 1;
+	else
+		responseTime(n-1) = 0;
+	end
+	if k > length(audioTime)
+		responseTime(n) = 0;
+	end
+end
+		
