@@ -49,7 +49,7 @@ for n = 1:size(ints_table)
     %samplingRate = edfinfo.getSamplingRate();
     samplingRate = ints_table{n, 9};
     %blockrange = floor([int1/samplingRate int2/samplingRate]);
-    blockrange = floor([int1 int2])
+    blockrange = floor([int1 int2]);
 
     % Loading EDF
     EEG = pop_biosig(arqedf, 'blockrange', blockrange, 'rmeventchan', 'off');

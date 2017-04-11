@@ -238,6 +238,7 @@ ints_table = ler_arq_ints(get(handles.editFile, 'String'));
 [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
 
 studyName = strcat(get(handles.editOutput, 'String'), filesep, 'Study_', date, '.study');
+handles.studyName = studyName;
 [STUDY ALLEEG] = pop_study([ ], [ ]);
 
 for n = 1:size(ints_table)
@@ -248,13 +249,14 @@ for n = 1:size(ints_table)
                                  'filename', strcat('/Study_', date), ...
                                  'filepath', get(handles.editOutput, 'String'), ...
                                  'commands', ...
-                                 {'index', n, ...
                                  'load', setFile, ...
                                  'subject', ints_table{n, 1}, ...
-                                 'session', ints_table{n, 5}});
+                                 'session', ints_table{n, 6}});
+                                 {'index', n, ...
 end
 
 set(handles.buttonMap, 'Enable', 'on');
+guidata(hObject, handles);
 
 % --- Executes on button press in buttonMap.
 function buttonMap_Callback(hObject, eventdata, handles)
@@ -262,5 +264,10 @@ function buttonMap_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+studyName = handles.studyName;
+[studyfilepath, studyfilename, studyfileext] = fileparts(studyName);
+
+[STUDY ALLEEG] = pop_loadstudy('filename', strcat(studyfilename, studyfileext), ...
+                               'filepath', studyfilepath);
 
 
