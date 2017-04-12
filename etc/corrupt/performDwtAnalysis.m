@@ -21,3 +21,6 @@ end
 % TODO Save the signals on a single file
 dlmwrite(outputFile, signals, 'delimiter', '\t');
 % TODO Create information file
+fp = fopen(infoFile, 'w');
+fprintf(fp, 'fs=%f\n', edf.getSamplingRate());
+fclose(fp);
