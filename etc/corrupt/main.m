@@ -6,7 +6,7 @@ function main(folder)
 % `main ..\..\..\SST\data\ns\EEG\edf`
 %
 % The current idea of this procedure is to extract a sample of the signal and
-% calculate its STFT, resulting in a plot that will be analyzed later.
+% calculate its DWT, trying to filter the signal in an useful way.
 %
 
 % Adding P2Lib
@@ -18,5 +18,6 @@ cd corrupt
 
 % Running procedure
 % TODO Load files
+files = getEDFs(folder);
 % TODO Filter them using the DWT
-# TODO Save files to memory
+% TODO Save files to memory
