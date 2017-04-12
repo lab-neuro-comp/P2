@@ -17,9 +17,7 @@ cd etc
 cd corrupt
 
 % # Running procedure
-% Loading files
 files = getEDFs(folder);
-% TODO Filter them using the DWT
 limit = length(files);
 parfor n = 1:limit
 	fileName = files{n};
@@ -28,5 +26,4 @@ parfor n = 1:limit
 	[outlet, infolet] = performDwtAnalysis(inlet);
 	fprintf('%d. %s -> %s\n', n, inlet, outlet);
 end
-% TODO Save files to memory
 disp('DONE!');
