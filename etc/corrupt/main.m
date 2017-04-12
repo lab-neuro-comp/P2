@@ -9,15 +9,23 @@ function main(folder)
 % calculate its DWT, trying to filter the signal in an useful way.
 %
 
-% Adding P2Lib
+% # Adding P2Lib
 cd ..
 cd ..
 addP2Lib
 cd etc
 cd corrupt
 
-% Running procedure
-% TODO Load files
+% # Running procedure
+% Loading files
 files = getEDFs(folder);
 % TODO Filter them using the DWT
+limit = length(files);
+parfor n = 1:limit
+	fileName = files{n};
+	inlet = [ folder filesep fileName ];
+	edf = br.unb.biologiaanimal.edf.EDF(inlet);
+	% TODO For each signal, perform Wavelets analysis
+	fprintf('%d. %s\n', n, inlet)
+end
 % TODO Save files to memory
