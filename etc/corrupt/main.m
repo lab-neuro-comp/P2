@@ -24,8 +24,9 @@ limit = length(files);
 parfor n = 1:limit
 	fileName = files{n};
 	inlet = [ folder filesep fileName ];
-	edf = br.unb.biologiaanimal.edf.EDF(inlet);
 	% TODO For each signal, perform Wavelets analysis
-	fprintf('%d. %s\n', n, inlet)
+	[outlet, infolet] = performDwtAnalysis(inlet);
+	fprintf('%d. %s -> %s\n', n, inlet, outlet);
 end
 % TODO Save files to memory
+disp('DONE!');
