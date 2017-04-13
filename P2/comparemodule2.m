@@ -207,23 +207,37 @@ semicollon = findstr(content{1}{1}, ';');
 
 responseTime = handles.responseTime;
 
+n = 1;
 if length(semicollon) == 1
 	content{1}{1} = strcat(content{1}{1}, ';Delay');
 	
-	for n = 2:length(content{1})
-		responseFile = replace_dot(responseTime(n-1));
-		content{1}{n} = strcat(content{1}{n}, ';', responseFile);
+	for k = 1:length(responseTime)
+		if ~isequal(responseTime(n), 0)
+			responseFile = replace_dot(responseTime(n-1));
+			content{1}{n} = strcat(content{1}{n}, ';', responseFile);
+			n = n + 1;
+		else
+			while isequal(responseTime(n), 0)
+				n = n + 1;
+			end
+		end
 	end
 else
 	content{1}{1} = content{1}{1}(1:semicollon(2));
 	content{1}{1} = strcat(content{1}{1}, 'Delay');
 
-	for n = 2:length(content{1})
-		semicollon = findstr(content{1}{n}, ';');
-		content{1}{n} = content{1}{n}(1:semicollon(2));
-		responseFile = replace_dot(responseTime(n-1));
-		content{1}{n} = strcat(content{1}{n}, responseFile);
-		disp(content{1}{n});
+	for k = 1:length(responseTime)
+		if ~isequal(responseTime(n), 0)
+			semicollon = findstr(content{1}{n}, ';');
+			content{1}{n} = content{1}{n}(1:semicollon(2));
+			responseFile = replace_dot(responseTime(n-1));
+			content{1}{n} = strcat(content{1}{n}, responseFile);
+			disp(content{1}{n});
+		else
+			while isequal(responseTime(n), 0)
+				n = n + 1;
+			end
+		end
 	end
 end
 fclose(fileID);
