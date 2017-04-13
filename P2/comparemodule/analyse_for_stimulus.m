@@ -21,7 +21,7 @@ initialTime = find_beginning(audioName);
 
 for n = 1:R
 	if ~isempty(timeArray{n})
-		timeArray{n,1} = split_string(timeArray{n,1}, ':')
+		timeArray{n,1} = split_string(timeArray{n,1}, ':');
 		timeArray{n}{5} = (str2num(timeArray{n}{1})*3600 +...	% Hours
 						   str2num(timeArray{n}{2})*60 +...		% Minutes
 						   str2num(timeArray{n}{3}) +...		% Seconds
