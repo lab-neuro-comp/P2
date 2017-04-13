@@ -6,23 +6,24 @@ function main(folder)
 % `main ..\..\..\SST\data\ns\EEG\edf`
 %
 % The current idea of this procedure is to extract a sample of the signal and
-% calculate its STFT, resulting in a plot that will be analyzed later.
+% calculate its DWT, trying to filter the signal in an useful way.
 %
 
-% Adding P2Lib
+% # Adding P2Lib
 cd ..
 cd ..
 addP2Lib
 cd etc
 cd corrupt
 
-% Running procedure
-if isequal(exist('parfor', 'builtin'), 5)
-	disp('Running on parallel');
-	generateChopsOnParallel(folder);
-	calculateStftOnParallel(folder);
-else
-	disp('Not running on parallel');
-	generateChopsOnly(folder);
-	calculateStftOnly(folder);
+% # Running procedure
+files = getEDFs(folder);
+limit = length(files);
+parfor n = 1:limit
+	fileName = files{n};
+	inlet = [ folder filesep fileName ];
+	% TODO For each signal, perform Wavelets analysis
+	[outlet, infolet] = performDwtAnalysis(inlet);
+	fprintf('%d. %s -> %s\n', n, inlet, outlet);
 end
+disp('DONE!');
