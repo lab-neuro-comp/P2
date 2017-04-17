@@ -7,7 +7,7 @@ function varargout = plot_stuff(varargin)
 
 % Edit the above text to modify the response to help plot_stuff
 
-% Last Modified by GUIDE v2.5 17-Apr-2017 08:24:33
+% Last Modified by GUIDE v2.5 17-Apr-2017 08:09:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -182,26 +182,26 @@ m = 1;
 record = handles.record;
 for n = 1:numel(moments)
 	if m <= numel(selected)
-	if strcmp(moments(n), selected(m)) 
+	if strcmp(moments(n), selected(m)), 
 		xposition = str2double(selected(m));
-		plot([xposition xposition], [-(0.5*max(record)) (0.5*max(record))], '-g',...
-			 'LineWidth', 1,...
+		plot(xposition, -(2*max(record)):(max(record)/5):(2*max(record)), 'g',...
+			 'LineWidth', 2,...
 			 'MarkerFaceColor', 'g',...
-			 'MarkerSize', 2);
+			 'MarkerSize', 10);
 		m = m + 1;
 	else
 		xposition = str2double(moments(n));
-		plot([xposition xposition], [-(0.5*max(record)) (0.5*max(record))], '-r',...
-			 'LineWidth', 1,...
-			 'MarkerFaceColor', 'r',...
-			 'MarkerSize', 2);
+		plot(xposition, -(2*max(record)):(max(record)/50):(2*max(record)), 'r',...
+			 'LineWidth', 2,...
+			 'MarkerFaceColor', 'g',...
+			 'MarkerSize', 10);
 	end
 	else
 	xposition = str2double(moments(n));
-	plot([xposition xposition], [-(0.5*max(record)) (0.5*max(record))], '-r',...
-		 'LineWidth', 1,...
-		 'MarkerFaceColor', 'r',...
-		 'MarkerSize', 2);
+	plot(xposition, -(2*max(record)):(max(record)/50):(2*max(record)), 'r',...
+		 'LineWidth', 2,...
+		 'MarkerFaceColor', 'g',...
+		 'MarkerSize', 10);
 	end
 end
 hold off;
@@ -255,12 +255,21 @@ end
 
 
 % --------------------------------------------------------------------
-function toolZoom_OnCallback(hObject, eventdata, handles)
-% hObject    handle to toolZoom (see GCBO)
+function toolZoomIn_OnCallback(hObject, eventdata, handles)
+% hObject    handle to toolZoomIn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 zoom on;
-set(handles.toolPan, 'State', 'off');
+set([handles.toolZoomOut handles.toolPan], 'State', 'off');
+
+
+% --------------------------------------------------------------------
+function toolZoomOut_OnCallback(hObject, eventdata, handles)
+% hObject    handle to toolZoomOut (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+zoom;
+set([handles.toolZoomIn handles.toolPan], 'State', 'off');
 
 
 % --------------------------------------------------------------------
@@ -269,5 +278,5 @@ function toolPan_OnCallback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 pan on;
-set(handles.toolZoom, 'State', 'off');
+set([handles.toolZoomOut handles.toolZoomIn], 'State', 'off');
 

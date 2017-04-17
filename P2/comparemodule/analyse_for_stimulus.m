@@ -59,7 +59,7 @@ for n = 2:length(stimulusTime)
 			responseTime(n-1) = audioTime(k) - stimulusTime(n-1);
 			k = k + 1;
 		else
-			while stimulusTime(n) < audioTime(k)
+			while (stimulusTime(n) < audioTime(k) && n < length(stimulusTime))
 				responseTime(n-1) = 0;
 				n = n + 1;
 			end
