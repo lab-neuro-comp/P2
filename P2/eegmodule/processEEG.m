@@ -39,16 +39,12 @@ checkArtifacts = options(7);
 rereferReuse = java.util.HashMap;
 cutReuse = java.util.HashMap;
 
-%Iniciar varredura para corte de intervalos
 for n = 1:size(ints_table)
     % Variables
     arqedf = ints_table{n, 10};
     int1 = ints_table{n, 7};
     int2 = ints_table{n, 8};
-    %edfinfo = br.unb.biologiaanimal.edf.EDF(arqedf);
-    %samplingRate = edfinfo.getSamplingRate();
     samplingRate = ints_table{n, 9};
-    %blockrange = floor([int1/samplingRate int2/samplingRate]);
     blockrange = floor([int1 int2]);
 
     % Loading EDF
@@ -67,8 +63,9 @@ for n = 1:size(ints_table)
             fprintf('Reusing previous selection');
             toBeRerefered = rereferReuse.get(channelsCodeRerefer);
         else
-            %toBeRerefered = rerefermodule(edfinfo);
+            h = msgbox('Choose the channel for rerefering:');
             toBeRerefered = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
+            close(h);
             if toBeRerefered > 0
                 rereferReuse.put(channelsCodeRerefer, toBeRerefered);
             end
@@ -89,27 +86,19 @@ for n = 1:size(ints_table)
             fprintf('Reusing previous selection');
             toRemove = cutReuse.get(channelsCodeRemove);
         else
-            %toRemove = removemodule(edfinfo);
+            h = msgbox('Choose the channels to be removed:');
             toRemove = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
-            if ~isempty(toRemove)
+            close(h);
+            if toRemove > 0
                 cutReuse.put(channelsCodeRemove, toRemove);
             end
         end
         % Removing channels
-        if ~isempty(toRemove)
+        if toRemove > 0
             EEG = pop_select(EEG, 'nochannel', toRemove);
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
             confirm_window(checkShow, 'EDF Channels Cut');
         end
-    end
-
-    % Locating electrodes
-    if isequal(checkLocate, 1)
-        % TODO Find a way to choose which channels should be deleted
-        EEG = pop_chanedit(EEG, 'load', eegloc_path, ...
-                                'delete', [23 24 25]);
-        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-        confirm_window(checkShow, 'Electrodes Located');
     end
 
     % Saving suject info
@@ -137,6 +126,18 @@ for n = 1:size(ints_table)
         confirm_window(checkShow, 'ICA Completed');
     end
 
+    % Storing data
+    [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+    EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
+                           'filepath', output_folder);
+end
+
+% User has to do these steps manually
+for n = 1:size(ints_table)
+    % Loading SET
+    arqset = ints_table{n, 11};
+    EEG = pop_loadset( 'filename', arqset, 'filepath', output_folder);
+
     % Removing artifacts
     if isequal(checkArtifacts, 1)
         pop_eegplot(EEG);
@@ -149,11 +150,20 @@ for n = 1:size(ints_table)
                                 'Yes', 'No', 'Yes');
             switch rmvagain
                 case 'Yes'
+                    pop_eegplot(EEG);
                     EEG = pop_subcomp(EEG);
                 case 'No'
+                    [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
                     confirm_window(checkShow, 'Components Removed');
             end
         end
+    end
+
+    % Locating electrodes
+    if isequal(checkLocate, 1)
+        EEG = pop_chanedit(EEG);
+        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+        confirm_window(checkShow, 'Electrodes Located');
     end
 
     % Storing data
@@ -161,7 +171,3 @@ for n = 1:size(ints_table)
     EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
                            'filepath', output_folder);
 end
-
-
-% TODO Replace this mesage with a dialog box
-fprintf('\t\tDEKITA~! o/\n');
