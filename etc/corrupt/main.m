@@ -22,7 +22,6 @@ limit = length(files);
 parfor n = 1:limit
 	fileName = files{n};
 	inlet = [ folder filesep fileName ];
-	% TODO For each signal, perform Wavelets analysis
 	[outlet, infolet] = performDwtAnalysis(inlet);
 	fprintf('%d. %s -> %s\n', n, inlet, outlet);
 end
