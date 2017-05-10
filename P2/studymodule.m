@@ -254,7 +254,6 @@ for n = 1:size(ints_table)
                                   'load', setFile, ...
                                   'subject', ints_table{n, 1}, ...
                                   'session', ints_table{n, 6}});
-                                 
 end
 
 set(handles.buttonMap, 'Enable', 'on');
@@ -266,10 +265,6 @@ function buttonMap_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-studyFullName = handles.studyFullName;
-[studyfilepath, studyfilename, studyfileext] = fileparts(studyFullName);
-
-[STUDY ALLEEG] = pop_loadstudy('filename', strcat(studyfilename, studyfileext), ...
-                               'filepath', studyfilepath);
+mappingmodule;
 
 
