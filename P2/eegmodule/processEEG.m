@@ -40,103 +40,105 @@ rereferReuse = java.util.HashMap;
 cutReuse = java.util.HashMap;
 
 for n = 1:size(ints_table)
-    try
-        % Variables
-        arqedf = ints_table{n, 10};
-        int1 = ints_table{n, 7};
-        int2 = ints_table{n, 8};
-        samplingRate = ints_table{n, 9};
-        blockrange = floor([int1 int2]);
+    % Variables
+    arqedf = ints_table{n, 10};
+    int1 = ints_table{n, 7};
+    int2 = ints_table{n, 8};
+    samplingRate = ints_table{n, 9};
+    blockrange = floor([int1 int2]);
 
-        % Loading EDF
-        EEG = pop_biosig(arqedf, 'blockrange', blockrange, 'rmeventchan', 'off');
-        confirm_window(checkShow, 'EDF Loaded');
+    % Loading EDF
+    EEG = pop_biosig(arqedf, 'blockrange', blockrange, 'rmeventchan', 'off');
+    confirm_window(checkShow, 'EDF Loaded');
 
-        [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
-                                             'setname', ints_table{n, 11},...
-                                             'overwrite', 'on');
+    [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
+                                         'setname', ints_table{n, 11},...
+                                         'overwrite', 'on');
 
-        % Rerefering EDF
-        if isequal(checkRerefer, 1)
-            % Checking if previous selections can be reused
-            channelsCodeRerefer = getChannelsCode({EEG.chanlocs.labels});
-            if rereferReuse.containsKey(channelsCodeRerefer)
-                fprintf('Reusing previous selection');
-                toBeRerefered = rereferReuse.get(channelsCodeRerefer);
-            else
-                h = msgbox('Choose the channel for rerefering:');
-                toBeRerefered = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
-                close(h);
-                if toBeRerefered > 0
-                    rereferReuse.put(channelsCodeRerefer, toBeRerefered);
-                end
-            end
-            % Rerefering all channels according to new reference
+    % Rerefering EDF
+    if isequal(checkRerefer, 1)
+        % Checking if previous selections can be reused
+        channelsCodeRerefer = getChannelsCode({EEG.chanlocs.labels});
+        if rereferReuse.containsKey(channelsCodeRerefer)
+            fprintf('Reusing previous selection');
+            toBeRerefered = rereferReuse.get(channelsCodeRerefer);
+        else
+            h = msgbox('Choose the channel for rerefering:');
+            toBeRerefered = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
+            close(h);
             if toBeRerefered > 0
-                EEG = pop_reref(EEG, toBeRerefered);
-                [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-                confirm_window(checkShow, 'EDF Rerefered');
+                rereferReuse.put(channelsCodeRerefer, toBeRerefered);
             end
         end
-
-        % Remove EDF channels
-        if isequal(checkRemove, 1)
-            % Checking if previous selections can be reused
-            channelsCodeRemove = getChannelsCode({EEG.chanlocs.labels});
-            if cutReuse.containsKey(channelsCodeRemove)
-                fprintf('Reusing previous selection');
-                toRemove = cutReuse.get(channelsCodeRemove);
-            else
-                h = msgbox('Choose the channels to be removed:');
-                toRemove = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
-                close(h);
-                if toRemove > 0
-                    cutReuse.put(channelsCodeRemove, toRemove);
-                end
-            end
-            % Removing channels
-            if toRemove > 0
-                EEG = pop_select(EEG, 'nochannel', toRemove);
-                [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-                confirm_window(checkShow, 'EDF Channels Cut');
-            end
-        end
-
-        % Saving suject info
-        if isequal(checkInfo, 1)
-            EEG = eeg_checkset(EEG);
-            EEG = pop_editset(EEG, 'subject', ints_table{n, 1}, ...
-                                   'condition', ints_table{n, 2}, ...
-                                   'session', ints_table{n, 6}, ...
-                                   'group', ints_table{n, 4});
+        % Rerefering all channels according to new reference
+        if toBeRerefered > 0
+            EEG = pop_reref(EEG, toBeRerefered);
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-            confirm_window(checkShow, 'Subject Info Saved');
+            confirm_window(checkShow, 'EDF Rerefered');
         end
-
-        % Running ICA
-        if isequal(checkICA, 1)
-            EEG = eeg_checkset(EEG);
-
-            % TODO Resample the dataset to make ICA faster
-            EEG = pop_resample(EEG, samplingRate/10);
-            [ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
-
-            EEG = pop_runica(EEG, 'icatype', 'runica',...
-                                  'options', { 'extended' 1 },...
-                                  'chanind', [ 1:21 ]);
-            [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-            confirm_window(checkShow, 'ICA Completed');
-        end
-
-        % Storing data
-        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-        EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
-                               'filepath', output_folder);
-
-        clear EEG;
-    catch
-        error('Out of memory');
     end
+
+    % Remove EDF channels
+    if isequal(checkRemove, 1)
+        % Checking if previous selections can be reused
+        channelsCodeRemove = getChannelsCode({EEG.chanlocs.labels});
+        if cutReuse.containsKey(channelsCodeRemove)
+            fprintf('Reusing previous selection');
+            toRemove = cutReuse.get(channelsCodeRemove);
+        else
+            h = msgbox('Choose the channels to be removed:');
+            toRemove = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
+            close(h);
+            if toRemove > 0
+                cutReuse.put(channelsCodeRemove, toRemove);
+            end
+        end
+        % Removing channels
+        if toRemove > 0
+            EEG = pop_select(EEG, 'nochannel', toRemove);
+            [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+            confirm_window(checkShow, 'EDF Channels Cut');
+        end
+    end
+
+    % Saving suject info
+    if isequal(checkInfo, 1)
+        EEG = eeg_checkset(EEG);
+        EEG = pop_editset(EEG, 'subject', ints_table{n, 1}, ...
+                               'condition', ints_table{n, 2}, ...
+                               'session', ints_table{n, 6}, ...
+                               'group', ints_table{n, 4});
+        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+        confirm_window(checkShow, 'Subject Info Saved');
+    end
+
+    % Running ICA
+    if isequal(checkICA, 1)
+        EEG = eeg_checkset(EEG);
+
+        % Resampling the dataset to make ICA faster
+        if samplingRate >= 500
+            resamplingRate = 500;
+        else
+            resamplingRate = samplingRate;
+        end
+    
+        EEG = pop_resample(EEG, resamplingRate);
+        [ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
+
+        EEG = pop_runica(EEG, 'icatype', 'runica',...
+                              'options', { 'extended' 1 },...
+                              'chanind', [ 1:21 ]);
+        [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+        confirm_window(checkShow, 'ICA Completed');
+    end
+
+    % Storing data
+    [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+    EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
+                           'filepath', output_folder);
+
+    clear EEG;
 end
 
 % User has to do these steps manually
