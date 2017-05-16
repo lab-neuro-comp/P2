@@ -147,7 +147,7 @@ function buttonSearchOut_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 EEGPath = uigetdir(cd, 'Select the EEGLab folder');
-set(handles.editEEGLab, 'String', EEGPath);
+set(handles.editOutput, 'String', EEGPath);
 
 
 % --- Executes on button press in buttonParameters.
@@ -256,7 +256,6 @@ for n = 1:size(ints_table)
                                   'session', ints_table{n, 6}});
 end
 
-set(handles.buttonMap, 'Enable', 'on');
 guidata(hObject, handles);
 
 % --- Executes on button press in buttonMap.
@@ -264,6 +263,9 @@ function buttonMap_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonMap (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% Open eeglab:
+[ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
 
 mappingmodule;
 
