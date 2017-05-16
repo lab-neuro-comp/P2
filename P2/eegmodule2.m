@@ -66,7 +66,7 @@ add_eeglab_path(get(handles.constants, 'EEGLAB_PATH'));
 % Update handles structure
 set(handles.editEEGLab, 'String', handles.constants.get('EEGLAB_PATH'));
 set(handles.editLocations, 'String', handles.constants.get('LOCATIONS_PATH'));
-set(handles.editOutput, 'String', strcat(pwd, filesep, 'output'));
+set(handles.editOutput, 'String', handles.constants.get('OUTPUT_PATH'));
 set(handles.figure1, 'Name', 'EEG Module');
 guidata(hObject, handles);
 
