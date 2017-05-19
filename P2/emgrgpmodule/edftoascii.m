@@ -1,22 +1,13 @@
-%% edftoascii: function to call the EDFtoASCII app
-function [asciifile] = edftoascii(edffile, edfinfo, labels)
+function [asciifile] = edftoascii(pathToSave, edffile, label)
 % function to call the EDFtoASCII app
 
-asciifile = 'null';
+asciipath = strcat(pathToSave, 'temp.ascii');
 
-for n = 1:length(labels)
-	if strcmp(labels(n), 'EMG-RGP');
+EEG = pop_select(edffile, 'channel', label);
+[ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG);
+EEG = pop_saveset(EEG, 'filename', 'temp.set', ...
+                       'filepath', pathToSave);
+EEG = pop_export(edffile, asciipath, 'time', 'off', 'elec', 'off');
 
-		% Getting raw EDF id
-		limit = length(edffile);
-		while ~isequal(edffile(limit), '.')
-		    limit = limit-1;
-		end
-		raw = edffile(1:limit);
-
-		% Converting EDF file
-		asciifile = strcat(raw, 'ascii');
-		edfinfo.toSingleChannelAscii(asciifile, 'EMG-RGP');
-		return;
-	end
-end
+asciifile = load(asciipath);
+delete(asciipath);

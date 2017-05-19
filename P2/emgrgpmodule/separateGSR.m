@@ -1,29 +1,17 @@
-function [EMG, GSR, SamplingRate] = separateGSR(edffile)
+function [EMG, GSR, SamplingRate] = separateGSR(pathToSave, edffile, channelLabel)
 % Separates GSR signal from EMG
 
-%import *;
-h = msgbox('Loading file...');
-edfinfo = br.unb.biologiaanimal.edf.EDF(edffile);
-labels = edfinfo.getLabels();
-SamplingRate = edfinfo.getSamplingRate();
-delete(h);
-
 % Converting EDF file to something we can use
-h = msgbox('Searching for EMG-GSR channel...');
-[asciifile] = edftoascii(edffile, edfinfo, labels);
+h = msgbox('Converting EMG-GSR channel...');
+[asciifile] = edftoascii(pathToSave, edffile, channelLabel);
 delete(h);
-
-if strcmp(asciifile, 'null')
-	EMG = 0;
-	GSR = 0;
-	return;
-end
 
 % Trying to use the EDF file
 h = msgbox('Separating channel...');
-raw = load(asciifile);
 
 % TODO Optimize parameters of the function
-GSR = smooth(raw, 255, 'sgolay', 2);
-EMG = raw - GSR;
+GSR = smooth(asciifile, 255, 'sgolay', 2);
+disp(asciifile)
+size(GSR)
+EMG = asciifile - GSR;
 delete(h);

@@ -22,12 +22,12 @@ else
 end
 
 addpath([cd '/emgrgpmodule']);
-javaaddpath('edf.jar');
-if ~is_in_javapath('edf.jar')
-	  javaaddpath('edf.jar');
-end
 
 function emgrgpmodule2_OpeningFcn(hObject, eventdata, handles, varargin)
+
+handles.constants = load_constants();
+add_eeglab_path(get(handles.constants, 'EEGLAB_PATH'));
+
 handles.output = hObject;
 set(handles.pushbuttonRun, 'Enable', 'off');
 set(handles.figure1, 'Name', 'EMG-GSR Separation Module');
@@ -82,54 +82,68 @@ while not(isempty(inlet))
 	[testcases{end+1}, inlet] = strtok(inlet, ';');
 end
 
-% Defining th epath to a folder to save the new files
+% Defining the path to a folder to save the new files
 newPath = uigetdir(cd, 'Select the folder for new files');
+
+% Open eeglab:
+[ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
+separateReuse = java.util.HashMap;
 
 % Applying algorithm
 for n = 1:length(testcases)
-	[EMG, GSR, SamplingRate] = separateGSR(testcases{n});
 
-	if GSR == 0
-		h = msgbox({[testcases{n}];...
-				   ['has no EMG-GSR channel']}, 'Error', 'error');
-	else
-		h = msgbox('Saving files...');
+    % Loading EDF
+    h = msgbox('Loading file...');
+    EEG = pop_biosig(testcases{n}, 'importevent', 'off',...
+								   'importannot', 'off',...
+								   'blockepoch', 'off');
+    
+	% Naming the new file accordingly
+	[edffilepath, edffilename, edffileext] = fileparts(testcases{n});
+	tablefilepath = strcat(newPath, filesep, 'SeparatedChannels');
+	tablenameEMG = strcat(edffilename, '_EMG.ascii');
+	tablenameGSR = strcat(edffilename, '_GSR.ascii');
+	close(h);
 
-		% Creating a new folder to store the files
-		programPath = cd(newPath);
-		mkdir(newPath, 'SeparatedChannels');
+	% Checking if previous selections can be reused
+    channelsSeparate = getChannelsCode({EEG.chanlocs.labels});
+    if separateReuse.containsKey(channelsSeparate)
+        fprintf('Reusing previous selection');
+        toBeSeparated = separateReuse.get(channelsSeparate);
+    else
+        h = msgbox('Choose the channel to be separated:');
+        toBeSeparated = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
+        close(h);
+        if toBeSeparated > 0
+            separateReuse.put(channelsSeparate, toBeSeparated);
+        else
+        	h = msgbox({[strcat(edffilename, edffileext)];...
+				   		['has no EMG-GSR channel']}, 'Error', 'error');
+        end
+    end
 
-		% Naming the new file acoordingly
-		size = length(strfind(testcases{n}, '\'));
-		remain = testcases{n};
-		for k = 1:size
-			[str, remain] = strtok(remain, '\');
-		end
-		tablenameEMG = strrep(remain, '.edf', '_EMG');
-		tablenameGSR = strrep(remain, '.edf', '_GSR');
+    [EMG, GSR, SamplingRate] = separateGSR(tablefilepath, EEG, toBeSeparated);
+	h = msgbox('Saving files...');
 
-		% Opening a new file and writing the new content
+	% Creating a new folder to store the files
+	programPath = cd(newPath);
+	mkdir(newPath, 'SeparatedChannels');
 
-		% EMG File
-		fileID = fopen(strcat(newPath, '\SeparatedChannels\', tablenameEMG, '.ascii'), 'w');
-		fprintf(fileID, '%f\n', EMG);
-		fclose(fileID);
-		fileID = fopen(strcat(newPath, '\SeparatedChannels\', tablenameEMG, 'Freq.txt'), 'w');
-		fprintf(fileID, '%s=%d', 'Sampling Rate', SamplingRate);
-		fclose(fileID);
+	% Opening a new file and writing the new content
 
-		% GSR File
-		fileID = fopen(strcat(newPath, '\SeparatedChannels\', tablenameGSR, '.ascii'), 'w');
-		fprintf(fileID, '%f\n', GSR);
-		fclose(fileID);		
-		fileID = fopen(strcat(newPath, '\SeparatedChannels\', tablenameGSR, 'Freq.txt'), 'w');
-		fprintf(fileID, '%s=%d', 'Sampling Rate', SamplingRate);
-		fclose(fileID);
-
-		% Gaoing back to the program's folder
-		newPath = cd(programPath);
-		delete(h);
-	end
+	% EMG File
+	fileID = fopen(strcat(tablefilepath, filesep, tablenameEMG), 'w');
+	fprintf(fileID, '%f\n', EMG);
+	fclose(fileID);
+	
+	% GSR File
+	fileID = fopen(strcat(tablefilepath, filesep, tablenameGSR), 'w');
+	fprintf(fileID, '%f\n', GSR);
+	fclose(fileID);		
+	
+	% Going back to the program's folder
+	newPath = cd(programPath);
+	delete(h);
 end
 
 h = msgbox('Separation complete!');
