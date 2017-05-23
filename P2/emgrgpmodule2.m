@@ -94,17 +94,20 @@ for n = 1:length(testcases)
 
     % Loading EDF
     h = msgbox('Loading file...');
-    EEG = pop_biosig(testcases{n}, 'importevent', 'off',...
-								   'importannot', 'off',...
-								   'blockepoch', 'off');
-    
+
 	% Naming the new file accordingly
 	[edffilepath, edffilename, edffileext] = fileparts(testcases{n});
 	tablefilepath = strcat(newPath, filesep, 'SeparatedChannels');
 	tablenameEMG = strcat(edffilename, '_EMG.ascii');
 	tablenameGSR = strcat(edffilename, '_GSR.ascii');
 	close(h);
-
+	
+	EEG = pop_biosig(testcases{n}, 'importevent', 'off',...
+								   'blockepoch', 'off');
+    [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
+                                         'setname', strcat(tablefilepath, filesep, 'temp.set'),...
+                                         'overwrite', 'on');
+    
 	% Checking if previous selections can be reused
     channelsSeparate = getChannelsCode({EEG.chanlocs.labels});
     if separateReuse.containsKey(channelsSeparate)
@@ -122,28 +125,30 @@ for n = 1:length(testcases)
         end
     end
 
-    [EMG, GSR, SamplingRate] = separateGSR(tablefilepath, EEG, toBeSeparated);
-	h = msgbox('Saving files...');
+    if toBeSeparated > 0
+	    [EMG, GSR] = separateGSR(tablefilepath, ALLEEG, EEG, n, toBeSeparated);
+		h = msgbox('Saving files...');
 
-	% Creating a new folder to store the files
-	programPath = cd(newPath);
-	mkdir(newPath, 'SeparatedChannels');
+		% Creating a new folder to store the files
+		programPath = cd(newPath);
+		mkdir(newPath, 'SeparatedChannels');
 
-	% Opening a new file and writing the new content
+		% Opening a new file and writing the new content
 
-	% EMG File
-	fileID = fopen(strcat(tablefilepath, filesep, tablenameEMG), 'w');
-	fprintf(fileID, '%f\n', EMG);
-	fclose(fileID);
-	
-	% GSR File
-	fileID = fopen(strcat(tablefilepath, filesep, tablenameGSR), 'w');
-	fprintf(fileID, '%f\n', GSR);
-	fclose(fileID);		
-	
-	% Going back to the program's folder
-	newPath = cd(programPath);
-	delete(h);
+		% EMG File
+		fileID = fopen(strcat(tablefilepath, filesep, tablenameEMG), 'w');
+		fprintf(fileID, '%f\n', EMG);
+		fclose(fileID);
+		
+		% GSR File
+		fileID = fopen(strcat(tablefilepath, filesep, tablenameGSR), 'w');
+		fprintf(fileID, '%f\n', GSR);
+		fclose(fileID);		
+		
+		% Going back to the program's folder
+		newPath = cd(programPath);
+		delete(h);
+	end
 end
 
 h = msgbox('Separation complete!');
