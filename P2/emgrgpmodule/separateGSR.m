@@ -1,9 +1,9 @@
-function [EMG, GSR] = separateGSR(pathToSave, ALLEEG, edffile, n, channelLabel)
+function [EMG, GSR] = separateGSR(pathToSave, ALLEEG, EEG, n)
 % Separates GSR signal from EMG
 
 % Converting EDF file to something we can use
 h = msgbox('Converting EMG-GSR channel...');
-[asciifile] = edftoascii(pathToSave, ALLEEG, edffile, n, channelLabel);
+[asciifile] = edftoascii(pathToSave, ALLEEG, EEG, n);
 delete(h);
 
 % Trying to use the EDF file

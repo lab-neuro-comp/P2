@@ -103,19 +103,22 @@ for n = 1:length(testcases)
 	close(h);
 	
 	EEG = pop_biosig(testcases{n}, 'importevent', 'off',...
-								   'blockepoch', 'off');
-    [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
+								   'blockepoch', 'off',...
+								   'blockrange', [0 1]);
+	[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
                                          'setname', strcat(tablefilepath, filesep, 'temp.set'),...
                                          'overwrite', 'on');
+    
     
 	% Checking if previous selections can be reused
     channelsSeparate = getChannelsCode({EEG.chanlocs.labels});
     if separateReuse.containsKey(channelsSeparate)
         fprintf('Reusing previous selection');
-        toBeSeparated = separateReuse.get(channelsSeparate);
+        toBeSeparated = separateReuse.get(channelsSeparate)
     else
         h = msgbox('Choose the channel to be separated:');
-        toBeSeparated = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
+        [chosenIndex chosenName chosenCell] = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
+        toBeSeparated = chosenIndex
         close(h);
         if toBeSeparated > 0
             separateReuse.put(channelsSeparate, toBeSeparated);
@@ -124,9 +127,16 @@ for n = 1:length(testcases)
 				   		['has no EMG-GSR channel']}, 'Error', 'error');
         end
     end
-
+    
     if toBeSeparated > 0
-	    [EMG, GSR] = separateGSR(tablefilepath, ALLEEG, EEG, n, toBeSeparated);
+		EEG = pop_biosig(testcases{n}, 'importevent', 'off',...
+									   'blockepoch', 'off',...
+									   'channels', toBeSeparated);
+		[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
+	                                         'setname', strcat(tablefilepath, filesep, 'temp.set'),...
+	                                         'overwrite', 'on');
+	    
+	    [EMG, GSR] = separateGSR(tablefilepath, ALLEEG, EEG, n);
 		h = msgbox('Saving files...');
 
 		% Creating a new folder to store the files
