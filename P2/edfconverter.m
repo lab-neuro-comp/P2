@@ -98,9 +98,7 @@ if isnumeric(filename)
 elseif iscell(filename)
     set(handles.editSearch, ...
         'String', ...
-        join_strings(append_on_each_one(filename, ...
-                                        pathname), ...
-                     ';'));
+        join_strings(strcat(pathname, filename), ';'));
 else
     set(handles.editSearch, ...
         'String', ...
@@ -123,21 +121,32 @@ function pushbuttonRun_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 raw = get(handles.editSearch, 'String');
-stuff = split_string(raw, ';');
+
+% Separating raw into many strings
+stuff = {};
+while not(isempty(raw))
+    [testcases{end+1}, raw] = strtok(raw, ';');
+end
+
+% Open eeglab:
+[ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
 
 % IDEA Try to run this on parallel
 if isequal(get(handles.checkboxMultiple, 'Value'), true)
     for n = 1:length(stuff)
         inlet = stuff{n};
-        edf = br.unb.biologiaanimal.edf.EDF(inlet);
-
+        
         % Find root file
-        root_index = length(inlet);
-        while ~isequal(inlet(root_index), '.')
-            root_index = root_index - 1;
-        end
-        root = inlet(1:root_index);
+        [filepath filename flieext] = fileparts(inlet);
+        root = strcat(filepath, filename);
 
+        EEG = pop_biosig(inlet, 'importevent', 'off',...
+                                'blockepoch', 'off',...
+                                'blockrange', [0 1]);
+        [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
+                                             'setname', strcat(filepath, filesep, 'temp.set'),...
+                                             'overwrite', 'on');
+    
         % To each file, loop through their labels
         labels = cell(edf.getLabels());
         if isequal(get(handles.checkboxChoose, 'Value'), true)
