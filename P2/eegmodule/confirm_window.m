@@ -1,7 +1,9 @@
-function confirm_window(checkValue, operation)
+function [msgHandle] = confirm_window(checkValue, operation, pop, msgHandle)
 
 if isequal(checkValue, 1)
-	h = msgbox(operation);
-	waitfor(h);
-	drawnow
+	if isequal(pop, 1)
+		msgHandle = msgbox(operation);
+	elseif (pop, 0)
+		close(msgHandle);
+	end
 end

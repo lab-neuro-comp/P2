@@ -49,15 +49,18 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
         blockrange = floor([int1 int2]);
 
         % Loading EDF
+        msgHandle = confirm_window(checkShow, 'Loading EDF...', 1, msgHandle);
         EEG = pop_biosig(arqedf, 'blockrange', blockrange, 'rmeventchan', 'off');
-        confirm_window(checkShow, 'EDF Loaded');
 
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
                                              'setname', ints_table{n, 11},...
                                              'overwrite', 'on');
-
+        msgHandle = confirm_window(checkShow, '', 0, msgHandle);
+        
         % Rerefering EDF
         if isequal(checkRerefer, 1)
+            msgHandle = confirm_window(checkShow, 'Rerefering EDF...', 1, msgHandle);
+
             % Checking if previous selections can be reused
             channelsCodeRerefer = getChannelsCode({EEG.chanlocs.labels});
             if rereferReuse.containsKey(channelsCodeRerefer)
@@ -74,13 +77,15 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
             % Rerefering all channels according to new reference
             if toBeRerefered > 0
                 EEG = pop_reref(EEG, toBeRerefered);
-                [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-                confirm_window(checkShow, 'EDF Rerefered');
+                [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);                
             end
+            msgHandle = confirm_window(checkShow, '', 0, msgHandle);
         end
 
         % Remove EDF channels
         if isequal(checkRemove, 1)
+            msgHandle = confirm_window(checkShow, 'Removing channels...', 1, msgHandle);
+
             % Checking if previous selections can be reused
             channelsCodeRemove = getChannelsCode({EEG.chanlocs.labels});
             if cutReuse.containsKey(channelsCodeRemove)
@@ -98,23 +103,27 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
             if toRemove > 0
                 EEG = pop_select(EEG, 'nochannel', toRemove);
                 [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-                confirm_window(checkShow, 'EDF Channels Cut');
             end
+            msgHandle = confirm_window(checkShow, '', 0, msgHandle);
         end
 
         % Saving suject info
         if isequal(checkInfo, 1)
+            msgHandle = confirm_window(checkShow, 'Saving subject info...', 1, msgHandle);
+
             EEG = eeg_checkset(EEG);
             EEG = pop_editset(EEG, 'subject', ints_table{n, 1}, ...
                                    'condition', ints_table{n, 2}, ...
                                    'session', ints_table{n, 6}, ...
                                    'group', ints_table{n, 4});
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-            confirm_window(checkShow, 'Subject Info Saved');
+            msgHandle = confirm_window(checkShow, '', 0, msgHandle);
         end
 
         % Running ICA
         if isequal(checkICA, 1)
+            msgHandle = confirm_window(checkShow, 'Running ICA...', 1, msgHandle);
+
             EEG = eeg_checkset(EEG);
 
             % Resampling the dataset to make ICA faster
@@ -131,7 +140,7 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
                                   'options', { 'extended' 1 },...
                                   'chanind', [ 1:21 ]);
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-            confirm_window(checkShow, 'ICA Completed');
+            msgHandle = confirm_window(checkShow, '', 0, msgHandle);
         end
 
         % Storing data
@@ -149,9 +158,13 @@ if (isequal(checkArtifacts, 1) | isequal(checkLocate, 1))
         % Loading SET
         arqset = ints_table{n, 11};
         EEG = pop_loadset( 'filename', arqset, 'filepath', output_folder);
+        
+        h = msgbox({['Analysing']; [arqset]});
 
         % Removing artifacts
         if isequal(checkArtifacts, 1)
+            msgHandle = confirm_window(checkShow, 'Removing artifacts...', 1, msgHandle);
+
             pop_eegplot(EEG, 0);
             pop_eegplot(EEG);
             EEG = pop_subcomp(EEG);
@@ -168,17 +181,21 @@ if (isequal(checkArtifacts, 1) | isequal(checkLocate, 1))
                         EEG = pop_subcomp(EEG);
                     case 'No'
                         [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-                        confirm_window(checkShow, 'Components Removed');
                 end
             end
+            msgHandle = confirm_window(checkShow, '', 0, msgHandle);
         end
 
         % Locating electrodes
         if isequal(checkLocate, 1)
+            msgHandle = confirm_window(checkShow, 'Locating electrodes...', 1, msgHandle);
+
             EEG = pop_chanedit(EEG);
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-            confirm_window(checkShow, 'Electrodes Located');
+            confirm_window(checkShow, '', 0, msgHandle);
         end
+
+        close(h);
 
         % Storing data
         [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
