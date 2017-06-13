@@ -27,10 +27,6 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 
-addpath([cd '/edfconverter']);
-if ~is_in_javapath('edf.jar')
-    javaaddpath('edf.jar');
-end
 % End initialization code - DO NOT EDIT
 
 
@@ -132,6 +128,7 @@ end
 
 % Open eeglab:
 [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
+convertReuse = java.util.HashMap;
 
 % IDEA Try to run this on parallel
 if isequal(get(handles.checkboxMultiple, 'Value'), true)
@@ -141,7 +138,7 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
         % Find root file
         [filepath filename fileext] = fileparts(inlet);
         mkdir(filepath, 'ASCII_Files');
-        root = strcat(filepath, filesep, 'ASCII_Files', filesep, filename)
+        root = strcat(filepath, filesep, 'ASCII_Files', filesep, filename);
 
         EEG = pop_biosig(inlet, 'importevent', 'off',...
                                 'blockepoch', 'off',...
@@ -150,16 +147,21 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
                                              'setname', strcat(filepath, filesep, 'temp.set'),...
                                              'overwrite', 'on');
         channelsConvert = getChannelsCode({EEG.chanlocs.labels});
-        
+
+        listChannels = {};
+        while not(isempty(channelsConvert))
+            [listChannels{end+1}, channelsConvert] = strtok(channelsConvert, ';');
+        end
+
         % Checking if previous selections can be reused
         if isequal(get(handles.checkboxChoose, 'Value'), true)
             if convertReuse.containsKey(channelsConvert)
                 fprintf('Reusing previous selection');
-                toBeConverted = convertReuse.get(channelsConvert)
+                toBeConverted = convertReuse.get(channelsConvert);
             else
                 h = msgbox('Choose the channel to be converted:');
                 [chosenIndex chosenName chosenCell] = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
-                toBeConverted = chosenIndex
+                toBeConverted = chosenIndex;
                 close(h);
                 if toBeConverted > 0
                     convertReuse.put(channelsConvert, toBeConverted);
@@ -168,18 +170,21 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
                                 [strcat(edffilename, edffileext)]}, 'Error', 'error');
                 end
             end
+        else
+            toBeConverted = linspace(1, length(listChannels), length(listChannels));
         end
-
-        listChannels = {};
-        while not(isempty(channelsConvert))
-            [listChannels{end+1}, channelsConvert] = strtok(channelsConvert, ';');
-        end
-
-        for m = 1:length(listChannels)
-            EEG = pop_select(EEG, 'channel', m);
+        
+        for m = 1:length(toBeConverted)
+            EEG = pop_biosig(inlet, 'importevent', 'off',...
+                                    'blockepoch', 'off',...
+                                    'channels', toBeConverted(m));
+            [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
+                                                 'setname', strcat(filepath, filesep, 'temp.set'),...
+                                                 'overwrite', 'on');
             EEG = pop_saveset(EEG, 'filename', 'temp.set', ...
                                    'filepath', filepath);
-            EEG = pop_export(EEG, strcat(root, '.ascii'), 'time', 'off', 'elec', 'off');
+            EEG = pop_export(EEG, strcat(root, listChannels{toBeConverted(m)}, '.ascii'),...
+                                  'time', 'off', 'elec', 'off');
         end
     end
 else
@@ -197,10 +202,47 @@ else
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
                                              'setname', strcat(filepath, filesep, 'temp.set'),...
                                              'overwrite', 'on');
-    
-        EEG = pop_saveset(EEG, 'filename', 'temp.set', ...
-                               'filepath', filepath);
-        EEG = pop_export(EEG, strcat(root, '.ascii'), 'time', 'off', 'elec', 'off');
+
+        % Checking if previous selections can be reused
+        if isequal(get(handles.checkboxChoose, 'Value'), true)
+            channelsConvert = getChannelsCode({EEG.chanlocs.labels});
+
+            listChannels = {};
+            while not(isempty(channelsConvert))
+                [listChannels{end+1}, channelsConvert] = strtok(channelsConvert, ';');
+            end
+
+            if convertReuse.containsKey(channelsConvert)
+                fprintf('Reusing previous selection');
+                toBeConverted = convertReuse.get(channelsConvert);
+            else
+                h = msgbox('Choose the channel to be converted:');
+                [chosenIndex chosenName chosenCell] = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
+                toBeConverted = chosenIndex;
+                close(h);
+                if toBeConverted > 0
+                    convertReuse.put(channelsConvert, toBeConverted);
+                else
+                    h = msgbox({['No channel has been chosen for'];...
+                                [strcat(edffilename, edffileext)]}, 'Error', 'error');
+                end
+            end
+
+            EEG = pop_biosig(inlet, 'importevent', 'off',...
+                                    'blockepoch', 'off',...
+                                    'channels', toBeConverted);
+            [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
+                                                 'setname', strcat(filepath, filesep, 'temp.set'),...
+                                                 'overwrite', 'on');
+            EEG = pop_saveset(EEG, 'filename', 'temp.set', ...
+                                   'filepath', filepath);
+            EEG = pop_export(EEG, strcat(root, '.ascii'), 'time', 'off', 'elec', 'off');
+
+        else
+            EEG = pop_saveset(EEG, 'filename', 'temp.set', ...
+                                   'filepath', filepath);
+            EEG = pop_export(EEG, strcat(root, '.ascii'), 'time', 'off', 'elec', 'off');
+        end
     end
 end
 
