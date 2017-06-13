@@ -186,6 +186,7 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
             EEG = pop_export(EEG, strcat(root, listChannels{toBeConverted(m)}, '.ascii'),...
                                   'time', 'off', 'elec', 'off');
         end
+        clear EEG;
     end
 else
     for n = 1:length(stuff)
@@ -243,6 +244,7 @@ else
                                    'filepath', filepath);
             EEG = pop_export(EEG, strcat(root, '.ascii'), 'time', 'off', 'elec', 'off');
         end
+        clear EEG;
     end
 end
 

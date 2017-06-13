@@ -38,6 +38,7 @@ checkArtifacts = options(7);
 % Preparing channel selection for reuse
 rereferReuse = java.util.HashMap;
 cutReuse = java.util.HashMap;
+msgHandle = 0;
 
 if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) | isequal(checkICA, 1))
     for n = 1:size(ints_table)
@@ -51,7 +52,7 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
         % Loading EDF
         msgHandle = confirm_window(checkShow, 'Loading EDF...', 1, msgHandle);
         EEG = pop_biosig(arqedf, 'blockrange', blockrange, 'rmeventchan', 'off');
-
+        
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
                                              'setname', ints_table{n, 11},...
                                              'overwrite', 'on');
