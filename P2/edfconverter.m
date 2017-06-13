@@ -43,6 +43,8 @@ function edfconverter_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to edfconverter (see VARARGIN)
 
 % Choose default command line output for edfconverter
+handles.constants = load_constants();
+add_eeglab_path(get(handles.constants, 'EEGLAB_PATH'));
 handles.output = hObject;
 
 % Update handles structure
@@ -125,7 +127,7 @@ raw = get(handles.editSearch, 'String');
 % Separating raw into many strings
 stuff = {};
 while not(isempty(raw))
-    [testcases{end+1}, raw] = strtok(raw, ';');
+    [stuff{end+1}, raw] = strtok(raw, ';');
 end
 
 % Open eeglab:
@@ -137,8 +139,9 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
         inlet = stuff{n};
         
         % Find root file
-        [filepath filename flieext] = fileparts(inlet);
-        root = strcat(filepath, filename);
+        [filepath filename fileext] = fileparts(inlet);
+        mkdir(filepath, 'ASCII_Files');
+        root = strcat(filepath, filesep, 'ASCII_Files', filesep, filename)
 
         EEG = pop_biosig(inlet, 'importevent', 'off',...
                                 'blockepoch', 'off',...
@@ -146,31 +149,63 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
                                              'setname', strcat(filepath, filesep, 'temp.set'),...
                                              'overwrite', 'on');
-    
-        % To each file, loop through their labels
-        labels = cell(edf.getLabels());
+        channelsConvert = getChannelsCode({EEG.chanlocs.labels});
+        
+        % Checking if previous selections can be reused
         if isequal(get(handles.checkboxChoose, 'Value'), true)
-            labels = pickChannels(inlet, labels);
-            % TODO Reuse selection if labels in thiese channels already appeared
-            if length(labels) == 0; return; end;
+            if convertReuse.containsKey(channelsConvert)
+                fprintf('Reusing previous selection');
+                toBeConverted = convertReuse.get(channelsConvert)
+            else
+                h = msgbox('Choose the channel to be converted:');
+                [chosenIndex chosenName chosenCell] = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
+                toBeConverted = chosenIndex
+                close(h);
+                if toBeConverted > 0
+                    convertReuse.put(channelsConvert, toBeConverted);
+                else
+                    h = msgbox({['No channel has been chosen for'];...
+                                [strcat(edffilename, edffileext)]}, 'Error', 'error');
+                end
+            end
         end
-        for m = 1:length(labels)
-            label = labels{m};
-            outlet = [ root label '.ascii' ];
-            fprintf('%s\n', outlet);
-            edf.toSingleChannelAscii(outlet, label);
+
+        listChannels = {};
+        while not(isempty(channelsConvert))
+            [listChannels{end+1}, channelsConvert] = strtok(channelsConvert, ';');
+        end
+
+        for m = 1:length(listChannels)
+            EEG = pop_select(EEG, 'channel', m);
+            EEG = pop_saveset(EEG, 'filename', 'temp.set', ...
+                                   'filepath', filepath);
+            EEG = pop_export(EEG, strcat(root, '.ascii'), 'time', 'off', 'elec', 'off');
         end
     end
 else
     for n = 1:length(stuff)
         % TODO Add effect of picking channels here
-        item = stuff{n};
-        inlet = item;
-        edf = br.unb.biologiaanimal.edf.EDF(item);
-        outlet = change_extension(inlet, '.ascii');
-        edf.toAscii(outlet);
+        inlet = stuff{n};
+        
+        % Find root file
+        [filepath filename fileext] = fileparts(inlet);
+        mkdir(filepath, 'ASCII_Files');
+        root = strcat(filepath, filesep, 'ASCII_Files', filesep, filename);
+
+        EEG = pop_biosig(inlet, 'importevent', 'off',...
+                                'blockepoch', 'off');
+        [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
+                                             'setname', strcat(filepath, filesep, 'temp.set'),...
+                                             'overwrite', 'on');
+    
+        EEG = pop_saveset(EEG, 'filename', 'temp.set', ...
+                               'filepath', filepath);
+        EEG = pop_export(EEG, strcat(root, '.ascii'), 'time', 'off', 'elec', 'off');
     end
 end
+
+delete(strcat(filepath, filesep, 'temp.set'));
+delete(strcat(filepath, filesep, 'temp.fdt'));
 msgbox('DONE!');
 
 % --- Executes on button press in checkboxChoose.
