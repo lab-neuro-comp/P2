@@ -165,9 +165,6 @@ set(hObject, 'String', {'plot(rand(5))', 'plot(sin(1:0.01:25))',...
 % --------------------------------------------------------------------
 % --- Executes on selection change in popupName.
 function popupName_Callback(hObject, eventdata, handles)
-% hObject    handle to popupName (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 fa = str2num(handles.constants.get('fa'));
 fb = str2num(handles.constants.get('fb'));
@@ -185,6 +182,20 @@ standard_plot(handles.signal, fs);
 grid(handles.PlotSignal, 'on');
 axis tight;
 ylabel('Amplitude [uV]');
+
+axes(handles.PlotAnalysis);
+cla reset;
+grid(handles.PlotAnalysis, 'on');
+signaltime = 0:1/fs:(length(handles.signal)-1)/fs;
+RegisteredTime = num2str(max(signaltime));
+xlabel(strcat('Tempo [s]', ' [', '0:', RegisteredTime, ']'));
+ylabel('Scale');
+
+set(handles.ButtonZoom, 'Value', 0);
+set(handles.ButtonColorbar, 'Value', 0);
+zoom off;
+
+guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -488,10 +499,12 @@ IntValue = str2num(get(handles.EditInt, 'String'));
 MaxValue = str2num(get(handles.EditMax, 'String'));
 wavename = get(handles.TextWavelet, 'String');
 
+h = msgbox('Calculating...');
 axes(handles.PlotAnalysis);
 clear analysis;
 analysis = cwt(handles.signal, MinValue:IntValue:MaxValue, wavename, 'plot');
 ylabel('Scale');
+close(h);
 
 fs = str2num(handles.constants.get('fs'));
 signaltime = 0:1/fs:(length(handles.signal)-1)/fs;
