@@ -11,7 +11,7 @@ function varargout = cwtmodule2(varargin)
 
 % Edit the above text to modify the response to help cwtmodule2
 
-% Last Modified by GUIDE v2.5 31-Aug-2016 09:13:16
+% Last Modified by GUIDE v2.5 20-Jun-2017 07:59:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -82,15 +82,24 @@ fa = str2num(handles.constants.get('fa'));
 fb = str2num(handles.constants.get('fb'));
 fc = str2num(handles.constants.get('fc'));
 fs = str2num(handles.constants.get('fs'));
-[signalname, signalpath] = uigetfile('*.ascii', 'Choose the data file');
-
+[signalname, signalpath, filterindex]  = uigetfile('*.ascii', 'Select files', ...
+                                               'MultiSelect', 'on');
+handles.cases = {};
 if ~isequal(signalname, 0)
-    signal = (load(strcat(signalpath, signalname)) + fa)*fb - fc;
-    signalname = signalname(1:length(signalname)-6);
-
+    if ischar(signalname)
+        handles.cases = { strcat(signalpath, signalname) };
+    elseif iscell(signalname)
+        handles.cases = {};
+        for n = 1:length(signalname)
+            handles.cases{n} = strcat(signalpath, signalname{n});
+        end
+    end
+    set(handles.popupName, 'String', signalname);
+    handles.signalpath = signalpath;
     handles.signalname = signalname;
+
+    signal = (load(handles.cases{1}) + fa)*fb - fc;
     handles.signal = signal;
-    set(handles.TextFilename, 'String', signalname);
     axes(handles.PlotSignal);
     cla reset;
     standard_plot(handles.signal, fs);
@@ -98,7 +107,6 @@ if ~isequal(signalname, 0)
     axis tight;
     ylabel('Amplitude [uV]');
 else
-
     return;
 end
 
@@ -152,6 +160,44 @@ end
 
 set(hObject, 'String', {'plot(rand(5))', 'plot(sin(1:0.01:25))',...
     'bar(1:.5:10)', 'plot(membrane)', 'surf(peaks)'});
+
+
+% --------------------------------------------------------------------
+% --- Executes on selection change in popupName.
+function popupName_Callback(hObject, eventdata, handles)
+% hObject    handle to popupName (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+fa = str2num(handles.constants.get('fa'));
+fb = str2num(handles.constants.get('fb'));
+fc = str2num(handles.constants.get('fc'));
+fs = str2num(handles.constants.get('fs'));
+
+contents = cellstr(get(hObject, 'String'));
+signalname = contents{get(hObject, 'Value')};
+
+signal = (load(strcat(handles.signalpath, signalname)) + fa)*fb - fc;
+handles.signal = signal;
+axes(handles.PlotSignal);
+cla reset;
+standard_plot(handles.signal, fs);
+grid(handles.PlotSignal, 'on');
+axis tight;
+ylabel('Amplitude [uV]');
+
+
+% --- Executes during object creation, after setting all properties.
+function popupName_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupName (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
 
 
 % --------------------------------------------------------------------
@@ -683,3 +729,5 @@ if get(handles.ButtonReset, 'Value')
         reset_module(hObject, handles);
     end
 end
+
+
