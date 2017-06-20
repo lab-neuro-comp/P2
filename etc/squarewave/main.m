@@ -5,7 +5,7 @@ function main()
 
 % Simulating square wave
 inlet = 0:0.001:10;
-outlet= (squarewave(inlet, 5)+1)/2;
+outlet = (squarewave(inlet, 5)+1)/2;
 
 % Plotting square wave
 hold on;
@@ -15,7 +15,7 @@ bert = -imag(hilbert(outlet));
 plot(inlet, downbert, 'r');
 plot(inlet, upbert, 'g');
 
-% TODO Discover peaks
+% Discovering peaks
 result = [ ];
 note = false;
 for it = (upbert-1);
@@ -28,3 +28,5 @@ for it = (upbert-1);
 end
 plot(inlet, result, 'm');
 hold off;
+
+% TODO Get this peak detection peak algorithm in its own script
