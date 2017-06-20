@@ -14,6 +14,17 @@ bert = -imag(hilbert(outlet));
 [downbert upbert] = moses(bert, 1);
 plot(inlet, downbert, 'r');
 plot(inlet, upbert, 'g');
-hold off;
 
 % TODO Discover peaks
+result = [ ];
+note = false;
+for it = (upbert-1);
+	if and(~note, it > 0)
+		result(end+1) = 1;
+	else
+		result(end+1) = 0;
+	end
+	note = it > 0;
+end
+plot(inlet, result, 'm');
+hold off;
