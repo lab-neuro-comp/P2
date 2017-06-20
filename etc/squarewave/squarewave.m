@@ -8,4 +8,4 @@ out = 0;
 for n = 1:N
 	out = out + sin(2*pi*(2*n-1)*t)/(2*n-1);
 end
-out = (4*out/pi + 1)/2;
+out = 4*out/pi;
