@@ -22,7 +22,7 @@ function varargout = paramconfig(varargin)
 
 % Edit the above text to modify the response to help paramconfig
 
-% Last Modified by GUIDE v2.5 06-Oct-2015 09:06:03
+% Last Modified by GUIDE v2.5 20-Jun-2017 08:34:34
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -199,3 +199,27 @@ set(hObject, 'String', fs);
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in restorebutton.
+function restorebutton_Callback(hObject, eventdata, handles)
+% hObject    handle to restorebutton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global fs fa fb fc
+
+selection = questdlg([{'Once restored to default' 'the current values will be lost.' 'Do you wish to proceed?'}],...
+                     ['Reset parameters values?'],...
+                     'Yes','No','Yes');
+
+if strcmp(selection,'Yes')
+    handles.constants.put('fs', handles.constants.get('fs_default'));
+    handles.constants.put('fa', handles.constants.get('fa_default'));
+    handles.constants.put('fb', handles.constants.get('fb_default'));
+    handles.constants.put('fc', handles.constants.get('fc_default'));
+    save_constants(handles.constants);
+    close;
+else
+    return;
+end
+
