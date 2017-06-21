@@ -4,6 +4,12 @@ function [peak] = getPeaks(time, inlet)
 bert = -imag(hilbert(inlet));
 [downbert upbert] = moses(bert, 1);
 
+figure;
+hold on;
+plot(time, downbert, 'g');
+plot(time, upbert, 'm');
+hold off;
+
 peak = [ ];
 note = false;
 for it = (upbert-1);
