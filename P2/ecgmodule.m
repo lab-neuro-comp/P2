@@ -56,6 +56,9 @@ function ecgmodule_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for ecgmodule
 handles.output = hObject;
+handles.hpeack = [];
+handles.hvhr = [];
+handles.hvhrspec = [];
 handles.constants = load_constants();
 
 %uV=(ASCII+fa)*fb-fc
@@ -118,6 +121,7 @@ xlim = get(handles.vhrspecaxes,'xlim');
 ylim = get(handles.vhrspecaxes,'ylim');
 savefigure(xdata, ydata, 'b', xlim, ylim, '[Hz]', '[ms^2]', 'VHR SPECTRUM');
 
+
 % --------------------------------------------------------------------
 function ecgfile_Callback(hObject, eventdata, handles)
 % hObject    handle to ecgfile (see GCBO)
@@ -130,6 +134,7 @@ function ecgexit_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 close(gcf);
+
 
 % --------------------------------------------------------------------
 function ecgopen_Callback(hObject, eventdata, handles)
@@ -207,6 +212,8 @@ fs = str2num(handles.constants.get('fs'));
 contents = cellstr(get(hObject, 'String'));
 ecgname = contents{get(hObject, 'Value')};
 
+delete(handles.ecgplot);
+
 try
     ecg = load(strcat(handles.ecgpath, ecgname));
     ecgexportmx{1,1} = 'File:';
@@ -220,7 +227,7 @@ try
 
     ecg = ((ecg + fa)*fb) - fc;
     t = 0:1/fs:(length(ecg)-1)/fs;
-    axes(handles.ecgaxes)
+    axes(handles.ecgaxes);
     ecgplot = plot(t, ecg);
     axis([0 max(t) min(ecg) max(ecg)]);
     xlabel('[seg]');
@@ -231,6 +238,10 @@ catch error
     error;
     return;
 end
+
+delete(handles.hpeack);
+delete(handles.hvhr);
+delete(handles.hvhrspec);
 
 handles.t = t;
 handles.ecgplot = ecgplot;
@@ -313,8 +324,8 @@ for ex = 1:length(yaxis_r)
 end
 
 handles = vhrfcn(yaxis_r, r_matrix, hObject, handles);
-set([handles.editr handles.zoombutton handles.slide handles.ecgrestart], 'enable', 'on');
-set([handles.ecgopen handles.invert], 'enable', 'off');
+set([handles.editr handles.zoombutton handles.slide handles.ecgrestart], 'Enable', 'on');
+set([handles.ecgopen handles.invert], 'Enable', 'off');
 
 handles.yaxis_r = yaxis_r;
 handles.r_matrix = r_matrix;
@@ -327,7 +338,7 @@ function editr_Callback(hObject, eventdata, handles)
 % hObject    handle to editr (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global hdata;
+
 switch get(hObject,'Value')
     case 1
         hdata = datacursormode;
@@ -339,55 +350,18 @@ switch get(hObject,'Value')
         datacursormode off;
 end
 
-guidata(hObject, handles);
-
-
-% --- Executes on button press in remove.
-function remove_Callback(hObject, eventdata, handles)
-% hObject    handle to remove (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global hdata;
-
-r_matrix = handles.r_matrix;
-yaxis_r = handles.yaxis_r;
-hvhr = handles. hvhr;
-hvhrspec = handles.hvhrspec;
-hpeack = handles.hpeack;
-
-datainfo = getCursorInfo(hdata);
-[height width] = size(datainfo);
-
-switch isempty(datainfo)
-    case 0
-        for n = 1:width
-            spotposition = datainfo(1,n).Position;
-            ytemp = yaxis_r - spotposition(1);
-            [minimum minindex] = min(abs(ytemp));
-            yaxis_r(minindex) = [];
-            r_matrix(minindex) = [];
-        end
-    case 1
-        msgbox('Make sure there is one point selected');
-        beep;
-end
-
-delete(hpeack);
-delete(hvhr);
-delete(hvhrspec);
-
-handles = vhrfcn(yaxis_r, r_matrix, hObject, handles);
-handles.r_matrix = r_matrix;
-handles.yaxis_r = yaxis_r;
+handles.hdata = hdata;
 
 guidata(hObject, handles);
+
 
 % --- Executes on button press in addr.
 function addr_Callback(hObject, eventdata, handles)
 % hObject    handle to addr (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global hdata;
+
+hdata = handles.hdata;
 r_matrix = handles.r_matrix;
 yaxis_r = handles.yaxis_r;
 hvhr = handles. hvhr;
@@ -414,7 +388,7 @@ switch isempty(datainfo)
             r_matrix = temp;
         end
     case 1
-        msgbox('Make sure there is one point selected');
+        msgbox('Make sure at least one point is selected.');
         beep;
 end
 
@@ -425,22 +399,68 @@ delete(hvhrspec);
 handles = vhrfcn(yaxis_r, r_matrix, hObject, handles);
 handles.r_matrix = r_matrix;
 handles.yaxis_r = yaxis_r;
+handles.hdata = hdata;
 
 guidata(hObject, handles);
+
+
+% --- Executes on button press in remove.
+function remove_Callback(hObject, eventdata, handles)
+% hObject    handle to remove (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+hdata = handles.hdata;
+r_matrix = handles.r_matrix;
+yaxis_r = handles.yaxis_r;
+hvhr = handles. hvhr;
+hvhrspec = handles.hvhrspec;
+hpeack = handles.hpeack;
+
+datainfo = getCursorInfo(hdata);
+[height width] = size(datainfo);
+
+switch isempty(datainfo)
+    case 0
+        for n = 1:width
+            spotposition = datainfo(1,n).Position;
+            ytemp = yaxis_r - spotposition(1);
+            [minimum minindex] = min(abs(ytemp));
+            yaxis_r(minindex) = [];
+            r_matrix(minindex) = [];
+        end
+    case 1
+        msgbox('Make sure at least one point is selected.');
+        beep;
+end
+
+delete(hpeack);
+delete(hvhr);
+delete(hvhrspec);
+
+handles = vhrfcn(yaxis_r, r_matrix, hObject, handles);
+handles.r_matrix = r_matrix;
+handles.yaxis_r = yaxis_r;
+handles.hdata = hdata;
+
+guidata(hObject, handles);
+
 
 % --- Executes on button press in zoombutton.
 function zoombutton_Callback(hObject, eventdata, handles)
 % hObject    handle to zoombutton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-switch get(hObject, 'value')
+
+switch get(hObject, 'Value')
     case 1
         zoom on;
-        set([handles.slide handles.editr], 'value', 0);
-        set([handles.addr handles.remove], 'value', 0, 'enable', 'off');
+        set([handles.slide handles.editr], 'Value', 0);
+        set([handles.addr handles.remove], 'Value', 0, 'Enable', 'off');
     case 0
         zoom off;
 end
+
 
 % --- Executes on button press in slide.
 function slide_Callback(hObject, eventdata, handles)
@@ -448,50 +468,51 @@ function slide_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hint: get(hObject,'Value') returns toggle state of slide
 switch get(hObject,'value')
     case 1
         pan xon;
-        set([handles.zoombutton handles.editr], 'value', 0);
-        set([handles.addr handles.remove], 'value', 0, 'enable', 'off');
+        set([handles.zoombutton handles.editr], 'Value', 0);
+        set([handles.addr handles.remove], 'Value', 0, 'Enable', 'off');
     case 0
         pan off;
 end
+
 
 % --------------------------------------------------------------------
 function ecgrestart_Callback(hObject, eventdata, handles)
 % hObject    handle to ecgrestart (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global hvhr hvhrspec hpeack ecgplot
+
 restartans = questdlg('Are you sure you want to restart the module?','Attention','No');
 switch restartans
     case 'Yes'
-        delete(hvhr);
-        delete(hvhrspec);
-        delete(hpeack);
-        delete(ecgplot);
+        delete(handles.hvhr);
+        delete(handles.hvhrspec);
+        delete(handles.hpeack);
+        delete(handles.ecgplot);
         set(handles.ecgaxes, 'xlim', [0 1], 'ylim', [0 1]);
         set(handles.vhraxes, 'xlim', [0 1], 'ylim', [0 1]);
         set(handles.vhrspecaxes, 'xlim', [0 1], 'ylim', [0 1]);
-        set([handles.process handles.ecgrestart], 'enable', 'off');
+        set(handles.popupECG, 'Visible', 'off');
+        set([handles.process handles.ecgrestart], 'Enable', 'off');
         set([handles.editr handles.addr handles.remove handles.zoombutton handles.slide],...
-            'value', 0, 'enable', 'off');
+            'Value', 0, 'Enable', 'off');
         zoom off;
         datacursormode off;
         pan off;
-        set(handles.beats, 'string', 'Beats:');
-        set(handles.sdnn, 'string', 'SDNN:');
-        set(handles.rms, 'string', 'RMSSD:');
-        set(handles.lfhf, 'string', 'LF/HF:');
-        set(handles.pnn50, 'string', 'pNN50:');
-        set(handles.text1, 'string', 'Signal:');
-        set(handles.ecgduration, 'string', 'Duration:');
-        set(handles.ecgfs, 'string', 'Fs:');
-        set(handles.ecgopen, 'enable', 'on');
-        set(handles.showdc, 'enable', 'off', 'value', 0);
-        set([handles.figurevhr handles.figurevhrspec], 'enable', 'off');
-        clear global yaxis_r r_matrix vhr vhrspectrum t hvhr hvhrspec hpeack ecgplot vhrspectrum ecgexportmx
+        set(handles.beats, 'String', 'Beats:');
+        set(handles.sdnn, 'String', 'SDNN:');
+        set(handles.rms, 'String', 'RMSSD:');
+        set(handles.lfhf, 'String', 'LF/HF:');
+        set(handles.pnn50, 'String', 'pNN50:');
+        set(handles.text1, 'String', 'Signal:');
+        set(handles.ecgduration, 'String', 'Duration:');
+        set(handles.ecgfs, 'String', 'Fs:');
+        set(handles.ecgopen, 'Enable', 'on');
+        set(handles.showdc, 'Enable', 'off', 'Value', 0);
+        set([handles.figurevhr handles.figurevhrspec], 'Enable', 'off');
+        clear handles.ecgpath handles.ecgname handles.yaxis_r handles.r_matrix handles.vhr handles.vhrspectrum handles.t handles.hvhr handles.hvhrspec handles.hpeack handles.ecgplot handles.vhrspectrum handles.ecgexportmx
     case 'No'
         return;
 end
@@ -499,10 +520,13 @@ end
 
 % --- Executes on button press in showdc.
 function showdc_Callback(hObject, eventdata, handles)
-global vhrspectrum faxis
 % hObject    handle to showdc (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+vhrspectrum = handles.vhrspectrum;
+faxis = handles.faxis;
+
 switch get(handles.showdc, 'value')
     case 1
         set(handles.vhrspecaxes, 'xlim', [0 0.5], 'ylim', [0 max(vhrspectrum)]);
@@ -515,13 +539,14 @@ end
 
 % --------------------------------------------------------------------
 function ecgexport_Callback(hObject, eventdata, handles)
-global ecgexportmx
-
-[xlsfile xlspath] = uiputfile('*.xls','Save File');
-xlswrite(strcat(xlspath, xlsfile), ecgexportmx);
 % hObject    handle to ecgexportmx (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+ecgexportmx = handles.ecgexportmx;
+
+[xlsfile xlspath] = uiputfile('*.xls','Save File');
+xlswrite(strcat(xlspath, xlsfile), ecgexportmx);
 
 
 % --- Executes on button press in invert.
@@ -530,8 +555,8 @@ function invert_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hint: get(hObject,'Value') returns toggle state of invert
-global ecgplot
+ecgplot = handles.ecgplot;
+
 ecgdata = get(ecgplot, 'ydata');
 set(ecgplot(), 'ydata', -ecgdata);
 axis tight;
