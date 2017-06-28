@@ -1,28 +1,8 @@
 function varargout = paramconfig(varargin)
-% PARAMCONFIG M-file for paramconfig.fig
-%      PARAMCONFIG, by itself, creates a new PARAMCONFIG or raises the existing
-%      singleton*.
+% Starts the window for changing some commonly used parameters in EEGLab.
 %
-%      H = PARAMCONFIG returns the handle to a new PARAMCONFIG or the handle to
-%      the existing singleton*.
-%
-%      PARAMCONFIG('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in PARAMCONFIG.M with the given input arguments.
-%
-%      PARAMCONFIG('Property','Value',...) creates a new PARAMCONFIG or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before paramconfig_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to paramconfig_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help paramconfig
-
-% Last Modified by GUIDE v2.5 20-Jun-2017 08:34:34
+% Last Modified by GUIDE v2.5 28-Jun-2017 09:10:01
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -46,180 +26,128 @@ end
 
 % --- Executes just before paramconfig is made visible.
 function paramconfig_OpeningFcn(hObject, eventdata, handles, varargin)
-% This function has no output args, see OutputFcn.
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to paramconfig (see VARARGIN)
-
-% Choose default command line output for paramconfig
 handles.output = hObject;
-
-% UIWAIT makes paramconfig wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
-
-% Write parameters from constants file here
 handles.constants = load_constants();
-set(handles.fa_edit, 'String', str2num(handles.constants.get('fa')));
-set(handles.fb_edit, 'String', str2num(handles.constants.get('fb')));
-set(handles.fc_edit, 'String', str2num(handles.constants.get('fc')));
+set(handles.fa_edit, 'String', num2str(handles.constants.get('fa')));
+set(handles.fb_edit, 'String', num2str(handles.constants.get('fb')));
+set(handles.fc_edit, 'String', num2str(handles.constants.get('fc')));
 set(handles.fs_edit, 'String', str2num(handles.constants.get('fs')));
-
-% % Atempt to make fb_edit remember their previous value
-% handles.fbprev = 0.061043;
-% handles.fb = handles.fbprev;
-% set(handles.fb, 'String', num2str(handles.fbprev));
-
-% Update handles structure
+set(handles.editeeglab, 'String', handles.constants.get('EEGLAB_PATH'));
+set(handles.editlocations, 'String', handles.constants.get('LOCATIONS_PATH'));
 guidata(hObject, handles);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = paramconfig_OutputFcn(hObject, eventdata, handles)
-% varargout  cell array for returning output args (see VARARGOUT);
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Get default command line output from handles structure
 varargout{1} = handles.output;
 
-
-
+% --- Does nothing
 function fa_edit_Callback(hObject, eventdata, handles)
-% hObject    handle to fa_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of fa_edit as text
-%        str2double(get(hObject,'String')) returns contents of fa_edit as a double
+% DOING NOTHING
 
 % --- Executes during object creation, after setting all properties.
 function fa_edit_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to fa_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-global fa
-set(hObject, 'String', fa);
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
+% --- Does nothing
 function fb_edit_Callback(hObject, eventdata, handles)
-% hObject    handle to fb_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of fb_edit as text
-%        str2double(get(hObject,'String')) returns contents of fb_edit as a double
-
-% raw = str2num(get(hObject, 'String'));
-% set(handles.fb, 'String', num2str(raw));
-% handles.fbprev = raw;
-% guidata(hObject, handles);
+% XXX
 
 % --- Executes during object creation, after setting all properties.
 function fb_edit_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to fb_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-global fb
-
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-set(hObject, 'String', num2str(fb));
 
+% --- Doing nothing
 function fc_edit_Callback(hObject, eventdata, handles)
-% hObject    handle to fc_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of fc_edit as text
-%        str2double(get(hObject,'String')) returns contents of fc_edit as a double
+% XXX
 
 % --- Executes during object creation, after setting all properties.
 function fc_edit_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to fc_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-global fc
-set(hObject, 'String', num2str(fc));
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
-
 % --- Executes on button press in updatebutton.
 function updatebutton_Callback(hObject, eventdata, handles)
-% hObject    handle to updatebutton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global fs fa fb fc
-
 fs = get(handles.fs_edit, 'String');
 fa = get(handles.fa_edit, 'String');
 fb = get(handles.fb_edit, 'String');
 fc = get(handles.fc_edit, 'String');
-% fprintf('%f %f %f %f\n', fs, fa, fb, fc);
+eeglab_path = get(handles.editeeglab, 'String');
+locs_path = get(handles.editlocations, 'String');
 
 handles.constants.put('fs', fs);
 handles.constants.put('fa', fa);
 handles.constants.put('fb', fb);
 handles.constants.put('fc', fc);
+handles.constants.put('EEGLAB_PATH', eeglab_path);
+handles.constants.put('LOCATIONS_PATH', locs_path);
 save_constants(handles.constants);
 close;
 
+% --- Doing nothing
 function fs_edit_Callback(hObject, eventdata, handles)
-% hObject    handle to fs_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of fs_edit as text
-%        str2double(get(hObject,'String')) returns contents of fs_edit as a double
+% XXX
 
 % --- Executes during object creation, after setting all properties.
 function fs_edit_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to fs_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-global fs
-set(hObject, 'String', fs);
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
-
 % --- Executes on button press in restorebutton.
 function restorebutton_Callback(hObject, eventdata, handles)
-% hObject    handle to restorebutton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global fs fa fb fc
-
 selection = questdlg([{'Once restored to default' 'the current values will be lost.' 'Do you wish to proceed?'}],...
                      ['Reset parameters values?'],...
                      'Yes','No','Yes');
-
 if strcmp(selection,'Yes')
     handles.constants.put('fs', handles.constants.get('fs_default'));
     handles.constants.put('fa', handles.constants.get('fa_default'));
     handles.constants.put('fb', handles.constants.get('fb_default'));
     handles.constants.put('fc', handles.constants.get('fc_default'));
     save_constants(handles.constants);
-    close;
 else
     return;
 end
+guidata(hObject, handles);
 
+
+
+% --- Executes on button press in cancelbutton.
+function cancelbutton_Callback(hObject, eventdata, handles)
+close;
+
+% --- Doing nothing
+function editeeglab_Callback(hObject, eventdata, handles)
+% XXX
+
+
+% --- Executes during object creation, after setting all properties.
+function editeeglab_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes on button press in buttonsearcheeglab.
+function buttonsearcheeglab_Callback(hObject, eventdata, handles)
+% TODO Start search activity
+
+% --- Doing nothing
+function editlocations_Callback(hObject, eventdata, handles)
+% XXX
+
+
+% --- Executes during object creation, after setting all properties.
+function editlocations_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), ...
+                   get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes on button press in buttonlocs.
+function buttonlocs_Callback(hObject, eventdata, handles)
+% TODO Start search activity
