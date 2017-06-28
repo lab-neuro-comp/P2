@@ -145,7 +145,10 @@ function buttonSearchEEG_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 EEGPath = uigetdir(cd, 'Select the EEGLab folder');
-set(handles.editEEGLab, 'String', EEGPath);
+if EEGPath
+    set(handles.editEEGLab, 'String', EEGPath);
+end
+
 
 function editLocations_Callback(hObject, eventdata, handles)
 % hObject    handle to editLocations (see GCBO)
@@ -175,7 +178,9 @@ function buttonSearchLoc_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 [LocName LocPath FileInd] = uigetfile('*.ced', 'Select the locations file');
-set(handles.editLocations, 'String', strcat(LocPath, LocName));
+if LocName
+    set(handles.editLocations, 'String', strcat(LocPath, LocName));
+end
 
 
 % --- OUTPUT FOLDER STUFF ------------------------------------------------------
@@ -208,7 +213,9 @@ function buttonSearchOut_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 directoryName = uigetdir(pwd, 'Select output folder');
-set(handles.editOutput, 'String', directoryName);
+if directoryName
+    set(handles.editOutput, 'String', directoryName);
+end
 
 
 %-----------------------------------------------------------------
@@ -387,5 +394,3 @@ function checkRemove_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of checkRemove
-
-
