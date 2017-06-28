@@ -182,7 +182,6 @@ if LocName
     set(handles.editLocations, 'String', strcat(LocPath, LocName));
 end
 
-
 % --- OUTPUT FOLDER STUFF ------------------------------------------------------
 function editOutput_Callback(hObject, eventdata, handles)
 % hObject    handle to editOutput (see GCBO)
