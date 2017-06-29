@@ -14,7 +14,6 @@ plot(inlet, outlet, 'b');
 plot(inlet, squarePeaks, 'r');
 hold off;
 
-% TODO Test procedure with real data
 % Simulating with real life data
 period = 1/500;
 testfilepath = '../../b/dudu.ascii';
@@ -27,3 +26,11 @@ hold on;
 plot(inlet, recording, 'b');
 plot(inlet, realPeaks, 'r');
 hold off;
+
+% Generating output table
+moments = extractPeakMoments(realPeaks, 500);
+fp = fopen('peaks.txt', 'w');
+for n = 1:length(moments)
+	fprintf(fp, '%.5f\n', moments(n));
+end
+fclose(fp);
