@@ -1,6 +1,6 @@
 function main()
 % This is an experiment to recognize the first peak in a square wave signal.
-% To run it,
+% To run it, type `main` on the matlab command prompt.
 %
 
 % Simulating square wave
@@ -28,7 +28,7 @@ plot(inlet, realPeaks, 'r');
 hold off;
 
 % Generating output table
-moments = extractPeakMoments(realPeaks, 500);
+moments = extractPeakMoments(realPeaks, 500, 1);
 fp = fopen('peaks.txt', 'w');
 for n = 1:length(moments)
 	fprintf(fp, '%.5f\n', moments(n));
