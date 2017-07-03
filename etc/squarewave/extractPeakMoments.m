@@ -4,7 +4,7 @@ function [outlet] = extractPeakMoments(data, fs, ml)
 %
 %     data - the binary array telling when the events happenned
 %     fs - the sample frequency
-%     ml - minimum time length between
+%     ml - minimum time length between two events.
 %
 period = 1/fs;
 inlet = 0:period:(period*(length(data(1,:))-1));
