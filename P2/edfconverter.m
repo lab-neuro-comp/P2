@@ -134,7 +134,7 @@ convertReuse = java.util.HashMap;
 if isequal(get(handles.checkboxMultiple, 'Value'), true)
     for n = 1:length(stuff)
         inlet = stuff{n};
-        
+
         % Find root file
         [filepath filename fileext] = fileparts(inlet);
         mkdir(filepath, 'ASCII_Files');
@@ -173,7 +173,7 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
         else
             toBeConverted = linspace(1, length(listChannels), length(listChannels));
         end
-        
+
         for m = 1:length(toBeConverted)
             EEG = pop_biosig(inlet, 'importevent', 'off',...
                                     'blockepoch', 'off',...
@@ -192,7 +192,7 @@ else
     for n = 1:length(stuff)
         % TODO Add effect of picking channels here
         inlet = stuff{n};
-        
+
         % Find root file
         [filepath filename fileext] = fileparts(inlet);
         mkdir(filepath, 'ASCII_Files');
