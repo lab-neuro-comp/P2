@@ -6,4 +6,6 @@ PROTOLIZE! comes with two folders: P2 (the graphical user interface with tools a
 
 To run PROTOLIZE!, open MATLAB and run the `protolize.m` script.
 
+PROTOLIZE! also comes with an extensive documentation inside itself, in the "Read Documentation" window inside the "Help" toolbar.
+
 To include the PROTOLIZE! library to your MATLAB path, run the `addP2Lib.m` script on this root folder.

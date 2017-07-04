@@ -117,7 +117,7 @@ function voicecompbut_Callback(hObject, eventdata, handles)
 % hObject    handle to voicecompbut (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-comparemodule2; 
+comparemodule2;
 
 % --- Executes on button press in edfconvbut.
 function edfconvbut_Callback(hObject, eventdata, handles)
@@ -238,5 +238,3 @@ function docmain_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 web('file:///', cd, 'doc.html');
-
-
