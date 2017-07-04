@@ -7,7 +7,7 @@ function varargout = plot_stuff(varargin)
 
 % Edit the above text to modify the response to help plot_stuff
 
-% Last Modified by GUIDE v2.5 17-Apr-2017 08:24:33
+% Last Modified by GUIDE v2.5 25-Jun-2017 11:33:55
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -44,14 +44,19 @@ handles.stuff = varargin{2};
 
 % Update handles structure
 set(handles.figure1, 'Name', 'Moments Verification');
-repeated = 1;
-handles.repeated = repeated;
+number = 1;
+handles.number = number;
+set(handles.panelName, 'Title', strcat('File: ', num2str(number), '/', num2str(length(handles.files))));
 
-if repeated == length(handles.files)
+if number == length(handles.files)
 	set(handles.pushbuttonSave, 'String', 'Save');
 end
 [handles.record, handles.fs] = refresh_signal(hObject, handles,...
-							   handles.files, handles.stuff, handles.repeated);
+							   handles.files, handles.stuff, handles.number);
+filename = handles.files;
+moments = get(handles.stuff, filename{handles.number});
+times = turn_to_time(moments, length(handles.record)/handles.fs);
+handles.times = times;
 guidata(hObject, handles);
 
 % UIWAIT makes plot_stuff wait for user response (see UIRESUME)
@@ -103,149 +108,141 @@ delete(handles.figure1)
 
 
 % --------------------------------------------------------------------
+function toolZoom_OnCallback(hObject, eventdata, handles)
+
+zoom on;
+set([handles.toolAdd handles.toolRemove], 'Enable', 'off');
+set([handles.toolPan handles.toolData], 'State', 'off');
+
+
+function toolPan_OnCallback(hObject, eventdata, handles)
+
+pan on;
+set([handles.toolAdd handles.toolRemove], 'Enable', 'off');
+set([handles.toolZoom handles.toolData], 'State', 'off');
+
+
+% --------------------------------------------------------------------
+function toolData_OnCallback(hObject, eventdata, handles)
+
+switch get(hObject,'State')
+    case 'on'
+        hdata = datacursormode;
+		datacursormode on;
+		set([handles.toolAdd handles.toolRemove], 'Enable', 'on');
+		set([handles.toolZoom handles.toolPan], 'State', 'off');
+    case 'off'
+        set([handles.toolAdd handles.toolRemove], 'Enable', 'off');
+		datacursormode off;
+end
+
+handles.hdata = hdata;
+
+guidata(hObject, handles);
+
+
+function toolAdd_ClickedCallback(hObject, eventdata, handles)
+
+datainfo = getCursorInfo(handles.hdata);
+[height width] = size(datainfo);
+
+times = handles.times;
+
+switch isempty(datainfo)
+    case 0
+        for n = 1:width
+            spotposition = datainfo(1,n).Position;
+            times(length(times)+1) = spotposition(1);
+            times = sort(times);
+            index = find(times == spotposition(1));
+        end
+    case 1
+        msgbox('Make sure at least one point is selected.');
+        beep;
+end
+recordtime = length(handles.record)/handles.fs;
+moments = turn_to_moment(handles.stuff.get(handles.files{handles.number}), times, recordtime);
+handles.stuff.put(handles.files{handles.number}, moments);
+
+[handles.record, handles.fs] = refresh_signal(hObject, handles,...
+							   handles.files, handles.stuff, handles.number);
+
+handles.times = times;
+
+guidata(hObject, handles);
+
+
+function toolRemove_ClickedCallback(hObject, eventdata, handles)
+
+datainfo = getCursorInfo(handles.hdata);
+[height width] = size(datainfo);
+
+times = handles.times;
+
+switch isempty(datainfo)
+    case 0
+        for n = 1:width
+            spotposition = datainfo(1,n).Position;
+            temp = times - spotposition(1);
+            [minimum minindex] = min(abs(temp));
+            times(minindex) = [];
+        end
+    case 1
+        msgbox('Make sure at least one point is selected.');
+        beep;
+end
+recordtime = length(handles.record)/handles.fs;
+moments = turn_to_moment(handles.stuff.get(handles.files{handles.number}), times, recordtime);
+handles.stuff.put(handles.files{handles.number}, moments);
+
+[handles.record, handles.fs] = refresh_signal(hObject, handles,...
+							   handles.files, handles.stuff, handles.number);
+
+handles.times = times;
+
+guidata(hObject, handles);
+
+
+% --------------------------------------------------------------------
 % --- Executes during object creation, after setting all properties.
 function textFilename_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to textFilename (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-
-% --- Executes on selection change in popupmenuFiles.
-function popupmenuFiles_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenuFiles (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = get(hObject,'String') returns popupmenuFiles contents 
-%                                         as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenuFiles
-
-
-% --- Executes during object creation, after setting all properties.
-function popupmenuFiles_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popupmenuFiles (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), ...
-		   get(0,'defaultUicontrolBackgroundColor'))
-	set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on selection change in listboxMoments.
-function listboxMoments_Callback(hObject, eventdata, handles)
-% hObject    handle to listboxMoments (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-filename = get(handles.textFilename, 'String');
-moments = handles.stuff.get(filename);
-maxlist = numel(moments);
-set(handles.listboxMoments, 'Max', maxlist);
-
-
-% --- Executes during object creation, after setting all properties.
-function listboxMoments_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to listboxMoments (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: listbox controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), ...
-		   get(0,'defaultUicontrolBackgroundColor'))
-	set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in pushbuttonView.
-function pushbuttonView_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbuttonView (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-filename = get(handles.textFilename, 'String');
-moments = cellstr(get(handles.listboxMoments, 'String'));
-list = get(handles.listboxMoments, 'Value');
-
-for n = 1:numel(list)
-	selected(n) = moments(list(n));
-end
-
-% TODO Find a better way to "replot"
-hold(handles.axes1, 'on');
-m = 1;
-
-record = handles.record;
-for n = 1:numel(moments)
-	if m <= numel(selected)
-	if strcmp(moments(n), selected(m)) 
-		xposition = str2double(selected(m));
-		plot([xposition xposition], [-(0.5*max(record)) (0.5*max(record))], '-g',...
-			 'LineWidth', 1,...
-			 'MarkerFaceColor', 'g',...
-			 'MarkerSize', 2);
-		m = m + 1;
-	else
-		xposition = str2double(moments(n));
-		plot([xposition xposition], [-(0.5*max(record)) (0.5*max(record))], '-r',...
-			 'LineWidth', 1,...
-			 'MarkerFaceColor', 'r',...
-			 'MarkerSize', 2);
-	end
-	else
-	xposition = str2double(moments(n));
-	plot([xposition xposition], [-(0.5*max(record)) (0.5*max(record))], '-r',...
-		 'LineWidth', 1,...
-		 'MarkerFaceColor', 'r',...
-		 'MarkerSize', 2);
-	end
-end
-hold off;
 
 
 % --- Executes on button press in pushbuttonSave.
 function pushbuttonSave_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbuttonSave (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-repeated = handles.repeated;
+number = handles.number;
 
-filename = get(handles.textFilename, 'String');
-moments = cellstr(get(handles.listboxMoments, 'String'));
-list = get(handles.listboxMoments, 'Value');
+filename = handles.files;
+moments = get(handles.stuff, filename{number});
+times = turn_to_time(moments, length(handles.record)/handles.fs);
 
-selection = questdlg({'You will save only the selected moments.',...
+selection = questdlg({'You will save only the marked moments.',...
 					 'Do you wish to continue?'},...
-					 ['Save ' filename '?'],...
+					 ['Save ' filename{number} '?'],...
 					 'Ok','Cancel','Ok');
 if strcmp(selection,'Cancel')
 	return;
 end
 
-for n = 1:numel(list)
-	list(n) = str2double(moments(list(n)));
-end
-
 recordtime = length(handles.record)/handles.fs;
-moments = turn_to_moment(handles.stuff.get(filename), list, recordtime);
+moments = turn_to_moment(handles.stuff.get(filename{handles.number}), times, recordtime);
 
-handles.stuff.put(filename, moments);
-set(handles.listboxMoments, 'Value', 1);
+handles.stuff.put(filename{number}, moments);
 
-repeated = repeated + 1;
-handles.repeated = repeated;
+number = number + 1;
+handles.number = number;
 
-if repeated <= length(handles.files)
-	if repeated == length(handles.files)
+if number <= length(handles.files)
+	if number == length(handles.files)
 		set(handles.pushbuttonSave, 'String', 'Save');
 	end
 	[handles.record, handles.fs] = refresh_signal(hObject, handles,...
-							       handles.files, handles.stuff, handles.repeated);
+							       handles.files, handles.stuff, handles.number);
+	filename = handles.files;
+	moments = get(handles.stuff, filename{handles.number});
+	times = turn_to_time(moments, length(handles.record)/handles.fs);
+	handles.times = times;
 	guidata(hObject, handles);
 else
 	handles.output = handles.stuff;
@@ -253,21 +250,4 @@ else
 	uiresume(handles.figure1);
 end
 
-
-% --------------------------------------------------------------------
-function toolZoom_OnCallback(hObject, eventdata, handles)
-% hObject    handle to toolZoom (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-zoom on;
-set(handles.toolPan, 'State', 'off');
-
-
-% --------------------------------------------------------------------
-function toolPan_OnCallback(hObject, eventdata, handles)
-% hObject    handle to toolPan (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-pan on;
-set(handles.toolZoom, 'State', 'off');
 

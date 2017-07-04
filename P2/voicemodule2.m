@@ -96,9 +96,6 @@ delete(handles.figure1)
 
 
 function editSearch_Callback(hObject, eventdata, handles)
-% hObject    handle to editSearch (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Hints: get(hObject,'String') returns contents of editSearch as text
 %        str2double(get(hObject,'String')) returns contents of editSearch as a double
@@ -106,9 +103,6 @@ function editSearch_Callback(hObject, eventdata, handles)
 
 % --- Executes during object creation, after setting all properties.
 function editSearch_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to editSearch (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
@@ -119,9 +113,6 @@ end
 
 % --- Executes on button press in buttonSearch.
 function buttonSearch_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonSearch (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 [filename, pathname, filterindex]  = uigetfile('*.wav', 'Select files', ...
 											   'MultiSelect', 'on');
@@ -148,9 +139,6 @@ guidata(hObject, handles);
 
 % --- Executes on button press in buttonRun.
 function buttonRun_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonRun (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 outlet = get(handles.editSearch, 'String');
 files = split_string(outlet, ';');
@@ -172,9 +160,6 @@ guidata(hObject, handles);
 
 % --- Executes on button press in buttonPlot.
 function buttonPlot_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonPlot (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 handles.stuff = plot_stuff(handles.files, handles.stuff);
 guidata(hObject, handles);
@@ -182,9 +167,6 @@ guidata(hObject, handles);
 
 % --- Executes on button press in buttonSave.
 function buttonSave_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonSave (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 file = handles.files;
 moments = {};
