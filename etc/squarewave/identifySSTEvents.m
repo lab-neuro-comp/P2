@@ -16,6 +16,19 @@ sounds = [ ];
 % Reading EDF file
 recording = br.unb.biologiaanimal.edf.EDF(edfFile);
 % TODO Get DC signal
+labels = recording.getLabels;
+limit = length(labels);
+which = 0;
+for n = 1:limit
+	if labels(n).contains(java.lang.String('DC'))
+		which = labels(n);
+	end
+end
+if ~isnumeric(which)
+	recording = recording.getSignal(which);
+else
+	error
+end
 
 % Reading CSV file
 results = csv2cell(csvFile);
