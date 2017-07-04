@@ -15,7 +15,6 @@ sounds = [ ];
 
 % Reading EDF file
 recording = br.unb.biologiaanimal.edf.EDF(edfFile);
-% TODO Get DC signal
 labels = recording.getLabels;
 limit = length(labels);
 which = 0;
@@ -33,6 +32,7 @@ end
 % Reading CSV file
 results = csv2cell(csvFile);
 % TODO Extract important data from the E-prime generated table.
+images = results;
 
 % Relating datasets
 % TODO Finish this monster
