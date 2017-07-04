@@ -22,7 +22,7 @@ function varargout = ecgmodule(varargin)
 
 % Edit the above text to modify the response to help ecgmodule
 
-% Last Modified by GUIDE v2.5 20-Jun-2017 14:56:10
+% Last Modified by GUIDE v2.5 25-Jun-2017 14:12:08
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -138,9 +138,6 @@ close(gcf);
 
 % --------------------------------------------------------------------
 function ecgopen_Callback(hObject, eventdata, handles)
-% hObject    handle to ecgopen (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 fa = str2num(handles.constants.get('fa'));
 fb = str2num(handles.constants.get('fb'));
@@ -200,9 +197,6 @@ guidata(hObject, handles);
 
 % --- Executes on selection change in popupECG.
 function popupECG_Callback(hObject, eventdata, handles)
-% hObject    handle to popupECG (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 fa = str2num(handles.constants.get('fa'));
 fb = str2num(handles.constants.get('fb'));
@@ -251,9 +245,6 @@ guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function popupECG_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popupECG (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
 % Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
@@ -265,9 +256,6 @@ end
 % --------------------------------------------------------------------
 % --- Executes on button press in process.
 function process_Callback(hObject, eventdata, handles)
-% hObject    handle to process (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 t = handles.t;
 ecgplot = handles.ecgplot;
@@ -335,9 +323,6 @@ guidata(hObject, handles);
 
 % --- Executes on button press in editr.
 function editr_Callback(hObject, eventdata, handles)
-% hObject    handle to editr (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 switch get(hObject,'Value')
     case 1
@@ -357,9 +342,6 @@ guidata(hObject, handles);
 
 % --- Executes on button press in addr.
 function addr_Callback(hObject, eventdata, handles)
-% hObject    handle to addr (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 hdata = handles.hdata;
 r_matrix = handles.r_matrix;
@@ -406,9 +388,6 @@ guidata(hObject, handles);
 
 % --- Executes on button press in remove.
 function remove_Callback(hObject, eventdata, handles)
-% hObject    handle to remove (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 hdata = handles.hdata;
 r_matrix = handles.r_matrix;
@@ -448,9 +427,6 @@ guidata(hObject, handles);
 
 % --- Executes on button press in zoombutton.
 function zoombutton_Callback(hObject, eventdata, handles)
-% hObject    handle to zoombutton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 switch get(hObject, 'Value')
     case 1
@@ -464,9 +440,6 @@ end
 
 % --- Executes on button press in slide.
 function slide_Callback(hObject, eventdata, handles)
-% hObject    handle to slide (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 switch get(hObject,'value')
     case 1
@@ -480,9 +453,6 @@ end
 
 % --------------------------------------------------------------------
 function ecgrestart_Callback(hObject, eventdata, handles)
-% hObject    handle to ecgrestart (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 restartans = questdlg('Are you sure you want to restart the module?','Attention','No');
 switch restartans
@@ -520,9 +490,6 @@ end
 
 % --- Executes on button press in showdc.
 function showdc_Callback(hObject, eventdata, handles)
-% hObject    handle to showdc (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 vhrspectrum = handles.vhrspectrum;
 faxis = handles.faxis;
@@ -539,9 +506,6 @@ end
 
 % --------------------------------------------------------------------
 function ecgexport_Callback(hObject, eventdata, handles)
-% hObject    handle to ecgexportmx (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 ecgexportmx = handles.ecgexportmx;
 
@@ -551,9 +515,6 @@ xlswrite(strcat(xlspath, xlsfile), ecgexportmx);
 
 % --- Executes on button press in invert.
 function invert_Callback(hObject, eventdata, handles)
-% hObject    handle to invert (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 ecgplot = handles.ecgplot;
 
