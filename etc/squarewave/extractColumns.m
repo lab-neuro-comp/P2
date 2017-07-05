@@ -32,10 +32,18 @@ for y = 1:howManyLines
 		temp{y, x} = masterTrim(temp{y, x});
 	end
 end
-relevantColumns = temp;
 
 % Taking only the relevant columns
+indexes = java.util.HashMap;
+relevantColumns = java.util.HashMap;
+for n = 1:howManyColumns
+	if is_in_cell(whichColumns, temp{2, n})
+		put(indexes, temp{2, n}, n);
+	end
+end
+indexes
 
+% -----------------------------------------------------------------------------
 function [outlet] = masterTrim(inlet)
 % Removing every null char in the `inlet` string.
 %
@@ -43,7 +51,7 @@ if ischar(inlet)
 	outlet = '';
 	for n = 1:length(inlet)
 		if inlet(n) > 0
-			outlet = [ outlet inlet(n) ];
+			outlet(end+1) = inlet(n);
 		end
 	end
 else
