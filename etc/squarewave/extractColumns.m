@@ -26,7 +26,26 @@ end
 
 % Compressing strings to be better processed
 howManyLines = lineNo - 1;
-howMabyColumns = n - 1;
+howManyColumns = n - 1;
+for y = 1:howManyLines
+	for x = 1:howManyColumns
+		temp{y, x} = masterTrim(temp{y, x});
+	end
+end
 relevantColumns = temp;
 
 % Taking only the relevant columns
+
+function [outlet] = masterTrim(inlet)
+% Removing every null char in the `inlet` string.
+%
+if ischar(inlet)
+	outlet = '';
+	for n = 1:length(inlet)
+		if inlet(n) > 0
+			outlet = [ outlet inlet(n) ];
+		end
+	end
+else
+	outlet = inlet;
+end
