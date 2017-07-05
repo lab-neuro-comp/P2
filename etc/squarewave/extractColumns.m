@@ -35,13 +35,23 @@ end
 
 % Taking only the relevant columns
 indexes = java.util.HashMap;
-relevantColumns = java.util.HashMap;
 for n = 1:howManyColumns
 	if is_in_cell(whichColumns, temp{2, n})
 		put(indexes, temp{2, n}, n);
 	end
 end
-indexes
+
+relevantColumns = java.util.HashMap;
+limit = length(whichColumns);
+for n = 1:limit
+	current = whichColumns{n};
+	outlet = { };
+	x = get(indexes, current);
+	for y = 3:howManyLines
+		outlet{end+1} = temp{y, x};
+	end
+	put(relevantColumns, current, outlet);
+end
 
 % -----------------------------------------------------------------------------
 function [outlet] = masterTrim(inlet)
