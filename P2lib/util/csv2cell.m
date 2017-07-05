@@ -2,7 +2,7 @@ function [outlet] = csv2cell(filename)
 % Converts a CSV file to a cell matrix.
 %
 outlet = { };
-fp = fopen(filename, 'r');
+fp = fopen(filename, 'rt', 'n', 'UTF-8');
 lineNo = 0;
 line = fgetl(fp);
 while ischar(line)
