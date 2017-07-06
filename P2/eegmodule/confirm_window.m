@@ -4,6 +4,8 @@ if isequal(checkValue, 1)
 	if isequal(pop, 1)
 		msgHandle = msgbox(operation);
 	elseif isequal(pop, 0)
-		close(msgHandle);
+		try
+			close(msgHandle);
+		end
 	end
 end

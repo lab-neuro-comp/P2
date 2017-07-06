@@ -70,7 +70,11 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
             else
                 h = msgbox('Choose the channel for rerefering:');
                 toBeRerefered = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
-                close(h);
+                
+                try
+                    close(h);
+                end
+
                 if toBeRerefered > 0
                     rereferReuse.put(channelsCodeRerefer, toBeRerefered);
                 end
@@ -95,7 +99,11 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
             else
                 h = msgbox('Choose the channels to be removed:');
                 toRemove = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
-                close(h);
+                
+                try
+                    close(h);
+                end
+                
                 if toRemove > 0
                     cutReuse.put(channelsCodeRemove, toRemove);
                 end
@@ -196,7 +204,9 @@ if (isequal(checkArtifacts, 1) | isequal(checkLocate, 1))
             confirm_window(checkShow, '', 0, msgHandle);
         end
 
-        close(h);
+        try
+            close(h);
+        end
 
         % Storing data
         [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
