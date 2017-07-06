@@ -504,7 +504,9 @@ axes(handles.PlotAnalysis);
 clear analysis;
 analysis = cwt(handles.signal, MinValue:IntValue:MaxValue, wavename, 'plot');
 ylabel('Scale');
-close(h);
+try
+    close(h);
+end
 
 fs = str2num(handles.constants.get('fs'));
 signaltime = 0:1/fs:(length(handles.signal)-1)/fs;

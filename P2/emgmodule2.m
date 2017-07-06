@@ -580,7 +580,9 @@ elseif get(handles.radioFilt, 'Value')
     % Filter Option
     h = msgbox('Filtering data...');
     [filtEEG com b] = pop_eegfiltnew(EEG, valueHi, valueLo, [], checkNo);
-    close(h);
+    try
+        close(h);
+    end
     pop_eegplot(filtEEG);
     choice = questdlg('Would you like to save the filtered data?',...
                       'Save?', 'Yes', 'No', 'No');
@@ -592,7 +594,9 @@ elseif get(handles.radioFilt, 'Value')
             outputFolder = handles.outFolder;
             filtEEG = pop_saveset(filtEEG, 'filename', filtfile, ...
                                   'filepath', outputFolder);
-            close(h);
+            try
+                close(h);
+            end
 
             % Adding file to the processed list
             files{m + 1} = filtfile;

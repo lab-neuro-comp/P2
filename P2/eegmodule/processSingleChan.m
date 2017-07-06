@@ -83,7 +83,9 @@ for n = 1:size(ints_table)
         EEG = pop_select(EEG, 'time', blockrange);
     end
     [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
-    close(h);
+    try
+        close(h);
+    end
 
     % Storing data
     h = msgbox('Saving dataset...');
@@ -91,12 +93,16 @@ for n = 1:size(ints_table)
     [arqsetpath, arqsetname, arqsetext] = fileparts(arqset);
     EEG = pop_saveset(EEG, 'filename', strcat(arqsetname, arqsetext), ...
                            'filepath', get(handles.editOutput, 'String'));
-    close(h);
+    try
+        close(h);
+    end
 
     h = msgbox('Exporting dataset...');
     exportASCII = strcat(get(handles.editOutput, 'String'), filesep, arqsetname, '.ascii');
     EEG = pop_export(EEG, exportASCII, 'elec', 'off');
-    close(h);
+    try
+        close(h);
+    end
 
     % BUG Is the output data being saved?
     % Calculating and saving the parameters
@@ -132,7 +138,9 @@ for n = 1:size(ints_table)
                         temp{4}, ...
                         temp{5});
     end
-    close(h);
+    try
+        close(h);
+    end
 
     % Adding file to the processed list
     listset{n} = arqset;
@@ -140,4 +148,4 @@ for n = 1:size(ints_table)
 end
 fclose(fileID);
 
-disp('DEKITA~! o/')
+h = msgbox('DONE!')

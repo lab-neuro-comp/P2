@@ -162,7 +162,9 @@ if isequal(get(handles.checkboxMultiple, 'Value'), true)
                 h = msgbox('Choose the channel to be converted:');
                 [chosenIndex chosenName chosenCell] = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
                 toBeConverted = chosenIndex;
-                close(h);
+                try
+                    close(h);
+                end
                 if toBeConverted > 0
                     convertReuse.put(channelsConvert, toBeConverted);
                 else
@@ -220,7 +222,9 @@ else
                 h = msgbox('Choose the channel to be converted:');
                 [chosenIndex chosenName chosenCell] = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
                 toBeConverted = chosenIndex;
-                close(h);
+                try
+                    close(h);
+                end
                 if toBeConverted > 0
                     convertReuse.put(channelsConvert, toBeConverted);
                 else

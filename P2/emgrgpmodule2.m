@@ -100,7 +100,9 @@ for n = 1:length(testcases)
 	tablefilepath = strcat(newPath, filesep, 'SeparatedChannels');
 	tablenameEMG = strcat(edffilename, '_EMG.ascii');
 	tablenameGSR = strcat(edffilename, '_GSR.ascii');
-	close(h);
+	try
+		close(h);
+	end
 	
 	EEG = pop_biosig(testcases{n}, 'importevent', 'off',...
 								   'blockepoch', 'off',...
@@ -119,7 +121,9 @@ for n = 1:length(testcases)
         h = msgbox('Choose the channel to be separated:');
         [chosenIndex chosenName chosenCell] = pop_chansel({EEG.chanlocs.labels}, 'withindex', 'on');
         toBeSeparated = chosenIndex
-        close(h);
+       	try
+        	close(h);
+        end
         if toBeSeparated > 0
             separateReuse.put(channelsSeparate, toBeSeparated);
         else
