@@ -136,18 +136,14 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
             EEG = eeg_checkset(EEG);
 
             % Resampling the dataset to make ICA faster
-            if samplingRate >= 500
+            if samplingRate > 500
                 resamplingRate = 500;
-            else
-                resamplingRate = samplingRate;
+                EEG = pop_resample(EEG, resamplingRate);
+                [ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
             end
         
-            EEG = pop_resample(EEG, resamplingRate);
-            [ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
-
             EEG = pop_runica(EEG, 'icatype', 'runica',...
-                                  'options', { 'extended' 1 },...
-                                  'chanind', [ 1:21 ]);
+                                  'options', { 'extended' 1 });
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
             msgHandle = confirm_window(checkShow, '', 0, msgHandle);
         end
