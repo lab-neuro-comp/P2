@@ -5,7 +5,7 @@ function [timevector] = mean_window(limit, signal, timevector)
 
 queue = [];
 
-for n = 1:limit
+for n = 1:(limit-4)
 	if timevector(n) == true
 		queue = signal(n:n+4);
 		meanvalue = sum(queue);
