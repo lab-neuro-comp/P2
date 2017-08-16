@@ -134,7 +134,11 @@ end
 
 % --- Executes on button press in buttonsearcheeglab.
 function buttonsearcheeglab_Callback(hObject, eventdata, handles)
-% TODO Start search activity
+EEGPath = uigetdir(cd, 'Select the EEGLab folder');
+if EEGPath
+    set(handles.editeeglab, 'String', EEGPath);
+end
+
 
 % --- Doing nothing
 function editlocations_Callback(hObject, eventdata, handles)
@@ -150,4 +154,8 @@ end
 
 % --- Executes on button press in buttonlocs.
 function buttonlocs_Callback(hObject, eventdata, handles)
-% TODO Start search activity
+[LocName LocPath FileInd] = uigetfile('*.ced', 'Select the locations file');
+if LocName
+    set(handles.editlocations, 'String', strcat(LocPath, LocName));
+end
+
