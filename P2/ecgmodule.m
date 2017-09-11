@@ -263,6 +263,9 @@ ecgexportmx = handles.ecgexportmx;
 
 ecg = get(ecgplot, 'ydata');
 
+[b, a] = butter(4, 40/1000);
+ecg = filter(b, a, ecg);
+
 deriv2 = [0 diff(diff(ecg)) 0];
 sqderiv2 = deriv2.^2;
 
@@ -304,11 +307,6 @@ r_matrix(repeated + 1) = [];
 if r_matrix(length(r_matrix)) < level2
     r_matrix = r_matrix(1:length(r_matrix)-1);
     yaxis_r = yaxis_r(1:length(yaxis_r)-1);
-end
-
-ecgexportmx{9,1} = 'Peaks Detected';
-for ex = 1:length(yaxis_r)
-    ecgexportmx{9+ex,1} = yaxis_r(ex);
 end
 
 handles = vhrfcn(yaxis_r, r_matrix, hObject, handles);
@@ -509,7 +507,12 @@ function ecgexport_Callback(hObject, eventdata, handles)
 
 ecgexportmx = handles.ecgexportmx;
 
-[xlsfile xlspath] = uiputfile('*.xls','Save File');
+ecgexportmx{9,1} = 'Peaks Detected';
+for ex = 1:length(handles.yaxis_r)
+    ecgexportmx{9+ex,1} = handles.yaxis_r(ex);
+end
+
+[xlsfile xlspath] = uiputfile('*.xls', 'Save File');
 xlswrite(strcat(xlspath, xlsfile), ecgexportmx);
 
 
