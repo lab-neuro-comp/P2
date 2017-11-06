@@ -157,7 +157,7 @@ function buttonAnalyse_Callback(hObject, eventdata, handles)
 contents = cellstr(get(handles.listFiles, 'String'));
 filename = contents{get(handles.listFiles, 'Value')};
 CSVPath = handles.CSVPath;
-filename = strcat(CSVPath, '\', filename);
+filename = strcat(CSVPath, filesep, filename);
 handles.filename = filename;
 
 responseTime = analyse_for_stimulus(filename, get(handles.editTest, 'String'));
@@ -228,19 +228,18 @@ else
 	content{1}{1} = strcat(content{1}{1}, 'Delay');
 
 	for n = 1:length(responseTime)
-		if ~isequal(responseTime(n), 0)
-			disp(content{1}{k});
+		%if ~isequal(responseTime(n), 0)
 			semicollon = findstr(content{1}{k}, ';');
 			content{1}{k} = content{1}{k}(1:semicollon(2));
 			responseFile = replace_dot(responseTime(n));
 			content{1}{k} = strcat(content{1}{k}, responseFile);
 			n = n + 1;
 			k = k + 1;
-		else
-			while isequal(responseTime(n), 0)
-				n = n + 1;
-			end
-		end
+		%else
+		%	while isequal(responseTime(n), 0)
+		%		n = n + 1;
+		%	end
+		%end
 	end
 end
 fclose(fileID);

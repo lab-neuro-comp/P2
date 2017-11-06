@@ -55,8 +55,9 @@ end
 							   handles.files, handles.stuff, handles.number);
 filename = handles.files;
 moments = get(handles.stuff, filename{handles.number});
-times = turn_to_time(moments, length(handles.record)/handles.fs);
-handles.times = times;
+timeArray = turn_to_time(moments, length(handles.record)/handles.fs);
+handles.times = timeArray;
+set(handles.textPoints, 'String', num2str(length(timeArray)));
 guidata(hObject, handles);
 
 % UIWAIT makes plot_stuff wait for user response (see UIRESUME)
@@ -146,28 +147,28 @@ function toolAdd_ClickedCallback(hObject, eventdata, handles)
 datainfo = getCursorInfo(handles.hdata);
 [height width] = size(datainfo);
 
-times = handles.times;
+timeArray = handles.times;
 
 switch isempty(datainfo)
     case 0
         for n = 1:width
             spotposition = datainfo(1,n).Position;
-            times(length(times)+1) = spotposition(1);
-            times = sort(times);
-            index = find(times == spotposition(1));
+            timeArray(length(timeArray)+1) = spotposition(1);
+            timeArray = sort(timeArray);
+            index = find(timeArray == spotposition(1));
         end
     case 1
         msgbox('Make sure at least one point is selected.');
         beep;
 end
 recordtime = length(handles.record)/handles.fs;
-moments = turn_to_moment(handles.stuff.get(handles.files{handles.number}), times, recordtime);
+moments = turn_to_moment(handles.stuff.get(handles.files{handles.number}), timeArray, recordtime);
 handles.stuff.put(handles.files{handles.number}, moments);
 
 [handles.record, handles.fs] = refresh_signal(hObject, handles,...
 							   handles.files, handles.stuff, handles.number);
 
-handles.times = times;
+handles.times = timeArray;
 
 guidata(hObject, handles);
 
@@ -177,28 +178,28 @@ function toolRemove_ClickedCallback(hObject, eventdata, handles)
 datainfo = getCursorInfo(handles.hdata);
 [height width] = size(datainfo);
 
-times = handles.times;
+timeArray = handles.times;
 
 switch isempty(datainfo)
     case 0
         for n = 1:width
             spotposition = datainfo(1,n).Position;
-            temp = times - spotposition(1);
+            temp = timeArray - spotposition(1);
             [minimum minindex] = min(abs(temp));
-            times(minindex) = [];
+            timeArray(minindex) = [];
         end
     case 1
         msgbox('Make sure at least one point is selected.');
         beep;
 end
 recordtime = length(handles.record)/handles.fs;
-moments = turn_to_moment(handles.stuff.get(handles.files{handles.number}), times, recordtime);
+moments = turn_to_moment(handles.stuff.get(handles.files{handles.number}), timeArray, recordtime);
 handles.stuff.put(handles.files{handles.number}, moments);
 
 [handles.record, handles.fs] = refresh_signal(hObject, handles,...
 							   handles.files, handles.stuff, handles.number);
 
-handles.times = times;
+handles.times = timeArray;
 
 guidata(hObject, handles);
 
@@ -215,7 +216,7 @@ number = handles.number;
 
 filename = handles.files;
 moments = get(handles.stuff, filename{number});
-times = turn_to_time(moments, length(handles.record)/handles.fs);
+timeArray = turn_to_time(moments, length(handles.record)/handles.fs);
 
 selection = questdlg({'You will save only the marked moments.',...
 					 'Do you wish to continue?'},...
@@ -226,9 +227,10 @@ if strcmp(selection,'Cancel')
 end
 
 recordtime = length(handles.record)/handles.fs;
-moments = turn_to_moment(handles.stuff.get(filename{handles.number}), times, recordtime);
+moments = turn_to_moment(handles.stuff.get(filename{handles.number}), timeArray, recordtime);
 
 handles.stuff.put(filename{number}, moments);
+delete(strrep(filename{handles.number}, '.wav', '2.wav'));
 
 number = number + 1;
 handles.number = number;
@@ -241,8 +243,8 @@ if number <= length(handles.files)
 							       handles.files, handles.stuff, handles.number);
 	filename = handles.files;
 	moments = get(handles.stuff, filename{handles.number});
-	times = turn_to_time(moments, length(handles.record)/handles.fs);
-	handles.times = times;
+	timeArray = turn_to_time(moments, length(handles.record)/handles.fs);
+	handles.times = timeArray;
 	guidata(hObject, handles);
 else
 	handles.output = handles.stuff;
