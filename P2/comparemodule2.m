@@ -35,11 +35,6 @@ addpath([cd '/comparemodule']);
 
 % --- Executes just before comparemodule2 is made visible.
 function comparemodule2_OpeningFcn(hObject, eventdata, handles, varargin)
-% This function has no output args, see OutputFcn.
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to comparemodule2 (see VARARGIN)
 
 % Choose default command line output for comparemodule2
 handles.output = hObject;
@@ -48,16 +43,10 @@ handles.output = hObject;
 set(handles.figure1, 'Name', 'Test Response Delay');
 guidata(hObject, handles);
 
-% UIWAIT makes comparemodule2 wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
 function varargout = comparemodule2_OutputFcn(hObject, eventdata, handles) 
-% varargout  cell array for returning output args (see VARARGOUT);
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
@@ -65,9 +54,6 @@ varargout{1} = handles.output;
 
 % --- Executes on button press in buttonFolder.
 function buttonFolder_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonFolder (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 CSVPath = uigetdir(cd, 'Select the folder containing the analysed audio');
 handles.CSVPath = CSVPath;
@@ -85,23 +71,13 @@ guidata(hObject, handles);
 
 % --- Executes on selection change in listFiles.
 function listFiles_Callback(hObject, eventdata, handles)
-% hObject    handle to listFiles (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = get(hObject,'String') returns listFiles contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from listFiles
 set(handles.buttonSave, 'Enable', 'off');
 
 
 % --- Executes during object creation, after setting all properties.
 function listFiles_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to listFiles (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: listbox controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -109,9 +85,6 @@ end
 
 % --- Executes on button press in buttonSearch.
 function buttonSearch_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonSearch (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 [filename, pathname, filterindex]  = uigetfile('*.txt', 'Select files');
 set(handles.editTest, 'String', strcat(pathname, filename));
@@ -122,12 +95,7 @@ end
 
 
 function editTest_Callback(hObject, eventdata, handles)
-% hObject    handle to editTest (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of editTest as text
-%        str2double(get(hObject,'String')) returns contents of editTest as a double
 set(handles.buttonSave, 'Enable', 'off');
 if ~isempty(get(handles.editTest, 'String'))
 	set(handles.buttonAnalyse, 'Enable', 'on');
@@ -137,12 +105,7 @@ end
 
 % --- Executes during object creation, after setting all properties.
 function editTest_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to editTest (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
 		set(hObject,'BackgroundColor','white');
 end
@@ -150,16 +113,15 @@ end
 
 % --- Executes on button press in buttonAnalyse.
 function buttonAnalyse_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonAnalyse (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 contents = cellstr(get(handles.listFiles, 'String'));
 filename = contents{get(handles.listFiles, 'Value')};
-CSVPath = handles.CSVPath;
-filename = strcat(CSVPath, filesep, filename);
+filename = strcat(handles.CSVPath, filesep, filename);
 handles.filename = filename;
 
+% analyse_for_stimulus will analyse the file containing information about
+% the time in which each stimulus were presented and calculate the delay
+% of the answer of the participant
 responseTime = analyse_for_stimulus(filename, get(handles.editTest, 'String'));
 set(handles.listAnalysis, 'String', responseTime);
 set(handles.buttonSave, 'Enable', 'on');
@@ -171,22 +133,12 @@ guidata(hObject, handles);
 
 % --- Executes on selection change in listAnalysis.
 function listAnalysis_Callback(hObject, eventdata, handles)
-% hObject    handle to listAnalysis (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = get(hObject,'String') returns listAnalysis contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from listAnalysis
+% Does nothing
 
 
 % --- Executes during object creation, after setting all properties.
 function listAnalysis_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to listAnalysis (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: listbox controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
 		set(hObject,'BackgroundColor','white');
 end
@@ -194,56 +146,64 @@ end
 
 % --- Executes on button press in buttonSave.
 function buttonSave_Callback(hObject, eventdata, handles)
-% hObject    handle to buttonSave (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 filename = handles.filename;
-filename = strrep(filename, '.wav', '.csv');
 fileID = fopen(filename, 'r');
 content = textscan(fileID, '%s');
+responseTime = handles.responseTime; % contains the delays calculated for the stimuli
 
+% Counts how many ';' a line has
 semicollon = findstr(content{1}{1}, ';');
 
-responseTime = handles.responseTime;
-
-k = 2;
+% IF line has only one ';', the file has never been successfully analysed before
+k = 2; % counts the line of the file that will be modified
 if length(semicollon) == 1
+	% Therefore, a new column must be created
 	content{1}{1} = strcat(content{1}{1}, ';Delay');
 	
 	for n = 1:length(responseTime)
+		% IF, the participant answered to the stimulus
 		if ~isequal(responseTime(n), 0)
 			responseFile = replace_dot(responseTime(n));
 			content{1}{k} = strcat(content{1}{k}, ';', responseFile);
 			n = n + 1;
 			k = k + 1;
+
+		% ELSE, there has been an omission
 		else
-			while isequal(responseTime(n), 0)
-				n = n + 1;
-			end
+			n = n + 1;
 		end
 	end
+
+% ELSE, the file has been successfully analysed before and
+%		one wishes to overwrite previous information
 else
+	% Assusres that the new column has the correct header
 	content{1}{1} = content{1}{1}(1:semicollon(2));
 	content{1}{1} = strcat(content{1}{1}, 'Delay');
-
+	
 	for n = 1:length(responseTime)
-		%if ~isequal(responseTime(n), 0)
+		% IF, the participant answered to the stimulus
+		if ~isequal(responseTime(n), 0)
+			% Finds the last semicollon of the line
+			% so the information after that can be replaced
 			semicollon = findstr(content{1}{k}, ';');
 			content{1}{k} = content{1}{k}(1:semicollon(2));
+
 			responseFile = replace_dot(responseTime(n));
 			content{1}{k} = strcat(content{1}{k}, responseFile);
 			n = n + 1;
 			k = k + 1;
-		%else
-		%	while isequal(responseTime(n), 0)
-		%		n = n + 1;
-		%	end
-		%end
+		
+		% ELSE, there has been an omission
+		else
+			n = n + 1;
+		end
 	end
 end
 fclose(fileID);
 
+% Opens filename to write the new information
 fileID = fopen(filename, 'w');
 for n = 1:length(content{1})
 	fprintf(fileID, '%s\n', content{1}{n});
@@ -251,8 +211,6 @@ end
 fclose(fileID);
 
 set(handles.buttonSave, 'Enable', 'off');
-
-guidata(hObject, handles);
-
 h = msgbox('File successfully saved!');
 
+guidata(hObject, handles);

@@ -18,7 +18,6 @@ timeArray = content{5};
 % in seconds and, comparing its value with the that is presented as the
 % beginning of the test, the timeline of the test can be created for later
 % comparison with the audio timeline.
-audioName = strrep(audioName, '.wav', '.csv');
 initialTime = find_beginning(audioName);
 
 for n = 1:R
@@ -55,15 +54,15 @@ end
 figure;
 plot(0);
 hold on;
-plot(stimulusTime, 0, 'ob');
+plot(stimulusTime, 0, 'ob', 'MarkerFaceColor', 'b');
 
-% Gets the timeline from the .csv file generated from the audio analysis
+% Obtains the timeline from the CSV file generated from the audio analysis
 fileID = fopen(audioName);
 timecontent = textscan(fileID, '%s');
 fclose(fileID);
 
+% Modifies the format of the number stored in the file exchanging ',' by '.'
 [R, C] = size(timecontent{1});
-
 for n = 2:R
 	timecontent{1}{n} = split_string(timecontent{1}{n}, ';');
 	temp = timecontent{1}{n}{2};
@@ -73,24 +72,32 @@ end
 plot(audioTime, 0, 'or');
 
 % Time that takes for one to respond to a stimulus
-k = 1;
+k = 1; % counts which word of the audio file is being analysed
 for n = 2:length(stimulusTime)
+
+	% IF there are still more words to be analysed
 	if k <= length(audioTime)
+		% TODO Fix the 'if' condition
 		if stimulusTime(n) >= audioTime(k)
 			responseTime(n-1) = audioTime(k) - stimulusTime(n-1);
 			k = k + 1;
-%			if n == length(stimulusTime)
-%				responseTime(n) = audioTime(k) - stimulusTime(n);
-%			end
+			% IF the stimulus being analysed is the last one
+			if n == length(stimulusTime)
+				responseTime(n) = audioTime(k) - stimulusTime(n);
+			end
+
+		% TODO Related to the 'if' that needs to be fixed
 		else
 			while (stimulusTime(n) < audioTime(k) && n < length(stimulusTime))
 				responseTime(n-1) = 0;
 				n = n + 1;
 			end
 		end
+
+	% ELSE, every word has already been analysed and the participant
+	%		didn't answered to further stimuli
 	else 
 		responseTime(n) = 0;
-		disp('Extra');
 	end
 end
 		

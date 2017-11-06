@@ -6,7 +6,7 @@ moments = get(stuff, files{n});
 [fpath, fname, fext] = fileparts(files{n});
 set(handles.textFilename, 'String', strcat(fname, fext));
 [record, fs] = wavread(filename);
-timemoments = turn_to_time(moments, length(record)/fs)
+timemoments = turn_to_time(moments, length(record)/fs);
 %list = get(handles.listboxMoments, 'Value');
 %set(handles.listboxMoments, 'String', timemoments);
 

@@ -161,6 +161,9 @@ switch isempty(datainfo)
         msgbox('Make sure at least one point is selected.');
         beep;
 end
+tmp = str2num(get(handles.textPoints, 'String'));
+set(handles.textPoints, 'String', num2str(tmp + width));
+
 recordtime = length(handles.record)/handles.fs;
 moments = turn_to_moment(handles.stuff.get(handles.files{handles.number}), timeArray, recordtime);
 handles.stuff.put(handles.files{handles.number}, moments);
@@ -192,6 +195,9 @@ switch isempty(datainfo)
         msgbox('Make sure at least one point is selected.');
         beep;
 end
+tmp = str2num(get(handles.textPoints, 'String'));
+set(handles.textPoints, 'String', num2str(tmp - width));
+
 recordtime = length(handles.record)/handles.fs;
 moments = turn_to_moment(handles.stuff.get(handles.files{handles.number}), timeArray, recordtime);
 handles.stuff.put(handles.files{handles.number}, moments);
