@@ -27,6 +27,10 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 
+addpath([cd '/edfconverter']);
+if ~is_in_javapath('edf.jar')
+	javaaddpath('edf.jar');
+end
 % End initialization code - DO NOT EDIT
 
 

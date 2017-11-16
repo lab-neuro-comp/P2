@@ -136,8 +136,8 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
             EEG = eeg_checkset(EEG);
 
             % Resampling the dataset to make ICA faster
-            if samplingRate > 500
-                resamplingRate = 500;
+            if samplingRate > 200
+                resamplingRate = 200;
                 EEG = pop_resample(EEG, resamplingRate);
                 [ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
             end

@@ -145,13 +145,13 @@ guidata(hObject, handles);
 function toolAdd_ClickedCallback(hObject, eventdata, handles)
 
 datainfo = getCursorInfo(handles.hdata);
-[height width] = size(datainfo);
+[h w] = size(datainfo);
 
 timeArray = handles.times;
 
 switch isempty(datainfo)
     case 0
-        for n = 1:width
+        for n = 1:w
             spotposition = datainfo(1,n).Position;
             timeArray(length(timeArray)+1) = spotposition(1);
             timeArray = sort(timeArray);
@@ -162,7 +162,7 @@ switch isempty(datainfo)
         beep;
 end
 tmp = str2num(get(handles.textPoints, 'String'));
-set(handles.textPoints, 'String', num2str(tmp + width));
+set(handles.textPoints, 'String', num2str(tmp + w));
 
 recordtime = length(handles.record)/handles.fs;
 moments = turn_to_moment(handles.stuff.get(handles.files{handles.number}), timeArray, recordtime);
@@ -179,13 +179,13 @@ guidata(hObject, handles);
 function toolRemove_ClickedCallback(hObject, eventdata, handles)
 
 datainfo = getCursorInfo(handles.hdata);
-[height width] = size(datainfo);
+[h w] = size(datainfo);
 
 timeArray = handles.times;
 
 switch isempty(datainfo)
     case 0
-        for n = 1:width
+        for n = 1:w
             spotposition = datainfo(1,n).Position;
             temp = timeArray - spotposition(1);
             [minimum minindex] = min(abs(temp));
@@ -196,7 +196,7 @@ switch isempty(datainfo)
         beep;
 end
 tmp = str2num(get(handles.textPoints, 'String'));
-set(handles.textPoints, 'String', num2str(tmp - width));
+set(handles.textPoints, 'String', num2str(tmp - w));
 
 recordtime = length(handles.record)/handles.fs;
 moments = turn_to_moment(handles.stuff.get(handles.files{handles.number}), timeArray, recordtime);
@@ -236,7 +236,7 @@ recordtime = length(handles.record)/handles.fs;
 moments = turn_to_moment(handles.stuff.get(filename{handles.number}), timeArray, recordtime);
 
 handles.stuff.put(filename{number}, moments);
-delete(strrep(filename{handles.number}, '.wav', '2.wav'));
+delete(strrep(filename{handles.number}, '.wav', '_tmp.wav'));
 
 number = number + 1;
 handles.number = number;

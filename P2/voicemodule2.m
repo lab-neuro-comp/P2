@@ -7,7 +7,7 @@ function varargout = voicemodule(varargin)
 
 % Edit the above text to modify the response to help voicemodule2
 
-% Last Modified by GUIDE v2.5 25-Nov-2016 11:17:12
+% Last Modified by GUIDE v2.5 13-Nov-2017 11:38:20
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -198,3 +198,21 @@ end
 guidata(hObject, handles);
 
 h = msgbox('Files successfully saved!');
+
+
+% --- Executes on button press in radioAudio.
+function radioAudio_Callback(hObject, eventdata, handles)
+% hObject    handle to radioAudio (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radioAudio
+
+
+% --- Executes on button press in radioTable.
+function radioTable_Callback(hObject, eventdata, handles)
+% hObject    handle to radioTable (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radioTable

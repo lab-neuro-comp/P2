@@ -277,6 +277,10 @@ for i = 1:length(sqderiv2)
         sqderiv2(i) = 0;
     end
 end
+
+figure;
+plot(sqderiv2);
+    
 r_start = 0;
 r_seg = 0;
 i_rm = 1;
