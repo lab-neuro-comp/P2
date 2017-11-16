@@ -32,17 +32,13 @@ addpath([cd '/voicemodule']);
 
 % --- Executes just before voicemodule2 is made visible.
 function voicemodule2_OpeningFcn(hObject, eventdata, handles, varargin)
-% This function has no output args, see OutputFcn.
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to voicemodule2 (see VARARGIN)
 
 % Choose default command line output for voicemodule2
 handles.output = hObject;
 handles.cases = {};
 handles.files = {};
 handles.stuff = {};
+handles.type = '*.wav';
 
 % Update handles structure
 set(handles.figure1, 'Name', 'Voice Recognition');
@@ -54,10 +50,6 @@ guidata(hObject, handles);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = voicemodule2_OutputFcn(hObject, eventdata, handles)
-% varargout  cell array for returning output args (see VARARGOUT);
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
@@ -65,16 +57,11 @@ varargout{1} = handles.output;
 
 % --------------------------------------------------------------------
 function FileMenu_Callback(hObject, eventdata, handles)
-% hObject    handle to FileMenu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
+% Does nothing
 
 % --------------------------------------------------------------------
 function OpenMenuItem_Callback(hObject, eventdata, handles)
-% hObject    handle to OpenMenuItem (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 file = uigetfile('*.fig');
 if ~isequal(file, 0)
 	open(file);
@@ -82,9 +69,7 @@ end
 
 % --------------------------------------------------------------------
 function CloseMenuItem_Callback(hObject, eventdata, handles)
-% hObject    handle to CloseMenuItem (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 selection = questdlg(['Close ' get(handles.figure1,'Name') '?'],...
 					 ['Close ' get(handles.figure1,'Name') '...'],...
 					 'Yes','No','Yes');
@@ -95,17 +80,37 @@ end
 delete(handles.figure1)
 
 
-function editSearch_Callback(hObject, eventdata, handles)
+% --- Executes on button press in radioAudio.
+function radioAudio_Callback(hObject, eventdata, handles)
 
-% Hints: get(hObject,'String') returns contents of editSearch as text
-%        str2double(get(hObject,'String')) returns contents of editSearch as a double
+if get(hObject, 'Value');
+	set(handles.radioTable, 'Value', 0);
+	set(handles.buttonPlot, 'Enable', 'off');
+	set(handles.buttonRun, 'Enable', 'on');
+	set(handles.buttonSave, 'Enable', 'off');
+	handles.type = '*.wav';
+end
+guidata(hObject, handles);
+
+% --- Executes on button press in radioTable.
+function radioTable_Callback(hObject, eventdata, handles)
+
+if get(hObject, 'Value')
+	set(handles.radioAudio, 'Value', 0);
+	set(handles.buttonPlot, 'Enable', 'on');
+	set(handles.buttonRun, 'Enable', 'off');
+	set(handles.buttonSave, 'Enable', 'on');
+	handles.type = '*.csv';
+end
+guidata(hObject, handles);
+
+function editSearch_Callback(hObject, eventdata, handles)
+% Does nothing
 
 
 % --- Executes during object creation, after setting all properties.
 function editSearch_CreateFcn(hObject, eventdata, handles)
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
 	set(hObject,'BackgroundColor','white');
 end
@@ -114,7 +119,7 @@ end
 % --- Executes on button press in buttonSearch.
 function buttonSearch_Callback(hObject, eventdata, handles)
 
-[filename, pathname, filterindex]  = uigetfile('*.wav', 'Select files', ...
+[filename, pathname, filterindex]  = uigetfile(handles.type, 'Select files', ...
 											   'MultiSelect', 'on');
 handles.cases = {};
 if ~isequal(filename, 0)
@@ -136,6 +141,7 @@ else
 end
 
 guidata(hObject, handles);
+
 
 % --- Executes on button press in buttonRun.
 function buttonRun_Callback(hObject, eventdata, handles)
@@ -161,6 +167,29 @@ guidata(hObject, handles);
 % --- Executes on button press in buttonPlot.
 function buttonPlot_Callback(hObject, eventdata, handles)
 
+if get(handles.radioTable, 'Value')
+	% transform time column with replace_dot
+	% fill out stuff hash with new value
+	outlet = get(handles.editSearch, 'String');
+	files = split_string(outlet, ';');
+	stuff = java.util.HashMap;
+
+	for n = 1:length(files)
+		fileID = fopen(filename, 'r');
+		content = textscan(files{n});
+		[R, C] = size(content{1});
+
+		for k = 2:R
+			semicollon = findstr(content{1}{k}, ';');
+			timeArray[k - 1] = content{1}{k}(semicollon(1):length(content{1}{k}));
+			timeArray[k - 1] = str2num(strrep(timeArray[k - 1], ',', '.'));
+		end
+		fclose(fileID);
+
+		class(timeArray);
+		stuff.put(files{n}, timeArray);
+	end
+end
 handles.stuff = plot_stuff(handles.files, handles.stuff);
 guidata(hObject, handles);
 
@@ -198,21 +227,3 @@ end
 guidata(hObject, handles);
 
 h = msgbox('Files successfully saved!');
-
-
-% --- Executes on button press in radioAudio.
-function radioAudio_Callback(hObject, eventdata, handles)
-% hObject    handle to radioAudio (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of radioAudio
-
-
-% --- Executes on button press in radioTable.
-function radioTable_Callback(hObject, eventdata, handles)
-% hObject    handle to radioTable (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of radioTable
