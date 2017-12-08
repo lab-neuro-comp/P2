@@ -37,7 +37,7 @@ handles.output = hObject;
 % Defining some handles for the program
 handles.files = varargin{1};
 handles.stuff = varargin{2};
-handles.exp = varargin{3};
+handles.ext = varargin{3};
 
 handles.number = 1;
 set(handles.panelName,...
