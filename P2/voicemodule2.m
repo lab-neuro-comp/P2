@@ -35,10 +35,13 @@ function voicemodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for voicemodule2
 handles.output = hObject;
-handles.cases = {};
-handles.files = {};
-handles.stuff = {};
-handles.type = '*.wav';
+
+% Defining some handles for the program
+handles.files = {};		% strcat(pathname, filename)
+handles.filename = {};	% stores filenames
+handles.pathname = {};	% stores file paths
+handles.stuff = {};		% stores hash map with analysed audio information
+handles.ext = '*.wav';	% stores file extension expected
 
 % Update handles structure
 set(handles.figure1, 'Name', 'Voice Recognition');
@@ -83,24 +86,27 @@ delete(handles.figure1)
 % --- Executes on button press in radioAudio.
 function radioAudio_Callback(hObject, eventdata, handles)
 
+% If user chooses to analyse a brand new audio
 if get(hObject, 'Value');
 	set(handles.radioTable, 'Value', 0);
-	set(handles.buttonPlot, 'Enable', 'off');
 	set(handles.buttonRun, 'Enable', 'on');
-	set(handles.buttonSave, 'Enable', 'off');
-	handles.type = '*.wav';
+	set([handles.buttonPlot handles.buttonSave], 'Enable', 'off');
+%	set(handles.buttonSave, 'Enable', 'off');
+	handles.ext = '*.wav';
 end
 guidata(hObject, handles);
 
 % --- Executes on button press in radioTable.
 function radioTable_Callback(hObject, eventdata, handles)
 
+% If user decides to reanalyse an audio that
+% already has a CSV "attached" to it
 if get(hObject, 'Value')
 	set(handles.radioAudio, 'Value', 0);
-	set(handles.buttonPlot, 'Enable', 'on');
 	set(handles.buttonRun, 'Enable', 'off');
-	set(handles.buttonSave, 'Enable', 'on');
-	handles.type = '*.csv';
+	set([handles.buttonPlot handles.buttonSave], 'Enable', 'on');
+%	set(handles.buttonSave, 'Enable', 'on');
+	handles.ext = '*.csv';
 end
 guidata(hObject, handles);
 
@@ -119,22 +125,34 @@ end
 % --- Executes on button press in buttonSearch.
 function buttonSearch_Callback(hObject, eventdata, handles)
 
-[filename, pathname, filterindex]  = uigetfile(handles.type, 'Select files', ...
+[filename, pathname, filterindex]  = uigetfile(handles.ext, 'Select files', ...
 											   'MultiSelect', 'on');
-handles.cases = {};
+temp = {};
+
+% If a file wasa selected during search
 if ~isequal(filename, 0)
+	% If only one file was selected during search
 	if ischar(filename)
-		handles.cases = { strcat(pathname, filename) };
+		temp = {strcat(pathname, filename)};
+
+	% Else, if multiple files were selected during search
 	elseif iscell(filename)
-		handles.cases = {};
 		for n = 1:length(filename)
-			handles.cases{n} = strcat(pathname, filename{n});
+			temp{n} = strcat(pathname, filename{n});
 		end
 	end
+
 	outlet = join_strings(handles.cases, ';');
 	set(handles.editSearch, 'String', outlet);
-	set(handles.buttonRun, 'Enable', 'on');
+
+	% If an audio will be analysed, Run must be enabled
+	if get(handles.radioAudio, 'Value')
+		set(handles.buttonRun, 'Enable', 'on');
+	end
+
+	% Set pathname and filename to a handle structure
 	handles.pathname = pathname;
+	filename = cellstr(filename);
 	handles.filename = filename;
 else
 	return;
@@ -146,51 +164,61 @@ guidata(hObject, handles);
 % --- Executes on button press in buttonRun.
 function buttonRun_Callback(hObject, eventdata, handles)
 
-outlet = get(handles.editSearch, 'String');
-files = split_string(outlet, ';');
+pathname = handles.pathname;
+filename = handles.filename;
 stuff = java.util.HashMap;
-for n = 1:length(files)
-	stuff.put(files{n}, main(files{n}));
+
+% Analyse each audio provided by the user
+for n = 1:length(filename)
+	file{n} = strcat(pathname, filename{n})
+	stuff.put(file{n}, main(file{n}));
 end
 
-set(handles.buttonPlot, 'Enable', 'on');
-set(handles.buttonSave, 'Enable', 'on');
+% After audios have been analysed, enable Plot and Save
+set([handles.buttonPlot handles.buttonSave], 'Enable', 'on');
+%set(handles.buttonSave, 'Enable', 'on');
 
-handles.files = files;
+% Stores filenames and hash map in handles structures
+handles.files = file;
 handles.stuff = stuff;
 guidata(hObject, handles);
-
-% TODO Cause the appropiate side effects
-% TODO Discover why some test cases are missing
 
 
 % --- Executes on button press in buttonPlot.
 function buttonPlot_Callback(hObject, eventdata, handles)
 
+% If files provided were CSV tables
 if get(handles.radioTable, 'Value')
-	% transform time column with replace_dot
-	% fill out stuff hash with new value
-	outlet = get(handles.editSearch, 'String');
-	files = split_string(outlet, ';');
+	pathname = handles.pathname;
+	filename = handles.filename;
 	stuff = java.util.HashMap;
-
-	for n = 1:length(files)
-		fileID = fopen(filename, 'r');
-		content = textscan(files{n});
+	
+	for n = 1:length(filename)
+		file{n} = strcat(pathname, filename{n});
+		fileID = fopen(file{n}, 'r');
+		content = textscan(fileID, '%s\n');
 		[R, C] = size(content{1});
 
+		% Transform time column from string to number
 		for k = 2:R
 			semicollon = findstr(content{1}{k}, ';');
-			timeArray[k - 1] = content{1}{k}(semicollon(1):length(content{1}{k}));
-			timeArray[k - 1] = str2num(strrep(timeArray[k - 1], ',', '.'));
+			temp = content{1}{k}(semicollon(1):length(content{1}{k}));
+			timeArray(k - 1) = str2num(strrep(temp, ',', '.'));
 		end
 		fclose(fileID);
-
-		class(timeArray);
-		stuff.put(files{n}, timeArray);
+		file{n} = content{1}{k}(1:semicollon(1) - 1)
+		
+		% Fill out stuff hash map with new value
+		stuff.put(file{n}, timeArray);
 	end
+
+	% Updates handles structures with filename and hash map
+	handles.files = file;
+	handles.stuff = stuff;
+	guidata(hObject, handles);
+
 end
-handles.stuff = plot_stuff(handles.files, handles.stuff);
+handles.stuff = plot_stuff(handles.files, handles.stuff, get(handles.radioAudio, 'Value'));
 guidata(hObject, handles);
 
 
@@ -198,26 +226,28 @@ guidata(hObject, handles);
 function buttonSave_Callback(hObject, eventdata, handles)
 
 file = handles.files;
-moments = {};
 name = handles.filename;
 mkdir(handles.pathname, 'CSVFiles');
+moments = {};
 
+% For each file provided in search
 for n = 1:length(file)
-	[record, fs, nbits] = wavread(file{n});
+	% Prepares information that will be written
+	[record, fs] = audioread(file{n});
 	moments{n} = handles.stuff.get(file{n});
 	time{n} = turn_to_time(moments{n}, length(record)/fs);
-	
-    if ischar(name)
-		tablename = strrep(name, '.wav', '.csv');
-    elseif iscell(name)
-        tablename = strrep(name{n}, '.wav', '.csv');
-    end
-	
-	fileID = fopen(strcat(handles.pathname, 'CSVFiles/', tablename), 'w');
+
+	% Prepares file in which the information will be written on
+	tablename = strrep(name{n}, '.wav', '.csv');    
+	fileID = fopen(strcat(handles.pathname, 'CSVFiles', filesep, tablename), 'w');
 	fprintf(fileID, '%s;%s\n', 'Filename', 'Moments');
 	
+	% Write each pair of filename/moment in time
 	for m = 1:length(time{n})
+		% Replaces '.' in numbers (US decimal separator)
+		% by ',' (BR decimal separator)
 		timestring = replace_dot(time{n}(m));
+
 		h = strcat(file{n}, '; ', timestring);
 		fprintf(fileID, '%s;%s\n', file{n}, timestring);
 	end
