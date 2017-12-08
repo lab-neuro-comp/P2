@@ -31,35 +31,17 @@ end
 
 % --- Executes just before protolize2 is made visible.
 function protolize2_OpeningFcn(hObject, eventdata, handles, varargin)
-global deltaf1 deltaf2 thetaf1 thetaf2 alphaf1 alphaf2 betaf1 betaf2 gammaf1 gammaf2 fa fb fc fs frhzoom hfourier pcalc
-% This function has no output args, see OutputFcn.
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to protolize2 (see VARARGIN)
 
 % Choose default command line output for protolize2
 handles.output = hObject;
 
+% Defining some handles for the program
+handles.constants = load_constants();
+
 % Update handles structure
+set(handles.figure1, 'Name', 'Protolize 2 v0.6b');
 guidata(hObject, handles);
 
-% SETUP GLOBALS
-handles.constants = load_constants();
-deltaf1=0.5;
-deltaf2=3.5;
-thetaf1=3.5;
-thetaf2=7;
-alphaf1=8;
-alphaf2=13;
-betaf1=15;
-betaf2=24;
-gammaf1=30;
-gammaf2=70;
-fs=200;
-fa=4096;
-fb=0.0610426077402027;
-fc=250;
 
 % UIWAIT makes protolize2 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -67,10 +49,6 @@ fc=250;
 
 % --- Outputs from this function are returned to the command line.
 function varargout = protolize2_OutputFcn(hObject, eventdata, handles)
-% varargout  cell array for returning output args (see VARARGOUT);
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
@@ -79,119 +57,72 @@ varargout{1} = handles.output;
 % --------------------------------------------------------------------
 % --- Executes on button press in eegprocessbut.
 function eegprocessbut_Callback(hObject, eventdata, handles)
-% hObject    handle to eegprocessbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 eegmodule2;
 
 % --- Executes on button press in studymapbut.
 function studymapbut_Callback(hObject, eventdata, handles)
-% hObject    handle to studymapbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 studymodule;
 
 % --- Executes on button press in emgrgpbut.
 function emgrgpbut_Callback(hObject, eventdata, handles)
-% hObject    handle to emgrgpbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 emgrgpmodule2;
 
 % --- Executes on button press in singleprocessbut.
 function singleprocessbut_Callback(hObject, eventdata, handles)
-% hObject    handle to singleprocessbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 emgmodule2;
 
 % --- Executes on button press in voicerecogbut.
 function voicerecogbut_Callback(hObject, eventdata, handles)
-% hObject    handle to voicerecogbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 voicemodule2;
 
 % --- Executes on button press in voicecompbut.
 function voicecompbut_Callback(hObject, eventdata, handles)
-% hObject    handle to voicecompbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 comparemodule2;
 
 % --- Executes on button press in edfconvbut.
 function edfconvbut_Callback(hObject, eventdata, handles)
-% hObject    handle to edfconvbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 edfconverter;
 
 
 % --------------------------------------------------------------------
 % --- Executes on button press in timespecbut.
 function timespecbut_Callback(hObject, eventdata, handles)
-% hObject    handle to timespecbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 editionmodule2;
 
 % --- Executes on button press in dwtbut.
 function dwtbut_Callback(hObject, eventdata, handles)
-% hObject    handle to dwtbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 dwtmodule2;
 
 
 % --------------------------------------------------------------------
 % --- Executes on button press in timedombut.
 function timedombut_Callback(hObject, eventdata, handles)
-% hObject    handle to timedombut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 timemodule2;
 
 % --- Executes on button press in fourierbut.
 function fourierbut_Callback(hObject, eventdata, handles)
-% hObject    handle to fourierbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 fourier2; % done but needs some changes
 
 % --- Executes on button press in stftbut.
 function stftbut_Callback(hObject, eventdata, handles)
-% hObject    handle to stftbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 stft2; % under construction
 
 % --- Executes on button press in cwtbut.
 function cwtbut_Callback(hObject, eventdata, handles)
-% hObject    handle to cwtbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 cwtmodule2;
 
 % --- Executes on button press in ecgbut.
 function ecgbut_Callback(hObject, eventdata, handles)
-% hObject    handle to ecgbut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 ecgmodule; % needs to be checked
 
 
 % --------------------------------------------------------------------
 function mainfnc_Callback(hObject, eventdata, handles)
-% hObject    handle to mainfnc (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+% Does nothing
 
 
 % --------------------------------------------------------------------
 function mainexit_Callback(hObject, eventdata, handles)
-% hObject    handle to mainexit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 close;
 clear;
 clc;
@@ -200,41 +131,26 @@ cd ..
 
 % --------------------------------------------------------------------
 function mainhelp_Callback(hObject, eventdata, handles)
-% hObject    handle to mainhelp (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+% Does nothing
 
 % --------------------------------------------------------------------
 function paramconfig_main_Callback(hObject, eventdata, handles)
-% hObject    handle to paramconfig_main (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 paramconfig;
 
 %---------------------------------------------------------------------
 function mainconfig_Callback(hObject, eventData, handles)
-% hObject    handle to mainconfig (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+% Does nothing
 
 
 % --------------------------------------------------------------------
 function settings_main_Callback(hObject, eventdata, handles)
-% hObject    handle to settings_main (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+% Does nothing
 
 
 % --------------------------------------------------------------------
 function rhythmconfig_main_Callback(hObject, eventdata, handles)
-% hObject    handle to rhythmconfig_main (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 rhythmconfig;
 
 % --------------------------------------------------------------------
 function docmain_Callback(hObject, eventdata, handles)
-% hObject    handle to docmain (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 web('file:///', cd, 'doc.html');
