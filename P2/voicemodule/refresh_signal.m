@@ -1,7 +1,7 @@
 function [record, fs] = refresh_signal(hObject, handles, files, stuff, n, analysis)
 
 % Recover file original name
-filename = strrep(files{n}, '.csv', '.wav')
+filename = strrep(files{n}, '.csv', '.wav');
 filename = strrep(filename, strcat(filesep, 'CSVFiles', filesep), filesep);
 [fpath, fname, fext] = fileparts(files{n});
 set(handles.textFilename, 'String', strcat(fname, fext));
@@ -11,7 +11,7 @@ set(handles.textFilename, 'String', strcat(fname, fext));
 
 % If the file being analysed is indeed an audio
 if analysis
-	moments = get(stuff, files{n})
+	moments = get(stuff, files{n});
 	timemoments = turn_to_time(moments, length(record)/fs);
 
 % Else, if file hasa been analysed already

@@ -195,7 +195,7 @@
 <a name="voice"></a>
 <h2>Análise de Voz</h2>
 
-<p>Esta ferramenta extrai os momentos iniciais de cada palavra em um sinal de voz em um arquivo WAV aplicando um <em>threshold</em> no espectro de potência da gravação em questão. Permite remoção de falsos-positivos em um submódulo após a análise computacional do arquivo de áudio.</p>
+<p>Esta ferramenta extrai os momentos iniciais de cada palavra em um sinal de voz em um arquivo WAV aplicando um <em>threshold</em> no espectro de potência da gravação em questão. Permite remoção de falsos-positivos em um submódulo após a análise computacional do arquivo de áudio. Caso o arquivo de áudio já tenha sido analisado previamente, também é possível informar ao programa a versão em tabela CSV que contém as informações de análise para, então, verificar a marcação dos momentos.</p>
 
 <p><img src="assets/voice.png" alt="voice analysis" title="'Voice Analysis' Module" /></p>
 
@@ -205,7 +205,9 @@
 
 <p><img src="assets/subvoice.png" alt="moments verification" title="'Moments Verification' Module" /></p>
 
-<p>O nome do arquivo que está sendo analisado é mostrado no topo de uma lista contendo todos os valores obtidos após a análise computacional do arquivo. Estes valores <b>devem</b> ser selecionados (para seleção múltipla, utilize <em>Ctrl/Shift</em>) para serem salvos ao final da verificação. Caso o usuário deseje checar o que foi selecionado, é possível fazê-lo com o botão <code>View Selection</code>. Este botão atualiza o gráfico contendo as marcações dos tempos, colorindo de verde aquilo que foi selecionado pelo usuário.</p>
+<p>O nome do arquivo que está sendo analisado é mostrado no topo da janela do módulo. Os valores encontrados com a análise computacional do arquivo de áudio são marcados em vermelho sobre o formato de onda (em azul) do arquivo de som.</p>
+
+<p>Com auxílio das ferramentas no topo da janela é possível aumentar e diminuir o zoom e arrastar o formato de onda de um lado para o outro. Além disso, é possível habilitar e desabilitar a seleção de pontos para a adição e remoção. Para selecionar múltiplo pontos, ative a ferramenta <code>Data Cursor</code> e segure a tecla <em>Alt</em> enquanto clica nos lugares desejados. Para adicionar os lugares marcados à lista de pontos relacionados ao arquivo, basta clicar no ícone <code>+</code>. Para eliminar os lugares selecionados, clique no ícone <code>-</code>.</p>
 
 <p>Uma vez que o usuário esteja satisfeito com o resultado, clica-se no botão <code>Next</code> (ou <code>Save</code>, se não houver mais arquivos para analisar) para atualizar a lista de valores de momentos do arquivo e continuar a análise com o próximo arquivo.</p>
 

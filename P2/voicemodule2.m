@@ -91,7 +91,6 @@ if get(hObject, 'Value');
 	set(handles.radioTable, 'Value', 0);
 	set(handles.buttonRun, 'Enable', 'on');
 	set([handles.buttonPlot handles.buttonSave], 'Enable', 'off');
-%	set(handles.buttonSave, 'Enable', 'off');
 	handles.ext = '*.wav';
 end
 guidata(hObject, handles);
@@ -105,7 +104,6 @@ if get(hObject, 'Value')
 	set(handles.radioAudio, 'Value', 0);
 	set(handles.buttonRun, 'Enable', 'off');
 	set([handles.buttonPlot handles.buttonSave], 'Enable', 'on');
-%	set(handles.buttonSave, 'Enable', 'on');
 	handles.ext = '*.csv';
 end
 guidata(hObject, handles);
@@ -142,7 +140,7 @@ if ~isequal(filename, 0)
 		end
 	end
 
-	outlet = join_strings(handles.cases, ';');
+	outlet = join_strings(temp, ';');
 	set(handles.editSearch, 'String', outlet);
 
 	% If an audio will be analysed, Run must be enabled
@@ -170,7 +168,7 @@ stuff = java.util.HashMap;
 
 % Analyse each audio provided by the user
 for n = 1:length(filename)
-	file{n} = strcat(pathname, filename{n})
+	file{n} = strcat(pathname, filename{n});
 	stuff.put(file{n}, main(file{n}));
 end
 
@@ -206,7 +204,7 @@ if get(handles.radioTable, 'Value')
 			timeArray(k - 1) = str2num(strrep(temp, ',', '.'));
 		end
 		fclose(fileID);
-		file{n} = content{1}{k}(1:semicollon(1) - 1)
+		file{n} = content{1}{k}(1:semicollon(1) - 1);
 		
 		% Fill out stuff hash map with new value
 		stuff.put(file{n}, timeArray);
@@ -218,7 +216,8 @@ if get(handles.radioTable, 'Value')
 	guidata(hObject, handles);
 
 end
-handles.stuff = plot_stuff(handles.files, handles.stuff, get(handles.radioAudio, 'Value'));
+handles.stuff = plot_stuff(handles.files, handles.stuff,...
+						   get(handles.radioAudio, 'Value'));
 guidata(hObject, handles);
 
 
