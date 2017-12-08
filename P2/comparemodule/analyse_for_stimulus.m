@@ -7,9 +7,9 @@ fileID = fopen(testName, 'r');
 content = textscan(fileID, '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s');
 fclose(fileID);
 k = 1;
-%timeArray = content{4};
+timeArray = content{4};
 %firstTime = content{4};
-timeArray = content{5};
+%timeArray = content{5};
 
 [R, C] = size(timeArray);
 
@@ -22,21 +22,21 @@ initialTime = find_beginning(audioName);
 
 for n = 1:R
 	if ~isempty(timeArray{n})
-%		timeArray{n,1} = split_string(timeArray{n,1}, ':');
-%		timeArray{n}{5} = (str2num(timeArray{n}{1})*3600 +...	% Hours
-%						   str2num(timeArray{n}{2})*60 + 120*n +...	% Minutes
-%						   str2num(timeArray{n}{3}) +...		% Seconds
-%						   str2num(timeArray{n}{4})/1000);		% Miliseconds
+		timeArray{n,1} = split_string(timeArray{n,1}, ':');
+		timeArray{n}{5} = (str2num(timeArray{n}{1})*3600 +...	% Hours
+						   str2num(timeArray{n}{2})*60 +...		% Minutes
+						   str2num(timeArray{n}{3}) +...		% Seconds
+						   str2num(timeArray{n}{4})/1000);		% Miliseconds
 		
 		% Calculates the gap of time between stimuli
 		% and creates a timeline
-%		if (n > 1)
-%			stimulusTime(n) = (timeArray{n}{5} - timeArray{n-1}{5}) + stimulusTime(n-1);
-%		elseif (n == 1)
-%			stimulusTime(1) = timeArray{n}{5} - initialTime;
-%		end
+		if (n > 1)
+			stimulusTime(n) = (timeArray{n}{5} - timeArray{n-1}{5}) + stimulusTime(n-1);
+		elseif (n == 1)
+			stimulusTime(1) = timeArray{n}{5} - initialTime;
+		end
 
-		stimulusTime(n) = str2num(timeArray{n})/1000;
+%		stimulusTime(n) = str2num(timeArray{n})/1000;
 
 %		if (n > 1)
 %			stimulusTime(n) = str2num(timeArray{n})/timeFactor;

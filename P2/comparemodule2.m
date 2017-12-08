@@ -33,6 +33,7 @@ end
 
 addpath([cd '/comparemodule']);
 
+
 % --- Executes just before comparemodule2 is made visible.
 function comparemodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 
@@ -42,7 +43,6 @@ handles.output = hObject;
 % Update handles structure
 set(handles.figure1, 'Name', 'Test Response Delay');
 guidata(hObject, handles);
-
 
 
 % --- Outputs from this function are returned to the command line.
@@ -59,12 +59,10 @@ CSVPath = uigetdir(cd, 'Select the folder containing the analysed audio');
 handles.CSVPath = CSVPath;
 programPath = cd(CSVPath);
 
-extension = '*.csv';
-listCSV = ls(extension);
+listCSV = ls('*.csv');
 handles.CSVFiles = listCSV;
 CSVPath = cd(programPath);
 
-listCSV = handles.CSVFiles;
 set(handles.listFiles, 'String', listCSV);
 guidata(hObject, handles);
 
@@ -86,20 +84,32 @@ end
 % --- Executes on button press in buttonSearch.
 function buttonSearch_Callback(hObject, eventdata, handles)
 
+% Searches for text file to match the CSV
 [filename, pathname, filterindex]  = uigetfile('*.txt', 'Select files');
 set(handles.editTest, 'String', strcat(pathname, filename));
+
+% Disables Save if new search was made
 set(handles.buttonSave, 'Enable', 'off');
+
+% If a file was selected during search
 if ~isempty(get(handles.editTest, 'String'))
+	% Enables analysis
 	set(handles.buttonAnalyse, 'Enable', 'on');
 end
 
 
 function editTest_Callback(hObject, eventdata, handles)
 
+% Disables save if filename is modified
 set(handles.buttonSave, 'Enable', 'off');
+
+% If text name field is not empty
 if ~isempty(get(handles.editTest, 'String'))
 	set(handles.buttonAnalyse, 'Enable', 'on');
+
+% Else, if text name field is empty
 else
+	% Prevents user from analysing no file
 	set(handles.buttonAnalyse, 'Enable', 'off');
 end
 
@@ -126,8 +136,8 @@ responseTime = analyse_for_stimulus(filename, get(handles.editTest, 'String'));
 set(handles.listAnalysis, 'String', responseTime);
 set(handles.buttonSave, 'Enable', 'on');
 
+% Updates handles structure
 handles.responseTime = responseTime;
-
 guidata(hObject, handles);
 
 
@@ -147,6 +157,7 @@ end
 % --- Executes on button press in buttonSave.
 function buttonSave_Callback(hObject, eventdata, handles)
 
+% Prepares for write in file
 filename = handles.filename;
 fileID = fopen(filename, 'r');
 content = textscan(fileID, '%s');
@@ -155,27 +166,28 @@ responseTime = handles.responseTime; % contains the delays calculated for the st
 % Counts how many ';' a line has
 semicollon = findstr(content{1}{1}, ';');
 
-% IF line has only one ';', the file has never been successfully analysed before
 k = 2; % counts the line of the file that will be modified
+
+% If line has only one ';', the file has never been successfully analysed before
 if length(semicollon) == 1
 	% Therefore, a new column must be created
 	content{1}{1} = strcat(content{1}{1}, ';Delay');
 	
 	for n = 1:length(responseTime)
-		% IF, the participant answered to the stimulus
+		% If the participant answered to the stimulus
 		if ~isequal(responseTime(n), 0)
 			responseFile = replace_dot(responseTime(n));
 			content{1}{k} = strcat(content{1}{k}, ';', responseFile);
 			n = n + 1;
 			k = k + 1;
 
-		% ELSE, there has been an omission
+		% Else, there has been an omission
 		else
 			n = n + 1;
 		end
 	end
 
-% ELSE, the file has been successfully analysed before and
+% Else, the file has been successfully analysed before and
 %		one wishes to overwrite previous information
 else
 	% Assusres that the new column has the correct header
@@ -183,7 +195,7 @@ else
 	content{1}{1} = strcat(content{1}{1}, 'Delay');
 	
 	for n = 1:length(responseTime)
-		% IF, the participant answered to the stimulus
+		% If the participant answered to the stimulus
 		if ~isequal(responseTime(n), 0)
 			% Finds the last semicollon of the line
 			% so the information after that can be replaced
@@ -195,7 +207,7 @@ else
 			n = n + 1;
 			k = k + 1;
 		
-		% ELSE, there has been an omission
+		% Else, there has been an omission
 		else
 			n = n + 1;
 		end
