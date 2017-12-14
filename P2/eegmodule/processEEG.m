@@ -176,7 +176,7 @@ if (isequal(checkArtifacts, 1) | isequal(checkLocate, 1))
         if strcmp(lower(ints_table{n, 6}), 'full');
             % Loading SET
             arqset = ints_table{n, 11};
-            EEG = pop_loadset( 'filename', arqset, 'filepath', output_folder);
+            EEG = pop_loadset('filename', arqset, 'filepath', output_folder);
             
             h = msgbox({['Analysing']; [arqset]});
 
@@ -269,8 +269,8 @@ end
 %if isequal(checkEvent, 1)
     for n = 1:size(ints_table)
         if strcmp(lower(ints_table{n, 6}), 'full');
-            arqset = ints_table{n, 10};
-            EEG = pop_loadset(arqset);
+            arqset = ints_table{n, 11};
+            EEG = pop_loadset('filename', arqset, 'filepath', output_folder);
 
             msgHandle = confirm_window(checkShow, 'Creating epochs...', 1, msgHandle);
 
@@ -287,8 +287,13 @@ end
             end
             EEG = pop_editeventvals(EEG, 'delete', 1);
             EEG = pop_epoch(EEG, {}, [0 (ints_table{j, 8} - ints_table{j, 7})]);
+            
             [ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
+            EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
+                                   'filepath', output_folder);
             msgHandle = confirm_window(checkShow, '', 0, msgHandle);
+
+            clear EEG;
         end
     end
 %end
