@@ -82,8 +82,10 @@ for n = 2:length(stimulusTime)
 			responseTime(n-1) = audioTime(k) - stimulusTime(n-1);
 			k = k + 1;
 			% IF the stimulus being analysed is the last one
-			if n == length(stimulusTime)
+			if ((n == length(stimulusTime)) && (k <= length(audioTime)))
 				responseTime(n) = audioTime(k) - stimulusTime(n);
+			else
+				responseTime(n) = 0;
 			end
 
 		% TODO Related to the 'if' that needs to be fixed
