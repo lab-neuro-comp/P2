@@ -27,13 +27,14 @@ ints_table = ler_arq_ints(inputfile);
 [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
 
 % Setting options
-checkShow = options(1);
-checkRerefer = options(2);
-checkRemove = options(3);
-checkLocate = options(4);
-checkInfo = options(5);
-checkICA = options(6);
-checkArtifacts = options(7);
+checkRerefer = options(1);
+checkRemove = options(2);
+checkInfo = options(3);
+checkICA = options(4);
+checkArtifacts = options(5);
+checkLocate = options(6);
+checkEvents = options(7);
+checkShow = options(8)
 
 % Preparing channel selection for reuse
 rereferReuse = java.util.HashMap;
@@ -47,8 +48,8 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
         if isFull
             % Variables
             arqedf = ints_table{n, 10};
-            int1 = ints_table{n, 7}
-            int2 = ints_table{n, 8}
+            int1 = ints_table{n, 7};
+            int2 = ints_table{n, 8};
             samplingRate = ints_table{n, 9};
             
             % Loading EDF
@@ -228,14 +229,15 @@ if (isequal(checkArtifacts, 1) | isequal(checkLocate, 1))
     end
 end
 
-% Process goes back to be fully automatic
+% Process goes back to be fully automatic when
+% the processed dataset is cut
 if needCut
     for n = 1:size(ints_table)
         if ~strcmp(lower(ints_table{n, 6}), 'full');
             % Variables
             arqset = ints_table{n, 10};
-            int1 = ints_table{n, 7}
-            int2 = ints_table{n, 8}
+            int1 = ints_table{n, 7};
+            int2 = ints_table{n, 8};
             blockrange = floor([int1 int2]);
 
             % Loading analised dataset
@@ -265,35 +267,42 @@ if needCut
     end
 end
 
-% Creating epochs
-%if isequal(checkEvent, 1)
+% Creating epochs for each full dataset
+if isequal(checkEvent, 1)
     for n = 1:size(ints_table)
+        msgHandle = confirm_window(checkShow, 'Creating epochs...', 1, msgHandle);
+        
         if strcmp(lower(ints_table{n, 6}), 'full');
+            % Loading SET
             arqset = ints_table{n, 11};
             EEG = pop_loadset('filename', arqset, 'filepath', output_folder);
 
-            msgHandle = confirm_window(checkShow, 'Creating epochs...', 1, msgHandle);
 
+            % Creating events
             EEG = pop_editeventfield(EEG, 'type', 1, 'latency', 0);
             for j = (n + 1):size(ints_table)
                 [filepath, name, ext] = fileparts(ints_table{j, 10});
 
                 if strcmp(strcat(name, ext), ints_table{n, 11})
-                    typeEvent = ints_table{j, 6}
+                    typeEvent = ints_table{j, 6};
                     latency = ints_table{j, 7} - ints_table{n, 7};
                     EEG = pop_editeventvals(EEG, 'append', {1 typeEvent latency});
                     [ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
                 end
             end
             EEG = pop_editeventvals(EEG, 'delete', 1);
+
+            % Creating epochs
             EEG = pop_epoch(EEG, {}, [0 (ints_table{j, 8} - ints_table{j, 7})]);
             
+            % Storing data
             [ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
             EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
                                    'filepath', output_folder);
-            msgHandle = confirm_window(checkShow, '', 0, msgHandle);
 
             clear EEG;
         end
+        
+        msgHandle = confirm_window(checkShow, '', 0, msgHandle);
     end
-%end
+end
