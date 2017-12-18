@@ -39,7 +39,7 @@ handles.output = hObject;
 handles.constants = load_constants();
 
 % Update handles structure
-set(handles.figure1, 'Name', 'Protolize 2 v0.6b');
+set(handles.figure1, 'Name', 'Protolize 2 v1.0b');
 guidata(hObject, handles);
 
 
