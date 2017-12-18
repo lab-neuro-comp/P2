@@ -8,13 +8,14 @@ function processEEG(inputfile, eeglab_path, eegloc_path, output_folder, options)
 % - output_folder: where to store the produced data
 % - options: a vector of booleans describing what to do on this processing.
 %   Namely, they must be in this order:
-%   + Show processing steps?
 %   + Rerefer?
 %   + Remove channels?
-%   + Locate electrodes?
 %   + Save subject's info?
 %   + Run ICA?
 %   + Remove artifacts?
+%   + Locate electrodes?
+%   + Mark events?
+%   + Show processing steps?
 %
 
 % TODO Add example call
@@ -251,11 +252,14 @@ if needCut
             EEG = pop_select(EEG, 'time', blockrange);
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
             
-            EEG = eeg_checkset(EEG);
-            EEG = pop_editset(EEG, 'subject', ints_table{n, 2}, ...
-                                   'condition', ints_table{n, 3}, ...
-                                   'session', ints_table{n, 4}, ...
-                                   'group', ints_table{n, 5});
+             % Saving suject info
+            if isequal(checkInfo, 1)
+                EEG = eeg_checkset(EEG);
+                EEG = pop_editset(EEG, 'subject', ints_table{n, 2}, ...
+                                       'condition', ints_table{n, 3}, ...
+                                       'session', ints_table{n, 4}, ...
+                                       'group', ints_table{n, 5});
+            end
 
             % Storing data
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);

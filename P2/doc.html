@@ -1,0 +1,323 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>﻿PROTOLIZE! 2</title>
+    <link rel="stylesheet" type="text/css" href="default.css" />
+</head>
+<body>
+
+<!-- TODO Add Protolize! logo -->
+
+<div class="index">
+    <h1>Índice</h1>
+    <ol>
+        <li><a href="#protolize">Protolize! 2</a></li>
+        <ol>
+            <li><a href="#prereq">Pré-requisitos</a></li>
+            <li><a href="#installation">Instalação</a></li>
+            <li><a href="#inforel">Outras informações relevantes</a></li>
+        </ol>
+        <li><a href="#mainmenu">Menu principal</a></li>
+        <ol>
+            <li><a href="#toolbar">Barra de ferramentas</a></li>
+        </ol>
+        <li><a href="#tools">Tools</a></li>
+        <ol>
+            <li><a href="#eeg">Processamento de EEG</a></li>
+            <li><a href="#emgrgp">Separação de EMG-RGP</a></li>
+            <li><a href="#emg">Processamento de EMG</a></li>
+            <li><a href="#rgp">Processamento de RGP</a></li>
+            <li><a href="#voice">Análise de Voz</a></li>
+            <li><a href="#voicetest">Comparação Voz-Teste</a></li>
+            <li><a href="#edf">Conversor de EDFs</a></li>
+        </ol>
+        <li><a href="#edition">Módulos de edição</a></li>
+        <ol>
+            <li><a href="#timespec">Time / Spectre</a></li>
+            <li><a href="#dwt">Discrete Wavelets Transform (DWT)</a></li>
+        </ol>
+        <li><a href="#analysis">Módulos de análise</a></li>
+        <ol>
+            <li><a href="#timedomain">Time Domain</a></li>
+            <li><a href="#fourier">Fourier</a></li>
+            <li><a href="#stft">Short Time Fourier Transform (STFT)</a></li>
+            <li><a href="#cwt">Continuous Wavelet Transform (CWT)</a></li>
+        </ol>
+    </ol>
+</div>
+
+<a name="protolize"></a>
+<h1>﻿PROTOLIZE! 2</h1>
+
+<p>O PROTOLIZE! é uma ferramenta escrita em MATLAB para processamento de sinais de caráter biológico. Inicialmente <a href="http://repositorio.unb.br/bitstream/10482/4213/1/2009_SergioAndresCondeOcazionez.pdf">feito</a> pelo professor <a href="http://lattes.cnpq.br/7159531395590165">Sergio Ocazionez</a>, que hoje se encontra no <a href="http://www.neuro.ufrn.br/incerebro/">Instituto do Cérebro da Universidade Federal do Rio Grande do Norte</a>, durante sua tese de mestrado na Universidade de Brasília, o programa está sendo trabalhado no Laboratório de Neurociência e Comportamento da Universidade de Brasília.</p>
+
+<p><img src="assets/p2.png" alt="Protolize 2"/></p>
+
+<p>O Protolize! está sendo escrito em MATLAB 2010.</p>
+
+<a name="prereq"></a>
+<h2>Pré-requisitos</h2>
+
+<p>Protolize! requer MATLAB R2008a rodando em um computador rodando Microsoft Windows Vista ou posterior com no mínimo 1GB RAM.</p>
+
+<a name="installation"></a>
+<h2>Instalação</h2>
+
+<p>Para fazer o download do Protolize!, baixe o arquivo <code>protolize.zip</code> disponível no <a href="https://github.com/lab-neuro-comp/P2">repositório do GitHub</a> e extraia seu conteúdo em um pasta específica. Inicie o MATLAB e vá à pasta onde você extraiu a sua versão do Protolize!. Dentro desta pasta, entre o comando <span style="background-color: #BDC3CE"><code>protolize</code></span>. Se não houver nenhum problema, o menu principal do Protolize! aparecerá, indicando que ele está pronto para uso.]</p>
+
+<p>Esta documentação se refere à versão v0.2b do Protolize!</p>
+
+<a name="inforel"></a>
+<h2>Outras informações relevantes</h2>
+
+<p>Os sinais a serem processados deverão estar no formato <code>*.ASCII</code>. Para converter arquivos EDF em ASCII, há um ferramenta dentro do próprio Protolize! para isso. Certifique-se que há somente um sinal por arquivo ASCII para que o programa aceite a entrada.</p>
+
+
+
+
+<a name="mainmenu"></a>
+<h1>Menu principal</h1>
+
+<p>O menu principal contém 3 divisões: <a href="#tools"><code>Tools</code></a>, <a href="#edition"><code>Edition</code></a> e <a href="#analysis"><code>Analysis</code></a>. A partir delas, podemos acessar as diversas funcionalidades do Protolize! como descritas em suas respectivas sessões.</p>
+
+<p>Além disso, há uma <a href="#toolbar">barra de ferramentas</a> para acesso rápido de diversos ajustes do programa, do módulo de estudos e do arquivo de ajuda.</p>
+
+<p><a name="toolbar"></a></p>
+<h2>Barra de ferramentas</h2>
+
+<p>No topo da janela principal, temos uma barra de ferramentas com as opções <code>File</code>, <code>Settings</code> e <code>Help</code>.</p>
+
+<p>Em <code>File</code>, pode-se sair do programa ou do módulo; ou abrir ou salvar arquivos de acordo com o módulo que está sendo usado.</p>
+
+<p>Em <code>Settings</code>, pode-se alterar diversos valores usados na análise de sinais, em especial a taxa de amostragem (chamada de <code>fs</code>); e os ritmos mentais usados no estudo em questão. O software define, por padrão, os seguinte ritmos mentais:</p>
+
+<ul>
+    <li>Delta: 0.5 a 3.5Hz</li>
+    <li>Theta: 3.5 a 7Hz</li>
+    <li>Alpha: 8 a 13Hz</li>
+    <li>Beta: 15 a 24Hz</li>
+    <li>Gamma: 30 a 70Hz</li>
+</ul>
+
+<p>Também pode-se ajustar o caminho em disco para o EEGLAB, caso disponível no computador do usuário, para que ambos possam atuar no processamento de sinais. Estes valores podem ser ajustados de acordo com a necessidade do usuário, e todos os parâmetros disponíveis para ajuste ficam guardados em memória para uso futuro.</p>
+
+<p>Em <code>Help</code>, tem-se acesso a este arquivo de ajuda que você está lendo.</p>
+
+
+
+
+<p><a name="tools"></a></p>
+
+<h1>Tools</h1>
+
+<a name="eeg"></a>
+<h2>Processamento de EEG</h2>
+
+<p>O Protolize! contém uma ferramenta para realizar processamentos em lote utilizando o EEGLab. Esta ferramenta busca mostrar um passo-a-passo automatizado de um processamento usual de vários sinais de EEG em conjunto.</p>
+
+<p><img src="assets/eegprocess.png" alt="eeg module" title="'EEG Processing' Module" /></p>
+
+<p>Do lado esquedo da janela do módulo, há três campos de parâmetros necessários para que o módulo funcione corretamente. O primeiro informa a pasta onde o programa EEGLab se encontra; o segundo, o caminho para o arquivo de localicações; e, por último, o caminho onde os arquivos gerados durante o programa deverão ser salvos. Para editar essas informações, clique no botão <code>Edit Parameters</code>. Após editar aquilo que for necessário, salve os novos parâmetros clicando no botão <code>Save Parameters</code>.</p>
+
+<p>A entrada deste módulo é uma planilha Excel contendo, exatamente nesta ordem, uma coluna para cada uma das informações abaixo:</p>
+
+<ul>
+    <li>Iniciais do sujeito</li>
+    <li>Sujeito</li>
+    <li>Teste</li>
+    <li>Sessão do teste</li>
+    <li>Grupo do sujeito</li>
+    <li>Tipo de evento</li>
+    <li>Momento inferior de corte</li>
+    <li>Momento superior de corte</li>
+    <li>Taxa de amostragem</li>
+    <li>Nome do arquivo EDF ou SET de entrada</li>
+    <li>Nome do arquivo SET de saída</li>
+</ul>
+
+<p>Para escolher a planilha, clique no botão <code>Search</code> e abra o arquivo desejado. Em seguida, marque ou desmarque as opções desejadas:</p>
+<ul>
+    <li><b>Rerefer</b>: Esta opção abre uma nova janela contendo uma lista dos canais contidos no arquivo EDF. Para utilizar um canal para rereferenciamento basta selecioná-lo na lista e clicar em <code>OK</code>. A opção escolhida é reutilizada em todos os arquivos que possuem a mesma estrutura que a do primeiro arquivo rereferenciado. Caso um arquivo possua uma estrutura diferente, outra janela será aberta para que a escolha seja feita para o novo tipo de arquivo. Esta ação não apaga a configuração do arquivo anterior, e sim adiciona a nova opção para os arquivos de estruturas diferentes.</li>
+    <li><b>Remove channels</b>: Esta opção abre uma nova janela contendo uma lista dos canais contidos no arquivo EDF. Para remover um canal do arquivo basta selecioná-lo na lista e clicar em <code>OK</code>. A opção escolhida é reutilizada em todos os arquivos que possuem a mesma estrutura que a do primeiro arquivo rereferenciado. Caso um arquivo possua uma estrutura diferente, outra janela será aberta para que a escolha seja feita para o novo tipo de arquivo. Esta ação não apaga a configuração do arquivo anterior, e sim adiciona a nova opção para os arquivos de estruturas diferentes.</li>
+    <li><b>Save subject's info</b>: Esta opção permite que o programa salve os arquivos do sujeito do teste correspondente ao arquivo que está sendo analisado.</li>
+    <li><b>Run ICA</b>: Esta opção permite que o programa rode o algoritmo do ICA no arquivo que esta sendo analisado.</li>
+    <li><b>Remove artifacts manually</b>: Esta opção abre uma janela que permite que o usuário possa remover os artefatos manualmente.</li>
+    <li><b>Locate electrodes manually</b>: Esta opção abre uma janela que permite que o usuário possa informar o arquivos de localização de eletrodos manualmente.</li>
+    <li><b>Mark events</b>: Esta opção utiliza os dados informados por meio da planilha de dados de entrada para marcar os eventos correspondentes a cada um dos arquivos EDF analisados.</li>
+    <li><b>Show processing steps</b>: Esta opção ativa (quando selecionada) as mensagens indicando o andamento do processamento de cada arquivo.</li>
+</ul>
+
+<a name="emgrgp"></a>
+<h2>Separação de EMG-RGP</h2>
+
+<p>Uma limpeza comum de se realizar neste laboratório é a separação dos sinais de EMG (registro eletromiográfico) e RGP (resposta galvânica da pele). Eles comumente aparecem no mesmo canal e é necessário separá-los.</p>
+
+<p><img src="assets/emggsr.png" alt="emg gsr module" title="'EMG-GSR Separation' Module" /></p>
+
+<p>Para utilizar o módulo de separação de EMG-RGP, basta clicar no botão <code>Search</code>. Em seguida, selecione os arquivos EDF desejados para a separação (para a seleção múltipla, utilize <em>Ctrl/Shift</em>) e abra-os. Para realizar a separação do canal EMG-GSR, clique no botão <code>Run</code>. Uma nova janela vai surgir na tela pedindo que o usuário identifique a pasta onde os arquivos resultantes da separação deverão ser salvos. Após a escolha, a separação começará a ser feita e pop-ups aparecerão na tela indicando o estado em que a separação de cada arquivo se encontra e, caso o canal EMG-GSR não seja encontrado em um dos arquivos, o programa avisará o usuário através de uma caixa de diálogo.</p>
+
+<p>Para cada arquivo que é separado com sucesso o programa gera quatro arquivos: dois arquivos TXT que contêm a informação da frequência de amostragem e dois arquivos ASCII onde as ondas estão salvas separadamente.</p>
+
+<a name="emg"></a>
+<h2>Processamento de EMG</h2>
+
+<p>O módulo para processamento de EMG tem como principal objetivo realizar cortes e fazer filtragens dos arquivos que são passados.</p>
+
+<p><img src="assets/emg.png" alt="emg module" title="'Single Channel' Module" /></p>
+
+<p>A estrutura inicial do módulo de processamento de EMG é similar à de processamento de EEG. No canto superior esquerdo há um espaço para o informe de parâmetros necessários para o funcionamento do programa e que podem ser alterados, caso o usuário deseje, clicando em <code>Edit Parameters</code>. O primeiro campo, <i>EEGLab Path</i>, informa o caminho para o programa EEGLab e o segundo, <i>Output Files Path</i>, informa onde os arquivos analisados pelo programa serão salvos. Uma vez editados, esses parâmetros podem ser salvos clicando em <code>SAve Parameters</code>.</p>
+
+<p>No canto superior direito, o usuário informa ao programa um arquivo com estrutura similar ao que havia sido informado durante o processamento de EEG. Este arquivo deve ser uma planilha do Excel contendo, exatamente nesta ordem, uma coluna para cada uma das informações abaixo:</p>
+
+<ul>
+    <li>Sujeito</li>
+    <li>Teste</li>
+    <li>Fragmento</li>
+    <li>Iniciais do sujeito</li>
+    <li>Momento inferior de corte</li>
+    <li>Momento superior de corte</li>
+    <li>Taxa de amostragem</li>
+    <li>Sessão</li>
+    <li>Nome do arquivo EDF ou ASCII</li>
+</ul>
+
+<p>Todos os arquivos informados na última coluna da planilha <b>devem</b> conter a mesma extensão. Caso os arquivos tenham o formato EDF, o usuário deve marcar a opção <code>EDF Files</code> localizada logo abaixo do botão que é utilizado para procurar o arquivo de parâmetros, <code>Search</code>. Caso o formato seja ASCII, a opção <code>ASCII Files</code> deve ser marcada. Após a correta extensão dos arquivos ter sido informada, clique no botão <code>Run</code> para iniciar a análise.</p>
+
+<p>Finalizada a análise, os nomes dos arquivo gerados serão inseridos numa lista na parte inferior direita da janela do módulo. Os novos nomes dos arquivos são gerados com base nas informações presentes na planilha Excel e tem o formato SET. Para plotar o resultado do corte realizado, basta clicar no nome do arquivo desejado, marcar a opção <code>Plot</code> presente no lado inferior esquerdo da janela do módulo e clicar no botão <code>Plot</code>.</p>
+
+<p>Para realizar a filtragem de um dos arquivos é necessário projetar o filtro. Para isso, marque a opção <code>Filter</code> que aparece no canto inferior esquerdo da janela do módulo e as opções de design de filtro serão habilitadas. A primeira delas é <i>Lower Cut Frequency</i>. Marque apenas esta opção para designar o valor de frequência <b>mínimo</b> que o filtro deve permitir a passagem. Qualquer valor acima desta frequência será mantido inalterado e os valores abaixo serão filtrados. A segunda opção é <i>Higher Cut Frequency</i>. Marque apenas esta opção para designar o valor <b>máximo</b> que o filtro deve permitir a passagem. Qualquer valor abaixo desta frequência será mantido e os valores acima serão filtrados. Marque as duas opções para definir uma faixa de valores que deverá ser mantida e os valores fora desta faixa deverão ser filtrados. A última opção é <i>Notch Filter</i>. Esta opção fica disponível quando as opções <i>Lower Cut Frequency</i> e <i>Higher Cut Frequency</i> são marcadas e seus valores de frequência determinados. Marcando esta opção o usuário cria um filtro que filtra os valores <b>dentro</b> da faixa de frequência determinada, mantendo todo o restante.</p>
+
+<p>Assim que o filtro estiver de acordo com o desejado, clique no botão <code>Filter</code>. Após a filtragem ter sido realizada, o programa abre uma janela mostrando o resultado do processo. Uma caixa de diálogo também aparece, pergutando se o usuário deseja salvar o resultado ou não. Caso esteja satisfeito com a filtragem, clique em <code>Yes</code>; caso contrário, clique em <code>No</code>. Caso escolha a opção afirmativa, o programa salva o resultado em um novo arquivo SET que é adicionado à lista de arquivos processados e pode ser manipulado mais uma vez, se desejado.</p>
+
+<a name="rgp"></a>
+<h2>Processamento de RGP</h2>
+
+<p><span style="background-color: #BDC3CE"><code>TODO: ESCREVER DOCUMENTAÇÃO</code></span></p>
+
+<a name="voice"></a>
+<h2>Análise de Voz</h2>
+
+<p>Esta ferramenta extrai os momentos iniciais de cada palavra em um sinal de voz em um arquivo WAV aplicando um <em>threshold</em> no espectro de potência da gravação em questão. Permite remoção de falsos-positivos em um submódulo após a análise computacional do arquivo de áudio. Caso o arquivo de áudio já tenha sido analisado previamente, também é possível informar ao programa a versão em tabela CSV que contém as informações de análise para, então, verificar a marcação dos momentos.</p>
+
+<p><img src="assets/voice.png" alt="voice analysis" title="'Voice Analysis' Module" /></p>
+
+<p>Para carregar os arquivos de áudio para análise utiliza-se o botão <code>Search</code>. É possível escolher múltiplos arquivos utilizando <em>Ctrl/Shift</em>. Após escolher os arquivos desejados, o programa começa a análise assim que o botão <code>Run</code> for pressionado. Uma barra de carregamento aparecerá na tela indicando o progresso da análise para cada um dos arquivos. Assim que a análise de todos os arquivos for concluída é possível salvar o trabalho em arquivos CSV com o botão <code>Save</code>. Entretanto, é recomendado fazer uma checagem manual daquilo que o programa analisou. Para tanto, escolha o botão <code>Plot</code>.</p>
+
+<p>Esse botão abrirá uma nova janela onde será possível fazer a checagem de cada um dos arquivos.</p>
+
+<p><img src="assets/subvoice.png" alt="moments verification" title="'Moments Verification' Module" /></p>
+
+<p>O nome do arquivo que está sendo analisado é mostrado no topo da janela do módulo. Os valores encontrados com a análise computacional do arquivo de áudio são marcados em vermelho sobre o formato de onda (em azul) do arquivo de som.</p>
+
+<p>Com auxílio das ferramentas no topo da janela é possível aumentar e diminuir o zoom e arrastar o formato de onda de um lado para o outro. Além disso, é possível habilitar e desabilitar a seleção de pontos para a adição e remoção. Para selecionar múltiplo pontos, ative a ferramenta <code>Data Cursor</code> e segure a tecla <em>Alt</em> enquanto clica nos lugares desejados. Para adicionar os lugares marcados à lista de pontos relacionados ao arquivo, basta clicar no ícone <code>+</code>. Para eliminar os lugares selecionados, clique no ícone <code>-</code>.</p>
+
+<p>Uma vez que o usuário esteja satisfeito com o resultado, clica-se no botão <code>Next</code> (ou <code>Save</code>, se não houver mais arquivos para analisar) para atualizar a lista de valores de momentos do arquivo e continuar a análise com o próximo arquivo.</p>
+
+<p>Logo que todas as análises tenham sido feitas, o programa retorna para o módulo de análise de voz e o usuário pode salvar todo o trabalho com o botão <code>Save</code>.</p>
+
+<a name="voicetest"></a>
+<h2>Comparação Voz-Teste</h2>
+
+<p>Esta ferramenta permite a comparação entre os tempos em que os estímulos de um teste foram apresentados ao sujeito e os tempos de resposta armazenados em arquivos CSV.</p>
+
+<p><img src="assets/voicedelay.png" alt="test response delay" title="'Test Response Delay' Module" /></p>
+
+<p>O primeiro passo é procurar o caminho da pasta que contém os arquivos CSV que foram gerados após as análises dos arquivos de áudio. Para isso, clique no botão <code>Search Folder</code>. Após escolher a pasta, uma lista com todos os arquivos existentes na pasta aparece e é preciso selecionar aquele que se deseja comparar. Com o arquivo escolhido, clique no botão <code>Search File</code> para procurar pelo arquivo TXT que contém os dados do teste correspondente àquele que foi selecionado na lista de arquivos CSV.</p>
+
+<p>Com os dois arquivos em mãos, clique no botão <code>Analyse</code> para calcular os atrasos da resposta do áudio em relação ao tempo em que os estímulos do teste foram apresentados. Os resultados dessa análise aparecerão em forma de lista do lado direito da janela do módulo. Para salvar os resultados em uma nova coluna no arquivo CSV, clique em <code>Save Results</code>.</p>
+
+<a name="edf"></a>
+<h2>Conversor de EDFs</h2>
+
+<p>Esta á uma ferramenta criada para converter arquivos EDF em arquivos ASCII para serem usados no Protolize!, que requer, como entrada nos seus módulos, um sinal no formato ASCII por vez. Esta ferramenta também permite a conversão do EDF em questão para um único arquivo ASCII contendo todos os canais.</p>
+
+<p><img src="assets/edf2ascii.png" alt="edf converter module" title="'EDF to ASCII Converter' Module" /></p>
+
+<p>Para utilizar este módulo, comece clicando em <code>Search</code>. escolha os arquivo EDF que deseja converter (para a seleção múltipla, utilize <em>Ctrl/Shift</em>) e abra-os. Logo abaixo do campo para os nomes dos arquivos há duas opções. Marque a primeira, <code>Translate to multiple files?</code>, caso deseje que cada um dos canais do arquivo seja convertido para um arquivo ASCII separado. Caso deseje que o arquivo seja convertido para apenas um arquvi ASCII contendo todos os canais, desmarque esta opção. Quanto à segunda opção, <code>Pick channels?</code>, marque-a caso deseje escolher quais canais deseja converter para ASCII.</p>
+
+<p>Após ter marcado as opções desejadas, clique no botão <code>Run</code> para iniciar a conversão. Os arquivos obtidos da conversão serão salvos na mesma pasta que o arquivo EDF original.</p>
+
+
+
+
+
+<p><a name="edition"/></p>
+
+<h1>Módulos de edição</h1>
+
+<p>Para podermos visualizar e editar o sinal, há as ferramentas <code>Time/Spec</code> e <code>DWT</code>.</p>
+
+<a name="timespec"></a>
+<h2>Time / Spectre</h2>
+
+<p>Este módulo fornece algumas ferramentas para edição de sinais no domínio do tempo. Em sua interface, pode-se notar que há ferramentas para cortar e para filtrar o sinal.</p>
+
+<p><img src="assets/timespec.png" alt="time/spec module" title="'Time/Spec' Module"/></p>
+
+<p>Inicialmente, carrega-se um sinal usando a opção <code>Open</code> no menu <code>File</code> da barra de ferramentas. Este sinal aparecerá na lista <code>Data registry</code>, no canto superior direito. Para mostrar este sinal na tela, aperte o botão <code>Plot</code>. Para cortar o sinal, digite os valores mínimo e máximo nas caixas <code>Min</code> e <code>Max</code>, respectivamente, e aperte o botão <code>Crop</code>. Para filtrar o sinal, existem 4 opções de filtros: passa-baixa, passa-alta, passa-banda ou rejeita-banda. Escolha o filtro e os intervalos de frequência desejados.</p>
+
+<p>Para executar este módulo em separado, execute a função <code>editionmodule2</code>.</p>
+
+<a name="dwt"></a>
+<h2>Discrete Wavelets Transform (DWT)</h2>
+
+<p>O módulo DWT permite descontruir um sinal usando diversas transformadas de wavelets; fazer edições em seus coeficientes (isto é, em suas aproximações e detalhes); e reconstruir o sinal editado.</p>
+
+<p><img src="assets/dwt2.png" alt="dwt module" title="'DWT' Module"/></p>
+
+<p>Este módulo permite que apenas um sinal seja trabalhado por vez. Para carregar um sinal na memória, abre o submenu <code>File</code> e selecione <code>Open</code> para escolher o arquivo com o sinal desejado. No canto superior esquerdo, há um painel com as opções de transformada de Wavelets: família de wavelets, tipo de wavelet e nível desejado. O botão <code>Calculate</code> determinará os coeficientes do sinal em memória.</p>
+
+<p>Após a aplicação da transformada, pode-se escolher visualizar as aproximações ou os detalhes do sinal escolhido. Para editá-los, estão disponíveis as ferramentas no painel no lado direito. Nominalmente, pode-se substituir um coeficiente por um valor contínuo; e limitar os valores do coeficiente dentro de um intervalo.</p>
+
+<p>Com os coeficientes editados, pode-se reconstruir o sinal clicando no botão <code>Reconstruct</code>. Para salvar o novo sinal, aperte o botão <code>Save</code>.</p>
+
+<p>Para usar este módulo em separado, use o comando <code>dwtmodule2</code>. As funções relacionadas à transformada discreta de Wavelets estão disponíveis na pasta <code>math</code>; enquanto que as funções de edição dos coeficientes (que, por sinal, podem ser usadas para qualquer sinal) estão na pasta <code>util</code>.</p>
+
+
+
+
+
+<p><a name="analysis"></a></p>
+<h1>Módulos de análise</h1>
+
+<p>O Protolize! possui 4 ferramentas de análise de dados: análise no domínio do tempo (<code>Time domain</code>); análise por transformada de Fourier (<code>Fourier</code>); por transforma de Fourier de curta duração (<code>STFT</code>); e por transformada contínua de Wavelets (<code>CWT</code>).</p>
+
+<a name="timedomain"></a>
+<h2>Time Domain</h2>
+
+<p>A análise em domínio do tempo gera uma análise estatística do sinal em um período de tempo determinado. Selecione um sinal usando a opção <code>Open</code> no menu <code>File</code>. Este sinal pode ser cortado em um intervalo menor usando a opção <code>Crop</code>.</p>
+
+<p><img src="assets/timedomain.png" alt="time domain module" title="'Time domain' Module"/></p>
+
+<p>Para gerar uma análise deste sinal, aperte o botão <code>Generate Statistics</code>. A análise produzida poderá ser vista no painel ao lado direito, e poderá ser salva apertando o botão <code>Export statistics</code>.</p>
+
+<p>Este módulo pode ser executado em separado usando o script <code>timemodule2</code>.</p>
+
+<a name="cwt"></a>
+<h2>Continuous Wavelet Transform (CWT)</h2>
+
+<p><img src="assets/cwt.png" alt="cwt module" title="'CWT' Module" /></span></p>
+
+<p>O primeiro passo para utilizar o módulo de CWT é carregar um sinal. No menu <code>File</code>, escolha a opção <code>Choose a signal...</code> (ou utilize o atalho <em>Ctrl+O</em>). É sempre importante checar se o valor enunciado em <em>Sampling Frequency</em>, corresponde ao valor da frequência da onda que está sendo analisada. Se não, este valor precisa ser alterado na tela inicial no programa através da opção <code>Settings > Change Parameters</code> e o módulo de CWT precisa ser reinicializado.</p>
+
+<p><img src="assets/cwt2.png" alt="cwt with subwavelet type" title="Displaying Wavelet Subtypes" /></p>
+
+<p>Após o sinal ter sido carregado com as informações de frequência corretas é possivel escolher várias opções para a análise. É possível escolher o tipo de wavelet para a transformada entre as dez opções disponíveis. Algumas das opções apresentam subtipos que ficam visíveis assim as seguintes wavelets são selecionadas:</p>
+
+<ul>
+    <li>Deubachies;</li>
+    <li>Symlets;</li>
+    <li>Coiflets;</li>
+    <li>Biorthogonal;</li>
+    <li>R_Biorthogonal; e</li>
+    <li>Gaussian.</li>
+</ul>
+
+<p>Em seguida, escolhe-se a escala para a qual deseja-se aplicar a análise. É possível escolher entre as opções <code>Manual</code> e <code>Predetermined</code>. Na opção <code>Manual</code>, o usuário pode inserir os valores desejados nos campos <code>Minimum</code>, <code>Interval</code> e <code>Maximum</code>. Caso o usuário não saiba o valor desejado em escala, é possível utilizar o conversor no canto superior direito da tela para a conversão de frequência em escala e vice-versa. Para utilizar o conversor basta digitar o valor que se deseja converter no campo adequado e teclar <em>Enter</em>.</p>
+
+<p>A opção <code>Predetermined</code>, por sua vez, permite que o usuário escolha entre cinco ritmos predefinidos: <code>Delta</code>, <code>Theta</code>, <code>Alpha</code>, <code>Beta</code> e <code>Gamma</code>. O valor do campo <code>Interval</code> ainda pode ser inserido manualmente pelo usuário nesta opção. Finalmente, inicia-se a análise clicando no botão <code>Calculate</code>.</p>
+
+<p>Assim que a análise do sinal é concluída, é possível graficar os coeficientes em função da escala ou em função do tempo separadamente. Para isso, escolhe-se entre as opções <code>Scale</code> e <code>Time [s]</code> que estão do lado direito da janela do módulo. Em seguida, digita-se o valor desejado dentro do campo e, ao clicar no botão <code>View</code>, uma nova janela contendo o gráfico dos coeficientes aparecerá na tela.</p>
+
+<p>Além disso, também é possível aumentar e diminuir o zoom dos gráficos ao clicar no botão <code>Zoom</code>. Uma vez clicado, este botão fica ativo até que o usuário clique nele novamente. Para adicionar ou retirar uma barra de cores abaixo do gráfico do sinal processado, o usuário deve clicar no botão <code>Colorbar</code> e, por fim, para resetar o módulo, clica-se no botão <code>Reset</code>.</p>
