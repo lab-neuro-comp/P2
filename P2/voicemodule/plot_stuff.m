@@ -55,16 +55,8 @@ end
 							   				  handles.number,...
 							   				  handles.ext);
 
-% If file being analysed is an audio
-if handles.ext
-	% The information stored in hash map must be updated
-	moments = get(handles.stuff, handles.files{handles.number});
-	timeArray = turn_to_time(moments, length(handles.record)/handles.fs);
-
-%Else, if the file is CSV table
-else
-	timeArray = get(handles.stuff, handles.files{handles.number});
-end
+% The information stored in hash map must be updated
+timeArray = get(handles.stuff, handles.files{handles.number});
 
 % Update number of points marked in file
 set(handles.textPoints, 'String', num2str(length(timeArray)));
@@ -179,9 +171,7 @@ set(handles.textPoints, 'String', num2str(tmp + w));
 
 % Adds new points to hash map
 recordtime = length(handles.record)/handles.fs;
-moments = turn_to_moment(handles.stuff.get(handles.files{handles.number}),...
-						 timeArray, recordtime);
-handles.stuff.put(handles.files{handles.number}, moments);
+handles.stuff.put(handles.files{handles.number}, timeArray);
 
 % Updates plot
 [handles.record, handles.fs] = refresh_signal(hObject, handles,...
@@ -225,9 +215,7 @@ set(handles.textPoints, 'String', num2str(tmp - w));
 
 % Removes points from hash map
 recordtime = length(handles.record)/handles.fs;
-moments = turn_to_moment(handles.stuff.get(handles.files{handles.number}),...
-										   timeArray, recordtime);
-handles.stuff.put(handles.files{handles.number}, moments);
+handles.stuff.put(handles.files{handles.number}, timeArray);
 
 % Updates plot
 [handles.record, handles.fs] = refresh_signal(hObject, handles,...
@@ -254,8 +242,7 @@ number = handles.number;
 
 % Prepares to save file
 filename = handles.files;
-moments = get(handles.stuff, filename{number});
-timeArray = turn_to_time(moments, length(handles.record)/handles.fs);
+timeArray = get(handles.stuff, filename{number});
 
 selection = questdlg({'You will save only the marked moments.',...
 					 'Do you wish to continue?'},...
@@ -266,10 +253,7 @@ if strcmp(selection,'Cancel')
 end
 
 % Updates hash map with modified information
-recordtime = length(handles.record)/handles.fs;
-moments = turn_to_moment(handles.stuff.get(filename{handles.number}),...
-						 timeArray, recordtime);
-handles.stuff.put(filename{number}, moments);
+handles.stuff.put(filename{number}, timeArray);
 
 number = number + 1;
 handles.number = number;
@@ -288,17 +272,8 @@ if number <= length(handles.files)
 							   				  handles.ext);
 	
 	filename = handles.files;
-	% If file being analysed is an audio
-	if handles.ext
-		% The information stored in hash map must be updated
-		moments = get(handles.stuff, handles.files{handles.number});
-		timeArray = turn_to_time(moments, length(handles.record)/handles.fs);
-
-	%Else, if the file is CSV table
-	else
-		timeArray = get(handles.stuff, handles.files{handles.number});
-	end
-
+	timeArray = get(handles.stuff, handles.files{handles.number});
+	
 	% Update number of points marked in file
 	set(handles.textPoints, 'String', num2str(length(timeArray)));
 

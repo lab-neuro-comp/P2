@@ -226,19 +226,23 @@ function buttonSave_Callback(hObject, eventdata, handles)
 
 file = handles.files;
 name = handles.filename;
-mkdir(handles.pathname, 'CSVFiles');
-moments = {};
+if get(handles.radioAudio, 'Value')
+	mkdir(handles.pathname, 'CSVFiles');
+end
 
 % For each file provided in search
 for n = 1:length(file)
 	% Prepares information that will be written
 	[record, fs] = audioread(file{n});
-	moments{n} = handles.stuff.get(file{n});
-	time{n} = turn_to_time(moments{n}, length(record)/fs);
-
+	time{n} = handles.stuff.get(file{n});
+	
 	% Prepares file in which the information will be written on
-	tablename = strrep(name{n}, '.wav', '.csv');    
-	fileID = fopen(strcat(handles.pathname, 'CSVFiles', filesep, tablename), 'w');
+	tablename = strrep(name{n}, '.wav', '.csv');
+	if get(handles.radioAudio, 'Value')
+		fileID = fopen(strcat(handles.pathname, 'CSVFiles', filesep, tablename), 'w');
+	else
+		fileID = fopen(strcat(handles.pathname, tablename), 'w');
+	end
 	fprintf(fileID, '%s;%s\n', 'Filename', 'Moments');
 	
 	% Write each pair of filename/moment in time

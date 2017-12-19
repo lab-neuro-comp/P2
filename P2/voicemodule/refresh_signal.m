@@ -10,15 +10,7 @@ set(handles.textFilename, 'String', strcat(fname, fext));
 [record, fs] = audioread(filename);
 
 % If the file being analysed is indeed an audio
-if analysis
-	moments = get(stuff, files{n});
-	timemoments = turn_to_time(moments, length(record)/fs);
-
-% Else, if file hasa been analysed already
-% and the information provided is a CSV
-else
-	timemoments = get(stuff, files{n});
-end
+timemoments = get(stuff, files{n});
 
 % Plots audio wave
 axes(handles.axes1);

@@ -1,4 +1,4 @@
-function [lastanalysis] = main(filename)
+function [voiceTimes] = main(filename)
 % Callback to run button
 
 % Loading voice signal
@@ -21,3 +21,5 @@ ignorenoise = ignore_noise(analysis, threshold);
 % Applying voice logic
 analysis = isvoice(ignorenoise, threshold);
 lastanalysis = mean_window(length(analysis), ignorenoise, analysis);
+
+voiceTimes = turn_to_time(lastanalysis, length(record)/fs);
