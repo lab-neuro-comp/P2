@@ -22,7 +22,7 @@
         <ol>
             <li><a href="#toolbar">Barra de ferramentas</a></li>
         </ol>
-        <li><a href="#tools">Tools</a></li>
+        <li><a href="#tools">Módulos de ferramentas</a></li>
         <ol>
             <li><a href="#eeg">Processamento de EEG</a></li>
             <li><a href="#emgrgp">Separação de EMG-RGP</a></li>
@@ -54,24 +54,24 @@
 
 <p><img src="assets/p2.png" alt="Protolize 2"/></p>
 
-<p>O Protolize! está sendo escrito em MATLAB 2010.</p>
+<p>O Protolize! está sendo escrito em MATLAB 2017.</p>
 
 <a name="prereq"></a>
 <h2>Pré-requisitos</h2>
 
-<p>Protolize! requer MATLAB R2008a rodando em um computador rodando Microsoft Windows Vista ou posterior com no mínimo 1GB RAM.</p>
+<p>Protolize! requer MATLAB R2015a rodando em um computador rodando Microsoft Windows Vista ou posterior com no mínimo 1GB RAM.</p>
 
 <a name="installation"></a>
 <h2>Instalação</h2>
 
-<p>Para fazer o download do Protolize!, baixe o arquivo <code>protolize.zip</code> disponível no <a href="https://github.com/lab-neuro-comp/P2">repositório do GitHub</a> e extraia seu conteúdo em um pasta específica. Inicie o MATLAB e vá à pasta onde você extraiu a sua versão do Protolize!. Dentro desta pasta, entre o comando <span style="background-color: #BDC3CE"><code>protolize</code></span>. Se não houver nenhum problema, o menu principal do Protolize! aparecerá, indicando que ele está pronto para uso.]</p>
+<p>Para fazer o download do Protolize!, baixe o arquivo <code>protolize.zip</code> disponível no <a href="https://github.com/lab-neuro-comp/P2/releases">repositório do GitHub</a> e extraia seu conteúdo em um pasta específica. Inicie o MATLAB e vá à pasta onde você extraiu a sua versão do Protolize!. Dentro desta pasta, entre o comando <span style="background-color: #BDC3CE"><code>protolize</code></span>. Se não houver nenhum problema, o menu principal do Protolize! aparecerá, indicando que ele está pronto para uso.</p>
 
-<p>Esta documentação se refere à versão v0.2b do Protolize!</p>
+<p>Esta documentação se refere à versão v1.1b do Protolize!</p>
 
 <a name="inforel"></a>
 <h2>Outras informações relevantes</h2>
 
-<p>Os sinais a serem processados deverão estar no formato <code>*.ASCII</code>. Para converter arquivos EDF em ASCII, há um ferramenta dentro do próprio Protolize! para isso. Certifique-se que há somente um sinal por arquivo ASCII para que o programa aceite a entrada.</p>
+<p>Para que alguns sinais sejam processados, eles precisarão estar no formato <code>*.ASCII</code>. O próprio Protolize! já disponibiliza uma ferramenta para esta finalidade. Para que minimizar a chance de problema durante a análise, certifique-se que há somente um sinal por arquivo ASCII para que o programa aceite a entrada.</p>
 
 
 
@@ -109,7 +109,7 @@
 
 <p><a name="tools"></a></p>
 
-<h1>Tools</h1>
+<h1>Módulos de ferramentas</h1>
 
 <a name="eeg"></a>
 <h2>Processamento de EEG</h2>
@@ -138,11 +138,11 @@
 
 <p>Para escolher a planilha, clique no botão <code>Search</code> e abra o arquivo desejado. Em seguida, marque ou desmarque as opções desejadas:</p>
 <ul>
-    <li><b>Rerefer</b>: Esta opção abre uma nova janela contendo uma lista dos canais contidos no arquivo EDF. Para utilizar um canal para rereferenciamento basta selecioná-lo na lista e clicar em <code>OK</code>. A opção escolhida é reutilizada em todos os arquivos que possuem a mesma estrutura que a do primeiro arquivo rereferenciado. Caso um arquivo possua uma estrutura diferente, outra janela será aberta para que a escolha seja feita para o novo tipo de arquivo. Esta ação não apaga a configuração do arquivo anterior, e sim adiciona a nova opção para os arquivos de estruturas diferentes.</li>
-    <li><b>Remove channels</b>: Esta opção abre uma nova janela contendo uma lista dos canais contidos no arquivo EDF. Para remover um canal do arquivo basta selecioná-lo na lista e clicar em <code>OK</code>. A opção escolhida é reutilizada em todos os arquivos que possuem a mesma estrutura que a do primeiro arquivo rereferenciado. Caso um arquivo possua uma estrutura diferente, outra janela será aberta para que a escolha seja feita para o novo tipo de arquivo. Esta ação não apaga a configuração do arquivo anterior, e sim adiciona a nova opção para os arquivos de estruturas diferentes.</li>
+    <li><b>Rerefer</b>: Esta opção abre uma nova janela contendo uma lista dos canais contidos no arquivo EDF. Para utilizar um canal para rereferenciamento basta selecioná-lo na lista e clicar em <code>OK</code>. A opção escolhida é reutilizada em todos os arquivos que possuem a mesma estrutura que a do primeiro arquivo rereferenciado. Caso um arquivo possua uma estrutura diferente, outra janela será aberta para que a escolha seja feita para o novo tipo de arquivo. Esta ação não apaga a configuração do arquivo anterior, e sim adiciona a nova opção para os arquivos de estruturas diferentes. Caso a opção seja selecionada e nenhum canal seja escolhido para o rereferenciamento, a janela listando os canais continuará a aparecer para cada um dos arquivos a serem analisados.</li>
+    <li><b>Remove channels</b>: Esta opção abre uma nova janela contendo uma lista dos canais contidos no arquivo EDF. Para remover um canal do arquivo basta selecioná-lo na lista e clicar em <code>OK</code>. A opção escolhida é reutilizada em todos os arquivos que possuem a mesma estrutura que a do primeiro arquivo. Caso um arquivo possua uma estrutura diferente, outra janela será aberta para que a escolha seja feita para o novo tipo de arquivo. Esta ação não apaga a configuração do arquivo anterior, e sim adiciona a nova opção para os arquivos de estruturas diferentes. Caso a opção de remoção seja marcado e nenhum canal seja escolhido para a remoção, a janela listando os canais continuará a aparecer repetidamente para cada um dos arquivos a serem analisados.</li>
     <li><b>Save subject's info</b>: Esta opção permite que o programa salve os arquivos do sujeito do teste correspondente ao arquivo que está sendo analisado.</li>
-    <li><b>Run ICA</b>: Esta opção permite que o programa rode o algoritmo do ICA no arquivo que esta sendo analisado.</li>
-    <li><b>Remove artifacts manually</b>: Esta opção abre uma janela que permite que o usuário possa remover os artefatos manualmente.</li>
+    <li><b>Run ICA</b>: Esta opção permite que o programa rode o algoritmo de análise de componentes independentes (ICA) no arquivo que esta sendo analisado.</li>
+    <li><b>Remove artifacts manually</b>: Esta opção abre uma janela que permite que o usuário possa remover os artefatos identificados após o ICA manualmente. Para que este passo funcione, é preciso que a opção <code>Run ICA</code> esteja selecionada.</li>
     <li><b>Locate electrodes manually</b>: Esta opção abre uma janela que permite que o usuário possa informar o arquivos de localização de eletrodos manualmente.</li>
     <li><b>Mark events</b>: Esta opção utiliza os dados informados por meio da planilha de dados de entrada para marcar os eventos correspondentes a cada um dos arquivos EDF analisados.</li>
     <li><b>Show processing steps</b>: Esta opção ativa (quando selecionada) as mensagens indicando o andamento do processamento de cada arquivo.</li>

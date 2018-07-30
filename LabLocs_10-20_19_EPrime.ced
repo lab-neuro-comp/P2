@@ -18,4 +18,4 @@ Number	labels	theta	radius	X	Y	Z	sph_theta	sph_phi	sph_radius	type	datachan	ref	
 17	T4	 90	0.533	5.18e-15	-84.5	-8.84	-90	-5.97	 85	17	  1		 17	
 18	T5	-126	0.528	-49.8	68.5	-7.5	126	-5.06	 85	18	  1		  18	
 19	T6	126	0.528	-49.8	-68.5	-7.48	-126	-5.05	 85	19	  1		 19	
-			
+20											  1			

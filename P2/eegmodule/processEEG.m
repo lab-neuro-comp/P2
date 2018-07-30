@@ -35,7 +35,7 @@ checkICA = options(4);
 checkArtifacts = options(5);
 checkLocate = options(6);
 checkEvents = options(7);
-checkShow = options(8)
+checkShow = options(8);
 
 % Preparing channel selection for reuse
 rereferReuse = java.util.HashMap;
@@ -48,6 +48,7 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
         isFull = strcmp(lower(ints_table{n, 6}), 'full');
         if isFull
             % Variables
+            % Columns based on expected positions indicated on spreadsheet_example
             arqedf = ints_table{n, 10};
             int1 = ints_table{n, 7};
             int2 = ints_table{n, 8};
@@ -61,9 +62,11 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
                 EEG = pop_biosig(arqedf, 'rmeventchan', 'off');
             else
                 blockrange = floor([int1 int2]);
-                EEG = pop_biosig(arqedf, 'blockrange', blockrange, 'rmeventchan', 'off');
+                EEG = pop_biosig(arqedf, 'blockrange', blockrange,...
+                                         'rmeventchan', 'off');
             end
             
+            % Creating a new dataset with the information on the EDF file
             [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, n,...
                                                  'setname', ints_table{n, 11},...
                                                  'overwrite', 'on');
@@ -94,6 +97,8 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
                 if toBeRerefered > 0
                     EEG = pop_reref(EEG, toBeRerefered);
                     [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);                
+                    EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
+                                           'filepath', output_folder);
                 end
                 msgHandle = confirm_window(checkShow, '', 0, msgHandle);
             end
@@ -120,9 +125,12 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
                     end
                 end
                 % Removing channels
+                disp(toRemove);
                 if toRemove > 0
                     EEG = pop_select(EEG, 'nochannel', toRemove);
                     [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+                    EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
+                                           'filepath', output_folder);
                 end
                 msgHandle = confirm_window(checkShow, '', 0, msgHandle);
             end
@@ -137,6 +145,8 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
                                        'session', ints_table{n, 4}, ...
                                        'group', ints_table{n, 5});
                 [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+                EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
+                                   'filepath', output_folder);
                 msgHandle = confirm_window(checkShow, '', 0, msgHandle);
             end
 
@@ -156,6 +166,8 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
                 EEG = pop_runica(EEG, 'icatype', 'runica',...
                                       'options', { 'extended' 1 });
                 [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+                EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
+                                   'filepath', output_folder);
                 msgHandle = confirm_window(checkShow, '', 0, msgHandle);
             end
 
@@ -194,7 +206,7 @@ if (isequal(checkArtifacts, 1) | isequal(checkLocate, 1))
                 while strcmp(rmvagain, 'Yes')
                     rmvagain = questdlg('Would you like to remove some other component?', ...
                                         'Remove Component', ...
-                                        'Yes', 'No', 'Yes');
+                                        'Yes', 'No', 'No');
                     switch rmvagain
                         case 'Yes'
                             pop_eegplot(EEG, 0);
@@ -202,6 +214,8 @@ if (isequal(checkArtifacts, 1) | isequal(checkLocate, 1))
                             EEG = pop_subcomp(EEG);
                         case 'No'
                             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+                            EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
+                                                   'filepath', output_folder);
                     end
                 end
                 msgHandle = confirm_window(checkShow, '', 0, msgHandle);
@@ -213,6 +227,8 @@ if (isequal(checkArtifacts, 1) | isequal(checkLocate, 1))
 
                 EEG = pop_chanedit(EEG);
                 [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+                EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
+                                       'filepath', output_folder);
                 confirm_window(checkShow, '', 0, msgHandle);
             end
 
@@ -251,8 +267,10 @@ if needCut
             % Cuts dataset according to int1 and int2
             EEG = pop_select(EEG, 'time', blockrange);
             [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
+            EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
+                                   'filepath', output_folder);
             
-             % Saving suject info
+            % Saving suject info
             if isequal(checkInfo, 1)
                 EEG = eeg_checkset(EEG);
                 EEG = pop_editset(EEG, 'subject', ints_table{n, 2}, ...
@@ -272,7 +290,7 @@ if needCut
 end
 
 % Creating epochs for each full dataset
-if isequal(checkEvent, 1)
+if isequal(checkEvents, 1)
     for n = 1:size(ints_table)
         msgHandle = confirm_window(checkShow, 'Creating epochs...', 1, msgHandle);
         
@@ -307,6 +325,9 @@ if isequal(checkEvent, 1)
             clear EEG;
         end
         
+        msgHandle = confirm_window(checkShow, '', 0, msgHandle);
+    end
+
         msgHandle = confirm_window(checkShow, '', 0, msgHandle);
     end
 end

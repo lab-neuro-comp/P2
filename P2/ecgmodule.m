@@ -48,11 +48,6 @@ addpath ([cd '/ecgmodule']);
 
 % --- Executes just before ecgmodule is made visible.
 function ecgmodule_OpeningFcn(hObject, eventdata, handles, varargin)
-% This function has no output args, see OutputFcn.
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to ecgmodule (see VARARGIN)
 
 % Choose default command line output for ecgmodule
 handles.output = hObject;
@@ -87,10 +82,6 @@ guidata(hObject, handles);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = ecgmodule_OutputFcn(hObject, eventdata, handles)
-% varargout  cell array for returning output args (see VARARGOUT);
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
@@ -98,9 +89,6 @@ varargout{1} = handles.output;
 
 % --- Executes on button press in figurevhr.
 function figurevhr_Callback(hObject, eventdata, handles)
-% hObject    handle to figurevhr (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 xdata = get(handles.hvhr, 'xdata');
 ydata = get(handles.hvhr, 'ydata');
@@ -111,9 +99,6 @@ savefigure(xdata, ydata, 'b', xlim, ylim, '[s]', '[s]', 'VHR')
 
 % --- Executes on button press in figurevhrspec.
 function figurevhrspec_Callback(hObject, eventdata, handles)
-% hObject    handle to figurevhrspec (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 xdata = get(handles.hvhrspec,'xdata');
 ydata = get(handles.hvhrspec,'ydata');
@@ -124,15 +109,11 @@ savefigure(xdata, ydata, 'b', xlim, ylim, '[Hz]', '[ms^2]', 'VHR SPECTRUM');
 
 % --------------------------------------------------------------------
 function ecgfile_Callback(hObject, eventdata, handles)
-% hObject    handle to ecgfile (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+% Does nothing
 
 
 function ecgexit_Callback(hObject, eventdata, handles)
-% hObject    handle to ecgexit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 close(gcf);
 
 
@@ -532,22 +513,12 @@ axis tight;
 
 % --- Executes on selection change in processoption.
 function processoption_Callback(hObject, eventdata, handles)
-% hObject    handle to processoption (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = get(hObject,'String') returns processoption contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from processoption
+% Does nothing
 
 
 % --- Executes during object creation, after setting all properties.
 function processoption_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to processoption (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end

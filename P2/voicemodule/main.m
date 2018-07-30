@@ -3,15 +3,16 @@ function [voiceTimes] = main(filename)
 
 % Loading voice signal
 [record, fs] = audioread(filename);
-analysis = [];
-n = 1;
 windowsize = 1024;
 
 % Creates a passband filter for the human voice frequency range
-[b, a] = butter(4, [80, 260]/(fs/2));
+[b, a] = butter(4, [80, 260]/(fs/2), 'bandpass');
 record = filter(b, a, record);
 
 analysis = calc_power_voice(record, windowsize);
+
+%hold on;
+%stem(step(2:windowsize:length(step)), analysis, 'b');
 
 % TODO Find a good mathematical way to get a good threshold
 ignorenoise = [];

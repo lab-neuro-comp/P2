@@ -123,15 +123,17 @@
 <p>A entrada deste módulo é uma planilha Excel contendo, exatamente nesta ordem, uma coluna para cada uma das informações abaixo:</p>
 
 <ul>
-    <li>Sujeito</li>
-    <li>Teste</li>
-    <li>Fragmento</li>
     <li>Iniciais do sujeito</li>
+    <li>Código do sujeito</li>
+    <li>Teste</li>
+    <li>Sessão do teste</li>
+    <li>Grupo ao qual o seujeito pertence</li>
+    <li>Informação quanto ao evento</li>
     <li>Momento inferior de corte</li>
     <li>Momento superior de corte</li>
     <li>Taxa de amostragem</li>
-    <li>Sessão</li>
-    <li>Nome do arquivo EDF</li>
+    <li>Nome do arquivo de entrada para análise</li>
+    <li>Nome do arquivo DATASET de saída</li>
 </ul>
 
 <p>Para escolher a planilha, clique no botão <code>Search</code> e abra o arquivo desejado. Em seguida, marque ou desmarque as opções desejadas:</p>
@@ -141,7 +143,9 @@
     <li><b>Locate electrodes</b>: Esta opção permite que o programa localize os eletrodos baseado no arquivo de localizações informado nos parâmetros do programa.</li>
     <li><b>Save subject's info</b>: Esta opção permite que o programa salve os arquivos do sujeito do teste correspondente ao arquivo que está sendo analisado.</li>
     <li><b>Run ICA</b>: Esta opção permite que o programa rode o algoritmo do ICA no arquivo que esta sendo analisado.</li>
-    <li><b>Remove artifacts after processing</b>: Esta opção abre uma janela que permite que o usuário possa remover os artefatos manualmente.</li>
+    <li><b>Remove artifacts manually</b>: Esta opção abre uma janela que permite que o usuário possa remover os artefatos manualmente.</li>
+    <li><b>Locate electrodes manually</b>: Esta opção abre uma janela que permite que o usuário possa escolher o arquivo contendo as informações das localizações dos eletrodos.</li>
+    <li><b>Mark events</b>: Esta opção utiliza as informações de eventos da planilha para demarcar os eventos no arquivo cuja denominação de evento é "full".</li>
     <li><b>Show processing steps</b>: Esta opção ativa (quando selecionada) as mensagens indicando o andamento do processamento de cada arquivo.</li>
 </ul>
 

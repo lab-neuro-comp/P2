@@ -153,4 +153,4 @@ rhythmconfig;
 
 % --------------------------------------------------------------------
 function docmain_Callback(hObject, eventdata, handles)
-web('file:///', cd, 'doc.html');
+web('file:///', cd, 'docs/doc.html');

@@ -167,6 +167,7 @@ responseTime = handles.responseTime; % contains the delays calculated for the st
 semicollon = findstr(content{1}{1}, ';');
 
 k = 2; % counts the line of the file that will be modified
+[R, C] = size(content{1});
 
 % If line has only one ';', the file has never been successfully analysed before
 if length(semicollon) == 1
@@ -175,13 +176,14 @@ if length(semicollon) == 1
 	
 	for n = 1:length(responseTime)
 		% If the participant answered to the stimulus
-		if ~isequal(responseTime(n), 0)
+		if ((~isequal(responseTime(n), 0)) && (k <= R))
 			responseFile = replace_dot(responseTime(n));
 			content{1}{k} = strcat(content{1}{k}, ';', responseFile);
 			n = n + 1;
 			k = k + 1;
 
 		% Else, there has been an omission
+		% or one is trying to write too much information
 		else
 			n = n + 1;
 		end
@@ -196,7 +198,7 @@ else
 	
 	for n = 1:length(responseTime)
 		% If the participant answered to the stimulus
-		if ~isequal(responseTime(n), 0)
+		if ((~isequal(responseTime(n), 0)) && (k <= R))
 			% Finds the last semicollon of the line
 			% so the information after that can be replaced
 			semicollon = findstr(content{1}{k}, ';');
