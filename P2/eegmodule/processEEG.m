@@ -146,7 +146,7 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
                                        'group', ints_table{n, 5});
                 [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
                 EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
-                                   'filepath', output_folder);
+                                       'filepath', output_folder);
                 msgHandle = confirm_window(checkShow, '', 0, msgHandle);
             end
 
@@ -167,7 +167,7 @@ if (isequal(checkRerefer, 1) | isequal(checkRemove, 1) | isequal(checkInfo, 1) |
                                       'options', { 'extended' 1 });
                 [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG, n);
                 EEG = pop_saveset(EEG, 'filename', ints_table{n, 11}, ...
-                                   'filepath', output_folder);
+                                       'filepath', output_folder);
                 msgHandle = confirm_window(checkShow, '', 0, msgHandle);
             end
 

@@ -7,7 +7,7 @@ fileID = fopen(testName, 'r');
 content = textscan(fileID, '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s');
 fclose(fileID);
 k = 1;
-timeArray = content{5};
+timeArray = content{6};
 
 [R, C] = size(timeArray);
 
