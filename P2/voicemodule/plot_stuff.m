@@ -7,7 +7,7 @@ function varargout = plot_stuff(varargin)
 
 % Edit the above text to modify the response to help plot_stuff
 
-% Last Modified by GUIDE v2.5 25-Jun-2017 11:33:55
+% Last Modified by GUIDE v2.5 01-Mar-2019 11:03:09
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -48,15 +48,31 @@ if length(handles.files) == 1
 	set(handles.pushbuttonSave, 'String', 'Save');
 end
 
-% Prepare axes for first plot
-[handles.record, handles.fs] = refresh_signal(hObject, handles,...
-							   				  handles.files,...
-							   				  handles.stuff,...
-							   				  handles.number,...
-							   				  handles.ext);
+% Opens first record
+[handles.record, handles.fs] = open_signal(hObject, handles,...
+							   			   handles.files,...
+							   			   handles.number);
 
 % The information stored in hash map must be updated
 timeArray = get(handles.stuff, handles.files{handles.number});
+set(handles.editFirst, 'String', '0');
+set(handles.editInterval,...
+	 'String', num2str(length(handles.record)/handles.fs));
+set(handles.textMax,...
+	 'String', strcat('Max. ', num2str(length(handles.record)/handles.fs)));
+set([handles.buttonFirst handles.buttonPrev handles.buttonNext handles.buttonLast], ...
+	 'Enable', 'on');
+
+% Prepare axes for first plot
+refresh_signal(hObject, handles,...
+			   handles.files,...
+			   handles.stuff,...
+			   handles.number,...
+			   handles.record,...
+			   handles.fs,...
+			   handles.ext,...
+			   str2num(get(handles.editFirst, 'String')),...
+			   str2num(get(handles.editInterval, 'String')));
 
 % Update number of points marked in file
 set(handles.textPoints, 'String', num2str(length(timeArray)));
@@ -103,7 +119,7 @@ end
 
 delete(handles.figure1)
 
-
+%{
 % --------------------------------------------------------------------
 function toolZoom_OnCallback(hObject, eventdata, handles)
 
@@ -228,11 +244,262 @@ handles.stuff.put(handles.files{handles.number}, timeArray);
 handles.times = timeArray;
 guidata(hObject, handles);
 
-
+%}
 % --------------------------------------------------------------------
 % --- Executes during object creation, after setting all properties.
 function textFilename_CreateFcn(hObject, eventdata, handles)
 % Does nothing
+
+
+function editFirst_Callback(hObject, eventdata, handles)
+
+maxSec = length(handles.record)/handles.fs;
+first = str2num(get(handles.editFirst, 'String'));
+interval = str2num(get(handles.editInterval, 'String'));
+
+% Checks if the first point is too big (more then size of record),
+% too small (less then zero) or if the first point summed with the
+% interval are bigger then the size of the record
+if (first > maxSec || first < 0 || first + interval > maxSec)
+	set(handles.editFirst, 'String', '0');
+else
+	set(handles.editFirst, 'String', num2str(first));
+end
+refresh_signal(hObject, handles,...
+			   handles.files,...
+			   handles.stuff,...
+			   handles.number,...
+			   handles.record,...
+			   handles.fs,...
+			   handles.ext,...
+			   str2num(get(handles.editFirst, 'String')),...
+			   str2num(get(handles.editInterval, 'String')));
+
+	
+% --- Executes during object creation, after setting all properties.
+function editFirst_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in buttonFirst.
+function buttonFirst_Callback(hObject, eventdata, handles)
+set(handles.editFirst, 'String', '0');
+refresh_signal(hObject, handles,...
+			   handles.files,...
+			   handles.stuff,...
+			   handles.number,...
+			   handles.record,...
+			   handles.fs,...
+			   handles.ext,...
+			   0,...
+			   str2num(get(handles.editInterval, 'String')));
+
+
+% --- Executes on button press in buttonPrev.
+function buttonPrev_Callback(hObject, eventdata, handles)
+first = str2num(get(handles.editFirst, 'String'));
+interval = str2num(get(handles.editInterval, 'String'));
+
+first = first - interval;
+if (first - interval < 0)
+	first = 0;
+end
+
+set(handles.editFirst, 'String', num2str(first));
+refresh_signal(hObject, handles,...
+			   handles.files,...
+			   handles.stuff,...
+			   handles.number,...
+			   handles.record,...
+			   handles.fs,...
+			   handles.ext,...
+			   first,...
+			   interval);
+
+
+% --- Executes on button press in buttonNext.
+function buttonNext_Callback(hObject, eventdata, handles)
+first = str2num(get(handles.editFirst, 'String'));
+interval = str2num(get(handles.editInterval, 'String'));
+
+first = first + interval;
+if (first + interval > length(handles.record)/handles.fs)
+	first = (length(handles.record)/handles.fs) - interval;
+end
+
+set(handles.editFirst, 'String', num2str(first));
+refresh_signal(hObject, handles,...
+			   handles.files,...
+			   handles.stuff,...
+			   handles.number,...
+			   handles.record,...
+			   handles.fs,...
+			   handles.ext,...
+			   first,...
+			   interval);
+
+
+% --- Executes on button press in buttonLast.
+function buttonLast_Callback(hObject, eventdata, handles)
+maxSec = length(handles.record)/handles.fs;
+interval = str2num(get(handles.editInterval, 'String'));
+first = maxSec - interval;
+
+set(handles.editFirst, 'String', num2str(first));
+refresh_signal(hObject, handles,...
+			   handles.files,...
+			   handles.stuff,...
+			   handles.number,...
+			   handles.record,...
+			   handles.fs,...
+			   handles.ext,...
+			   first,...
+			   interval);
+
+
+function editInterval_Callback(hObject, eventdata, handles)
+
+maxSec = length(handles.record)/handles.fs;
+first = str2num(get(handles.editFirst, 'String'));
+interval = str2num(get(handles.editInterval, 'String'));
+
+% Checks if the interval is to big (bigger than max size of record)
+% or too small (lesser than sampling period)
+if (interval > maxSec || interval <= 1/handles.fs)
+	set(handles.editFirst, 'String', '0');
+	set(handles.editInterval, 'String', num2str(maxSec));
+else
+	% If the new interval "zooms" past end of record,
+	% move first point to a new location
+	if (first + interval > maxSec)
+		first = maxSec - interval;
+		set(handles.editFirst, 'String', num2str(first));
+	end
+	set(handles.editInterval, 'String', num2str(interval));
+end
+refresh_signal(hObject, handles,...
+			   handles.files,...
+			   handles.stuff,...
+			   handles.number,...
+			   handles.record,...
+			   handles.fs,...
+			   handles.ext,...
+			   str2num(get(handles.editFirst, 'String')),...
+			   str2num(get(handles.editInterval, 'String')));
+
+
+% --- Executes during object creation, after setting all properties.
+function editInterval_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in buttonEdit.
+function buttonEdit_Callback(hObject, eventdata, handles)
+
+timeArray = handles.times;
+sizeRecord = length(handles.record)/handles.fs;
+first = str2num(get(handles.editFirst, 'String'));
+interval = str2num(get(handles.editInterval, 'String'));
+record = handles.record;
+% creates a small window space to check the better spot to add the mark
+checkWindow = ceil(.001*handles.fs); 
+
+% while the toggle button is on, add/remove marks
+while get(hObject, 'Value') == 1
+	[x, y, b] = ginput(1);
+	% user clicked on the plot with the left button (add point)
+    if (b == 1 && x >= first && x <= first + interval && y >= min(record)/4 && y <= max(record)/4)
+        x = round(x*handles.fs);
+
+        if ((x - checkWindow) < 0)
+        	[y, w] = min(abs(record(0:(x + checkWindow))));
+        	if (length(w) > 1)
+        		[i, j] = min(abs(w - x));
+        		if length(j > 1)
+        			x = x + w(j(1));
+        		else
+        			x = x + w(j);
+        		end
+        	else
+        		x = x + w;
+        	end
+        elseif ((x + checkWindow) > length(handles.record))
+        	[y, w] = min(abs(record(x - checkWindow):sizeRecord));
+        	if (length(w) > 1)
+        		[i, j] = min(abs(w - x));
+        		if length(j > 1)
+        			x = x + w(j(1));
+        		else
+        			x = x + w(j);
+        		end
+        	else
+        		x = x + w;
+        	end
+        else
+        	[y, w] = min(abs(record((x - checkWindow):(x + checkWindow))));
+        	if (length(w) > 1)
+        		[i, j] = min(abs(w - x));
+        		if length(j > 1)
+        			x = x + w(j(1));
+        		else
+        			x = x + w(j);
+        		end
+        	else
+        		x = x + w;
+        	end
+        end
+        timeArray = sort([timeArray; x/handles.fs]);
+        handles.times = timeArray;
+
+		% Updates number of points marked in audio
+		tmp = str2num(get(handles.textPoints, 'String'));
+		set(handles.textPoints, 'String', num2str(tmp + 1));
+
+		% Adds new points to hash map
+		handles.stuff.put(handles.files{handles.number}, timeArray);
+		guidata(hObject, handles);
+
+    % user clicked on the plot with the right button (remove point)
+    elseif (b == 3 && x >= first && x <= first + interval && y >= min(record)/4 && y <= max(record)/4)
+    	[j, i] = min(abs(timeArray - x));
+    	if length(i > 1)
+        	timeArray(i(1))= [];
+        else
+    		timeArray(i) = [];
+    	end
+    	disp(timeArray);
+    	handles.times = timeArray;
+
+    	% Updates number of points marked in audio
+		tmp = str2num(get(handles.textPoints, 'String'));
+		set(handles.textPoints, 'String', num2str(tmp - 1));
+
+		% Remove points from hash map
+		handles.stuff.put(handles.files{handles.number}, timeArray);
+		guidata(hObject, handles);
+
+    else
+    	% if user clicks outside the plot area
+    	% or with the middle button, the toggle is turned off.
+    	set(hObject, 'Value', 0);
+    end
+
+    refresh_signal(hObject, handles,...
+					   handles.files,...
+					   handles.stuff,...
+					   handles.number,...
+					   handles.record,...
+					   handles.fs,...
+					   handles.ext,...
+					   first,...
+					   interval);
+
+end
+guidata(hObject, handles);
 
 
 % --- Executes on button press in pushbuttonSave.
@@ -265,13 +532,30 @@ if number <= length(handles.files)
 	end
 	
 	% Updates plot with next audio
-	[handles.record, handles.fs] = refresh_signal(hObject, handles,...
-							   				  handles.files,...
-							   				  handles.stuff,...
-							   				  handles.number,...
-							   				  handles.ext);
-	
-	filename = handles.files;
+	[handles.record, handles.fs] = open_signal(hObject, handles,...
+							   				   handles.files,...
+							   				   handles.number);
+
+	% The information stored in hash map must be updated
+	timeArray = get(handles.stuff, handles.files{handles.number});
+	set(handles.editFirst, 'String', '0');
+	set([handles.textMax handles.editInterval],...
+		 'String', num2str(length(handles.record)/handles.fs));
+	set([handles.buttonFirst handles.buttonPrev handles.buttonNext handles.buttonLast], ...
+		 'Enable', 'off');
+
+	% Prepare axes for next plot
+	refresh_signal(hObject, handles,...
+				   handles.files,...
+				   handles.stuff,...
+				   handles.number,...
+				   handles.record,...
+				   handles.fs,...
+				   handles.ext,...
+				   str2num(get(handles.editFirst, 'String')),...
+				   str2num(get(handles.textMax, 'String')));
+
+	%filename = handles.files;
 	timeArray = get(handles.stuff, handles.files{handles.number});
 	
 	% Update number of points marked in file
@@ -288,4 +572,3 @@ else
 	guidata(hObject, handles);
 	uiresume(handles.figure1);
 end
-
