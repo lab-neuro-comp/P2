@@ -10,7 +10,7 @@ function varargout = comparemodule2(varargin)
 
 % Edit the above text to modify the response to help comparemodule2
 
-% Last Modified by GUIDE v2.5 01-Feb-2017 08:14:08
+% Last Modified by GUIDE v2.5 20-Mar-2019 14:31:14
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -39,6 +39,9 @@ function comparemodule2_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for comparemodule2
 handles.output = hObject;
+handles.programPath = cd;
+handles.flagCSV = 0;
+handles.flagTXT = 0;
 
 % Update handles structure
 set(handles.figure1, 'Name', 'Test Response Delay');
@@ -52,114 +55,299 @@ function varargout = comparemodule2_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in buttonFolder.
-function buttonFolder_Callback(hObject, eventdata, handles)
+% --- Executes on button press in buttonCSV.
+function buttonCSV_Callback(hObject, eventdata, handles)
+
+handles.flagCSV = 0;
+if ~isempty(get(handles.editTXT, 'String'))
+	folder = get(handles.editTXT, 'String');
+else
+	folder = handles.programPath;
+end
 
 CSVPath = uigetdir(cd, 'Select the folder containing the analysed audio');
-handles.CSVPath = CSVPath;
-programPath = cd(CSVPath);
+if (~all(CSVPath) && isempty(get(handles.editCSV, 'String')))
+	set(handles.listCSV, 'String', {'No folder informed'});
+else
+	if all(CSVPath)
+		handles.CSVPath = CSVPath;
+		cd(CSVPath);
+		set(handles.editCSV, 'String', CSVPath);
+	else
+		CSVPath = get(handles.editCSV, 'String');
+		cd(CSVPath);
+		set(handles.editCSV, 'String', CSVPath);
+	end	
 
-listCSV = ls('*.csv');
-handles.CSVFiles = listCSV;
-CSVPath = cd(programPath);
+	listCSV = ls('*.csv');
+	if ~isempty(listCSV)
+		handles.CSVFiles = listCSV;
+		cd(handles.programPath);
+		set(handles.listCSV, 'String', listCSV);
+		handles.flagCSV = 1;
+	else
+		set(handles.listCSV, 'String', {'No CSV in this folder'});
+	end	
+end
 
-set(handles.listFiles, 'String', listCSV);
+if (handles.flagCSV && handles.flagTXT)
+	set(handles.buttonAnalyse, 'Enable', 'on');
+else
+	set(handles.buttonAnalyse, 'Enable', 'off');
+end
 guidata(hObject, handles);
 
 
-% --- Executes on selection change in listFiles.
-function listFiles_Callback(hObject, eventdata, handles)
+function editCSV_Callback(hObject, eventdata, handles)
 
+handles.flagCSV = 0;
+
+% Disables save if path has been modified
 set(handles.buttonSave, 'Enable', 'off');
+
+% If path field is not empty
+if ~isempty(get(handles.editCSV, 'String'))
+	set(handles.buttonAnalyse, 'Enable', 'on');
+	
+	CSVPath = get(handles.editCSV, 'String');
+	handles.CSVPath = CSVPath;
+	cd(CSVPath);
+
+	listCSV = ls('*.csv');
+	if ~isempty(listCSV)
+		handles.CSVFiles = listCSV;
+		cd(handles.programPath);
+		set(handles.listCSV, 'String', listCSV);
+		handles.flagCSV = 1;
+	else
+		set(handles.listCSV, 'String', {'No CSV in this folder'});
+	end
+
+% Else, if path field is empty
+else
+	% Prevents user from analysing no file
+	set(handles.buttonSave, 'Enable', 'off');
+	set(handles.listCSV, 'String', {'No folder informed'});
+end
+
+if (handles.flagCSV && handles.flagTXT)
+	set(handles.buttonAnalyse, 'Enable', 'on');
+else
+	set(handles.buttonAnalyse, 'Enable', 'off');
+end
+guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
-function listFiles_CreateFcn(hObject, eventdata, handles)
+function editCSV_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in listCSV.
+function listCSV_Callback(hObject, eventdata, handles)
+
+set([handles.buttonSave handles.buttonCorrect], 'Enable', 'off');
+set([handles.buttonPan handles.buttonZoom], 'Enable', 'off');
+
+
+% --- Executes during object creation, after setting all properties.
+function listCSV_CreateFcn(hObject, eventdata, handles)
 
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 
-% --- Executes on button press in buttonSearch.
-function buttonSearch_Callback(hObject, eventdata, handles)
+% --- Executes on button press in buttonTXT.
+function buttonTXT_Callback(hObject, eventdata, handles)
 
-% Searches for text file to match the CSV
-[filename, pathname, filterindex]  = uigetfile('*.txt', 'Select files');
-set(handles.editTest, 'String', strcat(pathname, filename));
+handles.flagTXT = 0;
+if ~isempty(get(handles.editCSV, 'String'))
+	folder = get(handles.editCSV, 'String');
+else
+	folder = handles.programPath;
+end
+	
+TXTPath = uigetdir(cd, 'Select the folder containing the test information');
+if (~all(TXTPath) && isempty(get(handles.editTXT, 'String')))
+	set(handles.listTXT, 'String', {'No folder informed'});
+else
+	if all(TXTPath)
+		handles.TXTPath = TXTPath;
+		cd(TXTPath);
+		set(handles.editTXT, 'String', TXTPath);
+	else
+		TXTPath = get(handles.editTXT, 'String');
+		cd(TXTPath);
+		set(handles.editTXT, 'String', TXTPath);
+	end	
 
-% Disables Save if new search was made
-set(handles.buttonSave, 'Enable', 'off');
-
-% If a file was selected during search
-if ~isempty(get(handles.editTest, 'String'))
-	% Enables analysis
-	set(handles.buttonAnalyse, 'Enable', 'on');
+	listTXT = ls('*.txt');
+	if ~isempty(listTXT)
+		handles.TXTFiles = listTXT;
+		cd(handles.programPath);
+		set(handles.listTXT, 'String', listTXT);
+		handles.flagTXT = 1;
+	else
+		set(handles.listTXT, 'String', {'No TXT in this folder'});
+	end	
 end
 
+if (handles.flagCSV && handles.flagTXT)
+	set(handles.buttonAnalyse, 'Enable', 'on');
+else
+	set(handles.buttonAnalyse, 'Enable', 'off');
+end
+guidata(hObject, handles);
 
-function editTest_Callback(hObject, eventdata, handles)
+
+function editTXT_Callback(hObject, eventdata, handles)
 
 % Disables save if filename is modified
 set(handles.buttonSave, 'Enable', 'off');
 
-% If text name field is not empty
-if ~isempty(get(handles.editTest, 'String'))
-	set(handles.buttonAnalyse, 'Enable', 'on');
+handles.flagTXT = 0;
 
-% Else, if text name field is empty
+% Disables save if path has been modified
+set(handles.buttonSave, 'Enable', 'off');
+
+% If path field is not empty
+if ~isempty(get(handles.editTXT, 'String'))
+	set(handles.buttonAnalyse, 'Enable', 'on');
+	
+	TXTPath = get(handles.editTXT, 'String');
+	handles.TXTPath = CSVPath;
+	cd(TXTPath);
+
+	listTXT = ls('*.txt');
+	if ~isempty(listTXT)
+		handles.TXTFiles = listTXT;
+		cd(handles.programPath);
+		set(handles.listTXT, 'String', listTXT);
+		handles.flagTXT = 1;
+	else
+		set(handles.listTXT, 'String', {'No TXT in this folder'});
+	end
+
+% Else, if path field is empty
 else
 	% Prevents user from analysing no file
-	set(handles.buttonAnalyse, 'Enable', 'off');
+	set(handles.buttonSave, 'Enable', 'off');
+	set(handles.listTXT, 'String', {'No folder informed'});
 end
 
+if (handles.flagCSV && handles.flagTXT)
+	set(handles.buttonAnalyse, 'Enable', 'on');
+else
+	set(handles.buttonAnalyse, 'Enable', 'off');
+end
+guidata(hObject, handles);
+
+
 % --- Executes during object creation, after setting all properties.
-function editTest_CreateFcn(hObject, eventdata, handles)
+function editTXT_CreateFcn(hObject, eventdata, handles)
 
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
 		set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in listTXT.
+function listTXT_Callback(hObject, eventdata, handles)
+
+set([handles.buttonSave handles.buttonCorrect], 'Enable', 'off');
+set([handles.buttonPan handles.buttonZoom], 'Enable', 'off');
+
+
+% --- Executes during object creation, after setting all properties.
+function listTXT_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
 end
 
 
 % --- Executes on button press in buttonAnalyse.
 function buttonAnalyse_Callback(hObject, eventdata, handles)
 
-contents = cellstr(get(handles.listFiles, 'String'));
-filename = contents{get(handles.listFiles, 'Value')};
-filename = strcat(handles.CSVPath, filesep, filename);
-handles.filename = filename;
+contentsCSV = cellstr(get(handles.listCSV, 'String'));
+fileCSV = contentsCSV{get(handles.listCSV, 'Value')};
+fileCSV = strcat(handles.CSVPath, filesep, fileCSV);
+handles.fileCSV = fileCSV;
+
+contentsTXT = cellstr(get(handles.listTXT, 'String'));
+fileTXT = contentsTXT{get(handles.listTXT, 'Value')};
+handles.fileTXT = strcat(handles.TXTPath, filesep, fileTXT);
 
 % analyse_for_stimulus will analyse the file containing information about
 % the time in which each stimulus were presented and calculate the delay
 % of the answer of the participant
-responseTime = analyse_for_stimulus(filename, get(handles.editTest, 'String'));
-set(handles.listAnalysis, 'String', responseTime);
-set(handles.buttonSave, 'Enable', 'on');
+responseTime = analyse_for_stimulus(fileCSV, handles.fileTXT);
+set(handles.listRT, 'String', responseTime);
+set([handles.buttonSave handles.buttonCorrect], 'Enable', 'on');
+set([handles.buttonZoom handles.buttonPan], 'Enable', 'on');
 
 % Updates handles structure
 handles.responseTime = responseTime;
 guidata(hObject, handles);
 
 
-% --- Executes on selection change in listAnalysis.
-function listAnalysis_Callback(hObject, eventdata, handles)
+% --------------------------------------------------------------------
+% --- Executes on selection change in listRT.
+function listRT_Callback(hObject, eventdata, handles)
 % Does nothing
 
 
 % --- Executes during object creation, after setting all properties.
-function listAnalysis_CreateFcn(hObject, eventdata, handles)
+function listRT_CreateFcn(hObject, eventdata, handles)
 
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
 		set(hObject,'BackgroundColor','white');
 end
 
 
+% --------------------------------------------------------------------
+% --- Executes on button press in buttonCorrect.
+function buttonCorrect_Callback(hObject, eventdata, handles)
+% allows pair of points to be reassigned
+
+
+% --- Executes on button press in buttonZX.
+function buttonZoom_Callback(hObject, eventdata, handles)
+% controls the zoom in the x-axis
+switch get(handles.buttonZoom, 'Value')
+ 	case 1
+ 		set(handles.buttonPan, 'Enable', 'off')
+ 		zoom xon;
+ 	otherwise
+ 		set(handles.buttonPan, 'Enable', 'on')
+ 		zoom off;
+ end
+guidata(hObject, handles);
+
+
+% --- Executes on button press in buttonPan.
+function buttonPan_Callback(hObject, eventdata, handles)
+% controls the pan in the x-axis
+switch get(handles.buttonPan, 'Value')
+ 	case 1
+ 		set(handles.buttonZoom, 'Enable', 'off')
+ 		pan xon;
+ 	otherwise
+ 		set(handles.buttonZoom, 'Enable', 'off')
+ 		pan off;
+ end
+guidata(hObject, handles);
+
+
 % --- Executes on button press in buttonSave.
 function buttonSave_Callback(hObject, eventdata, handles)
 
 % Prepares for write in file
-filename = handles.filename;
-fileID = fopen(filename, 'r');
+fileCSV = handles.fileCSV;
+fileID = fopen(fileCSV, 'r');
 content = textscan(fileID, '%s');
 responseTime = handles.responseTime; % contains the delays calculated for the stimuli
 
@@ -228,3 +416,4 @@ set(handles.buttonSave, 'Enable', 'off');
 h = msgbox('File successfully saved!');
 
 guidata(hObject, handles);
+

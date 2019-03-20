@@ -1,4 +1,4 @@
-function [responseTime] = analyse_for_stimulus(audioName, testName)
+function [responseTime] = analyse_for_stimulus(audioName, testName, hAxes)
 % Analyses the file generated during a test with Stroop and gets
 % the time were the stimuli were produced turning them into a
 % timeline in seconds
@@ -25,7 +25,7 @@ for n = 1:R
 		stimulusTime(n) = str2num(timeArray{n})/1000;
 	end
 end
-figure;
+axes(hAxes);
 plot(0);
 hold on;
 plot(stimulusTime, 0, 'ob', 'MarkerFaceColor', 'b');
@@ -44,6 +44,7 @@ for n = 2:R
 	audioTime(n-1) = str2num(char(strcat(temp(1), '.', temp(2))));
 end
 plot(audioTime, 0, 'or');
+hold off;
 
 % Time that takes for one to respond to a stimulus
 k = 1; % counts which word of the audio file is being analysed
