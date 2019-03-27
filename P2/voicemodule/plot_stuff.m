@@ -284,9 +284,11 @@ checkWindow = ceil(.001*handles.fs);
 
 % while the toggle button is on, add/remove marks
 while get(hObject, 'Value') == 1
+	xInfo = xlim(handles.axes1);
+	yInfo = ylim(handles.axes1);
 	[x, y, b] = ginput(1);
 	% user clicked on the plot with the left button (add point)
-    if (b == 1 && x >= first && x <= first + interval && y >= min(record)/4 && y <= max(record)/4)
+    if (b == 1 && x >= xInfo(1) && x <= xInfo(2) && y >= yInfo(1) && y <= yInfo(2))
         x = round(x*handles.fs);
 
         if ((x - checkWindow) < 0)
@@ -338,7 +340,7 @@ while get(hObject, 'Value') == 1
 		guidata(hObject, handles);
 
     % user clicked on the plot with the right button (remove point)
-    elseif (b == 3 && x >= first && x <= first + interval && y >= min(record)/4 && y <= max(record)/4)
+    elseif (b == 3 && x >= xInfo(1) && x <= xInfo(2) && y >= yInfo(1) && y <= yInfo(2))
     	[j, i] = min(abs(timeArray - x));
     	if length(i > 1)
         	timeArray(i(1))= [];

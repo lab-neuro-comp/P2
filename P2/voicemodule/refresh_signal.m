@@ -27,7 +27,7 @@ rfLimit = (first * fs) + 1; % first record interval
 rlLimit = (first + interval)*fs; % last record interval
 plot(timeAxis(1:length(timeAxis)-1), record(rfLimit:rlLimit), 'b');
 xlim([first (first + interval)]);
-ylim([min(record)/4 max(record)/4]);
+%ylim([min(record)/4 max(record)/4]);
 
 % Replace each point that represents speech
 for n = 1:numel(timemoments)
