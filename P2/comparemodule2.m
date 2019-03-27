@@ -42,6 +42,8 @@ handles.output = hObject;
 handles.programPath = cd;
 handles.flagCSV = 0;
 handles.flagTXT = 0;
+handles.stimTime = {};
+handles.audioTime = {};
 
 % Update handles structure
 set(handles.figure1, 'Name', 'Test Response Delay');
@@ -65,7 +67,7 @@ else
 	folder = handles.programPath;
 end
 
-CSVPath = uigetdir(cd, 'Select the folder containing the analysed audio');
+CSVPath = uigetdir(folder, 'Select the folder containing the analysed audio');
 if (~all(CSVPath) && isempty(get(handles.editCSV, 'String')))
 	set(handles.listCSV, 'String', {'No folder informed'});
 else
@@ -170,7 +172,7 @@ else
 	folder = handles.programPath;
 end
 	
-TXTPath = uigetdir(cd, 'Select the folder containing the test information');
+TXTPath = uigetdir(folder, 'Select the folder containing the test information');
 if (~all(TXTPath) && isempty(get(handles.editTXT, 'String')))
 	set(handles.listTXT, 'String', {'No folder informed'});
 else
@@ -284,13 +286,13 @@ handles.fileTXT = strcat(handles.TXTPath, filesep, fileTXT);
 % analyse_for_stimulus will analyse the file containing information about
 % the time in which each stimulus were presented and calculate the delay
 % of the answer of the participant
-responseTime = analyse_for_stimulus(fileCSV, handles.fileTXT);
-set(handles.listRT, 'String', responseTime);
+[handles.stimTime, handles.audioTime, rTime] = analyse_for_stimulus(fileCSV, handles.fileTXT, handles.axes1);
+set(handles.listRT, 'String', rTime);
 set([handles.buttonSave handles.buttonCorrect], 'Enable', 'on');
 set([handles.buttonZoom handles.buttonPan], 'Enable', 'on');
 
 % Updates handles structure
-handles.responseTime = responseTime;
+handles.rTime = rTime;
 guidata(hObject, handles);
 
 
@@ -312,6 +314,35 @@ end
 % --- Executes on button press in buttonCorrect.
 function buttonCorrect_Callback(hObject, eventdata, handles)
 % allows pair of points to be reassigned
+set([handles.buttonPan handles.buttonZoom], 'Enable', 'off');
+xInfo = xlim(handles.axes1);
+yInfo = ylim(handles.axes1);
+
+[x1, y1, b] = ginput(1);
+if (b == 1 && x1 >= xInfo(1) && x1 <= xInfo(2) && y1 >= yInfo(1) && y1 <= yInfo(2))
+	[j, i] = min(abs(handles.stimTime - x1));
+	if length(i > 1)
+    	markStim = handles.stimTime(i(1));
+    else
+		markStim = handles.stimTime(i);
+	end
+	disp(markStim);	
+	guidata(hObject, handles);
+
+	[x2, y2, b] = ginput(1);
+	if (b == 1 && x1 >= xInfo(1) && x1 <= xInfo(2) && y1 >= yInfo(1) && y1 <= yInfo(2))
+		[j, i] = min(abs(handles.stimTime - x1));
+		if length(i > 1)
+	    	markAudio = handles.audioTime(i(1));
+	    else
+			markAudio = handles.audioTime(i);
+		end
+		disp(markAudio);	
+		guidata(hObject, handles);
+	end
+end
+set([handles.buttonPan handles.buttonZoom], 'Enable', 'on');
+guidata(hObject, handles);
 
 
 % --- Executes on button press in buttonZX.
@@ -319,10 +350,10 @@ function buttonZoom_Callback(hObject, eventdata, handles)
 % controls the zoom in the x-axis
 switch get(handles.buttonZoom, 'Value')
  	case 1
- 		set(handles.buttonPan, 'Enable', 'off')
+ 		set([handles.buttonPan handles.buttonCorrect], 'Enable', 'off');
  		zoom xon;
  	otherwise
- 		set(handles.buttonPan, 'Enable', 'on')
+ 		set([handles.buttonPan handles.buttonCorrect], 'Enable', 'on');
  		zoom off;
  end
 guidata(hObject, handles);
@@ -333,10 +364,10 @@ function buttonPan_Callback(hObject, eventdata, handles)
 % controls the pan in the x-axis
 switch get(handles.buttonPan, 'Value')
  	case 1
- 		set(handles.buttonZoom, 'Enable', 'off')
+ 		set([handles.buttonZoom handles.buttonCorrect], 'Enable', 'off');
  		pan xon;
  	otherwise
- 		set(handles.buttonZoom, 'Enable', 'off')
+ 		set([handles.buttonZoom handles.buttonCorrect], 'Enable', 'on');
  		pan off;
  end
 guidata(hObject, handles);
@@ -349,7 +380,7 @@ function buttonSave_Callback(hObject, eventdata, handles)
 fileCSV = handles.fileCSV;
 fileID = fopen(fileCSV, 'r');
 content = textscan(fileID, '%s');
-responseTime = handles.responseTime; % contains the delays calculated for the stimuli
+rTime = handles.rTime; % contains the delays calculated for the stimuli
 
 % Counts how many ';' a line has
 semicollon = findstr(content{1}{1}, ';');
@@ -362,10 +393,10 @@ if length(semicollon) == 1
 	% Therefore, a new column must be created
 	content{1}{1} = strcat(content{1}{1}, ';Delay');
 	
-	for n = 1:length(responseTime)
+	for n = 1:length(rTime)
 		% If the participant answered to the stimulus
-		if ((~isequal(responseTime(n), 0)) && (k <= R))
-			responseFile = replace_dot(responseTime(n));
+		if ((~isequal(rTime(n), 0)) && (k <= R))
+			responseFile = replace_dot(rTime(n));
 			content{1}{k} = strcat(content{1}{k}, ';', responseFile);
 			n = n + 1;
 			k = k + 1;
@@ -380,19 +411,19 @@ if length(semicollon) == 1
 % Else, the file has been successfully analysed before and
 %		one wishes to overwrite previous information
 else
-	% Assusres that the new column has the correct header
+	% Assures that the new column has the correct header
 	content{1}{1} = content{1}{1}(1:semicollon(2));
 	content{1}{1} = strcat(content{1}{1}, 'Delay');
 	
-	for n = 1:length(responseTime)
+	for n = 1:length(rTime)
 		% If the participant answered to the stimulus
-		if ((~isequal(responseTime(n), 0)) && (k <= R))
+		if ((~isequal(rTime(n), 0)) && (k <= R))
 			% Finds the last semicollon of the line
 			% so the information after that can be replaced
 			semicollon = findstr(content{1}{k}, ';');
 			content{1}{k} = content{1}{k}(1:semicollon(2));
 
-			responseFile = replace_dot(responseTime(n));
+			responseFile = replace_dot(rTime(n));
 			content{1}{k} = strcat(content{1}{k}, responseFile);
 			n = n + 1;
 			k = k + 1;
@@ -406,7 +437,7 @@ end
 fclose(fileID);
 
 % Opens filename to write the new information
-fileID = fopen(filename, 'w');
+fileID = fopen(fileCSV, 'w');
 for n = 1:length(content{1})
 	fprintf(fileID, '%s\n', content{1}{n});
 end
